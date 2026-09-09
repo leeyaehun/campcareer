@@ -1,7 +1,6 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { FifoFunnelAnalytics } from "@/components/analytics/fifo-funnel-analytics"
 import { TopNav } from "./top-nav"
 import { SiteFooter } from "./site-footer"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
@@ -25,7 +24,6 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <FifoFunnelAnalytics />
       {!isInteractiveMap && <TopNav />}
       <main className="flex-1 bg-white">{children}</main>
       <SiteFooter className={isInteractiveMap ? "hidden" : undefined} />
