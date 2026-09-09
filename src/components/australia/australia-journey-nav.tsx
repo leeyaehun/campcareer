@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowRight, ClipboardList, FileCheck2, Search, Scale } from "lucide-react"
+import { ArrowRight, Search, Scale } from "lucide-react"
 import { useRouteLocale, useRouteTranslations } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils"
 const JOURNEY_ITEMS = [
   { href: "/", key: "findPath", icon: Search },
   { href: "/au/study", key: "compareStudy", icon: Scale },
-  { href: "/home", key: "plan", icon: ClipboardList },
 ] as const
 
 function isCurrentStep(pathname: string, href: (typeof JOURNEY_ITEMS)[number]["href"]) {
@@ -36,7 +35,7 @@ export function AustraliaJourneyNav({ className }: { className?: string }) {
         <p className="max-w-xl text-sm leading-5 text-slate-600">{t.summary}</p>
       </div>
 
-      <nav aria-label={t.ariaLabel} className="mt-3 grid gap-2 sm:grid-cols-3">
+      <nav aria-label={t.ariaLabel} className="mt-3 grid gap-2 sm:grid-cols-2">
         {JOURNEY_ITEMS.map((item, index) => {
           const current = isCurrentStep(barePathname, item.href)
           const Icon = item.icon
@@ -69,14 +68,6 @@ export function AustraliaJourneyNav({ className }: { className?: string }) {
           )
         })}
       </nav>
-      <Link
-        href={localizePath("/reports/australia", pathLocale)}
-        className="group mt-3 flex items-center gap-3 rounded-2xl border border-violet-200 bg-violet-50/70 p-3 transition hover:border-violet-300 hover:bg-violet-50"
-      >
-        <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-violet-600 text-white"><FileCheck2 className="size-4" /></span>
-        <span className="min-w-0 flex-1"><span className="text-sm font-semibold text-violet-950">{t.reportPrep}</span><span className="mt-0.5 block text-xs leading-5 text-violet-800">{t.reportPrepDescription}</span></span>
-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-violet-800">{t.reportPrepAction}<ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" /></span>
-      </Link>
     </section>
   )
 }
