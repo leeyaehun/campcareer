@@ -2,10 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Suspense } from "react"
 import { RootOAuthCallbackFallback } from "@/components/auth/root-oauth-callback-fallback"
+import { HOME_CANONICAL_PATH } from "@/lib/seo-routes.mjs"
 
 export const metadata: Metadata = {
   title: { absolute: "CampCareer | Career, Study & Country Decisions" },
   description: "Compare careers, countries, and study options with evidence-backed data.",
+  alternates: { canonical: HOME_CANONICAL_PATH },
   robots: { index: true, follow: true },
 }
 
