@@ -18,14 +18,12 @@ function sitemapUrls() {
   return sitemap().map((entry) => entry.url)
 }
 
-test("the canonical home is root and dormant /home permanently returns there", () => {
+test("the canonical home is root and retired /home stays out of the sitemap", () => {
   const urls = sitemapUrls()
   const homeSource = readFileSync("src/app/page.tsx", "utf8")
-  const legacyHomeSource = readFileSync("src/app/(workspace)/home/page.tsx", "utf8")
 
   assert.equal(HOME_CANONICAL_PATH, "/")
   assert.ok(homeSource.includes("alternates: { canonical: HOME_CANONICAL_PATH }"))
-  assert.ok(legacyHomeSource.includes("permanentRedirect(\"/\")"))
   assert.ok(urls.includes(`${SITE_URL}/`))
   assert.ok(!urls.includes(`${SITE_URL}/home`))
 })
