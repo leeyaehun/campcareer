@@ -72,7 +72,8 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
 
   assert.deepEqual(redirects.slice(0, LEGACY_SEO_REDIRECTS.length), [...LEGACY_SEO_REDIRECTS])
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
-  assert.ok(!redirects.some((redirect) => redirect.source === "/home"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/home/:path*" && redirect.destination === "/"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/fifo/:path*" && redirect.destination === "/"))
 })
 
 test("legacy country roots redirect permanently except the active /sg destination", () => {
