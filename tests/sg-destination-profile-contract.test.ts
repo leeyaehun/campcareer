@@ -8,12 +8,10 @@ const linkage = read("supabase/migrations/20260810121500_sg_destination_linkage_
 const metrics = read("supabase/migrations/20260810122500_sg_destination_metrics_v1.sql")
 const loader = read("src/lib/destinations/sg-destination-profile.server.ts")
 const profile = read("src/components/country-profiles/singapore-study-destination-profile.tsx")
-const page = read("src/app/sg/page.tsx")
 
 test("SG destination stays country-level instead of inventing a city shortlist", () => {
   assert.match(foundation, /COUNTRY_LEVEL_CITY_STATE_DESTINATION/)
   assert.match(foundation, /country_city_state/)
-  assert.doesNotMatch(page, /\/cities\/sg\//)
   assert.doesNotMatch(loader, /report_metric_evidence_city/)
 })
 
@@ -32,13 +30,4 @@ test("SG study profile preserves programme-pending and student-rule caveats", ()
   assert.match(profile, /University-student concession products require eligibility/)
   assert.match(profile, /not a universal national fee/)
   assert.match(profile, /not an unconditional allowance/)
-})
-
-test("SG hub keeps existing jobs and living-area decision paths", () => {
-  assert.match(page, /SingaporeDecisionOverview/)
-  assert.match(page, /SingaporeQuickRoiPreview/)
-  assert.match(page, /SG_DEMAND_OCCUPATIONS/)
-  assert.match(page, /SG_MAP_AREAS/)
-  assert.match(profile, /\/sg\/jobs/)
-  assert.match(profile, /\/map\?country=sg&area=central/)
 })

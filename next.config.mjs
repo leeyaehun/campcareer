@@ -18,6 +18,9 @@ const nextConfig = {
       ...LEGACY_SEO_REDIRECTS,
 
       // Retired product surfaces return visitors to the current product root.
+      { source: "/results/:path*", destination: "/", permanent: false },
+      { source: "/comingsoon/:path*", destination: "/", permanent: false },
+      { source: "/ko/fr/jobs/:path*", destination: "/ko/fr", permanent: false },
       { source: "/home/:path*", destination: "/", permanent: false },
       { source: "/fifo/:path*", destination: "/", permanent: false },
       { source: "/planner/:path*", destination: "/", permanent: false },

@@ -2,7 +2,6 @@
 // Rendered in the HTML before the interactive map so Googlebot sees real content
 // without needing to execute JavaScript.
 
-import Link from "next/link"
 import { ExternalLink, MapPin, GraduationCap, DollarSign, TrendingUp, Home } from "lucide-react"
 
 export type UniversityCardData = {
@@ -27,7 +26,6 @@ export type UniversityCardData = {
     salary: number | null
     currency: string
   }>
-  roiExplorerUrl?: string      // link to /roi-explorer/[country]/[id] if exists
 }
 
 function StatBox({
@@ -162,17 +160,6 @@ export default function UniversityStaticCard({ d }: { d: UniversityCardData }) {
         </div>
       )}
 
-      {/* Link to ROI explorer if available */}
-      {d.roiExplorerUrl && (
-        <div className="mt-3">
-          <Link
-            href={d.roiExplorerUrl}
-            className="text-xs font-medium text-violet-600 hover:text-violet-800 hover:underline"
-          >
-            View full ROI analysis →
-          </Link>
-        </div>
-      )}
     </div>
   )
 }

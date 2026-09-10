@@ -37,9 +37,9 @@ export function MobileBottomBar() {
     }
   }, [])
 
-  const isPathfinder = barePathname === "/" || barePathname.startsWith("/au/majors")
-  const isCompare = barePathname === "/au/study" || barePathname.startsWith("/au/study/")
-  const isPlan = barePathname === "/home" || barePathname.startsWith("/home/") || barePathname === "/planner" || barePathname.startsWith("/planner/")
+  const isPathfinder = barePathname === "/career" || barePathname.startsWith("/career/")
+  const isCompare = barePathname === "/compare" || barePathname.startsWith("/compare/")
+  const isPlan = barePathname === "/"
   const isProfile = barePathname === "/profile" || barePathname.startsWith("/profile/")
 
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
@@ -51,17 +51,17 @@ export function MobileBottomBar() {
   return (
     <div className={cn("sm:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 backdrop-blur-sm safe-area-bottom transition-all duration-300", hidden ? "translate-y-full opacity-0 pointer-events-none" : "")}>
       <div className="grid h-14 grid-cols-4">
-        <Link href={localizePath("/home", pathLocale)} aria-current={isPathfinder ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPathfinder ? "text-blue-600" : "text-slate-400")}>
+        <Link href={localizePath("/career", pathLocale)} aria-current={isPathfinder ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPathfinder ? "text-blue-600" : "text-slate-400")}>
           <Search className="size-5" strokeWidth={isPathfinder ? 2.4 : 1.8} />
           <span className="truncate">{t.australia.journey.findPath}</span>
         </Link>
 
-        <Link href={localizePath("/au/study", pathLocale)} aria-current={isCompare ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isCompare ? "text-blue-600" : "text-slate-400")}>
+        <Link href={localizePath("/compare", pathLocale)} aria-current={isCompare ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isCompare ? "text-blue-600" : "text-slate-400")}>
           <Scale className="size-5" strokeWidth={isCompare ? 2.4 : 1.8} />
           <span className="truncate">{t.australia.journey.compareStudy}</span>
         </Link>
 
-        <Link href={localizePath("/home", pathLocale)} aria-current={isPlan ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPlan ? "text-violet-700" : "text-slate-400")}>
+        <Link href={localizePath("/", pathLocale)} aria-current={isPlan ? "page" : undefined} className={cn("flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[10px] font-medium transition", isPlan ? "text-violet-700" : "text-slate-400")}>
           <ClipboardList className="size-5" strokeWidth={isPlan ? 2.4 : 1.8} />
           <span className="truncate">{t.australia.journey.plan}</span>
         </Link>

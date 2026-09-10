@@ -10,6 +10,7 @@ import {
   isMapCountry,
   resolveMapOccupation,
 } from "@/lib/map-slugs"
+import { buildCountryCompareCanonicalHref } from "@/lib/compare-routes"
 import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 86400
@@ -66,14 +67,15 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
     occupation.shortageRating != null ? `${occupation.shortageRating}/5 shortage rating` :
     occupation.shortageScore != null ? `${occupation.shortageScore}/100 shortage score` :
     "Demand varies by region"
-  const decisionBriefHref = `/decision-brief?occupation=${encodeURIComponent(occupation.name)}`
+  const countryMapHref = `/maps?country=${occupation.country}`
+  const compareHref = buildCountryCompareCanonicalHref({ goal: occupation.name })
 
   return (
     <>
       <JsonLd data={breadcrumbLd([
         { name: "CampCareer", path: "/" },
         { name: "Maps", path: "/maps" },
-        { name: occupation.countryName, path: `/${occupation.country}` },
+        { name: occupation.countryName, path: countryMapHref },
         { name: occupation.name, path: occupation.path },
       ])} />
       <JsonLd data={{
@@ -98,7 +100,7 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
             <nav className="mb-7 flex flex-wrap items-center gap-2 text-sm text-slate-500">
               <Link href="/maps" className="hover:text-slate-900">Maps</Link>
               <span>/</span>
-              <Link href={`/${occupation.country}`} className="hover:text-slate-900">
+              <Link href={countryMapHref} className="hover:text-slate-900">
                 {occupation.countryName}
               </Link>
               <span>/</span>
@@ -162,12 +164,12 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
         <section className="mx-auto grid max-w-6xl gap-5 px-4 py-8 sm:px-6 lg:grid-cols-3 lg:px-8">
           {occupation.country === "au" && (
             <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
-              <h2 className="text-lg font-semibold text-slate-950">Full occupation page</h2>
+              <h2 className="text-lg font-semibold text-slate-950">Career exploration</h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">
                 Salary, shortage by state, skills map, live jobs, outlook and credentials — all in one place.
               </p>
-              <Link href={`/au/jobs/${occupation.slug}`} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline">
-                View occupation details <ArrowRight className="h-4 w-4" />
+              <Link href="/career" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline">
+                Explore careers <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           )}
@@ -177,18 +179,18 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
             <p className="mt-3 text-sm leading-6 text-slate-600">
               Use this map as the entry point for choosing majors, cities, and institutions connected to {occupation.name}.
             </p>
-            <Link href="/degree-risk" className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
-              Check degree risk
+            <Link href="/career" className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
+              Explore careers
             </Link>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
-            <h2 className="text-lg font-semibold text-slate-950">Career ROI</h2>
+            <h2 className="text-lg font-semibold text-slate-950">Study programs</h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               Compare tuition, living cost, graduate salary, and payback time before committing to a country or course.
             </p>
-            <Link href="/roi-explorer" className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
-              Open ROI Explorer
+            <Link href="/programs" className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
+              Explore programs
             </Link>
           </div>
 
@@ -207,8 +209,8 @@ export default async function MapsOccupationPage(props: { params: Promise<Params
             <p className="mt-3 text-sm leading-6 text-slate-600">
               Compare this career direction against your budget, study level, migration goal, and country options.
             </p>
-            <Link href={decisionBriefHref} className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
-              Build decision brief
+            <Link href={compareHref} className="mt-5 inline-flex text-sm font-semibold text-slate-950 hover:underline">
+              Compare countries
             </Link>
           </div>
         </section>

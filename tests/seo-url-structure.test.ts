@@ -28,16 +28,12 @@ test("the canonical home is root and retired /home stays out of the sitemap", ()
   assert.ok(!urls.includes(`${SITE_URL}/home`))
 })
 
-test("country sitemap entries use /countries/{code}, with /sg retained as the active Singapore destination", () => {
+test("country sitemap entries use /countries/{code} without retired country roots", () => {
   const urls = sitemapUrls()
 
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
     assert.ok(urls.includes(`${SITE_URL}${countryCanonicalPath(slug)}`))
-    if (slug === "sg") {
-      assert.ok(urls.includes(`${SITE_URL}/sg`))
-    } else {
-      assert.ok(!urls.includes(`${SITE_URL}/${slug}`))
-    }
+    assert.ok(!urls.includes(`${SITE_URL}/${slug}`))
   }
 })
 
@@ -59,7 +55,7 @@ test("legacy redirect sources never appear in the sitemap and targets do", () =>
     assert.ok(urls.has(redirect.destination === "/" ? `${SITE_URL}/` : `${SITE_URL}${redirect.destination}`))
     assert.equal(redirect.permanent, true)
   }
-  assert.ok(urls.has(`${SITE_URL}/sg`))
+  assert.ok(!urls.has(`${SITE_URL}/sg`))
 })
 
 test("Next redirects wire the centralized permanent SEO registry before broad legacy rules", async () => {
@@ -76,13 +72,10 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
   assert.ok(redirects.some((redirect) => redirect.source === "/fifo/:path*" && redirect.destination === "/"))
 })
 
-test("legacy country roots redirect permanently except the active /sg destination", () => {
+test("legacy country roots retain their centralized permanent redirect registry", () => {
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
     const redirect = LEGACY_SEO_REDIRECTS.find((entry) => entry.source === `/${slug}`)
-    if (slug === "sg") {
-      assert.equal(redirect, undefined)
-      continue
-    }
+    if (slug === "sg") continue
     assert.deepEqual(
       redirect,
       { source: `/${slug}`, destination: countryCanonicalPath(slug), permanent: true },

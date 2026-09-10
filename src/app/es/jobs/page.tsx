@@ -1,6 +1,0 @@
-import Link from "next/link"
-import { ES_OCCUPATIONS, isSpainOccupationIndexable } from "@/data/es-map-data"
-import { slugifyMapTerm } from "@/lib/map-slugs"
-import { pageMetadata } from "@/lib/seo"
-export const metadata = pageMetadata({ title: "Spain hard-to-fill occupations | CampCareer", description: "SEPE quarterly hard-to-fill occupations by Spanish province with source-led study-to-work context.", path: "/es/jobs" })
-export default function SpainJobs() { const rows = ES_OCCUPATIONS.filter(isSpainOccupationIndexable); return <main className="mx-auto max-w-5xl px-4 py-12"><Link href="/es" className="text-sm font-semibold text-blue-700">Spain hub</Link><h1 className="mt-5 text-4xl font-semibold">스페인 외국인 고용 접근성이 있는 충원 곤란 직종</h1><p className="mt-4 max-w-3xl leading-7 text-slate-600">SEPE 2026년 1분기 도별 목록입니다. 고용허가 신청 근거가 될 수 있지만 비자 승인이나 채용을 보장하지 않습니다.</p><div className="mt-8 divide-y border-y">{rows.map((row) => <Link key={row.code} href={`/maps/es/${slugifyMapTerm(row.nameEn!)}`} className="flex gap-4 py-4 hover:bg-slate-50"><span className="min-w-0 flex-1"><span className="block font-semibold">{row.nameKo}</span><span className="mt-1 block text-sm text-slate-500">{row.nameEn} · {row.localName}</span></span><span className="text-sm font-semibold text-blue-800">{row.provinceCodes.length}개 도</span></Link>)}</div></main> }

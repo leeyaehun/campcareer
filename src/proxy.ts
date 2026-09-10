@@ -4,9 +4,9 @@ import { DEFAULT_LOCALE, LOCALE_COOKIE, isPublishedLocaleOption, localeForUi, lo
 import { getLegacyLocaleHomeRedirect } from '@/lib/i18n/legacy-locale-home'
 import { isLegacyGonePath } from '@/lib/seo-routes.mjs'
 
-// Authentication protects retention/account surfaces only. Public Career value,
-// including the dormant /home redirect to Career discovery, never requires login.
-const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents', '/profile', '/settings', '/onboarding']
+// Authentication protects retention/account surfaces only. Public Career value
+// never requires login.
+const PROTECTED_PATHS = ['/saved', '/documents', '/profile', '/settings', '/onboarding']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
@@ -109,8 +109,7 @@ export async function proxy(request: NextRequest) {
     return response
   }
 
-  // Public pages should not pay middleware/Supabase auth CPU. This includes
-  // /home, whose route now simply redirects to public Career discovery.
+  // Public pages should not pay middleware/Supabase auth CPU.
   if (!isProtected) {
     return withLocale(nextWithLocaleRequest())
   }
@@ -159,14 +158,9 @@ export const config = {
     '/vi/:path*',
     '/hi/:path*',
     '/es-419/:path*',
-    // Retired locale roots and the former default route are canonicalized.
+    // Retired locale roots are canonicalized.
     '/en/:path*',
-    '/results/:path*',
-    // Account/retention pages need authentication. /home remains matched only
-    // so its legacy redirect can run without invoking Supabase auth.
-    '/dashboard/:path*',
-    '/home/:path*',
-    '/planner/:path*',
+    // Account/retention pages need authentication.
     '/saved/:path*',
     '/documents/:path*',
     '/profile/:path*',

@@ -4841,7 +4841,7 @@ function CAOccupationDetail({
 
         {occ.noc_code && (
           <Link
-            href={`/roi-explorer/ca/occupation/${occ.noc_code}`}
+            href="/career"
             className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
           >
             자세히 보기
@@ -5130,7 +5130,6 @@ function courseProgramUrl(websiteUrl: string | null, title: string): string | nu
 }
 
 // 미국 대학은 데이터에 공식 URL이 없어, 학교명 검색으로 공식 사이트까지 안내한다.
-// (/roi-explorer 는 현재 next.config 에서 soft-hide 되어 내부 링크가 홈으로 리다이렉트됨.)
 function collegeSearchUrl(name: string): string {
   return `https://www.google.com/search?q=${encodeURIComponent(name)}`
 }
@@ -5262,7 +5261,7 @@ function OccupationDetail({
 
         {!routeMode && occ.anzsco_code && (
           <Link
-            href={`/roi-explorer/au/occupation/${occ.anzsco_code}`}
+            href="/career"
             className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
           >
             자세히 보기
@@ -5351,7 +5350,7 @@ function OccupationDetail({
               {relatedData.courses.length > 0 ? (
               <div className="space-y-2">
                 {relatedData.courses.map((c) => {
-                  const href = c.institution_id ? `/roi-explorer/au/${c.institution_id}` : null
+                  const href = c.institution_id ? "/programs" : null
                   const programUrl = courseProgramUrl(c.website_url, c.title)
                   const info = (
                     <>
@@ -5366,7 +5365,7 @@ function OccupationDetail({
                       </p>
                     </>
                   )
-                  // 코스 카드는 /roi-explorer 링크와 외부(CRICOS/홈페이지) 링크를 형제로 둔다.
+                  // 코스 카드는 Programs 탐색과 외부(CRICOS/홈페이지) 링크를 형제로 둔다.
                   // (앵커 중첩 = 잘못된 HTML 이라 hydration 에러가 난다.)
                   return (
                     <div
@@ -5673,7 +5672,7 @@ function USOccupationDetail({
             </div>
             <div className="mt-2 pt-2 border-t border-slate-100">
               <Link
-                href={`/roi-explorer/us/occupation/${occ.occ_code}`}
+                href="/career"
                 className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:text-blue-700 transition-colors"
               >
                 자세히 보기
@@ -6146,7 +6145,7 @@ function IEPanel({
 
       {ietab === "schools" && (
         <p className="border-t border-slate-100 px-5 py-3 text-xs text-slate-400">
-          <Link href="/roi-explorer/ie/language-schools" className="text-blue-600 hover:underline">
+          <Link href="/programs" className="text-blue-600 hover:underline">
             {t.map.ieViewAll}
           </Link>
         </p>

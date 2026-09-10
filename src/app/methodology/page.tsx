@@ -129,7 +129,7 @@ export default function MethodologyPage() {
 
       <div className="mt-12 flex items-center gap-4 border-t border-slate-200 pt-6 text-sm">
         <Link href="/sources" className="text-blue-600 hover:underline">Sources</Link>
-        <Link href="/roi-explorer" className="text-blue-600 hover:underline">ROI Explorer</Link>
+        <Link href="/programs" className="text-blue-600 hover:underline">Programs</Link>
       </div>
     </main>
   )
