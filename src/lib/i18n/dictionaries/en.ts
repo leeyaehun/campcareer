@@ -25,9 +25,6 @@ const en = {
       compareStudyDescription: 'Review tuition, outcomes and ROI side by side.',
       plan: 'My plan',
       planDescription: 'Keep your shortlist and next steps in one place.',
-      reportPrep: 'Prepare a decision report',
-      reportPrepDescription: 'Save your conditions and up to three options for a personalised ROI decision.',
-      reportPrepAction: 'View report launch',
     },
     footer: {
       comingSoon: 'Coming Soon',
@@ -810,7 +807,7 @@ const en = {
     },
   },
   visaAlert: {
-    heading: 'Get visa-policy alerts (+ your full report)',
+    heading: 'Get visa-policy alerts',
     subtitle: "We'll email you if the post-study work or PR rules for this path change.",
     placeholder: 'you@example.com',
     submit: 'Notify me',

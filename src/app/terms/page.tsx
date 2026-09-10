@@ -73,16 +73,12 @@ export default async function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Australia report products and launch updates</h2>
+          <h2 className="font-display text-lg font-semibold text-slate-800 mb-2">6. Retired Australia report records</h2>
           <p>
-            A report launch-update request is not a purchase, booking, reservation, or payment
-            instruction. A report becomes purchasable only after CampCareer publishes the
-            applicable price, payment, delivery, refund, and support terms and the report has
-            passed its evidence and fulfilment checks. Personalised reports are evidence-based
-            decision aids, not automated visa-eligibility determinations or guarantees of admission,
-            employment, salary, permanent residency, or investment return. Expert review may not
-            provide regulated immigration, legal, financial, or education-agent advice unless the
-            assigned expert is appropriately authorised and the service terms say otherwise.
+            CampCareer no longer sells Australia reports, accepts report preparation, or accepts
+            report-launch registrations. Historic records are retained or deleted only as described
+            in the Privacy Policy. CampCareer does not provide a report purchase, delivery, expert
+            review, or automated visa-eligibility service.
           </p>
         </section>
 
@@ -140,7 +136,7 @@ function KoreanTermsPage() {
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">3. 계정과 제출 정보</h2><p>이용자는 계정 자격증명과 본인이 제출하는 저장 계획·지원 요청·피드백의 책임을 집니다. 이용자는 자신의 콘텐츠 권리를 보유하며, CampCareer에는 서비스 보관·검토·보안·운영에 필요한 범위의 권한만 부여합니다. 타인의 기밀 정보나 공유 권한이 없는 정보를 제출해서는 안 됩니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">4. 피드백과 외부 링크</h2><p>피드백은 서비스 개선에 사용되지만 지원 의무를 만들지 않습니다. 비밀번호, 여권번호, 결제 정보, 민감한 개인정보를 포함하지 마세요. 공식 출처·학교·채용·제3자 링크는 편의를 위한 것이며, 외부 사이트의 내용·가용성·개인정보 처리는 해당 사이트가 책임집니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">5. 파트너·추천·제휴 링크</h2><p>CampCareer는 검증된 학교, 에이전시, 보험, 송금, 통신, 숙소 서비스 등의 링크를 명확히 표시할 수 있습니다. 상업적 관계는 순위나 근거를 바꾸지 않습니다. 이용자가 요청 화면에서 특정 동의한 경우에만 지원 요청을 파트너와 공유합니다. 파트너와 맺는 계약은 이용자와 파트너 간의 직접 계약입니다.</p></section>
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">6. 호주 리포트와 출시 알림</h2><p>출시 알림 신청은 구매, 예약, 좌석 확보, 결제 지시가 아닙니다. CampCareer가 가격·결제·전달·환불·지원 조건을 공개하고, 해당 리포트가 근거와 전달 검증을 통과한 뒤에만 구매가 가능합니다. 개인화 리포트는 근거 기반 의사결정 보조 자료이며 자동 비자 자격 판정이나 입학·취업·연봉·영주권·투자수익 보장이 아닙니다. 전문가 검토 역시 담당 전문가가 적절히 자격을 갖추고 서비스 조건에서 허용한 경우를 제외하면 규제 대상 이민·법률·금융·교육 에이전트 자문을 제공하지 않습니다.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">6. 종료된 호주 리포트 기록</h2><p>CampCareer는 더 이상 호주 리포트를 판매하거나 리포트 준비·출시 알림 등록을 받지 않습니다. 과거 기록은 개인정보 처리방침에 따라 보관 또는 삭제합니다. 리포트 구매·전달·전문가 검토·자동 비자 자격 판정 서비스는 제공하지 않습니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">7. 허용되는 이용</h2><p>다른 이용자의 데이터에 접근하려 하거나, 서비스를 저해할 정도로 자동 수집을 하거나, 서비스 운영을 방해해서는 안 됩니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">8. 가용성과 변경</h2><p>서비스는 어떠한 보증 없이 제공됩니다. 기능은 언제든 수정·중단될 수 있으며, 약관이 바뀐 뒤 계속 이용하면 변경된 약관에 동의한 것으로 봅니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">9. 책임 제한</h2><p>법이 허용하는 최대 범위에서 CampCareer는 추정 데이터에 의존해 내린 결정이나 서비스 이용으로 발생한 간접·결과적 손해에 책임지지 않습니다.</p></section>

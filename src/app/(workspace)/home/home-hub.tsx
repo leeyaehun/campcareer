@@ -17,7 +17,7 @@ export function HomeHub() {
     ? {
         headlineLead: "호주 유학과 커리어의",
         headlineAccent: "투자회수를 계산하세요",
-        description: "학비, 생활비, 취업률, 연봉을 반영한 호주 학업·커리어의 투자회수 비교 데이터와 개인화 의사결정 리포트입니다.",
+        description: "학비, 생활비, 취업률, 연봉을 반영한 호주 학업·커리어의 투자회수 비교 데이터와 의사결정 가이드입니다.",
         explore: "ROI 가이드 보기",
         trust: "CampCareer는 막연한 조언이 아니라 데이터 기반 의사결정을 돕습니다.",
         benefitJobs: "학부터 직업까지 데이터",

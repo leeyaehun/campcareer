@@ -27,9 +27,6 @@ const ko: Dictionary = {
       compareStudyDescription: '학비·성과·ROI를 나란히 확인합니다.',
       plan: '내 계획',
       planDescription: '후보와 다음 할 일을 한곳에서 관리합니다.',
-      reportPrep: '의사결정 리포트 준비',
-      reportPrepDescription: '내 조건과 최대 3개의 선택지를 저장해 개인화 ROI 의사결정을 준비합니다.',
-      reportPrepAction: '출시 리포트 보기',
     },
     footer: {
       comingSoon: '준비 중',
@@ -812,7 +809,7 @@ const ko: Dictionary = {
     },
   },
   visaAlert: {
-    heading: '비자정책 변경 알림 받기 (+ 전체 리포트)',
+    heading: '비자정책 변경 알림 받기',
     subtitle: '이 경로의 졸업 후 취업비자·영주권 규정이 바뀌면 이메일로 알려드립니다.',
     placeholder: 'you@example.com',
     submit: '알림 받기',

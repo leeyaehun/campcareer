@@ -6,7 +6,7 @@ import { isLegacyGonePath } from '@/lib/seo-routes.mjs'
 
 // Authentication protects retention/account surfaces only. Public Career value,
 // including the dormant /home redirect to Career discovery, never requires login.
-const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents', '/profile', '/settings', '/reports/my-australia', '/onboarding']
+const PROTECTED_PATHS = ['/dashboard', '/saved', '/documents', '/profile', '/settings', '/onboarding']
 
 // 매출에 기여하지 않는 SEO·백링크 분석 크롤러. 검색엔진(Googlebot/Bingbot/
 // DuckDuckBot 등)과 소셜 미리보기 봇(Twitterbot, facebookexternalhit,
@@ -171,7 +171,6 @@ export const config = {
     '/documents/:path*',
     '/profile/:path*',
     '/settings/:path*',
-    '/reports/:path*',
     '/onboarding/:path*',
     // Preserve explicit 410 responses for retired URL families without
     // charging every active URL to the Proxy.

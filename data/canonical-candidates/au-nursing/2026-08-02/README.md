@@ -6,7 +6,7 @@ This is a read-only candidate package for the three existing Programs Compare pr
 - `unisc-bachelor-nursing-science`
 - `unisc-graduate-entry-nursing-science`
 
-The canonical read model was resolved from the Report Factory `api_private.au_nursing_programme_catalog_v1` and its fees, requirements, and accreditations views. The package records the exact canonical programme/offering UUIDs and existing evidence snapshot IDs. No UUID was generated, no fuzzy match was used, and no production insert/update/delete or migration was performed.
+The canonical read model was resolved from the private `api_private.au_nursing_programme_catalog_v1` and its fees, requirements, and accreditations views. The package records the exact canonical programme/offering UUIDs and existing evidence snapshot IDs. No UUID was generated, no fuzzy match was used, and no production insert/update/delete or migration was performed.
 
 Current result: **B — Partial Candidate Package**. Identity, international offering, current 2026 annual tuition, duration, location, and entry requirements are available. Professional outcome and accreditation remain null because the queried accreditation rows have no `evidence_id` and require review. Mandatory study costs and estimated total tuition are not inferred.
 
