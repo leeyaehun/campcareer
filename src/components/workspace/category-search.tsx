@@ -1,6 +1,7 @@
 "use client"
 
 import { Search, X } from "lucide-react"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 type CategorySearchProps = {
@@ -20,8 +21,8 @@ export function CategorySearch({
 }: CategorySearchProps) {
   return (
     <div className={cn("relative", className)}>
-      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#9c9a94]" />
-      <input
+      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-campcareer-muted" />
+      <Input
         type="search"
         role="searchbox"
         value={value}
@@ -29,14 +30,14 @@ export function CategorySearch({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="h-12 w-full appearance-none rounded-xl border border-[#e0dfdb] bg-white pr-12 pl-11 text-[15px] text-[#1b1b1b] outline-none transition placeholder:text-[#a3a19b] focus:border-[#1b1b1b] focus:ring-4 focus:ring-[#1b1b1b]/5 [&::-webkit-search-cancel-button]:hidden"
+        className="h-12 appearance-none rounded-cc-surface pr-12 pl-11 text-[15px] [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
         <button
           type="button"
           onClick={() => onChange("")}
           aria-label="Clear search"
-          className="absolute right-3 top-1/2 grid size-6 -translate-y-1/2 place-items-center rounded-md text-[#9c9a94] transition hover:bg-[#f0efec] hover:text-[#1b1b1b]"
+          className="absolute right-3 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-cc-control text-campcareer-muted transition-colors duration-cc-fast hover:bg-secondary hover:text-campcareer-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
         >
           <X className="size-3.5" />
         </button>

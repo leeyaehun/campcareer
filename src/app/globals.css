@@ -3,41 +3,32 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;        /* pure white (page + cards; hairline borders separate) */
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-
-    /* Brand tokens (single cobalt blue — matches logo) */
-    --brand: 221 83% 53%;          /* blue-600 #2563EB */
-    --brand-foreground: 0 0% 100%;
-    --brand-press: 224 76% 48%;    /* blue-700 #1D4ED8 — hover/press */
-    --brand-tint: 214 100% 97%;    /* blue-50 #EFF6FF — selected/highlight bg */
-    --depth: 215 16% 80%;          /* neutral 3D shadow for non-brand cards */
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+  * {
+    @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    color-scheme: light;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+.campcareer-wordmark {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  text-decoration: none;
 }
 
 /* The route map is research-only: no account-bound save or share controls. */
@@ -48,18 +39,8 @@
   display: none;
 }
 
-/* Search-first wordmark from the 3001 prototype: no icon, no decorative type. */
-.campcareer-wordmark {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.075em;
-  line-height: 1;
-  text-decoration: none;
-}
-
-/* The interactive map retains its geographic signal colours, but its old
-   product controls follow the same ink/fog palette as the 3001 interface. */
+/* The interactive map retains its geographic signal colours. Its controls are
+   a contained legacy surface and deliberately do not set product-wide tokens. */
 .route-map-mode .bg-blue-50,
 .route-map-mode .hover\:bg-blue-50:hover {
   background-color: #f6f6f4 !important;
@@ -87,31 +68,8 @@
   background-color: #1b1b1b !important;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-sans;
-    color-scheme: light;
-  }
-}
-
-/* Vacant Dublin — Press Start 2P minimum 10 px */
-.font-pixel {
-  font-family: 'Press Start 2P', monospace;
-  font-size: max(10px, 1em);
-}
-
-/* transform-only so content is ALWAYS visible (opacity stays 1) even if the
-   animation is paused/frozen by a screenshot tool or never runs. */
-@keyframes tl-fade-up {
-  from { transform: translateY(8px); }
-  to   { transform: none; }
-}
-
-/* The career check moves one question at a time. Keep the transition subtle:
-   it should make the path feel considered, never interrupt the next answer. */
+/* Onboarding and immigration timeline are retained, dormant product paths.
+   Their motion is short and transform-only so content remains visible. */
 @keyframes cc-onboarding-step-enter {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -122,229 +80,33 @@
   to { opacity: 0; transform: translateY(-6px); }
 }
 
+@keyframes tl-fade-up {
+  from { transform: translateY(8px); }
+  to { transform: none; }
+}
+
 .cc-onboarding-step {
-  animation: cc-onboarding-step-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cc-onboarding-step-enter var(--cc-duration-slow) var(--cc-ease-standard) both;
 }
 
 .cc-onboarding-step--leaving {
-  animation: cc-onboarding-step-leave 150ms ease-in both;
+  animation: cc-onboarding-step-leave var(--cc-duration-fast) ease-in both;
 }
 
-/* Product motion is intentionally limited to focus, selection and short
-   feedback transitions. Respect an OS-level reduced-motion preference across
-   the Landing, Compare and Maps surfaces instead of relying on individual
-   components to remember every animation utility. */
+.tl-stage {
+  opacity: 1;
+  animation: tl-fade-up var(--cc-duration-fast) ease both;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-@layer components {
-  /* Landing stays white and quiet; its energy comes from a few clear accents,
-     not a coloured page background. */
-  .cc-landing-hero {
-    background: #fff;
-  }
-
-  .cc-landing-highlight {
-    background: linear-gradient(100deg, #245cab 0%, #2865c7 65%, #36745f 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .cc-signal-panel {
-    background: linear-gradient(145deg, #f5f9ff, #f9fcfb);
-  }
-
-  /* The result carries the same white canvas as the landing page. The blue
-     tint is reserved for the report's orientation points: header, score and
-     market metrics. */
-  .cc-result-page {
-    background: linear-gradient(180deg, #fff 0, #fff 24rem, #fbfcff 100%);
-  }
-
-  .cc-result-back {
-    background: #f7f9fc;
-  }
-
-  .cc-result-back:hover {
-    background: #eef5ff;
-  }
-
-  .cc-result-surface {
-    box-shadow: 0 22px 48px -42px rgb(31 75 145 / 0.46);
-  }
-
-  .cc-result-metric {
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 26px -28px rgb(31 75 145 / 0.58);
-  }
-
-  .cc-result-metric::before {
-    position: absolute;
-    top: 0;
-    left: 1rem;
-    right: 1rem;
-    height: 2px;
-    border-radius: 9999px;
-    background: linear-gradient(90deg, #4b84d8, #70b89d);
-    content: "";
-  }
-
-  .cc-prominent-score {
-    position: relative;
-    padding-right: 1rem;
-  }
-
-  .cc-prominent-score::after {
-    position: absolute;
-    inset: 0 0 0.15rem auto;
-    width: 3px;
-    border-radius: 9999px;
-    background: linear-gradient(#4b84d8, #70b89d);
-    content: "";
-  }
-
-  .cc-prominent-score-value {
-    background: linear-gradient(115deg, #174d9e, #2865c7 68%, #36745f);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* A quiet, scroll-linked reveal adds depth to the long career brief without
-     turning a research surface into a decorative animation. Unsupported
-     browsers simply render the complete report normally. */
-  @keyframes cc-result-view-reveal {
-    from {
-      opacity: 0.48;
-      transform: translateY(28px) scale(0.985);
-    }
-    55%, to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  @supports (animation-timeline: view()) {
-    .cc-result-motion .cc-result-reveal {
-      animation: cc-result-view-reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 4% cover 36%;
-    }
-  }
-
-  /* The landing signal panel communicates live analysis without introducing
-     decorative motion. One signal is legible at a time, and the complete set
-     remains available to assistive technology in the component. */
-  @keyframes cc-signal-live-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgb(74 135 91 / 0.18); opacity: 1; }
-    50% { box-shadow: 0 0 0 4px rgb(74 135 91 / 0); opacity: 0.72; }
-  }
-
-  @keyframes cc-signal-enter {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .cc-signal-live-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 9999px;
-    background: #4a875b;
-    animation: cc-signal-live-pulse 1.8s ease-in-out infinite;
-  }
-
-  .cc-signal-rotator {
-    min-height: 64px;
-  }
-
-  .cc-signal-slide {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    animation: cc-signal-enter 220ms ease-out both;
-  }
-
-  @keyframes cc-mobile-step-open {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Keep discovery pages in the same composition as the landing page: the
-     blue hero resolves into the canvas colour rather than ending at a line. */
-  .au-discovery-gradient {
-    background:
-      radial-gradient(circle at 84% 0%, rgb(147 197 253 / 0.5), transparent 29rem),
-      linear-gradient(180deg, #dbeafe 0%, #eff6ff 20rem, #f8fafc 38rem);
-  }
-
-  .au-discovery-hero {
-    background: linear-gradient(180deg, #2563eb 0%, #eff6ff 100%);
-  }
-
-  .finder-select {
-    @apply h-8 w-full appearance-none bg-transparent text-sm font-semibold text-slate-900 outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
-  }
-  /* ── Flat pressable surface (restrained / professional) ───────────────── */
-  /* Solid, no 3D ledge. Quick, calm color/shadow feedback — no bounce. */
-  .btn-3d {
-    box-shadow: 0 1px 2px 0 hsl(var(--depth) / 0.18);
-    transition: background-color 130ms ease, border-color 130ms ease,
-      box-shadow 130ms ease;
-  }
-  .btn-3d:hover {
-    box-shadow: 0 2px 6px 0 hsl(var(--depth) / 0.22);
-  }
-  .btn-3d:active {
-    box-shadow: 0 1px 2px 0 hsl(var(--depth) / 0.18);
-  }
-  .btn-3d-brand {
-    --depth: var(--brand-press);
-  }
-
-  /* ── Timeline stage entrance (CSS, always resolves to visible) ────────── */
-  .tl-stage {
-    opacity: 1;
-    animation: tl-fade-up 0.3s ease both;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cc-signal-live-dot,
-    .cc-signal-slide {
-      animation: none;
-    }
-
-    .tl-stage {
-      animation: none;
-    }
-  }
-
-  /* ── Typography scale (bigger, tighter) ───────────────────────────────── */
-  .text-question {
-    @apply text-[28px] md:text-[38px] font-semibold leading-tight tracking-[-0.01em];
-  }
-  .text-option {
-    @apply text-[18px] md:text-[20px] font-medium tracking-[-0.01em] leading-snug;
-  }
-  .text-body-lg {
-    @apply text-[17px] leading-relaxed;
-  }
-  /* Hide scrollbar but keep horizontal scroll (top-nav on mobile) */
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* iPhone bottom safe area for fixed bottom bar */
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }

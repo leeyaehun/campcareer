@@ -13,21 +13,12 @@ import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
+import { Badge } from "@/components/ui/badge"
+import { EmptyState } from "@/components/ui/status-state"
+import { FilterBar, FilterChip } from "@/components/ui/filter-bar"
 import { cn } from "@/lib/utils"
 
 const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
-const CATEGORY_ACCENT = new Map<string, string>([
-  ["trades", "#c2691e"],
-  ["health", "#2563eb"],
-  ["technology", "#6d4fc4"],
-  ["engineering", "#3e7a2e"],
-  ["business", "#2563eb"],
-  ["education", "#6d4fc4"],
-  ["environment", "#3e7a2e"],
-  ["design", "#c2691e"],
-  ["hospitality", "#c2691e"],
-  ["transport", "#6d4fc4"],
-])
 const CATEGORY_ICON = new Map([
   ["trades", Hammer],
   ["health", HeartPulse],
@@ -44,7 +35,43 @@ const CATEGORY_ICON = new Map([
 type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
 
 function OccupationDiscovery({ locale, onChoose, onBrowseAll, isCareerIndex }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void; isCareerIndex: boolean }) {
-  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CAREER_CATALOGUE.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">{isCareerIndex ? "Browse all careers" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" /></button></section>
+  return (
+    <section className="mt-6" aria-labelledby="field-discovery-heading">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.08em] text-brand">Start here</p>
+          <h2 id="field-discovery-heading" className="mt-2 text-xl font-semibold tracking-[-0.03em] text-campcareer-ink sm:text-2xl">Find a field that fits you</h2>
+        </div>
+        <p className="hidden max-w-52 text-right text-xs leading-5 text-campcareer-muted sm:block">Choose a field first, then compare the careers inside it.</p>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {STUDY_CATEGORIES.map((category) => {
+          const careers = CAREER_CATALOGUE.filter((career) => career.categoryId === category.id)
+          const example = careers[0]
+          const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness
+          const label = locale === "ko" ? category.labelKo : category.label
+          const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null
+
+          return (
+            <button
+              key={category.id}
+              type="button"
+              onClick={() => onChoose(category.id)}
+              className="group min-h-36 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 text-left shadow-cc-surface transition-colors duration-cc-standard hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 sm:min-h-40"
+            >
+              <span className="grid size-9 place-items-center rounded-cc-surface bg-brand-tint text-brand"><Icon className="size-[18px]" /></span>
+              <span className="mt-4 block text-sm font-semibold leading-5 tracking-[-0.015em] text-campcareer-ink">{label}</span>
+              <span className="mt-2 block text-xs font-medium text-campcareer-muted">{careers.length} roles to explore</span>
+              {exampleLabel ? <span className="mt-1 block truncate text-xs text-campcareer-ink-secondary">e.g. {exampleLabel}</span> : null}
+            </button>
+          )
+        })}
+      </div>
+      <button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-cc-control px-1 text-sm font-semibold text-brand transition-colors duration-cc-fast hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+        {isCareerIndex ? "Browse all careers" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" />
+      </button>
+    </section>
+  )
 }
 
 function matchCareer(career: Career, q: string) {
@@ -213,11 +240,11 @@ export function OccupationExplorer({
     <>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="hidden text-[11px] font-semibold uppercase tracking-[0.12em] text-[#c2691e] sm:block">
+          <p className="hidden text-xs font-semibold tracking-[0.08em] text-brand sm:block">
             Explore
           </p>
           <div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3">
-            <h1 className="text-xl font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
+            <h1 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-campcareer-ink sm:text-3xl">
               {isCareerIndex ? (locale === "ko" ? "커리어" : "Careers") : "Occupation"}
             </h1>
             <CountryPill onChange={updateCountry} />
@@ -234,61 +261,39 @@ export function OccupationExplorer({
       </div>
 
       <div className="relative mt-3 lg:hidden">
-        <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e0dfdb] bg-white px-3 text-[12.5px] font-semibold text-[#4d4c48] transition hover:border-[#c2691e]/50 hover:text-[#c2691e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/25"><SlidersHorizontal className="size-4" /><span>{selectedCategoryLabel}</span><ChevronDown className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")} /></button>
-        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-2xl border border-[#e7e6e3] bg-white p-3 shadow-xl shadow-slate-900/10"><p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">Filter {isCareerIndex ? "careers" : "occupations"}</p><div className="flex flex-wrap gap-2"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>All</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{item.label}</button>)}</div></div> : null}
+        <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"><SlidersHorizontal className="size-4" /><span>{selectedCategoryLabel}</span><ChevronDown className={cn("size-3.5 transition-transform duration-cc-fast", filtersOpen && "rotate-180")} /></button>
+        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-3 shadow-cc-raised"><p className="px-1 pb-2 text-xs font-semibold text-campcareer-muted">Filter {isCareerIndex ? "careers" : "occupations"}</p><FilterBar><FilterChip active={category === "all"} onClick={() => chooseCategory("all")}>All</FilterChip>{STUDY_CATEGORIES.map((item) => <FilterChip key={item.id} active={category === item.id} onClick={() => chooseCategory(item.id)}>{item.label}</FilterChip>)}</FilterBar></div> : null}
       </div>
 
-      <div className="mt-5 hidden flex-wrap gap-2 lg:flex">
-        <button
-          type="button"
-          onClick={() => chooseCategory("all")}
-          className={cn(
-            "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-            category === "all"
-              ? "border-[#c2691e] bg-[#c2691e] text-white"
-              : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
-          )}
-        >
-          All
-        </button>
+      <FilterBar className="mt-5 hidden lg:flex">
+        <FilterChip active={category === "all"} onClick={() => chooseCategory("all")}>All</FilterChip>
         {STUDY_CATEGORIES.map((item) => (
-          <button
+          <FilterChip
             key={item.id}
-            type="button"
             onClick={() => chooseCategory(item.id)}
-            className={cn(
-              "rounded-lg border px-3 py-1.5 text-[12.5px] font-medium transition",
-              category === item.id
-                ? "border-[#c2691e] bg-[#c2691e] text-white"
-                : "border-[#e0dfdb] bg-white text-[#6f6d68] hover:border-[#c2691e]/50 hover:text-[#c2691e]"
-            )}
+            active={category === item.id}
           >
             {item.label}
-          </button>
+          </FilterChip>
         ))}
-      </div>
+      </FilterBar>
 
       {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} isCareerIndex={isCareerIndex} /> : <>
       <div className="mt-6 flex items-center justify-between">
-        <p className="text-[12.5px] font-medium text-[#a3a19b]">
+        <p className="text-sm font-medium text-campcareer-muted">
           {filtered.length} {isCareerIndex ? "careers" : "occupations"}
         </p>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="mt-4 flex h-56 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center">
-          <BriefcaseBusiness className="size-6 text-[#c4c2bc]" />
-          <p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">
-            No {isCareerIndex ? "careers" : "occupations"} match “{query}”.
-          </p>
-        </div>
+        <EmptyState icon={<BriefcaseBusiness className="size-6" />} title={`No ${isCareerIndex ? "careers" : "occupations"} found`} detail={`No results match “${query}”.`} className="mt-4 min-h-56" />
       ) : (
         <div className="mt-3 grid gap-4 lg:grid-cols-12 lg:items-start">
           {selected ? <section id="occupation-detail-mobile" className="min-w-0 scroll-mt-4 lg:hidden"><CountryAwareOccupationDetail career={selected} detail={selectedDetail} countryCode={selectedCountry?.code} countryName={selectedCountry?.name} countryProfile={countryProfile} countryProfileStatus={countryProfileStatus} /></section> : null}
 
           <section className="lg:hidden">
-            <div className="flex items-center justify-between"><h2 className="text-[12.5px] font-semibold text-[#1b1b1b]">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} ${isCareerIndex ? "careers" : "occupations"}`}</h2><span className="text-[11px] text-[#8f8c85]">Tap to view</span></div>
-            <div className="mt-2 space-y-1.5">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition active:scale-[0.99]", isSelected ? "border-[#c2691e]/60 bg-[#fffaf5]" : "border-[#e7e6e3] hover:bg-[#fffaf5]")}><span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e" }} /><span className={cn("min-w-0 flex-1 truncate text-[13px] font-medium", isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]")}>{displayLabel}</span>{demand ? <span className="shrink-0 text-[10px] font-bold text-[#3e7a2e]">{demand.rating.toUpperCase()}</span> : null}</button> })}</div>
+            <div className="flex items-center justify-between"><h2 className="text-sm font-semibold text-campcareer-ink">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} ${isCareerIndex ? "careers" : "occupations"}`}</h2><span className="text-xs text-campcareer-muted">Tap to view</span></div>
+            <div className="mt-2 space-y-2">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30", isSelected ? "border-brand bg-brand-tint" : "border-campcareer-border hover:border-brand/40 hover:bg-secondary")}><span className="size-2 shrink-0 rounded-full bg-brand" /><span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>{demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}</button> })}</div>
           </section>
 
           <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:block lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
@@ -296,17 +301,16 @@ export function OccupationExplorer({
               {grouped.map(([categoryId, careers]) => (
                 <div key={categoryId}>
                   <div className="flex items-baseline justify-between">
-                    <h2 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a3a19b]">
+                    <h2 className="text-xs font-semibold tracking-[0.08em] text-campcareer-muted">
                       {CATEGORY_LABELS.get(categoryId)}
                     </h2>
-                    <span className="text-[10.5px] font-medium text-[#c4c2bc]">
+                    <span className="text-xs font-medium text-campcareer-muted">
                       {careers.length}
                     </span>
                   </div>
                   <div className="mt-2 space-y-1">
                     {careers.map((career) => {
                       const detail = getOccupationDetail(career.id)
-                      const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e"
                       const isSelected = career.id === selectedId
                       const displayLabel = locale === "ko" ? career.labelKo : career.label
                       const countryDemand = selectedCountry
@@ -326,32 +330,27 @@ export function OccupationExplorer({
                           type="button"
                           onClick={() => select(career)}
                           className={cn(
-                            "flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition",
+                            "flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
                             isSelected
-                              ? "border-[#c2691e]/60 bg-[#fffaf5] ring-1 ring-[#c2691e]/20"
-                              : "border-[#e7e6e3] hover:border-[#dfc4a9] hover:bg-[#fffaf5]"
+                              ? "border-brand bg-brand-tint"
+                              : "border-campcareer-border hover:border-brand/40 hover:bg-secondary"
                           )}
                         >
                           <span
-                            className="size-2 shrink-0 rounded-full"
-                            style={{ backgroundColor: accent }}
+                            className="size-2 shrink-0 rounded-full bg-brand"
                           />
                           <span
                             className={cn(
-                              "min-w-0 flex-1 truncate text-[13.5px] font-medium",
-                              isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]"
+                              "min-w-0 flex-1 truncate text-sm font-semibold",
+                              isSelected ? "text-brand" : "text-campcareer-ink"
                             )}
                           >
                             {displayLabel}
                           </span>
                           {selectedScore != null ? (
-                            <span className="shrink-0 rounded-full bg-[#eef4ff] px-2 py-0.5 text-[10px] font-bold text-[#2563eb]">
-                              {selectedScore}
-                            </span>
+                            <Badge variant="primary">{selectedScore}</Badge>
                           ) : demand ? (
-                            <span className="shrink-0 rounded-full bg-[#edf5ea] px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">
-                              {demand.rating.toUpperCase()}
-                            </span>
+                            <Badge variant="success">{demand.rating.toUpperCase()}</Badge>
                           ) : null}
                         </button>
                       )
@@ -373,18 +372,12 @@ export function OccupationExplorer({
                 countryProfileStatus={countryProfileStatus}
               />
             ) : (
-              <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e6e3] bg-white/50 p-10 text-center">
-                <span className="grid size-14 place-items-center rounded-2xl bg-[#fff4e8] text-[#c2691e]">
-                  <MousePointerClick className="size-6" />
-                </span>
-                <h2 className="mt-5 text-[18px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">
-                  Pick an occupation to open its dashboard
-                </h2>
-                <p className="mt-2 max-w-sm text-[13.5px] leading-6 text-[#6f6d68]">
-                  Search or browse the list. Demand ratings, salary ranges and tasks update
-                  instantly here without a page reload.
-                </p>
-              </div>
+              <EmptyState
+                icon={<MousePointerClick className="size-6" />}
+                title={`Pick a ${isCareerIndex ? "career" : "occupation"} to see its details`}
+                detail="Search or browse the list. Available demand, pay and pathway context will update here."
+                className="min-h-[420px]"
+              />
             )}
           </section>
         </div>

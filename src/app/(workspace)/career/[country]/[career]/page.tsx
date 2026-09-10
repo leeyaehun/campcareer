@@ -198,9 +198,9 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <main className="cc-result-motion min-h-[calc(100vh-4rem)] bg-white px-4 pb-16 pt-5 sm:px-8 sm:pt-8">
+      <main className="min-h-[calc(100vh-4rem)] bg-campcareer-surface px-4 pb-16 pt-5 sm:px-8 sm:pt-8">
         <div className="mx-auto max-w-5xl">
-          <Link href={localizePath("/", locale)} className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium text-campcareer-muted transition-colors hover:bg-[hsl(var(--brand-tint))] hover:text-brand">
+          <Link href={localizePath("/", locale)} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-2.5 text-sm font-semibold text-campcareer-muted transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <ArrowLeft className="size-4" /> {locale === "ko" ? "다시 검색하기" : "Search again"}
           </Link>
           <CampCareerScoreHero

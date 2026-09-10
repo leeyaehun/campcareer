@@ -55,7 +55,7 @@ export function CountryPill({
         onClick={() => setOpen((prev) => !prev)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="inline-flex h-9 items-center gap-2 rounded-full border border-[#e0dfdb] bg-white pl-2 pr-3 text-[13px] font-medium text-[#1b1b1b] transition hover:border-[#6d4fc4]/50"
+        className="inline-flex min-h-10 items-center gap-2 rounded-full border border-campcareer-border bg-campcareer-surface pl-2 pr-3 text-[13px] font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
       >
         {selected ? (
           <img
@@ -66,13 +66,13 @@ export function CountryPill({
             className="size-5 shrink-0 rounded-full object-cover"
           />
         ) : (
-          <span className="grid size-5 shrink-0 place-items-center rounded-full bg-[#f3f0fa]">
-            <Globe2 className="size-3 text-[#6d4fc4]" />
+          <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand-tint">
+            <Globe2 className="size-3 text-brand" />
           </span>
         )}
         <span className="max-w-28 truncate">{selected?.name ?? "All countries"}</span>
         <ChevronDown
-          className={cn("size-3.5 shrink-0 text-[#9c9a94] transition", open && "rotate-180")}
+          className={cn("size-3.5 shrink-0 text-campcareer-muted transition-transform duration-cc-fast", open && "rotate-180")}
         />
       </button>
 
@@ -80,7 +80,7 @@ export function CountryPill({
         <div
           role="listbox"
           aria-label="Select country"
-          className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-xl border border-[#e7e6e3] bg-white p-1 shadow-xl shadow-black/5"
+          className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-1 shadow-cc-raised"
         >
           <ul className="max-h-72 overflow-y-auto">
             {allowAll && (
@@ -91,11 +91,11 @@ export function CountryPill({
                   aria-selected={!resolvedCode}
                   onClick={() => handlePick("")}
                   className={cn(
-                    "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition",
-                    !resolvedCode ? "bg-[#f3f0fa] text-[#6d4fc4]" : "text-[#4d4c48] hover:bg-[#fafaf8]"
+                    "flex min-h-9 w-full items-center gap-2.5 rounded-cc-control px-2.5 py-2 text-left text-[13px] font-medium transition-colors duration-cc-fast",
+                    !resolvedCode ? "bg-brand-tint text-brand" : "text-campcareer-ink-secondary hover:bg-secondary"
                   )}
                 >
-                  <Globe2 className="size-4 shrink-0 text-[#9c9a94]" />
+                  <Globe2 className="size-4 shrink-0 text-campcareer-muted" />
                   All countries
                   {!resolvedCode && <Check className="ml-auto size-3.5" />}
                 </button>
@@ -109,10 +109,10 @@ export function CountryPill({
                   aria-selected={resolvedCode === country.code}
                   onClick={() => handlePick(country.code)}
                   className={cn(
-                    "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition",
+                    "flex min-h-9 w-full items-center gap-2.5 rounded-cc-control px-2.5 py-2 text-left text-[13px] font-medium transition-colors duration-cc-fast",
                     resolvedCode === country.code
-                      ? "bg-[#f3f0fa] text-[#6d4fc4]"
-                      : "text-[#4d4c48] hover:bg-[#fafaf8]"
+                      ? "bg-brand-tint text-brand"
+                      : "text-campcareer-ink-secondary hover:bg-secondary"
                   )}
                 >
                   <img

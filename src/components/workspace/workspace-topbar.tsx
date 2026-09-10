@@ -13,11 +13,11 @@ export function WorkspaceTopbar() {
   const pathname = usePathname() || "/"
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b border-[hsl(var(--cc-border))] bg-white">
+    <header className="sticky top-0 z-30 h-16 border-b border-campcareer-border bg-campcareer-surface">
       <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-6 max-sm:px-[18px]">
         <Link
           href={localizePath("/", locale)}
-          className="campcareer-wordmark shrink-0 text-[hsl(var(--cc-ink))]"
+          className="campcareer-wordmark shrink-0 text-campcareer-ink"
           aria-label="CampCareer career search"
         >
           campcareer
@@ -26,7 +26,7 @@ export function WorkspaceTopbar() {
         <PrimaryProductNavigation pathname={pathname} locale={locale} />
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <CompareNavigationAction pathname={pathname} locale={locale} />
-        <LanguageMenu buttonClassName="text-[hsl(var(--cc-muted))] hover:bg-slate-100" />
+        <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-secondary" />
         <WorkspaceUserMenu />
         </div>
       </div>

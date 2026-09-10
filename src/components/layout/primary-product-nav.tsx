@@ -33,10 +33,10 @@ export function PrimaryProductNavigation({ pathname, locale, className }: Primar
             href={localizePath(item.href, locale)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
+              "rounded-cc-control px-2.5 py-2 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
               active
-                ? "bg-[hsl(var(--cc-canvas))] text-[hsl(var(--cc-ink))]"
-                : "text-[hsl(var(--cc-muted))] hover:bg-[hsl(var(--cc-canvas))] hover:text-[hsl(var(--cc-ink))]",
+                ? "bg-brand-tint text-campcareer-ink"
+                : "text-campcareer-muted hover:bg-secondary hover:text-campcareer-ink",
             )}
           >
             {item.label[language]}
@@ -55,10 +55,10 @@ export function CompareNavigationAction({ pathname, locale, className }: Primary
       href={localizePath("/compare", locale)}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "hidden rounded-md border px-2.5 py-1.5 text-sm font-semibold transition-colors lg:inline-flex",
+        "hidden min-h-10 rounded-cc-control border px-3 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 lg:inline-flex",
         active
-          ? "border-brand bg-[hsl(var(--brand-tint))] text-brand"
-          : "border-[hsl(var(--cc-border))] text-[hsl(var(--cc-ink-secondary))] hover:border-brand/40 hover:text-brand",
+          ? "border-brand bg-brand-tint text-brand"
+          : "border-campcareer-border text-campcareer-ink-secondary hover:border-brand/40 hover:text-brand",
         className,
       )}
     >

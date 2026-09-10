@@ -15,12 +15,8 @@ export interface ChoiceCardProps {
 }
 
 /**
- * Full-width tactile option card (Duolingo-style). Reused across the
- * degree-risk flow and anywhere a big, pressable single choice is needed.
- *
- * Depth/press/hover come from the .btn-3d utility (CSS, reduced-motion aware).
- * Framer Motion only animates the selection checkmark, so it never fights the
- * CSS press transform.
+ * Full-width option card for a deliberate single selection. Framer Motion only
+ * animates the selection checkmark and respects reduced-motion preferences.
  */
 export function ChoiceCard({
   label,
@@ -39,13 +35,13 @@ export function ChoiceCard({
       disabled={disabled}
       onClick={onSelect}
       className={cn(
-        "btn-3d group flex w-full items-center gap-4 rounded-xl border px-5 text-left",
+        "group flex w-full items-center gap-4 rounded-cc-large border px-5 text-left shadow-cc-surface transition-colors duration-cc-fast",
         "min-h-[72px] md:min-h-[88px]",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2",
         "disabled:opacity-60 disabled:pointer-events-none",
         selected
           ? "border-brand bg-brand-tint"
-          : "border-slate-200 bg-white hover:border-slate-300",
+          : "border-campcareer-border bg-campcareer-surface hover:border-brand/40 hover:bg-secondary",
         className
       )}
     >
@@ -57,8 +53,8 @@ export function ChoiceCard({
 
       <span
         className={cn(
-          "text-option flex-1 leading-snug",
-          selected ? "text-brand font-semibold" : "text-slate-700"
+          "flex-1 text-lg font-medium leading-snug tracking-[-0.01em] md:text-xl",
+          selected ? "text-brand font-semibold" : "text-campcareer-ink-secondary"
         )}
       >
         {label}

@@ -7,6 +7,7 @@ import { localizePath } from "@/lib/i18n/config"
 import { createClient } from "@/lib/supabase-client"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 import { buildCareerResultHref, getCareerResultCompareHref } from "./career-result-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Locale = "en" | "ko"
 type AuthState = "loading" | "signed-out" | "signed-in"
@@ -87,17 +88,17 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
   }
 
   if (authState === "loading") {
-    return <div className="mt-5 h-10 w-44 animate-pulse rounded-lg bg-slate-100" aria-hidden="true" />
+    return <Skeleton className="mt-5 h-10 w-44" />
   }
 
   const saveIntentHref = `${resultHref}${resultHref.includes("?") ? "&" : "?"}save=1`
   const signedOutSaveHref = `${localizePath("/login", locale)}?next=${encodeURIComponent(saveIntentHref)}`
 
   return (
-    <div className="mt-6 border-t border-[hsl(var(--cc-border))] pt-5" aria-label={locale === "ko" ? "보조 작업" : "Secondary career actions"}>
+    <div className="mt-6 border-t border-campcareer-border pt-5" aria-label={locale === "ko" ? "보조 작업" : "Secondary career actions"}>
       <div className="flex flex-wrap items-center gap-2">
         {authState === "signed-out" ? (
-          <Link href={signedOutSaveHref} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3.5 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-slate-50">
+          <Link href={signedOutSaveHref} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Bookmark className="size-4" /> {locale === "ko" ? "저장" : "Save"}
           </Link>
         ) : (
@@ -106,15 +107,15 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
             onClick={() => void toggleSaved()}
             disabled={saveBusy}
             aria-pressed={saved}
-            className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3.5 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-slate-50 disabled:cursor-wait disabled:opacity-60"
+            className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:cursor-wait disabled:opacity-60"
           >
-            {saved ? <Check className="size-4 text-[hsl(var(--cc-success))]" /> : <Bookmark className="size-4" />}
+            {saved ? <Check className="size-4 text-campcareer-success" /> : <Bookmark className="size-4" />}
             {locale === "ko" ? (saved ? "저장됨" : "저장") : (saved ? "Saved" : "Save")}
           </button>
         )}
 
         {compareHref ? (
-          <Link href={localizePath(compareHref, locale)} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3.5 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-slate-50">
+          <Link href={localizePath(compareHref, locale)} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Scale className="size-4" /> {locale === "ko" ? "비교" : "Compare"}
           </Link>
         ) : null}
