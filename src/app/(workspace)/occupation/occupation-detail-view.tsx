@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  ArrowUpRight,
   BadgeCheck,
   Banknote,
   BriefcaseBusiness,
@@ -13,27 +12,13 @@ import {
   DEMAND_RATING_LABELS,
   type OccupationDetail,
 } from "@/lib/workspace/occupation-detail"
+import { Badge } from "@/components/ui/badge"
+import { EmptyState } from "@/components/ui/status-state"
+import { SourceInfo } from "@/components/ui/data-display"
 
 const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
-const CATEGORY_ACCENT = new Map<string, string>([
-  ["trades", "#c2691e"],
-  ["health", "#2563eb"],
-  ["technology", "#6d4fc4"],
-  ["engineering", "#3e7a2e"],
-  ["business", "#2563eb"],
-  ["education", "#6d4fc4"],
-  ["environment", "#3e7a2e"],
-  ["design", "#c2691e"],
-  ["hospitality", "#c2691e"],
-  ["transport", "#6d4fc4"],
-])
-
-const REGION_RATING_TONE = new Map<string, string>([
-  ["S", "bg-[#edf5ea] text-[#3e7a2e]"],
-  ["M", "bg-[#fbf0e7] text-[#c2691e]"],
-  ["R", "bg-[#f3f0fa] text-[#6d4fc4]"],
-  ["NS", "bg-[#f6f6f4] text-[#a3a19b]"],
-])
+const regionRatingVariant = (rating: string) =>
+  rating === "S" ? "success" : rating === "M" ? "caution" : "neutral"
 
 const fmt = (value: number) => new Intl.NumberFormat("en-US").format(value)
 
@@ -42,15 +27,15 @@ function SalaryBar({ low, median, high }: { low: number; median: number; high: n
 
   return (
     <div className="mt-4">
-      <div className="relative h-2.5 rounded-full bg-[linear-gradient(90deg,#eef4ff,#2563eb)]">
+      <div className="relative h-2.5 rounded-full bg-secondary">
         <div
-          className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#2563eb] shadow-sm"
+          className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-campcareer-surface bg-brand shadow-cc-surface"
           style={{ left: `${position}%` }}
         />
       </div>
-      <div className="mt-2 flex items-center justify-between text-[11px] font-medium text-[#a3a19b]">
+      <div className="mt-2 flex items-center justify-between text-xs font-medium text-campcareer-muted">
         <span>low {fmt(low)}</span>
-        <span className="text-[#2563eb]">median {fmt(median)}</span>
+        <span className="text-brand">median {fmt(median)}</span>
         <span>high {fmt(high)}</span>
       </div>
     </div>
@@ -68,7 +53,6 @@ export function OccupationDetailPanel({
   countryCode?: string
   countryName?: string
 }) {
-  const accent = CATEGORY_ACCENT.get(career.categoryId) ?? "#2563eb"
   const categoryLabel = CATEGORY_LABELS.get(career.categoryId) ?? career.categoryId
 
   const demand = detail?.demand.filter(
@@ -80,88 +64,54 @@ export function OccupationDetailPanel({
 
   if (!detail) {
     return (
-      <div className="rounded-2xl border border-[#e7e6e3] bg-white p-8 text-center">
-        <span
-          className="mx-auto grid size-12 place-items-center rounded-2xl"
-          style={{ backgroundColor: `${accent}14`, color: accent }}
-        >
-          <BriefcaseBusiness className="size-5" />
-        </span>
-        <p className="mt-4 text-[13px] font-semibold uppercase tracking-[0.08em]" style={{ color: accent }}>
-          {categoryLabel}
-        </p>
-        <h2 className="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
-          {career.label}
-        </h2>
-        <p className="mt-1 text-[14px] text-[#6f6d68]">{career.labelKo}</p>
-        <p className="mt-6 text-[13px] text-[#a3a19b]">
-          A detailed entry for this occupation is coming. It will follow the Registered
-          Nurse template.
-        </p>
-      </div>
+      <EmptyState icon={<BriefcaseBusiness className="size-5" />} title={career.label} detail={`A detailed ${categoryLabel} entry is still being verified. Missing details remain unpublished.`} />
     )
   }
 
   return (
     <div className="space-y-4">
-      <section
-        className="relative overflow-hidden rounded-2xl p-7 text-white"
-        style={{ backgroundColor: accent }}
-      >
-        <span aria-hidden="true" className="absolute -top-16 -right-10 size-44 rounded-full bg-white/10" />
-        <span aria-hidden="true" className="absolute -bottom-20 right-24 size-32 rounded-full bg-white/10" />
-        <div className="relative">
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface sm:p-7">
+        <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm">
+            <span className="rounded-full bg-brand-tint px-2.5 py-1 text-xs font-semibold text-brand">
               {categoryLabel}
             </span>
-            <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium backdrop-blur-sm">
+            <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-campcareer-ink-secondary">
               {detail.labelKo}
             </span>
           </div>
-          <h2 className="mt-4 text-[30px] font-semibold leading-tight tracking-[-0.025em]">
+          <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.03em] text-campcareer-ink">
             {detail.label}
           </h2>
-          <p className="mt-2 max-w-xl text-[13.5px] leading-6 text-white/85">{detail.overview.en}</p>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-campcareer-ink-secondary">{detail.overview.en}</p>
         </div>
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {(demand?.length ? demand : detail.demand).map((entry) => (
-          <div key={`demand-${entry.countryCode}`} className="rounded-2xl border border-[#e7e6e3] bg-white p-5">
+          <div key={`demand-${entry.countryCode}`} className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface">
             <div className="flex items-center justify-between">
-              <p className="text-[12.5px] font-medium text-[#a3a19b]">
+              <p className="text-sm font-medium text-campcareer-muted">
                 Demand · {entry.countryLabel}
                 {countryCode === entry.countryCode && countryName && (
-                  <span className="ml-1.5 rounded-full bg-[#edf5ea] px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide text-[#3e7a2e]">
-                    {countryName}
-                  </span>
+                  <Badge variant="success" className="ml-1.5">{countryName}</Badge>
                 )}
               </p>
-              <BadgeCheck className="size-4 text-[#3e7a2e]" />
+              <BadgeCheck className="size-4 text-campcareer-success" />
             </div>
-            <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-[#edf5ea] px-2.5 py-1 text-[13px] font-semibold text-[#3e7a2e]">
-              <span className="size-1.5 rounded-full bg-[#3e7a2e]" />
-              {entry.rating}
-            </span>
-            <p className="mt-2.5 text-[13px] leading-5.5 text-[#6f6d68]">{entry.note}</p>
+            <Badge variant="success" className="mt-2.5">{entry.rating}</Badge>
+            <p className="mt-2.5 text-sm leading-6 text-campcareer-ink-secondary">{entry.note}</p>
 
             {entry.regionRatings && (
               <div className="mt-3 grid grid-cols-4 gap-1.5">
                 {Object.entries(entry.regionRatings).map(([region, rating]) => (
                   <div
                     key={region}
-                    className="flex flex-col items-center gap-0.5 rounded-lg border border-[#f0efec] bg-[#fafaf8] py-1.5"
+                    className="flex flex-col items-center gap-0.5 rounded-cc-control border border-campcareer-border bg-campcareer-canvas py-1.5"
                     title={`${region}: ${DEMAND_RATING_LABELS[rating] ?? rating}`}
                   >
-                    <span className="text-[10px] font-semibold text-[#9c9a94]">{region}</span>
-                    <span
-                      className={`grid size-5 place-items-center rounded-full text-[10px] font-bold ${
-                        REGION_RATING_TONE.get(rating) ?? "bg-[#f6f6f4] text-[#a3a19b]"
-                      }`}
-                    >
-                      {rating}
-                    </span>
+                    <span className="text-[10px] font-semibold text-campcareer-muted">{region}</span>
+                    <Badge variant={regionRatingVariant(rating)}>{rating}</Badge>
                   </div>
                 ))}
               </div>
@@ -171,7 +121,7 @@ export function OccupationDetailPanel({
               href={entry.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block text-[12px] font-medium text-[#2563eb] hover:underline"
+              className="mt-3 inline-flex min-h-10 items-center rounded-cc-control px-1 text-xs font-semibold text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
             >
               {entry.sourceLabel} →
             </a>
@@ -179,28 +129,26 @@ export function OccupationDetailPanel({
         ))}
 
         {(salaries?.length ? salaries : detail.salaries).map((entry) => (
-          <div key={`salary-${entry.countryCode}`} className="rounded-2xl border border-[#e7e6e3] bg-white p-5">
+          <div key={`salary-${entry.countryCode}`} className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface">
             <div className="flex items-center justify-between">
-              <p className="text-[12.5px] font-medium text-[#a3a19b]">
+              <p className="text-sm font-medium text-campcareer-muted">
                 Salary · {entry.countryLabel}
                 {countryCode === entry.countryCode && countryName && (
-                  <span className="ml-1.5 rounded-full bg-[#edf5ea] px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide text-[#3e7a2e]">
-                    {countryName}
-                  </span>
+                  <Badge variant="success" className="ml-1.5">{countryName}</Badge>
                 )}
               </p>
-              <Banknote className="size-4 text-[#c2691e]" />
+              <Banknote className="size-4 text-brand" />
             </div>
-            <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
+            <p className="mt-2 text-2xl font-semibold tracking-[-0.025em] tabular-nums text-campcareer-ink">
               {entry.currency} {fmt(entry.median)}
-              <span className="ml-1.5 text-[12px] font-medium text-[#a3a19b]">/ yr median</span>
+              <span className="ml-1.5 text-xs font-medium text-campcareer-muted">/ yr median</span>
             </p>
             <SalaryBar low={entry.low} median={entry.median} high={entry.high} />
             <a
               href={entry.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block text-[12px] font-medium text-[#2563eb] hover:underline"
+              className="mt-3 inline-flex min-h-10 items-center rounded-cc-control px-1 text-xs font-semibold text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
             >
               {entry.sourceLabel} →
             </a>
@@ -208,48 +156,35 @@ export function OccupationDetailPanel({
         ))}
       </div>
 
-      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-        <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">What they do</h2>
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+        <h2 className="text-base font-semibold tracking-[-0.01em] text-campcareer-ink">What they do</h2>
         <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
           {detail.mainTasks.map((task, index) => (
             <div
               key={task}
-              className="flex items-center gap-3 rounded-xl border border-[#f0efec] bg-[#fafaf8] p-3"
+              className="flex items-center gap-3 rounded-cc-surface border border-campcareer-border bg-campcareer-canvas p-3"
             >
-              <span
-                className="grid size-6 shrink-0 place-items-center rounded-lg text-[11.5px] font-bold text-white"
-                style={{ backgroundColor: accent }}
-              >
+              <span className="grid size-6 shrink-0 place-items-center rounded-cc-control bg-brand text-xs font-bold text-white">
                 {index + 1}
               </span>
-              <p className="text-[13px] leading-5 text-[#4d4c48]">{task}</p>
+              <p className="text-sm leading-5 text-campcareer-ink-secondary">{task}</p>
             </div>
           ))}
         </div>
       </section>
 
       {detail.registration && (
-        <section className="flex items-start gap-3 rounded-2xl border border-[#f0e0cb] bg-[#fbf0e7] p-5">
-          <ShieldAlert className="mt-0.5 size-5 shrink-0 text-[#c2691e]" />
-          <p className="text-[13.5px] leading-6 text-[#5d4a33]">{detail.registration.en}</p>
+        <section className="flex items-start gap-3 rounded-cc-large border border-campcareer-caution/25 bg-campcareer-caution/10 p-5">
+          <ShieldAlert className="mt-0.5 size-5 shrink-0 text-campcareer-caution" />
+          <p className="text-sm leading-6 text-campcareer-ink-secondary">{detail.registration.en}</p>
         </section>
       )}
 
-      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-        <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-[#1b1b1b]">Sources</h2>
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+        <h2 className="text-base font-semibold tracking-[-0.01em] text-campcareer-ink">Sources</h2>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {detail.sources.map((source) => (
-            <li key={source.url}>
-              <a
-                href={source.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between rounded-xl border border-[#f0efec] bg-[#fafaf8] px-3.5 py-2.5 text-[12.5px] font-medium text-[#1b1b1b] transition hover:border-[#d8d8d4]"
-              >
-                {source.label}
-                <ArrowUpRight className="ml-2 size-3.5 shrink-0 text-[#9c9a94]" />
-              </a>
-            </li>
+            <li key={source.url}><SourceInfo label={source.label} href={source.url} /></li>
           ))}
         </ul>
       </section>

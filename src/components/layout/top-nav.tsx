@@ -53,12 +53,12 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
   const accountInitial = Array.from(displayName.trim())[0]?.toLocaleUpperCase() || "C"
 
   return (
-    <header className="sticky top-0 z-40 h-16 border-b border-[hsl(var(--cc-border))] bg-white">
+    <header className="sticky top-0 z-40 h-16 border-b border-campcareer-border bg-campcareer-surface">
       <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
         <div className="flex h-16 items-center gap-4">
           <Link
             href={homeDestination}
-            className="campcareer-wordmark shrink-0 text-[hsl(var(--cc-ink))]"
+            className="campcareer-wordmark shrink-0 text-campcareer-ink"
             aria-label="CampCareer home"
           >
             campcareer
@@ -68,13 +68,13 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
 
           <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
             <CompareNavigationAction pathname={pathname} locale={pathLocale} />
-            <LanguageMenu buttonClassName="text-[hsl(var(--cc-muted))] hover:bg-slate-100" />
+            <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-secondary" />
 
             {user ? (
               <Link
                 href={profileDestination}
                 aria-label={pathLocale === "ko" ? "프로필 열기" : "Open profile"}
-                className="inline-flex rounded-lg border border-[hsl(var(--cc-border))] bg-white p-1.5 text-sm font-semibold text-[hsl(var(--cc-ink))] transition hover:bg-slate-50"
+                className="inline-flex min-h-10 rounded-cc-control border border-campcareer-border bg-campcareer-surface p-1.5 text-sm font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
               >
                 <span className="grid size-6 place-items-center rounded-full bg-blue-50 text-[10px] font-semibold text-brand" aria-hidden="true">
                   {accountInitial}
@@ -88,7 +88,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
                   const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
                   window.location.assign(`${loginPath}?next=${encodeURIComponent(returnTo || homeDestination)}`)
                 }}
-                className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3 py-2 text-sm font-semibold text-[hsl(var(--cc-ink))] transition hover:bg-slate-50")}
+                className={cn("inline-flex min-h-10 items-center gap-1.5 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30")}
               >
                 <LogIn className="size-4" />
                 {pathLocale === "ko" ? "로그인" : "Log in"}

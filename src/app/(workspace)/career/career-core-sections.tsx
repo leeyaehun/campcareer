@@ -12,6 +12,9 @@ import {
 import { localizePath } from "@/lib/i18n/config"
 import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
+import { SourceInfo } from "@/components/ui/data-display"
+import { Skeleton } from "@/components/ui/skeleton"
+import { EmptyState as SurfaceEmptyState } from "@/components/ui/status-state"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 
 type Locale = "en" | "ko"
@@ -299,7 +302,7 @@ export function CareerCoreSections({
   if (failed) {
     return (
       <section className="mt-10 border-t border-campcareer-border pt-8" aria-live="polite">
-        <CircleAlert className="size-5 text-[hsl(var(--cc-caution))]" />
+        <CircleAlert className="size-5 text-campcareer-caution" />
         <h2 className="mt-3 text-xl font-semibold text-campcareer-ink">{tr(locale, "상세 근거를 불러오지 못했습니다.", "We could not load the detailed evidence.")}</h2>
         <p className="mt-2 text-sm leading-6 text-campcareer-muted">{tr(locale, "점수는 그대로 유지됩니다. 잠시 후 상세 근거를 다시 확인해 주세요.", "Your score is unchanged. Please try the detailed evidence again shortly.")}</p>
       </section>
@@ -389,15 +392,14 @@ export function CareerCoreSections({
             </Link>
           </div>
         ) : (
-          <EmptyState
+          <SurfaceEmptyState
             icon={<GraduationCap className="size-5" />}
             title={tr(locale, "검증된 직접 과정 링크를 더 정리하고 있습니다.", "We are still consolidating verified program links.")}
             detail={tr(locale, "직업 진입에 학업이 필요한 경우, 관련 과정만 연결합니다. 현재는 Programs에서 추가 옵션을 확인할 수 있습니다.", "When study is required for entry, CampCareer links only relevant routes. You can inspect additional options in Programs for now.")}
-          >
-            <Link href={programsHref} className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
+            action={<Link href={programsHref} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-1 text-sm font-semibold text-brand transition-colors duration-cc-fast hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
               {tr(locale, "이 커리어의 Programs 보기", "Explore Programs for this career")} <ArrowRight className="size-4" />
-            </Link>
-          </EmptyState>
+            </Link>}
+          />
         )}
       </section>
 
@@ -412,7 +414,7 @@ export function CareerCoreSections({
             {jobs.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<BriefcaseBusiness className="size-4" />} />)}
           </div>
         ) : (
-          <EmptyState
+          <SurfaceEmptyState
             icon={<BriefcaseBusiness className="size-5" />}
             title={tr(locale, "직접 연결된 채용 링크를 더 확인하고 있습니다.", "We are still verifying direct job links.")}
             detail={tr(locale, "CampCareer는 확인되지 않은 채용 공고를 만들어내지 않습니다. 공식 고용주나 채용 출처가 확인되면 이곳에 연결합니다.", "CampCareer does not invent job listings. Verified employer or job-search sources will appear here when available.")}
@@ -425,13 +427,13 @@ export function CareerCoreSections({
 
 function CareerCoreSkeleton() {
   return (
-    <div className="mt-10 animate-pulse border-t border-campcareer-border pt-8" aria-hidden="true">
-      <div className="h-4 w-28 rounded bg-slate-200" />
-      <div className="mt-3 h-8 w-48 rounded bg-slate-200" />
+    <div className="mt-10 border-t border-campcareer-border pt-8" aria-label="Loading" role="status">
+      <Skeleton className="h-4 w-28" />
+      <Skeleton className="mt-3 h-8 w-48" />
       <div className="mt-7 space-y-4">
-        <div className="h-16 rounded-lg bg-slate-100" />
-        <div className="h-16 rounded-lg bg-slate-100" />
-        <div className="h-16 rounded-lg bg-slate-100" />
+        <Skeleton className="h-16" />
+        <Skeleton className="h-16" />
+        <Skeleton className="h-16" />
       </div>
     </div>
   )
@@ -449,22 +451,16 @@ function SectionHeading({ eyebrow, title, description }: { eyebrow: string; titl
 
 function ResourceRow({ resource }: { resource: ResourceLink }) {
   return (
-    <a href={resource.href} target="_blank" rel="noreferrer" className="group flex items-start justify-between gap-3 rounded-lg border border-campcareer-border bg-white px-4 py-3 transition hover:border-blue-200">
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-semibold text-campcareer-ink">{resource.label}</span>
-        {(resource.detail || resource.meta) && <span className="mt-0.5 block text-xs leading-5 text-campcareer-muted">{[resource.detail, resource.meta].filter(Boolean).join(" · ")}</span>}
-      </span>
-      <ExternalLink className="mt-0.5 size-3.5 shrink-0 text-campcareer-muted transition group-hover:text-brand" />
-    </a>
+    <SourceInfo label={resource.label} detail={[resource.detail, resource.meta].filter(Boolean).join(" · ") || undefined} href={resource.href} />
   )
 }
 
 function ResourceCard({ resource, icon }: { resource: ResourceLink; icon: ReactNode }) {
   return (
-    <a href={resource.href} target="_blank" rel="noreferrer" className="group rounded-lg border border-campcareer-border bg-white p-4 transition hover:border-blue-200">
+    <a href={resource.href} target="_blank" rel="noreferrer" className="group rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       <div className="flex items-start justify-between gap-3">
-        <span className="grid size-8 place-items-center rounded-md bg-[hsl(var(--brand-tint))] text-brand">{icon}</span>
-        <ExternalLink className="size-3.5 text-campcareer-muted transition group-hover:text-brand" />
+        <span className="grid size-8 place-items-center rounded-cc-control bg-brand-tint text-brand">{icon}</span>
+        <ExternalLink className="size-3.5 text-campcareer-muted transition-colors duration-cc-fast group-hover:text-brand" />
       </div>
       <h3 className="mt-4 text-sm font-semibold leading-5 text-campcareer-ink">{resource.label}</h3>
       {resource.detail && <p className="mt-1 text-xs leading-5 text-campcareer-ink-secondary">{resource.detail}</p>}
@@ -475,19 +471,8 @@ function ResourceCard({ resource, icon }: { resource: ResourceLink; icon: ReactN
 
 function ExternalAction({ href, label }: { href: string; label: string }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
+    <a href={href} target="_blank" rel="noreferrer" className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-cc-control px-1 text-sm font-semibold text-brand transition-colors duration-cc-fast hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       {label} <ExternalLink className="size-3.5" />
     </a>
-  )
-}
-
-function EmptyState({ icon, title, detail, children }: { icon: ReactNode; title: string; detail: string; children?: ReactNode }) {
-  return (
-    <div className="mt-7 rounded-lg border border-campcareer-border bg-white p-5">
-      <div className="text-campcareer-muted">{icon}</div>
-      <h3 className="mt-3 text-base font-semibold text-campcareer-ink">{title}</h3>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-campcareer-ink-secondary">{detail}</p>
-      {children}
-    </div>
   )
 }

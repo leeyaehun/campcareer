@@ -26,6 +26,9 @@ import {
   type CareerComparisonFieldKey,
   type CareerComparisonRow,
 } from "@/data/career-comparison/rows"
+import { CompareCell, CompareShell } from "@/components/ui/compare"
+import { DataTable, DataTableHeader, DataTableRow } from "@/components/ui/data-table"
+import { Dialog, DialogCloseButton, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 
 type CareerDisplaySection = {
   title: string
@@ -81,13 +84,13 @@ export default function CareersCompareMatrix() {
   }
 
   return (
-    <section className="mt-1" aria-label="Career comparison">
+    <CompareShell>
       <div className="mb-3 flex justify-end">
         <CareerLocationControl citySlug={comparison.citySlug} onChange={(citySlug) => updateUrl(citySlug, comparison.careerIds)} />
       </div>
 
       {!canCompare ? (
-        <p className="mb-3 text-sm font-medium text-[#5f5d57]" role="status">{getCareerSelectionStatusMessage(comparison.careers.length)}</p>
+        <p className="mb-3 text-sm font-medium text-campcareer-ink-secondary" role="status">{getCareerSelectionStatusMessage(comparison.careers.length)}</p>
       ) : null}
 
       <DesktopMatrix
@@ -124,7 +127,7 @@ export default function CareersCompareMatrix() {
           onClose={closeChooser}
         />
       ) : null}
-    </section>
+    </CompareShell>
   )
 }
 
@@ -181,11 +184,11 @@ type MatrixProps = {
 
 function CareerLocationControl({ citySlug, onChange }: { citySlug: string | null; onChange: (citySlug: string | null) => void }) {
   return (
-    <label className="relative inline-flex min-h-10 items-center rounded-xl border border-[#deddd9] bg-white transition focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600/20">
+    <label className="relative inline-flex min-h-10 items-center rounded-cc-control border border-campcareer-border bg-campcareer-surface shadow-cc-surface transition-colors duration-cc-fast focus-within:border-brand focus-within:ring-2 focus-within:ring-ring/30">
       <span className="sr-only">Career comparison location</span>
-      <span aria-hidden="true" className="pointer-events-none flex items-center gap-2 px-3 text-sm font-semibold text-[#34332f]">
+      <span aria-hidden="true" className="pointer-events-none flex items-center gap-2 px-3 text-sm font-semibold text-campcareer-ink">
         {citySlug ? AU_CAREER_COMPARE_CITIES.find((city) => city.citySlug === citySlug)?.cityName ?? "National" : "National"}
-        <ChevronDown className="size-4 text-[#77746e]" />
+        <ChevronDown className="size-4 text-campcareer-muted" />
       </span>
       <select
         aria-label="Choose a city for career comparison"
@@ -202,13 +205,13 @@ function CareerLocationControl({ citySlug, onChange }: { citySlug: string | null
 
 function DesktopMatrix({ comparison, sections, slots, chooserSlot, showAdd, triggerRefs, onOpenChooser, onRemove, onAddThird, onCancelThird }: MatrixProps) {
   return (
-    <div className="hidden border-y border-[#e7e6e3] bg-white md:block">
-      <table className="w-full table-fixed border-collapse text-left text-sm">
-        <thead>
-          <tr>
-            <th scope="col" className="sticky top-14 z-20 w-36 border-b border-[#e7e6e3] bg-white/95 px-4 py-3 backdrop-blur-md xl:w-44">
+    <div className="hidden md:block">
+      <DataTable label="Career comparison" className="min-w-[42rem] table-fixed">
+        <DataTableHeader>
+          <DataTableRow>
+            <th scope="col" className="sticky top-14 z-20 w-36 border-b border-campcareer-border bg-campcareer-surface/95 px-4 py-3 backdrop-blur-sm xl:w-44">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#77746e]">Compare</span>
+                <span className="text-xs font-semibold tracking-[0.08em] text-campcareer-muted">Compare</span>
                 {showAdd ? <AddCareerButton onClick={onAddThird} /> : null}
               </div>
             </th>
@@ -224,8 +227,8 @@ function DesktopMatrix({ comparison, sections, slots, chooserSlot, showAdd, trig
                 onCancel={slot === 2 && !comparison.careers[slot] ? onCancelThird : undefined}
               />
             ))}
-          </tr>
-        </thead>
+          </DataTableRow>
+        </DataTableHeader>
         {comparison.careers.length >= 2 ? (
           <tbody>
             {sections.map((section) => (
@@ -233,7 +236,7 @@ function DesktopMatrix({ comparison, sections, slots, chooserSlot, showAdd, trig
             ))}
           </tbody>
         ) : null}
-      </table>
+      </DataTable>
     </div>
   )
 }
@@ -242,13 +245,13 @@ function CareerSectionRows({ section, slots, careers }: { section: CareerDisplay
   return (
     <>
       <tr>
-        <th colSpan={slots.length + 1} className="border-b border-[#e7e6e3] bg-[#f7f7f5] px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.title}</th>
+        <th colSpan={slots.length + 1} className="border-b border-campcareer-border bg-campcareer-canvas px-4 py-2.5 text-left text-xs font-semibold tracking-[0.08em] text-campcareer-muted">{section.title}</th>
       </tr>
       {section.rows.map((row) => (
         <tr key={row.key}>
-          <th scope="row" className="border-b border-[#ecebe7] bg-white px-4 py-4 align-top text-sm font-medium text-[#5f5d57]">{row.label}</th>
+          <th scope="row" className="border-b border-campcareer-border bg-campcareer-surface px-4 py-4 align-top text-sm font-medium text-campcareer-ink-secondary">{row.label}</th>
           {slots.map((slot) => (
-            <td key={slot} className="border-b border-l border-[#ecebe7] px-5 py-4 align-top">
+            <td key={slot} className="border-b border-l border-campcareer-border px-5 py-4 align-top">
               {careers[slot] ? <CareerValue value={row.values[slot] ?? { primary: CAREER_COMPARE_MISSING_VALUE }} /> : null}
             </td>
           ))}
@@ -261,7 +264,7 @@ function CareerSectionRows({ section, slots, careers }: { section: CareerDisplay
 function MobileMatrix({ comparison, sections, slots, chooserSlot, showAdd, triggerRefs, onOpenChooser, onRemove, onAddThird, onCancelThird }: MatrixProps) {
   return (
     <div className="md:hidden">
-      <div className="sticky top-14 z-20 -mx-1 border-y border-[#e7e6e3] bg-white/95 px-1 py-2 backdrop-blur-md" aria-label="Career comparison columns">
+      <div className="sticky top-14 z-20 -mx-1 border-y border-campcareer-border bg-campcareer-surface/95 px-1 py-2 backdrop-blur-sm" aria-label="Career comparison columns">
         <div className="grid grid-cols-2 gap-2">
           {slots.map((slot) => (
             <CareerMobileHeader
@@ -278,7 +281,7 @@ function MobileMatrix({ comparison, sections, slots, chooserSlot, showAdd, trigg
           ))}
         </div>
         {showAdd ? (
-          <button type="button" onClick={onAddThird} className="mt-2 inline-flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+          <button type="button" onClick={onAddThird} className="mt-2 inline-flex min-h-10 items-center rounded-cc-control px-2 text-sm font-semibold text-brand transition-colors duration-cc-fast hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Plus aria-hidden="true" className="mr-1.5 size-4" /> Add career
           </button>
         ) : null}
@@ -288,17 +291,16 @@ function MobileMatrix({ comparison, sections, slots, chooserSlot, showAdd, trigg
         <div className="mt-5 space-y-7">
           {sections.map((section) => (
             <section key={section.title}>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.title}</h3>
-              <div className="mt-2 divide-y divide-[#ecebe7] border-y border-[#ecebe7]">
+              <h3 className="text-xs font-semibold tracking-[0.08em] text-campcareer-muted">{section.title}</h3>
+              <div className="mt-2 divide-y divide-campcareer-border border-y border-campcareer-border">
                 {section.rows.map((row) => (
                   <div key={row.key} className="py-4">
-                    <p className="text-sm font-medium text-[#5f5d57]">{row.label}</p>
+                    <p className="text-sm font-medium text-campcareer-ink-secondary">{row.label}</p>
                     <div className="mt-2 grid grid-cols-2 gap-2">
                       {comparison.careers.map((career, index) => (
-                        <div key={`${row.key}-${career.id}`} className="min-w-0 rounded-xl bg-[#fafaf9] p-3">
-                          <p className="truncate text-[11px] font-semibold text-[#77746e]">{career.label}</p>
-                          <div className="mt-1"><CareerValue value={row.values[index] ?? { primary: CAREER_COMPARE_MISSING_VALUE }} /></div>
-                        </div>
+                        <CompareCell key={`${row.key}-${career.id}`} label={career.label}>
+                          <CareerValue value={row.values[index] ?? { primary: CAREER_COMPARE_MISSING_VALUE }} />
+                        </CompareCell>
                       ))}
                     </div>
                   </div>
@@ -314,7 +316,7 @@ function MobileMatrix({ comparison, sections, slots, chooserSlot, showAdd, trigg
 
 function CareerColumnHeader({ slot, career, chooserOpen, triggerRef, onOpen, onRemove, onCancel }: { slot: number; career: AustraliaCareerComparison | null; chooserOpen: boolean; triggerRef: (element: HTMLButtonElement | null) => void; onOpen: (slot: number) => void; onRemove: (slot: number) => void; onCancel?: () => void }) {
   return (
-    <th scope="col" className="sticky top-14 z-20 border-b border-l border-[#e7e6e3] bg-white/95 px-2 py-2 align-top backdrop-blur-md">
+    <th scope="col" className="sticky top-14 z-20 border-b border-l border-campcareer-border bg-campcareer-surface/95 px-2 py-2 align-top backdrop-blur-sm">
       <div className="relative">
         <CareerTrigger slot={slot} career={career} chooserOpen={chooserOpen} triggerRef={triggerRef} onOpen={onOpen} />
         {career ? <RemoveCareerButton career={career} onClick={() => onRemove(slot)} /> : null}
@@ -326,7 +328,7 @@ function CareerColumnHeader({ slot, career, chooserOpen, triggerRef, onOpen, onR
 
 function CareerMobileHeader({ slot, career, chooserOpen, triggerRef, onOpen, onRemove, onCancel, className }: { slot: number; career: AustraliaCareerComparison | null; chooserOpen: boolean; triggerRef: (element: HTMLButtonElement | null) => void; onOpen: (slot: number) => void; onRemove: (slot: number) => void; onCancel?: () => void; className?: string }) {
   return (
-    <div className={`relative min-w-0 rounded-xl border border-[#e7e6e3] bg-white p-1 ${className ?? ""}`}>
+    <div className={`relative min-w-0 rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-1 shadow-cc-surface ${className ?? ""}`}>
       <CareerTrigger slot={slot} career={career} chooserOpen={chooserOpen} triggerRef={triggerRef} onOpen={onOpen} />
       {career ? <RemoveCareerButton career={career} onClick={() => onRemove(slot)} /> : null}
       {onCancel ? <CancelCareerButton onClick={onCancel} /> : null}
@@ -343,18 +345,18 @@ function CareerTrigger({ slot, career, chooserOpen, triggerRef, onOpen }: { slot
       aria-expanded={chooserOpen}
       aria-label={career ? `Change career from ${career.label}` : `Select career ${slot + 1}`}
       onClick={() => onOpen(slot)}
-      className="relative min-h-16 w-full rounded-lg px-3 py-2.5 pr-10 text-left hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35"
+      className="relative min-h-16 w-full rounded-cc-control px-3 py-2.5 pr-10 text-left transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
     >
-      <span className="block pr-5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#77746e]">Career {slot + 1}</span>
-      <span className="mt-1 block break-words pr-5 text-sm font-semibold leading-5 text-[#1b1b1b]">{career ? career.label : "Choose a career"}</span>
-      <ChevronDown aria-hidden="true" className="absolute right-3 top-5 size-4 text-[#77746e]" />
+      <span className="block pr-5 text-xs font-semibold tracking-[0.08em] text-campcareer-muted">Career {slot + 1}</span>
+      <span className="mt-1 block break-words pr-5 text-sm font-semibold leading-5 text-campcareer-ink">{career ? career.label : "Choose a career"}</span>
+      <ChevronDown aria-hidden="true" className="absolute right-3 top-5 size-4 text-campcareer-muted" />
     </button>
   )
 }
 
 function RemoveCareerButton({ career, onClick }: { career: AustraliaCareerComparison; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} aria-label={`Remove ${career.label} from comparison`} className="absolute right-1 top-1 z-10 inline-flex size-9 items-center justify-center rounded-lg text-[#77746e] hover:bg-[#f0efeb] hover:text-[#1b1b1b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+    <button type="button" onClick={onClick} aria-label={`Remove ${career.label} from comparison`} className="absolute right-1 top-1 z-10 inline-flex size-9 items-center justify-center rounded-cc-control text-campcareer-muted transition-colors duration-cc-fast hover:bg-secondary hover:text-campcareer-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       <X aria-hidden="true" className="size-4" />
     </button>
   )
@@ -362,7 +364,7 @@ function RemoveCareerButton({ career, onClick }: { career: AustraliaCareerCompar
 
 function CancelCareerButton({ onClick }: { onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} aria-label="Cancel empty career column" className="absolute right-1 top-1 z-10 min-h-9 rounded-lg px-2 text-xs font-semibold text-[#5f5d57] hover:bg-[#f0efeb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+    <button type="button" onClick={onClick} aria-label="Cancel empty career column" className="absolute right-1 top-1 z-10 min-h-9 rounded-cc-control px-2 text-xs font-semibold text-campcareer-ink-secondary transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       Cancel
     </button>
   )
@@ -370,7 +372,7 @@ function CancelCareerButton({ onClick }: { onClick: () => void }) {
 
 function AddCareerButton({ onClick }: { onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} aria-label="Add a third career" className="inline-flex size-9 items-center justify-center rounded-lg text-blue-700 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+    <button type="button" onClick={onClick} aria-label="Add a third career" className="inline-flex size-9 items-center justify-center rounded-cc-control text-brand transition-colors duration-cc-fast hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       <Plus aria-hidden="true" className="size-4" />
     </button>
   )
@@ -380,8 +382,8 @@ function CareerValue({ value }: { value: CareerComparisonDisplayValue }) {
   const missing = value.primary === CAREER_COMPARE_MISSING_VALUE
   return (
     <div className="min-w-0">
-      <p className={`break-words text-sm font-semibold leading-6 ${missing ? "text-[#9a978f]" : "text-[#1b1b1b]"}`}>{missing ? "—" : value.primary}</p>
-      {value.secondary ? <p className="mt-0.5 break-words text-xs leading-5 text-[#6f6d68]">{value.secondary}</p> : null}
+      <p className={`break-words text-sm font-semibold leading-6 ${missing ? "text-campcareer-muted" : "text-campcareer-ink"}`}>{missing ? "—" : value.primary}</p>
+      {value.secondary ? <p className="mt-0.5 break-words text-xs leading-5 text-campcareer-ink-secondary">{value.secondary}</p> : null}
     </div>
   )
 }
@@ -389,33 +391,25 @@ function CareerValue({ value }: { value: CareerComparisonDisplayValue }) {
 function CareerChooser({ selectedIds, currentId, onChoose, onClose }: { selectedIds: readonly CareerCompareId[]; currentId?: CareerCompareId; onChoose: (careerId: CareerCompareId) => void; onClose: () => void }) {
   const options = getCareerCompareOptions(selectedIds, currentId)
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") onClose() }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [onClose])
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/25 p-3 sm:items-center" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
-      <div role="dialog" aria-modal="true" aria-labelledby="career-chooser-heading" className="w-full max-w-md rounded-2xl border border-[#e7e6e3] bg-white p-4 shadow-xl">
+    <Dialog open onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-w-md">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 id="career-chooser-heading" className="text-base font-semibold text-[#1b1b1b]">Choose a career</h2>
-            <p className="mt-1 text-sm text-[#6f6d68]">Choose a career for this comparison column.</p>
+            <DialogTitle id="career-chooser-heading" className="text-base font-semibold text-campcareer-ink">Choose a career</DialogTitle>
+            <DialogDescription className="mt-1 text-sm text-campcareer-ink-secondary">Choose a career for this comparison column.</DialogDescription>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close career chooser" className="inline-flex size-11 shrink-0 items-center justify-center rounded-lg text-[#6f6d68] hover:bg-[#f0efeb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
-            <X aria-hidden="true" className="size-5" />
-          </button>
+          <DialogCloseButton className="shrink-0" />
         </div>
         <div className="mt-4 max-h-[60vh] space-y-2 overflow-y-auto pr-1">
           {options.map((option) => (
-            <button key={option.id} type="button" disabled={option.disabled} onClick={() => onChoose(option.id)} className="flex min-h-11 w-full items-center justify-between rounded-xl border border-[#e7e6e3] px-3 text-left text-sm font-semibold text-[#1b1b1b] hover:bg-[#fafaf9] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+            <button key={option.id} type="button" disabled={option.disabled} onClick={() => onChoose(option.id)} className="flex min-h-11 w-full items-center justify-between rounded-cc-surface border border-campcareer-border px-3 text-left text-sm font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
               <span>{option.label}</span>
-              {option.disabled ? <span className="ml-3 shrink-0 text-xs font-medium text-[#6f6d68]">Selected</span> : null}
+              {option.disabled ? <span className="ml-3 shrink-0 text-xs font-medium text-campcareer-muted">Selected</span> : null}
             </button>
           ))}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

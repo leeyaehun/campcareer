@@ -17,6 +17,7 @@ import { getLaunchCountry } from "@/data/launch-countries"
 import { getOccupationEditorial } from "@/data/occupation-editorial"
 import { AUSTRALIA_NURSING_PROGRAMS } from "@/data/programs/australia-nursing"
 import type { CountryOccupationProfile } from "@/lib/workspace/country-occupation-contract"
+import { Score } from "@/components/ui/data-display"
 
 const compact = (value: number | null) =>
   value == null
@@ -58,40 +59,26 @@ function MetricCard({
   hint: string
 }) {
   return (
-    <article className="rounded-xl border border-[#e7e6e3] bg-white p-4">
-      <div className="flex items-center gap-2 text-[#2563eb]">
+    <article className="rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface">
+      <div className="flex items-center gap-2 text-brand">
         {icon}
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
+        <p className="text-xs font-semibold tracking-[0.08em] text-campcareer-muted">
           {label}
         </p>
       </div>
-      <p className="mt-3 text-[23px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">{value}</p>
-      <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">{hint}</p>
+      <p className="mt-3 text-2xl font-semibold tracking-[-0.025em] tabular-nums text-campcareer-ink">{value}</p>
+      <p className="mt-1.5 text-xs leading-5 text-campcareer-muted">{hint}</p>
     </article>
-  )
-}
-
-function ScoreDimension({ label, value, description }: { label: string; value: number; description: string }) {
-  return (
-    <div className="rounded-xl border border-[#e7e6e3] bg-[#fafaf8] p-4">
-      <div className="flex items-end justify-between gap-3">
-        <p className="text-[12px] font-semibold text-[#4d4c48]">{label}</p>
-        <p className="text-[24px] font-semibold tracking-[-0.04em] text-[#1b1b1b]">
-          {value}<span className="ml-0.5 text-[10px] font-medium text-[#8f8c85]">/10</span>
-        </p>
-      </div>
-      <p className="mt-2 text-[10.5px] leading-4 text-[#77746e]">{description}</p>
-    </div>
   )
 }
 
 function CampCareerScorePanel({ score }: { score: CampCareerScore | null }) {
   if (!score) {
     return (
-      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-[#2563eb]">CampCareer Score</p>
-        <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">Score not ready yet</h3>
-        <p className="mt-2 max-w-2xl text-[11.5px] leading-5 text-[#77746e]">
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+        <p className="text-xs font-semibold tracking-[0.08em] text-brand">CampCareer Score</p>
+        <h3 className="mt-2 text-xl font-semibold tracking-[-0.025em] text-campcareer-ink">Score not ready yet</h3>
+        <p className="mt-2 max-w-2xl text-xs leading-5 text-campcareer-muted">
           Demand, Pay and Entry all need usable evidence before CampCareer publishes a total. Missing evidence is not replaced with an average.
         </p>
       </section>
@@ -99,23 +86,9 @@ function CampCareerScorePanel({ score }: { score: CampCareerScore | null }) {
   }
 
   return (
-    <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.09em] text-[#2563eb]">CampCareer Score</p>
-          <h3 className="mt-2 text-[20px] font-semibold tracking-[-0.025em] text-[#1b1b1b]">{VERDICT_LABEL[score.verdict]} career</h3>
-          <p className="mt-1 text-[11.5px] text-[#8f8c85]">Demand 40% · Pay 30% · Entry 30%</p>
-        </div>
-        <div className="text-right">
-          <p className="text-[44px] font-semibold leading-none tracking-[-0.06em] text-[#1b1b1b]">{score.total}<span className="ml-1 text-[13px] font-medium text-[#8f8c85]">/100</span></p>
-        </div>
-      </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <ScoreDimension label="Demand" value={score.demand} description="Current and forward labour-market demand." />
-        <ScoreDimension label="Pay" value={score.pay} description="Relative earnings in this country's labour market." />
-        <ScoreDimension label="Entry" value={score.entry} description="How easy it is for a newcomer to become job-ready." />
-      </div>
-      <p className="mt-4 text-[10.5px] leading-4 text-[#77746e]">
+    <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+      <Score total={score.total} verdict={VERDICT_LABEL[score.verdict]} dimensions={[{ label: "Demand", value: score.demand }, { label: "Pay", value: score.pay }, { label: "Entry", value: score.entry }]} />
+      <p className="mt-4 text-xs leading-5 text-campcareer-muted">
         Visa and personal eligibility are handled in the pathway, not in the public score. The historical nine-factor model remains internal evidence only.
       </p>
     </section>
@@ -201,7 +174,7 @@ function getProgramCards(profile: CountryOccupationProfile): ProgramCard[] {
 
 type ProfileLink = CountryOccupationProfile["links"][number]
 
-function LinkList({ links, hoverClass = "hover:border-[#cfd8ed]" }: { links: ProfileLink[]; hoverClass?: string }) {
+function LinkList({ links, hoverClass = "hover:border-brand/40 hover:bg-brand-tint" }: { links: ProfileLink[]; hoverClass?: string }) {
   return (
     <div className="mt-4 space-y-2">
       {links.map((link) => (
@@ -210,10 +183,10 @@ function LinkList({ links, hoverClass = "hover:border-[#cfd8ed]" }: { links: Pro
           href={link.url}
           target="_blank"
           rel="noreferrer"
-          className={`flex items-center justify-between rounded-xl border border-[#f0efec] bg-[#fafaf8] px-3.5 py-2.5 text-[12px] font-medium text-[#1b1b1b] transition ${hoverClass}`}
+          className={`flex min-h-10 items-center justify-between rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 py-2.5 text-xs font-medium text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast ${hoverClass}`}
         >
           <span className="min-w-0 truncate">{link.label}</span>
-          <ArrowUpRight className="ml-3 size-3.5 shrink-0 text-[#9c9a94]" />
+          <ArrowUpRight className="ml-3 size-3.5 shrink-0 text-campcareer-muted" />
         </a>
       ))}
     </div>
@@ -242,34 +215,33 @@ export function CountryOccupationDashboard({
 
   return (
     <div className="space-y-4">
-      <section className="relative overflow-hidden rounded-2xl bg-[#2563eb] p-7 text-white">
-        <span aria-hidden="true" className="absolute -right-12 -top-16 size-48 rounded-full bg-white/10" />
-        <div className="relative grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface sm:p-7">
+        <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold">
+              <span className="rounded-full bg-brand-tint px-2.5 py-1 text-xs font-semibold text-brand">
                 {countryName} · {profile.officialCodeSystem} {profile.officialUnitGroupCode}
               </span>
-              <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium">
+              <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-campcareer-ink-secondary">
                 {profile.specialisations.length} official occupations
               </span>
             </div>
-            <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.025em]">
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-campcareer-ink">
               {profile.officialTitle}
             </h2>
-            <p className="mt-2 max-w-2xl text-[13.5px] leading-6 text-white/85">
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-campcareer-ink-secondary">
               {countryEditorial?.headline ?? editorial?.overview}
             </p>
           </div>
-          <div className="rounded-2xl bg-white/15 px-5 py-4 text-center backdrop-blur-sm">
-            <p className="text-[10.5px] font-semibold uppercase tracking-[0.09em] text-white/70">CampCareer Score</p>
+          <div className="rounded-cc-surface border border-campcareer-border bg-campcareer-canvas px-5 py-4 text-center">
+            <p className="text-xs font-semibold tracking-[0.08em] text-brand">CampCareer Score</p>
             {publicScore ? (
               <>
-                <p className="mt-1 text-[42px] font-semibold leading-none">{publicScore.total}</p>
-                <p className="mt-1.5 text-[11px] font-semibold">{VERDICT_LABEL[publicScore.verdict]} · 100</p>
+                <p className="mt-1 text-4xl font-semibold leading-none tabular-nums text-campcareer-ink">{publicScore.total}</p>
+                <p className="mt-1.5 text-xs font-semibold text-campcareer-ink-secondary">{VERDICT_LABEL[publicScore.verdict]} · 100</p>
               </>
             ) : (
-              <p className="mt-2 text-[13px] font-semibold">Not ready</p>
+              <p className="mt-2 text-sm font-semibold text-campcareer-ink-secondary">Not ready</p>
             )}
           </div>
         </div>
@@ -305,15 +277,15 @@ export function CountryOccupationDashboard({
       <CampCareerScorePanel score={publicScore} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#6d4fc4]">
+        <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+          <div className="flex items-center gap-2 text-brand">
             <GraduationCap className="size-4" />
             <h3 className="text-[15px] font-semibold">Entry pathway</h3>
           </div>
-          <p className="mt-3 text-[13px] leading-6 text-[#5f5d58]">{countryEditorial?.entryPathway}</p>
-          <div className="mt-4 flex items-start gap-3 rounded-xl border border-[#e7e0f3] bg-[#f8f6fc] p-4">
-            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-[#6d4fc4]" />
-            <p className="text-[12px] leading-5 text-[#5f5570]">{countryEditorial?.registration}</p>
+          <p className="mt-3 text-sm leading-6 text-campcareer-ink-secondary">{countryEditorial?.entryPathway}</p>
+          <div className="mt-4 flex items-start gap-3 rounded-cc-surface border border-campcareer-border bg-brand-tint p-4">
+            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand" />
+            <p className="text-xs leading-5 text-campcareer-ink-secondary">{countryEditorial?.registration}</p>
           </div>
           {programs.length > 0 && (
             <div className="mt-4 space-y-2">
@@ -323,18 +295,18 @@ export function CountryOccupationDashboard({
                   href={program.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="block rounded-xl border border-[#f0efec] bg-[#fafaf8] p-3.5 transition hover:border-[#cfcac2]"
+                  className="block rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-3.5 shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-[12.5px] font-semibold text-[#1b1b1b]">{program.title}</p>
-                      <p className="mt-0.5 text-[11px] text-[#77746e]">{program.provider}</p>
+                      <p className="text-sm font-semibold text-campcareer-ink">{program.title}</p>
+                      <p className="mt-0.5 text-xs text-campcareer-muted">{program.provider}</p>
                     </div>
-                    <ArrowUpRight className="size-3.5 shrink-0 text-[#9c9a94]" />
+                    <ArrowUpRight className="size-3.5 shrink-0 text-campcareer-muted" />
                   </div>
-                  <p className="mt-2 text-[10.5px] text-[#8f8c85]">{program.meta}</p>
+                  <p className="mt-2 text-xs text-campcareer-muted">{program.meta}</p>
                   {program.note && (
-                    <p className="mt-1.5 text-[10.5px] leading-4 text-[#77746e]">{program.note}</p>
+                    <p className="mt-1.5 text-xs leading-5 text-campcareer-ink-secondary">{program.note}</p>
                   )}
                 </a>
               ))}
@@ -342,21 +314,21 @@ export function CountryOccupationDashboard({
           )}
         </section>
 
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#3e7a2e]">
+        <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+          <div className="flex items-center gap-2 text-brand">
             <BadgeCheck className="size-4" />
             <h3 className="text-[15px] font-semibold">Official occupations included</h3>
           </div>
           <div className="mt-4 space-y-2">
             {profile.specialisations.map((item) => (
-              <div key={item.officialCode} className="rounded-xl border border-[#edf0ea] bg-[#fafcf9] px-3.5 py-3">
+              <div key={item.officialCode} className="rounded-cc-surface border border-campcareer-border bg-campcareer-canvas px-3.5 py-3">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-[12.5px] font-semibold text-[#2f4f29]">{item.officialTitle}</p>
-                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-[#3e7a2e]">
+                  <p className="text-sm font-semibold text-campcareer-ink">{item.officialTitle}</p>
+                  <span className="rounded-full bg-campcareer-surface px-2 py-0.5 text-xs font-bold text-brand">
                     {item.officialCode}
                   </span>
                 </div>
-                <p className="mt-1 text-[10.5px] text-[#7d8b78]">
+                <p className="mt-1 text-xs text-campcareer-muted">
                   {item.legacyCodeSystem && item.legacyCode
                     ? `Legacy ${item.legacyCodeSystem} ${item.legacyCode} · `
                     : ""}
@@ -368,22 +340,20 @@ export function CountryOccupationDashboard({
         </section>
       </div>
 
-      <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-        <div className="flex items-center gap-2 text-[#c2691e]">
+      <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+        <div className="flex items-center gap-2 text-brand">
           <MapPinned className="size-4" />
           <h3 className="text-[15px] font-semibold">State demand ranking</h3>
         </div>
-        <p className="mt-1.5 text-[10.5px] leading-4 text-[#8f8c85]">Ranked by published 3-month vacancies — not a personal outcome or visa ranking.</p>
+        <p className="mt-1.5 text-xs leading-5 text-campcareer-muted">Ranked by published 3-month vacancies — not a personal outcome or visa ranking.</p>
         <div className="mt-4 grid grid-cols-3 gap-1.5 sm:grid-cols-4 sm:gap-2">
           {rankedRegions.map((region, index) => {
             const rank = index + 1
-            const rankTone = rank === 1 ? "border-[#ead29a] bg-[#fffaf0]" : rank === 2 ? "border-[#dce1e8] bg-[#f7f9fc]" : rank === 3 ? "border-[#d69a72] bg-[#fff4ed]" : "border-[#f0e5d9] bg-[#fffaf5]"
-            const rankLabelTone = rank === 1 ? "text-[#9c7a4f]" : rank === 2 ? "text-[#6d7787]" : rank === 3 ? "text-[#b86636]" : "text-[#9c7a4f]"
-            return <div key={region.regionCode} className={`relative rounded-xl border p-2.5 text-center sm:p-3 ${rankTone}`}>
-              <span className={`absolute left-2 top-1.5 text-[9px] font-bold sm:left-2.5 sm:top-2 ${rankLabelTone}`}>#{rank}</span>
-              <p className="text-[11px] font-bold text-[#c2691e]">{region.regionCode}</p>
-              <p className="mt-1 text-[16px] font-semibold text-[#1b1b1b] sm:text-[18px]">{number(region.vacancyCount)}</p>
-              <p className="mt-0.5 text-[9px] leading-3 text-[#8f8c85] sm:text-[10px] sm:leading-normal">
+            return <div key={region.regionCode} className="relative rounded-cc-surface border border-campcareer-border bg-campcareer-canvas p-2.5 text-center sm:p-3">
+              <span className="absolute left-2 top-1.5 text-[9px] font-bold text-campcareer-muted sm:left-2.5 sm:top-2">#{rank}</span>
+              <p className="text-xs font-bold text-brand">{region.regionCode}</p>
+              <p className="mt-1 text-base font-semibold tabular-nums text-campcareer-ink sm:text-lg">{number(region.vacancyCount)}</p>
+              <p className="mt-0.5 text-[9px] leading-3 text-campcareer-muted sm:text-[10px] sm:leading-normal">
                 3-mo vacancies · shortage {region.shortageRating ?? "—"}/3
               </p>
             </div>
@@ -392,26 +362,26 @@ export function CountryOccupationDashboard({
       </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#2563eb]">
+        <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+          <div className="flex items-center gap-2 text-brand">
             <BriefcaseBusiness className="size-4" />
             <h3 className="text-[15px] font-semibold">Jobs and entry pathways</h3>
           </div>
           {countryEditorial?.jobMarketNote && (
-            <p className="mt-3 text-[12.5px] leading-5 text-[#6f6d68]">{countryEditorial.jobMarketNote}</p>
+            <p className="mt-3 text-sm leading-5 text-campcareer-ink-secondary">{countryEditorial.jobMarketNote}</p>
           )}
           <LinkList links={[...jobLinks, ...entryLinks]} />
         </section>
 
-        <section className="rounded-2xl border border-[#e7e6e3] bg-white p-6">
-          <div className="flex items-center gap-2 text-[#3e7a2e]">
+        <section className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-6 shadow-cc-surface">
+          <div className="flex items-center gap-2 text-brand">
             <Building2 className="size-4" />
             <h3 className="text-[15px] font-semibold">Major employers</h3>
           </div>
-          <p className="mt-3 text-[11.5px] leading-5 text-[#77746e]">
+          <p className="mt-3 text-xs leading-5 text-campcareer-muted">
             Major organisations and employer networks with official career pages relevant to this occupation.
           </p>
-          <LinkList links={employers} hoverClass="hover:border-[#cfe0ca]" />
+          <LinkList links={employers} />
         </section>
       </div>
     </div>

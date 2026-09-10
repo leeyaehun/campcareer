@@ -4,6 +4,9 @@ import { useEffect, useState } from "react"
 import type { CampCareerScore, CampCareerVerdict } from "@/lib/campcareer-score"
 import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
+import { Score } from "@/components/ui/data-display"
+import { EntityPageHeader } from "@/components/ui/entity-page"
+import { Skeleton } from "@/components/ui/skeleton"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 
 type Locale = "en" | "ko"
@@ -167,13 +170,13 @@ export function CampCareerScoreHero({
 
   if (!insight) {
     return (
-      <section className="mt-6 animate-pulse rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8">
-        <div className="h-4 w-24 rounded bg-slate-200" />
-        <div className="mt-3 h-10 w-56 rounded bg-slate-200" />
+      <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="mt-3 h-10 w-56" />
         <div className="mt-8 border-t border-campcareer-border pt-6">
-          <div className="h-4 w-32 rounded bg-slate-200" />
-          <div className="mt-3 h-16 w-40 rounded bg-slate-200" />
-          <div className="mt-6 h-16 rounded bg-slate-100" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="mt-3 h-16 w-40" />
+          <Skeleton className="mt-6 h-16" />
         </div>
       </section>
     )
@@ -187,11 +190,8 @@ export function CampCareerScoreHero({
 
   if (!score) {
     return (
-      <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
-        <header>
-          <h1 id="career-heading" className="text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
-          <p className="mt-1 text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
-        </header>
+      <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
+        <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} />
         <div className="mt-8 border-t border-campcareer-border pt-6">
           <p className="text-sm font-semibold text-brand">CampCareer Score</p>
           <h2 className="mt-3 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink">{locale === "ko" ? "점수 준비 중" : "Score not ready yet"}</h2>
@@ -209,31 +209,12 @@ export function CampCareerScoreHero({
   ]
 
   return (
-    <section className="mt-6 rounded-xl border border-campcareer-border bg-campcareer-surface px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="career-heading">
-      <header>
-        <h1 id="career-heading" className="text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">{careerName}</h1>
-        <p className="mt-1 text-sm font-medium text-campcareer-muted">{insight.country.name}</p>
-      </header>
+    <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
+      <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} />
 
       <div className="mt-8 border-t border-campcareer-border pt-6">
-        <p className="text-sm font-semibold text-brand">CampCareer Score</p>
-        <div className="mt-2 flex items-end gap-4">
-          <p className="text-[64px] font-bold leading-none tracking-[-0.07em] text-campcareer-ink tabular-nums sm:text-[76px]" aria-label={`${score.total} out of 100`}>{score.total}</p>
-          <div className="pb-1.5 sm:pb-2">
-            <p className="text-xl font-bold tracking-[-0.025em] text-campcareer-ink">{verdictLabel[score.verdict]}</p>
-            <p className="mt-0.5 text-xs font-medium text-campcareer-muted">{locale === "ko" ? "100점 만점" : "out of 100"}</p>
-          </div>
-        </div>
+        <Score total={score.total} verdict={verdictLabel[score.verdict]} dimensions={dimensions} outOfLabel={locale === "ko" ? "100점 만점" : "out of 100"} />
         <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-campcareer-ink-secondary sm:text-lg">{interpretation(score, locale)}</p>
-      </div>
-
-      <div className="mt-6 grid grid-cols-3 divide-x divide-campcareer-border border-y border-campcareer-border">
-        {dimensions.map((dimension) => (
-          <div key={dimension.label} className="min-w-0 px-3 py-4 first:pl-0 last:pr-0 sm:px-5 sm:py-5 sm:first:pl-0 sm:last:pr-0">
-            <p className="text-xs font-semibold text-campcareer-muted sm:text-sm">{dimension.label}</p>
-            <p className="mt-1 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink tabular-nums sm:text-4xl">{dimension.value}</p>
-          </div>
-        ))}
       </div>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-8">
