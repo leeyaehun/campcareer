@@ -1,4 +1,4 @@
-import { CANONICAL_CAREERS } from "@/data/career-comparison-catalog"
+import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import {
   getLaunchCountry,
   getLaunchCountryBySlug,
@@ -28,7 +28,7 @@ export const INDEXABLE_CAREER_PROFILES: readonly IndexableCareerProfile[] = SCOR
 /** @deprecated Use INDEXABLE_CAREER_PROFILES. */
 export const INDEXABLE_OCCUPATION_PROFILES = INDEXABLE_CAREER_PROFILES
 
-const careerById = new Map(CANONICAL_CAREERS.map((career) => [career.id, career]))
+const careerById = new Map(CAREER_CATALOGUE.map((career) => [career.id, career]))
 const indexableProfileKeys = new Set(
   INDEXABLE_CAREER_PROFILES.map(({ countryCode, careerId }) => `${countryCode}:${careerId}`),
 )

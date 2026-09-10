@@ -5,7 +5,7 @@ import { notFound, permanentRedirect } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { localizePath, type Locale } from "@/lib/i18n/config"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
-import { getPublicCareerMarketInsight } from "@/lib/workspace/public-career-market-read"
+import { getPublicCareerProfile } from "@/lib/career-data-foundation/public-career-profile-read"
 import { getCareerRoute, getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
 import { CareerCoreSections } from "../../career-core-sections"
@@ -30,8 +30,8 @@ async function getRouteLocale(): Promise<Locale> {
   return routeLocale === "ko" ? "ko" : "en"
 }
 
-function getScore(insight: Awaited<ReturnType<typeof getPublicCareerMarketInsight>>) {
-  return insight?.profile?.metric.campCareerScore ?? insight?.foundation?.campCareerScore ?? null
+function getScore(profile: Awaited<ReturnType<typeof getPublicCareerProfile>>) {
+  return profile?.score ?? null
 }
 
 function metadataCopy(
@@ -68,11 +68,11 @@ export async function generateMetadata({ params }: CareerCanonicalPageProps): Pr
   const route = getCareerRoute(country, career)
   if (!route) return { title: "Career", robots: { index: false, follow: false } }
 
-  const [locale, insight] = await Promise.all([
+  const [locale, profile] = await Promise.all([
     getRouteLocale(),
-    getPublicCareerMarketInsight(route.country.code, route.career.id),
+    getPublicCareerProfile(route.country.code, route.career.id),
   ])
-  const score = getScore(insight)
+  const score = getScore(profile)
   const indexable = Boolean(getIndexableCareerRoute(route.country.code, route.career.id) && score)
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
   const copy = metadataCopy(careerName, route.country.name, score, locale)
@@ -135,11 +135,11 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
     permanentRedirect(canonicalPath)
   }
 
-  const insight = await getPublicCareerMarketInsight(route.country.code, route.career.id)
-  if (!insight?.country) notFound()
+  const profile = await getPublicCareerProfile(route.country.code, route.career.id)
+  if (!profile?.country) notFound()
 
   const query = { country: route.country.code, occupation: route.career.id }
-  const score = getScore(insight)
+  const score = getScore(profile)
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
   const copy = metadataCopy(careerName, route.country.name, score, locale)
   const canonicalUrl = `${SITE_URL}${canonicalPath}`
@@ -207,13 +207,13 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
             key={`score-${route.country.code}-${route.career.id}`}
             query={query}
             locale={locale}
-            initialInsight={insight}
+            initialInsight={profile.compatibility}
           />
           <CareerCoreSections
             key={`sections-${route.country.code}-${route.career.id}`}
             query={query}
             locale={locale}
-            initialInsight={insight}
+            initialInsight={profile.compatibility}
           />
           <CareerResultActions query={query} locale={locale} />
         </div>

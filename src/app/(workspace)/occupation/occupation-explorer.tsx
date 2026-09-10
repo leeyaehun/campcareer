@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BriefcaseBusiness, ChevronDown, Factory, HandHeart, Hammer, HeartPulse, Landmark, Laptop, MousePointerClick, Palette, Plane, ShoppingBag, SlidersHorizontal, Sprout } from "lucide-react"
-import { CANONICAL_CAREERS, type CanonicalCareer } from "@/data/career-comparison-catalog"
+import { CAREER_CATALOGUE, type Career } from "@/lib/career-data-foundation/career-catalogue"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getOccupationDetail } from "@/lib/workspace/occupation-detail"
@@ -44,10 +44,10 @@ const CATEGORY_ICON = new Map([
 type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
 
 function OccupationDiscovery({ locale, onChoose, onBrowseAll, isCareerIndex }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void; isCareerIndex: boolean }) {
-  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CANONICAL_CAREERS.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">{isCareerIndex ? "Browse all careers" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" /></button></section>
+  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CAREER_CATALOGUE.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">{isCareerIndex ? "Browse all careers" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" /></button></section>
 }
 
-function matchCareer(career: CanonicalCareer, q: string) {
+function matchCareer(career: Career, q: string) {
   const query = q.trim().toLowerCase()
   if (!query) return true
   return (
@@ -61,7 +61,7 @@ function matchCareer(career: CanonicalCareer, q: string) {
 function initialSelection(
   initialOccupation: string,
   query: string,
-  matches: CanonicalCareer[]
+  matches: Career[]
 ): string | undefined {
   if (initialOccupation && matches.some((c) => c.id === initialOccupation)) return initialOccupation
   if (!query.trim()) return undefined
@@ -110,7 +110,7 @@ export function OccupationExplorer({
   }, [initialCountry, setSelectedCountry])
 
   const filtered = useMemo(() => {
-    return CANONICAL_CAREERS.filter((career) => {
+    return CAREER_CATALOGUE.filter((career) => {
       if (category !== "all" && career.categoryId !== category) return false
       return matchCareer(career, query)
     })
@@ -121,7 +121,7 @@ export function OccupationExplorer({
   )
 
   const selected = selectedId
-    ? CANONICAL_CAREERS.find((career) => career.id === selectedId)
+    ? CAREER_CATALOGUE.find((career) => career.id === selectedId)
     : undefined
   const selectedDetail = selected ? getOccupationDetail(selected.id) : undefined
 
@@ -168,7 +168,7 @@ export function OccupationExplorer({
   }, [selectedId])
 
   const grouped = useMemo(() => {
-    const map = new Map<string, CanonicalCareer[]>()
+    const map = new Map<string, Career[]>()
     for (const career of filtered) {
       const list = map.get(career.categoryId) ?? []
       list.push(career)
@@ -189,7 +189,7 @@ export function OccupationExplorer({
     router.replace(nextQuery ? `${basePath}?${nextQuery}` : basePath, { scroll: false })
   }
 
-  function select(career: CanonicalCareer) {
+  function select(career: Career) {
     setSelectedId(career.id)
     const params = new URLSearchParams(searchParams.toString())
     if (query.trim()) params.set("q", query.trim())
