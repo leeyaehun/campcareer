@@ -1,8 +1,11 @@
 import 'server-only'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// Service-role Supabase client — bypasses RLS. Server-side only (쓰기 가능).
-// service role key는 RLS를 우회하므로 절대 클라이언트 번들에 포함되면 안 됨.
+// Admin/service-role client — bypasses RLS and is server-only. Use it only for
+// intentional private product reads, trusted ingestion, or privileged account
+// operations. Browser session work belongs in supabase-client.ts and
+// supabase-server.ts; do not use this as a general-purpose query shortcut.
+// The service role key must never cross a Client Component boundary.
 // Used by the visa-alert send layer: reading back unsubscribe_token, flipping
 // confirmed/confirmed_at, soft-unsubscribe, and the broadcast target query +
 // notifications_sent writes. `server-only` makes a client-bundle import fail
