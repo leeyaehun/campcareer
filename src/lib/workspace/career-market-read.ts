@@ -108,7 +108,7 @@ const foundationCareerContext = (foundation: CareerDataFoundationResult) => {
 
 const foundationHasPublicScore = (foundation: CareerDataFoundationResult) =>
   Boolean(
-    isCareerScoreReady(foundation.countryCode, foundation.canonicalOccupationId)
+    isCareerScoreReady(foundation.countryCode, foundation.careerId)
     && foundation.readiness.decisionReady
     && foundation.readiness.scoreReady
     && foundation.readiness.publishReady
@@ -134,7 +134,7 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
   return {
     profileKey: foundation.profileKey,
     countryCode: foundation.countryCode,
-    canonicalCareerId: foundation.canonicalOccupationId,
+    canonicalCareerId: foundation.careerId,
     officialTitle: foundation.mapping.officialTitle,
     officialCodeSystem: foundation.mapping.officialTaxonomy,
     officialCodeVersion: foundation.mapping.officialTaxonomyVersion,

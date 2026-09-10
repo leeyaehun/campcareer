@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import type { CampCareerScore, CampCareerVerdict } from "@/lib/campcareer-score"
+import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 
@@ -152,9 +153,9 @@ export function CampCareerScoreHero({
     fetch(`/api/home/career-insight?country=${encodeURIComponent(query.country)}&career=${encodeURIComponent(query.occupation)}`, { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error("Career score request failed")
-        return response.json() as Promise<CareerMarketInsight>
+        return response.json() as Promise<CareerProfile>
       })
-      .then(setInsight)
+      .then((profile) => setInsight(profile.compatibility))
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return
         setFailed(true)

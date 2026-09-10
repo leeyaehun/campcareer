@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getPublicCareerMarketInsight } from "@/lib/workspace/public-career-market-read"
+import { getPublicCareerProfile } from "@/lib/career-data-foundation/public-career-profile-read"
 
 export const dynamic = "force-dynamic"
 
@@ -12,11 +12,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const insight = await getPublicCareerMarketInsight(country, career)
-    if (!insight) return NextResponse.json({ error: "This occupation could not be found." }, { status: 404 })
-    return NextResponse.json(insight)
+    const profile = await getPublicCareerProfile(country, career)
+    if (!profile) return NextResponse.json({ error: "This career could not be found." }, { status: 404 })
+    return NextResponse.json(profile)
   } catch (error) {
-    console.error("[career-market-insight] read failed", error)
-    return NextResponse.json({ error: "Career-market insight could not be loaded." }, { status: 500 })
+    console.error("[career-profile] read failed", error)
+    return NextResponse.json({ error: "Career profile could not be loaded." }, { status: 500 })
   }
 }

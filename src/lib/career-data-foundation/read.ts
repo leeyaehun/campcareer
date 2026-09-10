@@ -478,12 +478,12 @@ export async function getCareerDataFoundation({
   return {
     profileKey: result.profile_key,
     countryCode: result.country_code,
-    canonicalOccupationId: result.canonical_occupation_id,
+    careerId: result.canonical_occupation_id,
     currency: result.currency,
     sourceCheckedOn: result.source_checked_on,
     mapping: {
       mappingKey: mappingRow.mapping_key,
-      canonicalOccupationId: result.canonical_occupation_id,
+      careerId: result.canonical_occupation_id,
       countryCode: result.country_code,
       officialTaxonomy: result.official_taxonomy,
       officialTaxonomyVersion: result.official_taxonomy_version,

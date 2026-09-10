@@ -43,7 +43,8 @@ export type CareerFoundationSource = {
 
 export type CareerFoundationMapping = {
   mappingKey: string
-  canonicalOccupationId: string
+  /** Product-facing identity; the database adapter retains canonical_occupation_id internally. */
+  careerId: string
   countryCode: string
   officialTaxonomy: string
   officialTaxonomyVersion: string
@@ -237,7 +238,7 @@ export type CareerFoundationDecisionMetrics = {
 export type CareerDataFoundationResult = {
   profileKey: string
   countryCode: string
-  canonicalOccupationId: string
+  careerId: string
   currency: string
   sourceCheckedOn: string
   mapping: CareerFoundationMapping
