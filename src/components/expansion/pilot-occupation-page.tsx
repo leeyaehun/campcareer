@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { PilotOccupation } from "@/lib/pilot-launch-gate"
 import { scoreHiddenRoiPath } from "@/lib/hidden-roi"
+import { buildCountryCompareCanonicalHref } from "@/lib/compare-routes"
 
 export function pilotOccupationSlug(occupation: Pick<PilotOccupation, "nameEn" | "sourceCode">) {
   const base = (occupation.nameEn ?? occupation.sourceCode)
@@ -55,7 +56,7 @@ export function PilotOccupationPage({
             {occupation.details.evidence.map((evidence) => <li key={evidence.sourceUrl}><a className="font-medium text-slate-950 hover:underline" href={evidence.sourceUrl} target="_blank" rel="noopener noreferrer">{evidence.sourceName}</a> · {evidence.lastChecked} · {evidence.confidence}</li>)}
           </ul>
         </div>}
-        <Link href="/decision-brief" className="mt-7 inline-flex text-sm font-semibold text-slate-950 hover:underline">{korean ? "내 조건으로 국가 비교하기" : "Compare countries for my situation"}</Link>
+        <Link href={buildCountryCompareCanonicalHref({ goal: occupation.nameEn ?? occupation.sourceCode })} className="mt-7 inline-flex text-sm font-semibold text-slate-950 hover:underline">{korean ? "내 조건으로 국가 비교하기" : "Compare countries for my situation"}</Link>
       </section>}
     </main>
   )

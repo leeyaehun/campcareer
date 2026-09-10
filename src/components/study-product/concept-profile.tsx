@@ -3,6 +3,7 @@ import { BadgeCheck, BookOpen, BriefcaseBusiness } from "lucide-react"
 import type { StudyConcept } from "@/lib/study-product/types"
 import { getLocalizedConceptLabel } from "@/data/study-concepts"
 import { COUNTRY_ROI_INSIGHTS } from "@/data/country-roi-mvp"
+import { buildCompareHref } from "@/lib/blog/compare-link"
 
 const COVERAGE_LABEL = {
   CATALOG: "Catalogued",
@@ -61,7 +62,7 @@ export function ConceptProfile({ concept, locale }: { concept: StudyConcept; loc
         </section>
       ) : null}
 
-      <Link href="/home" className="mt-12 inline-flex min-h-12 items-center rounded-xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700">
+      <Link href={buildCompareHref({ major: concept.slug })} className="mt-12 inline-flex min-h-12 items-center rounded-xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700">
         {korean ? "내 조건으로 국가 비교하기" : "Compare countries for my situation"}
       </Link>
     </main>

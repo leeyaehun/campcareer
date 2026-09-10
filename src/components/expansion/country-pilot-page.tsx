@@ -3,6 +3,7 @@ import type { ExpansionCountry } from "@/data/expansion-countries"
 import { getPilotSources, type PilotCountryCode } from "@/data/pilot-source-registry"
 import { PILOT_OCCUPATIONS } from "@/data/pilot-occupations"
 import { evaluatePilotLaunch } from "@/lib/pilot-launch-gate"
+import { buildCountryCompareCanonicalHref } from "@/lib/compare-routes"
 
 const PILOT_CODE_BY_SLUG: Record<string, PilotCountryCode> = {
   kr: "KR",
@@ -28,7 +29,7 @@ export function PilotCountryPage({ country, locale }: { country: ExpansionCountr
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:py-16">
-          <Link href="/home" className="text-sm font-semibold text-slate-500 hover:text-slate-950">
+          <Link href="/" className="text-sm font-semibold text-slate-500 hover:text-slate-950">
             {korean ? "CampCareer 한국어" : "CampCareer"}
           </Link>
           <p className="mt-7 text-xs font-semibold uppercase tracking-widest text-brand">
@@ -90,8 +91,8 @@ export function PilotCountryPage({ country, locale }: { country: ExpansionCountr
           <p className="mt-2 text-sm leading-6 text-slate-600">
             {korean ? "직업 공개 전에는 개인 조건으로 국가 선택을 비교하고, 공개 후에는 직업별 숨은 고ROI 경로로 이어집니다." : "Compare countries by your situation now; reviewed occupation-level hidden high-ROI paths appear here after launch gates pass."}
           </p>
-          <Link href="/decision-brief" className="mt-4 inline-flex text-sm font-semibold text-slate-950 hover:underline">
-            {korean ? "결정 브리프 열기" : "Open decision brief"}
+          <Link href={buildCountryCompareCanonicalHref({ goal: country.nameEn })} className="mt-4 inline-flex text-sm font-semibold text-slate-950 hover:underline">
+            {korean ? "국가 비교하기" : "Compare countries"}
           </Link>
         </div>
       </section>

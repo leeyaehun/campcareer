@@ -20,7 +20,7 @@ export default function GuestBanner({ user }: GuestBannerProps) {
     <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
       <p className="flex-1 text-sm text-amber-800 leading-relaxed">{t.guestBanner.message}</p>
       <Link
-        href="/degree-risk"
+        href="/career"
         className="shrink-0 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold px-3 py-1.5 text-xs transition-colors whitespace-nowrap"
       >
         {t.guestBanner.cta}

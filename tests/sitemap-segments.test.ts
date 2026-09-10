@@ -15,12 +15,9 @@ test("the sitemap publishes canonical Home, countries, maps, legal pages, and ve
   assert.ok(urls.includes(`${SITE_URL}/maps`))
   for (const slug of CANONICAL_COUNTRY_SLUGS) {
     assert.ok(urls.includes(`${SITE_URL}${countryCanonicalPath(slug)}`))
-    if (slug === "sg") {
-      assert.equal(urls.includes(`${SITE_URL}/sg`), true)
-    } else {
-      assert.equal(urls.includes(`${SITE_URL}/${slug}`), false)
-    }
+    assert.equal(urls.includes(`${SITE_URL}/${slug}`), false)
   }
+  assert.equal(urls.includes(`${SITE_URL}/sg`), false)
   for (const guide of ROUTE_GUIDES) {
     assert.ok(urls.includes(`${SITE_URL}${routeGuideHref(guide)}`))
     assert.ok(urls.includes(`${SITE_URL}/ko${routeGuideHref(guide)}`))

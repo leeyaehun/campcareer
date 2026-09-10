@@ -78,7 +78,7 @@ export function urlSetXml(entries: MetadataRoute.Sitemap) {
 export function belongsToSegment(pathname: string, segment: SitemapSegment) {
   switch (segment) {
     case "core-ko":
-      return pathname === "/ko/fr" || pathname === "/ko/fr/jobs"
+      return pathname === "/ko/fr"
     case "fields-ko":
       return pathname.startsWith("/ko/fields/")
     case "fields-en":

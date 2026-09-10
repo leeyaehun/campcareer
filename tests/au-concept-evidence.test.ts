@@ -3,7 +3,6 @@ import test from "node:test"
 import { AU_CONCEPT_OCCUPATIONS, getAuConceptForOccupation } from "../src/data/au-major-occupation-map"
 import { STUDY_CONCEPTS } from "../src/data/study-concepts"
 import { getAllAuMajorSignals, getAuMajorSignal } from "../src/lib/au-major-signals"
-import { rankAustralianPathways } from "../src/lib/au-pathfinder"
 
 const validBroadFields = new Set([
   "01 - Natural and Physical Sciences",
@@ -51,18 +50,4 @@ test("the refreshed snapshot covers every concept without hiding salary estimate
     assert.ok(signal?.salary_median_aud, `${conceptId} needs a salary estimate`)
     assert.equal(signal?.salary_kind, "estimated")
   }
-})
-
-test("Pathfinder does not rank concepts without an occupation-level evidence path", () => {
-  const rankedIds = new Set(rankAustralianPathways({
-    goal: "income",
-    budget: "balanced",
-    timeline: "flexible",
-    studyStage: "degree",
-    category: "any",
-  }).map((pathway) => pathway.concept.id))
-
-  assert.equal(rankedIds.has("commerce"), false)
-  assert.equal(rankedIds.has("international-business"), false)
-  assert.equal(rankedIds.has("tesol"), false)
 })

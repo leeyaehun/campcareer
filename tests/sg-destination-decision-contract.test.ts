@@ -14,8 +14,8 @@ test("SG city compare intent resolves to city-state guidance, not a fabricated c
   assert.doesNotMatch(compare, /getSgCityComparison/)
 })
 
-test("SG decision routes preserve country, living-area and country-compare choices", () => {
-  assert.match(compare, /href="\/sg"/)
+test("SG decision routes preserve map, living-area and country-compare choices", () => {
+  assert.match(compare, /href="\/maps\?country=sg"/)
   assert.match(compare, /\/map\?country=sg&area=central/)
   assert.match(compare, /buildCountryCompareCanonicalHref\(\)/)
   assert.match(profile, /Explore Singapore job signals/)

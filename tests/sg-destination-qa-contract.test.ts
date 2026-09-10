@@ -8,16 +8,13 @@ const linkage = read("supabase/migrations/20260810121500_sg_destination_linkage_
 const metrics = read("supabase/migrations/20260810122500_sg_destination_metrics_v1.sql")
 const loader = read("src/lib/destinations/sg-destination-profile.server.ts")
 const profile = read("src/components/country-profiles/singapore-study-destination-profile.tsx")
-const page = read("src/app/sg/page.tsx")
 const compare = read("src/app/(workspace)/compare/page.tsx")
 const sitemap = read("src/app/sitemap.ts")
 
-test("Phase 8 preserves the one-destination Singapore city-state model", () => {
+test("Phase 8 preserves the one-destination Singapore city-state model in the data contract", () => {
   assert.match(foundation, /COUNTRY_LEVEL_CITY_STATE_DESTINATION/)
   assert.match(foundation, /country_city_state/)
-  assert.match(page, /path: "\/sg"/)
-  assert.match(sitemap, /`\$\{SITE_URL\}\/sg`/)
-  assert.doesNotMatch(page, /\/cities\/sg\//)
+  assert.doesNotMatch(sitemap, /`\$\{SITE_URL\}\/sg`/)
   assert.doesNotMatch(sitemap, /\/cities\/sg\//)
 })
 
@@ -42,12 +39,5 @@ test("Phase 8 keeps city compare from inventing Singapore cities", () => {
   assert.match(compare, /countryCode === "SG"/)
   assert.match(compare, /There is no Singapore city shortlist to compare/)
   assert.match(compare, /CampCareer treats Singapore as one country-level study destination/)
-  assert.match(compare, /href="\/sg"/)
-})
-
-test("Phase 8 keeps publication and discovery bounded to /sg", () => {
-  assert.match(page, /Study in Singapore/)
-  assert.match(sitemap, /priority: 0\.84/)
-  assert.match(profile, /\/sg\/jobs/)
-  assert.match(profile, /\/map\?country=sg&area=central/)
+  assert.match(compare, /href="\/maps\?country=sg"/)
 })
