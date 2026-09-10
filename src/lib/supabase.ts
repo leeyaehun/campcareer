@@ -1,6 +1,10 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// 읽기 전용 클라이언트. 환경변수 검사는 실제 첫 요청 시점까지 지연한다.
+// Browser-compatible public-data client. It may be used by server code for
+// intentionally public read models, but never for raw, staging, or privileged
+// product data. Those reads must stay behind a server-only read model.
+// Environment checks are delayed until the first real request so CI can build
+// route modules without production credentials.
 // 이렇게 하면 GitHub CI처럼 Supabase 자격 증명이 없는 환경에서도 Next.js가
 // API route와 page module을 안전하게 분석하고 production build를 수행할 수 있다.
 // 쓰기용 service role 클라이언트는 '@/lib/supabase-admin' (server-only) 참조.

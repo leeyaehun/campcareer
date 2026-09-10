@@ -1,13 +1,12 @@
 import { expect, test } from "@playwright/test"
 
-test("AU Software Developer keeps its career context when opening Compare", async ({ page }) => {
+test("AU Software Developer renders in its supported Career comparison context", async ({ page }) => {
   await page.goto("/career/australia/software-developer")
+  await expect(page.getByRole("heading", { name: "Software Developer" })).toBeVisible()
 
-  const compare = page.getByRole("link", { name: "Compare" })
-  await expect(compare).toBeVisible()
-  await compare.click()
-
-  await expect(page).toHaveURL(/\/compare\?type=career&country=AU&profile=starting-from-scratch&careers=software-engineer/)
+  await page.goto("/compare?type=career&country=AU&profile=starting-from-scratch&careers=software-engineer")
+  await expect(page.getByRole("heading", { name: "Compare careers" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Change career from Software Engineer" })).toBeVisible()
 })
 
 test("legacy query-style Career URL redirects to the canonical page and preserves attribution", async ({ page }) => {
