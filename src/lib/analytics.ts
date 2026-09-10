@@ -26,31 +26,10 @@ const ALLOWED_EVENTS = new Set([
   "comparison_view",
   "comparison_personalized",
   "lead_request_submitted",
-  // Existing low-cardinality product events retained during the migration.
   "finder_search",
   "decision_start",
   "seo_landing_view",
   "visa_alert_submitted",
-  "report_launch_view",
-  "report_launch_interest_started",
-  "report_launch_interest_submitted",
-  "report_workspace_open",
-  // FIFO launch funnel. Keep names and properties intentionally low-cardinality.
-  "fifo_landing_view",
-  "fifo_hub_opened",
-  "fifo_hub_view",
-  "fifo_path_opened",
-  "fifo_path_view",
-  "fifo_report_cta_clicked",
-  // FIFO paid-guide commerce. Never attach purchase identity or payment identifiers.
-  "fifo_report_view",
-  "fifo_checkout_started",
-  "fifo_checkout_redirected",
-  "fifo_checkout_cancelled",
-  "fifo_checkout_completed",
-  "fifo_checkout_processing",
-  "fifo_checkout_failed",
-  "fifo_checkout_unverified",
 ])
 
 export function track(eventName: string, params?: Record<string, EventValue>) {
@@ -59,6 +38,7 @@ export function track(eventName: string, params?: Record<string, EventValue>) {
     !ALLOWED_EVENTS.has(eventName) ||
     !document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
   ) return
+
   const properties = Object.fromEntries(
     Object.entries(params ?? {})
       .filter(([key, value]) => /^[a-z][a-z0-9_]{0,31}$/.test(key) && value !== undefined)
@@ -84,67 +64,9 @@ function persistEvent(eventName: string, context: Record<string, string | undefi
   }).catch(() => undefined)
 }
 
-export type FifoAnalyticsEvent =
-  | "fifo_landing_view"
-  | "fifo_hub_opened"
-  | "fifo_hub_view"
-  | "fifo_path_opened"
-  | "fifo_path_view"
-  | "fifo_report_cta_clicked"
-
-export function recordFifoEvent(
-  eventName: FifoAnalyticsEvent,
-  context: {
-    surface: "landing" | "fifo_hub" | "fifo_path"
-    path_slug?: string
-    target?: "fifo_hub" | "fifo_path" | "fifo_report"
-  },
-) {
-  track(eventName, context)
-  persistEvent(eventName, context)
-}
-
-export type FifoCommerceAnalyticsEvent =
-  | "fifo_report_view"
-  | "fifo_checkout_started"
-  | "fifo_checkout_redirected"
-  | "fifo_checkout_cancelled"
-  | "fifo_checkout_completed"
-  | "fifo_checkout_processing"
-  | "fifo_checkout_failed"
-  | "fifo_checkout_unverified"
-
-export type FifoCommerceAnalyticsContext = {
-  surface: "fifo_report" | "fifo_report_success"
-  locale: "en" | "ko"
-  status?: "delivered" | "paid" | "processing" | "problem" | "unverified"
-  reason?: "checkout_response" | "checkout_network" | "return_state"
-}
-
-/**
- * Commerce analytics deliberately accepts only low-cardinality state.
- * Never add purchase email, checkout-attempt UUIDs, Stripe identifiers, order IDs,
- * checkout URLs or free text to this context.
- */
-export function recordFifoCommerceEvent(
-  eventName: FifoCommerceAnalyticsEvent,
-  context: FifoCommerceAnalyticsContext,
-) {
-  track(eventName, context)
-  persistEvent(eventName, context)
-}
-
 export function recordDiscoveryEvent(
   eventName: "recommendation_start" | "recommendation_result_view",
   context: { surface: "landing" | "country_results"; country: string; major: string; goal: string },
-) {
-  track(eventName, context)
-  persistEvent(eventName, context)
-}
-
-export function recordReportEvent(
-  eventName: "report_launch_view" | "report_workspace_open",
-  context: { surface: "report_launch" | "report_workspace"; country: "AU"; locale: "en" | "ko" },
 ) {
   track(eventName, context)
   persistEvent(eventName, context)

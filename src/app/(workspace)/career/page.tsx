@@ -3,7 +3,6 @@ import { headers } from "next/headers"
 import { permanentRedirect, redirect } from "next/navigation"
 import { localizePath, type Locale } from "@/lib/i18n/config"
 import { getCareerRoute } from "@/lib/workspace/occupation-routes"
-import { getOverviewSearchQuery } from "../home/home-overview-config"
 
 export const metadata: Metadata = {
   title: "Career | CampCareer",
@@ -29,10 +28,9 @@ export default async function LegacyCareerPage({ searchParams }: LegacyCareerPag
   }
 
   const locale = await getRouteLocale()
-  const query = getOverviewSearchQuery(params)
-  if (!query) redirect(localizePath("/", locale))
-
-  const route = getCareerRoute(query.country, query.occupation)
+  const country = params.get("country")?.toUpperCase() ?? ""
+  const occupation = params.get("occupation") ?? ""
+  const route = country && occupation ? getCareerRoute(country, occupation) : null
   if (!route) redirect(localizePath("/", locale))
 
   params.delete("country")

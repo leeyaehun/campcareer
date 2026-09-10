@@ -18,14 +18,12 @@ function sitemapUrls() {
   return sitemap().map((entry) => entry.url)
 }
 
-test("the canonical home is root and dormant /home permanently returns there", () => {
+test("the canonical home is root and retired /home stays out of the sitemap", () => {
   const urls = sitemapUrls()
   const homeSource = readFileSync("src/app/page.tsx", "utf8")
-  const legacyHomeSource = readFileSync("src/app/(workspace)/home/page.tsx", "utf8")
 
   assert.equal(HOME_CANONICAL_PATH, "/")
   assert.ok(homeSource.includes("alternates: { canonical: HOME_CANONICAL_PATH }"))
-  assert.ok(legacyHomeSource.includes("permanentRedirect(\"/\")"))
   assert.ok(urls.includes(`${SITE_URL}/`))
   assert.ok(!urls.includes(`${SITE_URL}/home`))
 })
@@ -74,7 +72,8 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
 
   assert.deepEqual(redirects.slice(0, LEGACY_SEO_REDIRECTS.length), [...LEGACY_SEO_REDIRECTS])
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
-  assert.ok(!redirects.some((redirect) => redirect.source === "/home"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/home/:path*" && redirect.destination === "/"))
+  assert.ok(redirects.some((redirect) => redirect.source === "/fifo/:path*" && redirect.destination === "/"))
 })
 
 test("legacy country roots redirect permanently except the active /sg destination", () => {

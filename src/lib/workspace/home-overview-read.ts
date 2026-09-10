@@ -3,9 +3,9 @@ import "server-only"
 import { CANONICAL_CAREERS, careersForCategory, type CareerCategoryId } from "@/data/career-comparison-catalog"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import type { CountryExplorerData, HomeOverviewData, OverviewEmployer, OverviewOccupationMetric } from "@/lib/home-overview-contract"
-import { supabase } from "@/lib/supabase"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { getCountryMetrics } from "./country-metrics"
+import { readRawCareerData } from "./raw-career-data"
 
 type OccupationProfileRow = {
   profile_key: string
@@ -178,11 +178,11 @@ export async function getHomeOverviewData(
   const [countryMetrics, profilesResult] = await Promise.all([
     getCountryMetrics(country),
     careersForLookup.length
-      ? supabase
+      ? readRawCareerData((client) => client
         .from("country_occupation_profiles")
         .select("profile_key, canonical_career_id, official_title, registration_required, source_checked_at")
         .eq("country_code", country)
-        .in("canonical_career_id", careersForLookup.map((career) => career.id))
+        .in("canonical_career_id", careersForLookup.map((career) => career.id)))
       : Promise.resolve({ data: [], error: null }),
   ])
 
@@ -191,11 +191,11 @@ export async function getHomeOverviewData(
   const profiles = (profilesResult.data ?? []) as OccupationProfileRow[]
   const profileKeys = profiles.map((profile) => profile.profile_key)
   const snapshotsResult = profileKeys.length
-    ? await supabase
+    ? await readRawCareerData((client) => client
       .from("country_occupation_metric_snapshots")
       .select("profile_key, as_of_date, opportunity_score, employment_total, vacancies_three_month_avg, employment_growth_5y_pct, annualised_median_salary, score_status")
       .in("profile_key", profileKeys)
-      .order("as_of_date", { ascending: false })
+      .order("as_of_date", { ascending: false }))
     : { data: [], error: null }
 
   if (snapshotsResult.error) throw snapshotsResult.error
@@ -230,12 +230,12 @@ export async function getHomeOverviewData(
     .sort((first, second) => (second.opportunityScore ?? 0) - (first.opportunityScore ?? 0))[0]
   const topProfile = topOccupation ? profileByCareer.get(topOccupation.careerId) : null
   const employersResult = topProfile
-    ? await supabase
+    ? await readRawCareerData((client) => client
       .from("country_occupation_links")
       .select("label, url, provider_type")
       .eq("profile_key", topProfile.profile_key)
       .eq("link_type", "employer")
-      .limit(4)
+      .limit(4))
     : { data: [], error: null }
 
   if (employersResult.error) throw employersResult.error

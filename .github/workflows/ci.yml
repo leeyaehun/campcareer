@@ -37,18 +37,3 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  fifo-release-e2e:
-    needs: verify
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - name: Install Chromium for Playwright
-        run: npx playwright install --with-deps chromium
-      - name: Run FIFO browser release gate
-        run: npm run test:e2e -- tests/e2e/fifo-release.spec.ts tests/e2e/fifo-report-checkout.spec.ts

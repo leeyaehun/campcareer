@@ -41,18 +41,6 @@ export default async function PrivacyPage() {
               and product priority used to calculate or save a decision plan.
             </li>
             <li>
-              <strong>Australia report preparation</strong> — the age range, education and work
-              summary, English level, budget, scholarship expectation, family and city preferences,
-              target occupation, risk preference, report language, and up to three saved options
-              you choose to store for a personalised Australia report. We do not request passport,
-              visa, payment-card, or health information for this purpose.
-            </li>
-            <li>
-              <strong>Report launch updates</strong> — your email address, selected Australia
-              report types, language, consent time, and optional attribution fields when you ask to
-              be notified of a report launch. The update is inactive until you confirm the email.
-            </li>
-            <li>
               <strong>Saved plans</strong> — the recommendation snapshot, source and engine
               versions, and recalculation history you explicitly save.
             </li>
@@ -131,10 +119,9 @@ export default async function PrivacyPage() {
             remains active and are deleted with your account.
             Programme evidence links are retained on the same basis and are deleted with your
             account.
-            Australia report-preparation records are retained for up to 12 months after your last
-            save unless you delete your account or request earlier deletion. Confirmed report-launch
-            updates are retained for up to 12 months; unsubscription marks them for removal by the
-            daily retention job. We do not take payment-card data through report-launch updates.
+            Historic Australia report-preparation and launch-update records are retained only for
+            the applicable deletion period and are not collected for new report sales or launch
+            registrations. We do not take payment-card data through these historic records.
           </p>
         </section>
 
@@ -224,8 +211,8 @@ function KoreanPrivacyPage() {
       <p className="mb-10 mt-2 text-sm text-slate-400">최종 업데이트: 2026년 8월 8일</p>
       <div className="space-y-8 text-sm leading-relaxed text-slate-600">
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">1. 운영 주체와 문의</h2><p>CampCareer는 Yaehun Lee가 운영하는 유학·커리어 의사결정 서비스입니다. Yaehun Lee는 이 방침에서 설명하는 개인정보의 처리자입니다. 이 방침은 어떤 정보를 왜 수집하는지와 이용자의 선택권을 설명합니다. 개인정보 관련 문의나 요청은 <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>으로 보내주세요.</p></section>
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">2. 수집하는 정보</h2><ul className="list-disc space-y-1.5 pl-5"><li><strong>계정 정보</strong> — 회원가입·로그인에 필요한 이메일과 인증 식별자</li><li><strong>의사결정 입력값과 저장 계획</strong> — 국가, 전공·직업, 예산, 우선순위, 저장한 후보와 다음 할 일</li><li><strong>호주 개인화 리포트 준비 정보</strong> — 나이 범위, 학력·경력 요약, 영어 수준, 예산·장학금 예상, 가족·도시 선호, 목표 직업, 위험 선호, 리포트 언어와 최대 3개의 선택지</li><li><strong>리포트 출시 알림</strong> — 이메일, 관심 리포트, 언어, 동의 시점과 선택적 유입 정보. 이메일 확인 전에는 알림이 활성화되지 않습니다.</li><li><strong>선택적 분석 정보</strong> — 측정 허용 시에만 생성되는 짧은 세션 식별자, 첫 방문 경로, UTM 캠페인 값과 허용된 제품 이벤트. 이메일이나 자유 입력 내용은 분석 이벤트에 넣지 않습니다.</li><li><strong>피드백·지원 요청</strong> — 사용자가 직접 제출한 범주, 내용, 후속 연락 동의와 필요한 경우의 비공개 스크린샷</li></ul><p className="mt-2">여권번호, 비자 서류, 비밀번호, 결제카드 정보, 건강 정보는 피드백이나 리포트 준비에 제출하지 마세요.</p></section>
-        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">3. 보관·보호·삭제</h2><p>계정과 저장 계획은 계정이 유지되는 동안 보관하며 계정 삭제 시 함께 삭제합니다. 개인화 리포트 준비 정보는 마지막 저장 후 최대 12개월 보관합니다. 확인된 출시 알림은 최대 12개월 보관하며, 수신 거부한 알림은 일일 보관정리 작업에서 삭제 대상으로 처리합니다. 피드백과 비공개 스크린샷은 원칙적으로 최대 180일 보관합니다. 저장 데이터는 계정 소유자만 읽을 수 있는 접근 통제와 전송·저장 암호화를 적용합니다.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">2. 수집하는 정보</h2><ul className="list-disc space-y-1.5 pl-5"><li><strong>계정 정보</strong> — 회원가입·로그인에 필요한 이메일과 인증 식별자</li><li><strong>의사결정 입력값과 저장 계획</strong> — 국가, 전공·직업, 예산, 우선순위, 저장한 후보와 다음 할 일</li><li><strong>선택적 분석 정보</strong> — 측정 허용 시에만 생성되는 짧은 세션 식별자, 첫 방문 경로, UTM 캠페인 값과 허용된 제품 이벤트. 이메일이나 자유 입력 내용은 분석 이벤트에 넣지 않습니다.</li><li><strong>피드백·지원 요청</strong> — 사용자가 직접 제출한 범주, 내용, 후속 연락 동의와 필요한 경우의 비공개 스크린샷</li></ul><p className="mt-2">여권번호, 비자 서류, 비밀번호, 결제카드 정보, 건강 정보는 피드백에 제출하지 마세요.</p></section>
+        <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">3. 보관·보호·삭제</h2><p>계정과 저장 계획은 계정이 유지되는 동안 보관하며 계정 삭제 시 함께 삭제합니다. 과거 호주 리포트 준비·출시 알림 기록은 해당 삭제 기간 동안에만 보관하며, 새 리포트 판매나 출시 알림 등록에는 수집하지 않습니다. 피드백과 비공개 스크린샷은 원칙적으로 최대 180일 보관합니다. 저장 데이터는 계정 소유자만 읽을 수 있는 접근 통제와 전송·저장 암호화를 적용합니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">4. 처리업체와 제3자</h2><p>서비스 운영을 위해 Supabase(데이터베이스·인증·비공개 저장소), Vercel(호스팅·분석), Resend(거래성 및 동의된 이메일)를 사용합니다. 학교나 에이전시에 지원 도움을 요청한 경우에도, 해당 요청 화면에서 별도 동의한 정보만 파트너에게 공유합니다. 스폰서나 제휴 관계는 비교·순위에 영향을 주지 않습니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">5. 처리 목적과 국제 이전</h2><p>서비스 제공, 보안과 신뢰성 유지, 허용된 제한적 제품 측정에는 계약 이행 또는 정당한 이익을, 이메일 알림·피드백 후속 연락·파트너 공유·선택적 측정에는 동의를 근거로 사용합니다. 서비스 제공업체는 이용자 국가 밖에서 데이터를 처리할 수 있으며, 필요한 경우 해당 제공업체의 데이터 처리·국제 이전 보호조치를 적용합니다.</p></section>
         <section><h2 className="font-display mb-2 text-lg font-semibold text-slate-800">6. 이용자의 권리</h2><p>거주 지역에 따라 열람, 정정, 내보내기, 삭제를 요청할 수 있습니다. 계정은 <Link href="/ko/settings" className="text-blue-600 hover:underline">계정 설정</Link>에서 삭제할 수 있으며, 그 밖의 요청은 등록 이메일 주소에서 <a href="mailto:leeyaehun@gmail.com" className="text-blue-600 hover:underline">leeyaehun@gmail.com</a>으로 보내주세요. 확인된 요청은 원칙적으로 30일 이내 처리합니다.</p></section>

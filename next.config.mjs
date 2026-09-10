@@ -17,8 +17,9 @@ const nextConfig = {
       // swallowed by temporary redirects.
       ...LEGACY_SEO_REDIRECTS,
 
-      // CampCareer is centered on the Career Page. Retire former workspace,
-      // onboarding, and broad-study funnels that compete with that core loop.
+      // Retired product surfaces return visitors to the current product root.
+      { source: "/home/:path*", destination: "/", permanent: false },
+      { source: "/fifo/:path*", destination: "/", permanent: false },
       { source: "/planner/:path*", destination: "/", permanent: false },
       { source: "/myplan/:path*", destination: "/", permanent: false },
       { source: "/dashboard/:path*", destination: "/", permanent: false },

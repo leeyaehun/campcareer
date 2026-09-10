@@ -20,25 +20,18 @@ export interface EmailMessage {
   to: string
   subject: string
   html: string
-  idempotencyKey?: string
 }
 
 // Send a single email. Throws on failure so callers can decide whether to
 // swallow (subscribe flow: never block the subscription) or count (broadcast).
-// Resend idempotency keys are optional and let transactional callers safely
-// retry the same provider request without sending the same email twice.
-export async function sendEmail(msg: EmailMessage): Promise<{ id: string }> {
-  const { data, error } = await client().emails.send(
-    {
-      from: EMAIL_FROM,
-      to: msg.to,
-      subject: msg.subject,
-      html: msg.html,
-    },
-    msg.idempotencyKey ? { idempotencyKey: msg.idempotencyKey } : undefined,
-  )
+export async function sendEmail(msg: EmailMessage): Promise<void> {
+  const { error } = await client().emails.send({
+    from: EMAIL_FROM,
+    to: msg.to,
+    subject: msg.subject,
+    html: msg.html,
+  })
   if (error) throw new Error(`Resend send failed: ${error.message}`)
-  return { id: data?.id ?? '' }
 }
 
 // Resend's batch endpoint accepts up to 100 messages per call. Callers must

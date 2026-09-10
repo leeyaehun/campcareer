@@ -1,7 +1,6 @@
 import "server-only"
 
 import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
-import { supabase } from "@/lib/supabase"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import type {
   CountryOccupationLink,
@@ -13,6 +12,7 @@ import type {
   CountryOccupationSpecialisation,
 } from "@/lib/workspace/country-occupation-contract"
 import { isCareerScoreReady } from "./career-coverage"
+import { readRawCareerData } from "./raw-career-data"
 
 const numeric = (value: unknown): number | null => {
   if (value == null || value === "") return null
@@ -35,52 +35,56 @@ export async function getCountryOccupationProfile(
   const career = canonicalCareerId.trim()
   if (!/^[A-Z]{2}$/.test(country) || !career) return null
 
-  const profileResult = await supabase
+  // The country_occupation tables retain legacy component and source data.
+  // They are read only by server-side presentation code, never directly by a
+  // browser. This keeps an anonymous REST caller from bypassing the Career
+  // publication gate.
+  const profileResult = await readRawCareerData((client) => client
     .from("country_occupation_profiles")
     .select("profile_key, country_code, canonical_career_id, official_title, official_code_system, official_code_version, official_unit_group_code, currency, registration_required, registration_authority, registration_url, publication_status, source_checked_at")
     .eq("country_code", country)
     .eq("canonical_career_id", career)
-    .maybeSingle()
+    .maybeSingle())
 
   if (profileResult.error) throw profileResult.error
   const profile = profileResult.data
   if (!profile) return null
 
-  const metricResult = await supabase
+  const metricResult = await readRawCareerData((client) => client
     .from("country_occupation_metric_snapshots")
     .select("as_of_date, employment_total, median_weekly_earnings, median_hourly_earnings, annualised_median_salary, all_occupations_median_weekly, part_time_share_pct, female_share_pct, median_age, average_full_time_hours, vacancies_three_month_avg, vacancy_period, vacancy_yoy_pct, employment_growth_5y_pct, employment_growth_10y_pct, shortage_component, vacancy_intensity_component, employer_diversity_component, vacancy_trend_component, entry_level_component, salary_component, growth_component, visa_component, entry_burden_component, opportunity_score, score_methodology_version, score_status, score_evidence, source_checked_at")
     .eq("profile_key", profile.profile_key)
     .order("as_of_date", { ascending: false })
     .limit(1)
-    .maybeSingle()
+    .maybeSingle())
 
   if (metricResult.error) throw metricResult.error
   const metricRow = metricResult.data
   if (!metricRow) return null
 
   const [specialisationsResult, regionsResult, linksResult, programsResult] = await Promise.all([
-    supabase
+    readRawCareerData((client) => client
       .from("country_occupation_specialisations")
       .select("official_code, official_title, legacy_code_system, legacy_code_version, legacy_code, shortage_rating, visa_eligible, included_in_rollup")
       .eq("profile_key", profile.profile_key)
-      .order("sort_order", { ascending: true }),
-    supabase
+      .order("sort_order", { ascending: true })),
+    readRawCareerData((client) => client
       .from("country_occupation_region_metrics")
       .select("region_code, as_of_date, shortage_rating, vacancy_count, source_url")
       .eq("profile_key", profile.profile_key)
       .eq("as_of_date", metricRow.as_of_date)
-      .order("vacancy_count", { ascending: false, nullsFirst: false }),
-    supabase
+      .order("vacancy_count", { ascending: false, nullsFirst: false })),
+    readRawCareerData((client) => client
       .from("country_occupation_links")
       .select("link_type, label, url, provider_type, region_code")
       .eq("profile_key", profile.profile_key)
       .order("link_type", { ascending: true })
-      .order("sort_order", { ascending: true }),
-    supabase
+      .order("sort_order", { ascending: true })),
+    readRawCareerData((client) => client
       .from("country_occupation_program_links")
       .select("program_ref, relation_type")
       .eq("profile_key", profile.profile_key)
-      .order("program_ref", { ascending: true }),
+      .order("program_ref", { ascending: true })),
   ])
 
   for (const result of [specialisationsResult, regionsResult, linksResult, programsResult]) {

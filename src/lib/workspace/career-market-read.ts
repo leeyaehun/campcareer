@@ -12,6 +12,7 @@ import {
   isCareerScoreReady,
 } from "./career-coverage"
 import { getCountryOccupationProfile } from "./country-occupation-read"
+import { readRawCareerData } from "./raw-career-data"
 import type {
   CareerMarketDemand,
   CareerMarketInsight,
@@ -235,11 +236,11 @@ type MetricRow = {
 
 export async function getCareerCountryRecommendations(careerId: string): Promise<CareerMarketRecommendation[]> {
   const [profilesResult, foundationRows] = await Promise.all([
-    supabase
+    readRawCareerData((client) => client
       .from("country_occupation_profiles")
       .select("profile_key,country_code,official_title,registration_required,publication_status")
       .eq("canonical_career_id", careerId)
-      .in("publication_status", ["profile_ready", "decision_ready"]),
+      .in("publication_status", ["profile_ready", "decision_ready"])),
     getFoundationCountriesForCareer(careerId),
   ])
 
@@ -249,11 +250,11 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   const latestMetrics = new Map<string, MetricRow>()
 
   if (profileKeys.length) {
-    const metricsResult = await supabase
+    const metricsResult = await readRawCareerData((client) => client
       .from("country_occupation_metric_snapshots")
       .select("profile_key,as_of_date,shortage_component,vacancy_intensity_component,employer_diversity_component,vacancy_trend_component,entry_level_component,salary_component,growth_component,entry_burden_component,opportunity_score,score_status")
       .in("profile_key", profileKeys)
-      .order("as_of_date", { ascending: false })
+      .order("as_of_date", { ascending: false }))
     if (metricsResult.error) throw metricsResult.error
     for (const row of (metricsResult.data ?? []) as MetricRow[]) {
       if (!latestMetrics.has(row.profile_key)) latestMetrics.set(row.profile_key, row)

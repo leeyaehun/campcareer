@@ -12,11 +12,3 @@ export function confirmUrl(token: string): string {
 export function unsubscribeUrl(token: string): string {
   return `${siteUrl()}/api/subscribe/unsubscribe?token=${encodeURIComponent(token)}`
 }
-
-export function reportLaunchConfirmUrl(token: string): string {
-  return `${siteUrl()}/api/reports/launch-interest/confirm?token=${encodeURIComponent(token)}`
-}
-
-export function reportLaunchUnsubscribeUrl(token: string): string {
-  return `${siteUrl()}/api/reports/launch-interest/unsubscribe?token=${encodeURIComponent(token)}`
-}
