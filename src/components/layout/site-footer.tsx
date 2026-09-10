@@ -24,9 +24,10 @@ export function SiteFooter({ className }: { className?: string }) {
           <div>
             <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "탐색" : "Explore"}</h4>
             <ul className="mt-3 space-y-2.5">
-              <FooterLink href="/career" locale={locale}>{isKo ? "커리어" : "Careers"}</FooterLink>
+              <FooterLink href="/careers" locale={locale}>{isKo ? "커리어" : "Careers"}</FooterLink>
               <FooterLink href="/countries" locale={locale}>{isKo ? "국가" : "Countries"}</FooterLink>
-              <FooterLink href="/programs" locale={locale}>{isKo ? "프로그램" : "Programs"}</FooterLink>
+              <FooterLink href="/programs" locale={locale}>{isKo ? "학위" : "Degrees"}</FooterLink>
+              <FooterLink href="/institutions" locale={locale}>{isKo ? "교육" : "Education"}</FooterLink>
               <FooterLink href="/compare" locale={locale}>{isKo ? "비교" : "Compare"}</FooterLink>
             </ul>
           </div>

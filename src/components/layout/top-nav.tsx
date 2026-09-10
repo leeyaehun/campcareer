@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { LogIn } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
+import { CompareNavigationAction, PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
 import { createClient } from "@/lib/supabase-client"
@@ -54,7 +55,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
   return (
     <header className="sticky top-0 z-40 h-16 border-b border-[hsl(var(--cc-border))] bg-white">
       <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center gap-4">
           <Link
             href={homeDestination}
             className="campcareer-wordmark shrink-0 text-[hsl(var(--cc-ink))]"
@@ -63,7 +64,10 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
             campcareer
           </Link>
 
+          <PrimaryProductNavigation pathname={pathname} locale={pathLocale} />
+
           <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+            <CompareNavigationAction pathname={pathname} locale={pathLocale} />
             <LanguageMenu buttonClassName="text-[hsl(var(--cc-muted))] hover:bg-slate-100" />
 
             {user ? (

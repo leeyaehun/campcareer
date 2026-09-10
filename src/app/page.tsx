@@ -5,15 +5,15 @@ import { RootOAuthCallbackFallback } from "@/components/auth/root-oauth-callback
 import { HOME_CANONICAL_PATH } from "@/lib/seo-routes.mjs"
 
 export const metadata: Metadata = {
-  title: { absolute: "CampCareer | Career, Study & Country Decisions" },
-  description: "Compare careers, countries, and study options with evidence-backed data.",
+  title: { absolute: "CampCareer | Career, Country, Degree & Education Decisions" },
+  description: "Explore careers, country context, degrees and education providers with evidence-backed data.",
   alternates: { canonical: HOME_CANONICAL_PATH },
   robots: { index: true, follow: true },
 }
 
 const destinations = [
   {
-    href: "/career",
+    href: "/careers",
     title: "Careers",
     description: "Explore career outcomes, demand, pay, and pathways.",
   },
@@ -24,13 +24,13 @@ const destinations = [
   },
   {
     href: "/programs",
-    title: "Programs",
-    description: "Explore education programs connected to real outcomes.",
+    title: "Degrees",
+    description: "Explore programs and qualifications connected to career outcomes.",
   },
   {
-    href: "/compare",
-    title: "Compare",
-    description: "Put options side by side before making a decision.",
+    href: "/institutions",
+    title: "Education",
+    description: "Explore institutions and the programs they provide.",
   },
 ] as const
 
@@ -45,10 +45,10 @@ export default function HomePage() {
         <section className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand">CampCareer</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[hsl(var(--cc-ink))] sm:text-6xl">
-            Make better career and study decisions.
+            From campus to career, with evidence.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[hsl(var(--cc-muted))]">
-            Explore connected evidence across careers, countries, and education before choosing what comes next.
+            Start with a career, then explore the country context, degree options, and education providers that support the path.
           </p>
         </section>
 
