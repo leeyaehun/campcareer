@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { getCareerRoute } from "@/lib/workspace/occupation-routes"
 
 type SurfaceCopy = {
   eyebrow: { en: string; ko: string }
@@ -70,10 +71,9 @@ export function ContextualSurfaceNotice({ pathname }: { pathname: string }) {
   if (!surface) return null
 
   const country = searchParams.get("country")?.toUpperCase() ?? null
-  const career = searchParams.get("career") ?? searchParams.get("occupation")
-  const careerHref = country && career
-    ? localizePath(`/career?country=${encodeURIComponent(country)}&occupation=${encodeURIComponent(career)}`, locale)
-    : null
+  const career = searchParams.get("careerContext") ?? searchParams.get("career") ?? searchParams.get("occupation")
+  const careerRoute = country && career ? getCareerRoute(country, career) : null
+  const careerHref = careerRoute ? localizePath(careerRoute.path, locale) : null
   const homeHref = localizePath("/", locale)
   const copy = surface.copy
 

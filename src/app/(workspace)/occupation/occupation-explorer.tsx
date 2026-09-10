@@ -43,8 +43,8 @@ const CATEGORY_ICON = new Map([
 
 type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
 
-function OccupationDiscovery({ locale, onChoose, onBrowseAll }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void }) {
-  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CANONICAL_CAREERS.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">Browse all occupations <ChevronDown className="size-4 -rotate-90" /></button></section>
+function OccupationDiscovery({ locale, onChoose, onBrowseAll, isCareerIndex }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void; isCareerIndex: boolean }) {
+  return <section className="mt-6" aria-labelledby="field-discovery-heading"><div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#c2691e]">Start here</p><h2 id="field-discovery-heading" className="mt-1 text-xl font-semibold tracking-[-0.03em] text-[#1b1b1b] sm:text-2xl">Find a field that fits you</h2></div><p className="hidden max-w-48 text-right text-[12px] leading-5 text-[#77746e] sm:block">Choose a field first, then compare the careers inside it.</p></div><div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">{STUDY_CATEGORIES.map((category) => { const careers = CANONICAL_CAREERS.filter((career) => career.categoryId === category.id); const example = careers[0]; const accent = CATEGORY_ACCENT.get(category.id) ?? "#c2691e"; const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness; const label = locale === "ko" ? category.labelKo : category.label; const exampleLabel = example ? (locale === "ko" ? example.labelKo : example.label) : null; return <button key={category.id} type="button" onClick={() => onChoose(category.id)} className="group min-h-36 rounded-2xl border border-[#e7e6e3] bg-white p-3.5 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2 sm:min-h-40 sm:p-4"><span className="grid size-9 place-items-center rounded-xl" style={{ backgroundColor: `${accent}16`, color: accent }}><Icon className="size-[18px]" /></span><span className="mt-4 block text-[13px] font-semibold leading-[1.25] tracking-[-0.015em] text-[#1b1b1b] sm:text-[14px]">{label}</span><span className="mt-2 block text-[10.5px] font-medium text-[#8f8c85]">{careers.length} roles to explore</span>{exampleLabel ? <span className="mt-1 block truncate text-[10.5px] text-[#6f6d68]">e.g. {exampleLabel}</span> : null}</button> })}</div><button type="button" onClick={onBrowseAll} className="mt-4 inline-flex min-h-10 items-center gap-2 text-[12.5px] font-semibold text-[#c2691e] transition hover:text-[#9d4f0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/35 focus-visible:ring-offset-2">{isCareerIndex ? "Browse all careers" : "Browse all occupations"} <ChevronDown className="size-4 -rotate-90" /></button></section>
 }
 
 function matchCareer(career: CanonicalCareer, q: string) {
@@ -73,11 +73,13 @@ function initialSelection(
 }
 
 export function OccupationExplorer({
+  basePath = "/occupation",
   initialQuery,
   initialOccupation,
   initialCountry,
   initialCategory,
 }: {
+  basePath?: "/careers" | "/occupation"
   initialQuery: string
   initialOccupation: string
   initialCountry: string
@@ -93,6 +95,7 @@ export function OccupationExplorer({
   const [showAllOccupations, setShowAllOccupations] = useState(false)
   const [countryProfile, setCountryProfile] = useState<CountryOccupationProfile | null>(null)
   const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
+  const isCareerIndex = basePath === "/careers"
 
   useEffect(() => {
     if (!initialCountry) return
@@ -183,7 +186,7 @@ export function OccupationExplorer({
     else params.delete("q")
 
     const nextQuery = params.toString()
-    router.replace(nextQuery ? `/occupation?${nextQuery}` : "/occupation", { scroll: false })
+    router.replace(nextQuery ? `${basePath}?${nextQuery}` : basePath, { scroll: false })
   }
 
   function select(career: CanonicalCareer) {
@@ -194,7 +197,7 @@ export function OccupationExplorer({
     const effectiveCountry = selectedCountry?.code || initialCountry
     if (effectiveCountry) params.set("country", effectiveCountry)
     params.set("occupation", career.id)
-    router.replace(`/occupation?${params.toString()}`, { scroll: false })
+    router.replace(`${basePath}?${params.toString()}`, { scroll: false })
   }
 
   function chooseCategory(categoryId: string) {
@@ -203,7 +206,7 @@ export function OccupationExplorer({
     setFiltersOpen(false)
   }
 
-  const selectedCategoryLabel = category === "all" ? "All occupations" : CATEGORY_LABELS.get(category) ?? "Filters"
+  const selectedCategoryLabel = category === "all" ? (isCareerIndex ? "All careers" : "All occupations") : CATEGORY_LABELS.get(category) ?? "Filters"
   const isDiscoveryMode = !showAllOccupations && category === "all" && !query.trim() && !selectedId
 
   return (
@@ -215,7 +218,7 @@ export function OccupationExplorer({
           </p>
           <div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3">
             <h1 className="text-xl font-semibold leading-tight tracking-[-0.02em] text-[#1b1b1b] sm:text-3xl">
-              Occupation
+              {isCareerIndex ? (locale === "ko" ? "커리어" : "Careers") : "Occupation"}
             </h1>
             <CountryPill onChange={updateCountry} />
           </div>
@@ -226,13 +229,13 @@ export function OccupationExplorer({
         <CategorySearch
           value={query}
           onChange={setQuery}
-          placeholder="Search occupations, e.g. Nurse or Electrician…"
+          placeholder={isCareerIndex ? "Search careers, e.g. Nurse or Electrician…" : "Search occupations, e.g. Nurse or Electrician…"}
         />
       </div>
 
       <div className="relative mt-3 lg:hidden">
         <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#e0dfdb] bg-white px-3 text-[12.5px] font-semibold text-[#4d4c48] transition hover:border-[#c2691e]/50 hover:text-[#c2691e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2691e]/25"><SlidersHorizontal className="size-4" /><span>{selectedCategoryLabel}</span><ChevronDown className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")} /></button>
-        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-2xl border border-[#e7e6e3] bg-white p-3 shadow-xl shadow-slate-900/10"><p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">Filter occupations</p><div className="flex flex-wrap gap-2"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>All</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{item.label}</button>)}</div></div> : null}
+        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-2xl border border-[#e7e6e3] bg-white p-3 shadow-xl shadow-slate-900/10"><p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">Filter {isCareerIndex ? "careers" : "occupations"}</p><div className="flex flex-wrap gap-2"><button type="button" onClick={() => chooseCategory("all")} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === "all" ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>All</button>{STUDY_CATEGORIES.map((item) => <button key={item.id} type="button" onClick={() => chooseCategory(item.id)} className={cn("rounded-lg border px-3 py-2 text-[12px] font-medium transition", category === item.id ? "border-[#c2691e] bg-[#c2691e] text-white" : "border-[#e0dfdb] text-[#6f6d68]")}>{item.label}</button>)}</div></div> : null}
       </div>
 
       <div className="mt-5 hidden flex-wrap gap-2 lg:flex">
@@ -265,10 +268,10 @@ export function OccupationExplorer({
         ))}
       </div>
 
-      {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} /> : <>
+      {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} isCareerIndex={isCareerIndex} /> : <>
       <div className="mt-6 flex items-center justify-between">
         <p className="text-[12.5px] font-medium text-[#a3a19b]">
-          {filtered.length} occupations
+          {filtered.length} {isCareerIndex ? "careers" : "occupations"}
         </p>
       </div>
 
@@ -276,7 +279,7 @@ export function OccupationExplorer({
         <div className="mt-4 flex h-56 flex-col items-center justify-center rounded-xl border border-dashed border-[#e7e6e3] bg-white/50 text-center">
           <BriefcaseBusiness className="size-6 text-[#c4c2bc]" />
           <p className="mt-3 text-[13.5px] font-medium text-[#6f6d68]">
-            No occupations match “{query}”.
+            No {isCareerIndex ? "careers" : "occupations"} match “{query}”.
           </p>
         </div>
       ) : (
@@ -284,7 +287,7 @@ export function OccupationExplorer({
           {selected ? <section id="occupation-detail-mobile" className="min-w-0 scroll-mt-4 lg:hidden"><CountryAwareOccupationDetail career={selected} detail={selectedDetail} countryCode={selectedCountry?.code} countryName={selectedCountry?.name} countryProfile={countryProfile} countryProfileStatus={countryProfileStatus} /></section> : null}
 
           <section className="lg:hidden">
-            <div className="flex items-center justify-between"><h2 className="text-[12.5px] font-semibold text-[#1b1b1b]">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} occupations`}</h2><span className="text-[11px] text-[#8f8c85]">Tap to view</span></div>
+            <div className="flex items-center justify-between"><h2 className="text-[12.5px] font-semibold text-[#1b1b1b]">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} ${isCareerIndex ? "careers" : "occupations"}`}</h2><span className="text-[11px] text-[#8f8c85]">Tap to view</span></div>
             <div className="mt-2 space-y-1.5">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex w-full items-center gap-2.5 rounded-xl border bg-white px-3 py-2.5 text-left transition active:scale-[0.99]", isSelected ? "border-[#c2691e]/60 bg-[#fffaf5]" : "border-[#e7e6e3] hover:bg-[#fffaf5]")}><span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: CATEGORY_ACCENT.get(career.categoryId) ?? "#c2691e" }} /><span className={cn("min-w-0 flex-1 truncate text-[13px] font-medium", isSelected ? "text-[#c2691e]" : "text-[#1b1b1b]")}>{displayLabel}</span>{demand ? <span className="shrink-0 text-[10px] font-bold text-[#3e7a2e]">{demand.rating.toUpperCase()}</span> : null}</button> })}</div>
           </section>
 

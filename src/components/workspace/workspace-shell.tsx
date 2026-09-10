@@ -17,7 +17,8 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
 
   // Career is the focused public product surface. The outer layout supplies
   // the standard CampCareer navigation so no workspace chrome is rendered.
-  if (pathname === "/career" || pathname.startsWith("/career/")) return <>{children}</>
+  const isCareerSurface = pathname === "/career" || pathname.startsWith("/career/")
+  if (isCareerSurface || pathname === "/careers") return <>{children}</>
 
   const isCityProfile = pathname.startsWith("/cities/") && !pathname.endsWith("/compare")
   const hasFullBleedHero =
