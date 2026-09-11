@@ -77,7 +77,7 @@ export function ProgramDetailMetric({
     <div className="rounded-xl border border-[#e7e6e3] bg-white p-4">
       <div className="flex items-center gap-2 text-[#3e7a2e]">
         {icon}
-        <p className="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-[#98958e]">
+        <p className="text-[10.5px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">
           {label}
         </p>
       </div>

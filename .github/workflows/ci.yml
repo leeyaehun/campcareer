@@ -33,6 +33,10 @@ jobs:
           path: test-results.log
           if-no-files-found: ignore
       - run: npm run build
+      - name: Install critical browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Run critical E2E release gate
+        run: npm run test:e2e:critical
       - name: Check diff whitespace
         run: git diff --check
       - name: Scan Git history for secrets

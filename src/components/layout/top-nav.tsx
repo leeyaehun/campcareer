@@ -58,6 +58,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
         <div className="flex h-16 items-center gap-4">
           <Link
             href={homeDestination}
+            prefetch={false}
             className="campcareer-wordmark shrink-0 text-campcareer-ink"
             aria-label="CampCareer home"
           >
@@ -73,6 +74,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
             {user ? (
               <Link
                 href={profileDestination}
+                prefetch={false}
                 aria-label={pathLocale === "ko" ? "프로필 열기" : "Open profile"}
                 className="inline-flex min-h-10 rounded-cc-control border border-campcareer-border bg-campcareer-surface p-1.5 text-sm font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
               >
@@ -83,6 +85,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
             ) : (
               <Link
                 href={fallbackLoginDestination}
+                prefetch={false}
                 onClick={(event) => {
                   event.preventDefault()
                   const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`

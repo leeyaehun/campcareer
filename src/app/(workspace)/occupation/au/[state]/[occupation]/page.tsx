@@ -79,7 +79,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: `${route.career.label} Demand in ${route.state.label}, Australia`,
     description: `${route.career.label} demand in ${route.state.label}: ${number(data.region.vacancyCount, 1)} online vacancies, shortage rating ${number(data.region.shortageRating)}/3, state rank and Australia-wide earnings and outlook context.`,
     alternates: { canonical: `${SITE_URL}${route.path}` },
-    robots: { index: data.indexable, follow: true },
+    // State demand is contextual evidence for the canonical Career Page, not a
+    // second indexable Career surface.
+    robots: { index: false, follow: true },
     openGraph: {
       title: `${route.career.label} Demand in ${route.state.label}`,
       description: `${number(data.region.vacancyCount, 1)} online vacancies and shortage rating ${number(data.region.shortageRating)}/3 in ${route.state.label}.`,
@@ -122,8 +124,8 @@ export default async function AuOccupationStatePage({ params }: Params) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-[#9a978f]" aria-label="Breadcrumb">
-        <Link href="/countries/au" className="hover:text-[#2563eb]">Australia</Link><span>/</span>
-        <Link href="/occupation?country=AU" className="hover:text-[#2563eb]">Occupations</Link><span>/</span>
+        <Link href="/countries/au" prefetch={false} className="hover:text-[#2563eb]">Australia</Link><span>/</span>
+        <Link href="/occupation?country=AU" prefetch={false} className="hover:text-[#2563eb]">Occupations</Link><span>/</span>
         <span>{route.state.label}</span><span>/</span><span>{route.career.label}</span>
       </nav>
 
@@ -136,11 +138,11 @@ export default async function AuOccupationStatePage({ params }: Params) {
           State and territory demand is based on the regional vacancy and shortage evidence attached to CampCareer&apos;s verified {profile.officialTitle} profile. Australia-wide earnings, employment and outlook are shown separately below.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Link href={`/occupation?occupation=${route.career.slug}`} className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563eb] px-4 py-2.5 text-[12px] font-semibold text-white hover:bg-[#1f55c9]">
+          <Link href={`/occupation?occupation=${route.career.slug}`} prefetch={false} className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563eb] px-4 py-2.5 text-[12px] font-semibold text-white hover:bg-[#1f55c9]">
             Open career explorer <ArrowRight className="size-3.5" />
           </Link>
           {route.state.citySlug && route.state.cityLabel && (
-            <Link href={`/cities/au/${route.state.citySlug}`} className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e]">
+            <Link href={`/cities/au/${route.state.citySlug}`} prefetch={false} className="inline-flex items-center gap-1.5 rounded-lg border border-[#cfd9ca] bg-white px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e]">
               {route.state.cityLabel} city guide <MapPin className="size-3.5" />
             </Link>
           )}
@@ -170,7 +172,7 @@ export default async function AuOccupationStatePage({ params }: Params) {
                     <span className="text-[12px] font-semibold text-[#2563eb]">{number(item.vacancyCount, 1)}</span>
                   </>
                 )
-                return statePage ? <Link key={item.regionCode} href={statePage.path} className="flex items-center justify-between gap-4 py-3 hover:bg-[#fafbfc]">{row}</Link> : <div key={item.regionCode} className="flex items-center justify-between gap-4 py-3">{row}</div>
+                return statePage ? <Link key={item.regionCode} href={statePage.path} prefetch={false} className="flex items-center justify-between gap-4 py-3 hover:bg-[#fafbfc]">{row}</Link> : <div key={item.regionCode} className="flex items-center justify-between gap-4 py-3">{row}</div>
               })}
           </div>
         </section>
@@ -206,11 +208,11 @@ export default async function AuOccupationStatePage({ params }: Params) {
       <section className="mt-5 grid gap-5 lg:grid-cols-2">
         <div className="rounded-xl border border-[#e7e6e3] bg-white p-5">
           <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">{route.career.label} demand in other states</h2>
-          <div className="mt-3 flex flex-wrap gap-2">{otherStates.map((page) => <Link key={page.path} href={page.path} className="rounded-full border border-[#deddd8] px-3 py-1.5 text-[11px] font-semibold text-[#5f5d57] hover:border-[#2563eb]/40 hover:text-[#2563eb]">{page.state.label}</Link>)}</div>
+          <div className="mt-3 flex flex-wrap gap-2">{otherStates.map((page) => <Link key={page.path} href={page.path} prefetch={false} className="rounded-full border border-[#deddd8] px-3 py-1.5 text-[11px] font-semibold text-[#5f5d57] hover:border-[#2563eb]/40 hover:text-[#2563eb]">{page.state.label}</Link>)}</div>
         </div>
         <div className="rounded-xl border border-[#e7e6e3] bg-white p-5">
           <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Other careers in {route.state.label}</h2>
-          <div className="mt-3 flex flex-wrap gap-2">{otherCareers.map((page) => <Link key={page.path} href={page.path} className="rounded-full border border-[#deddd8] px-3 py-1.5 text-[11px] font-semibold text-[#5f5d57] hover:border-[#3e7a2e]/40 hover:text-[#3e7a2e]">{page.career.label}</Link>)}</div>
+          <div className="mt-3 flex flex-wrap gap-2">{otherCareers.map((page) => <Link key={page.path} href={page.path} prefetch={false} className="rounded-full border border-[#deddd8] px-3 py-1.5 text-[11px] font-semibold text-[#5f5d57] hover:border-[#3e7a2e]/40 hover:text-[#3e7a2e]">{page.career.label}</Link>)}</div>
         </div>
       </section>
 

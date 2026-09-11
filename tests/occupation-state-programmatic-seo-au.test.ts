@@ -12,7 +12,7 @@ import {
   getAuOccupationStatePagesForState,
 } from "../src/lib/workspace/au-occupation-state-seo"
 
-test("Australia occupation-state SEO launches exactly 40 quality-gated routes", () => {
+test("Australia occupation-state context retains exactly 40 bounded routes", () => {
   assert.equal(AU_OCCUPATION_STATES.length, 8)
   assert.equal(AU_OCCUPATION_STATE_CAREERS.length, 5)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
@@ -20,7 +20,7 @@ test("Australia occupation-state SEO launches exactly 40 quality-gated routes", 
   assert.ok(AU_OCCUPATION_STATE_PAGES.every((page) => page.path.startsWith("/occupation/au/")))
 })
 
-test("only decision-ready launch careers are in the state SEO inventory", () => {
+test("only decision-ready launch careers are in the state context inventory", () => {
   assert.deepEqual(
     AU_OCCUPATION_STATE_CAREERS.map((career) => career.slug),
     ["carpenter", "electrician", "midwife", "physiotherapist", "registered-nurse"],
@@ -64,7 +64,7 @@ test("the occupation dashboard keeps AU regional demand evidence visible without
   assert.doesNotMatch(source, /Opportunity score/i)
 })
 
-test("unsupported states and non-gated careers do not create SEO routes", () => {
+test("unsupported states and non-gated careers do not create contextual routes", () => {
   assert.equal(getAuOccupationStatePage("new-south-wales", "plumber"), null)
   assert.equal(getAuOccupationStatePage("australian-capital-territory", "welder"), null)
   assert.equal(getAuOccupationStatePage("unknown-state", "electrician"), null)

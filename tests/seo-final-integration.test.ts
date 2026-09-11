@@ -63,7 +63,7 @@ test("sitemap contains every explicit SEO inventory exactly once", () => {
     assert.ok(urls.some((url) => url.startsWith(`${SITE_URL}/programs/au/${program.id}-`)))
   }
   for (const page of AU_PROGRAMMATIC_STUDY_PAGES) assert.ok(urlSet.has(`${SITE_URL}${page.path}`))
-  for (const page of AU_OCCUPATION_STATE_PAGES) assert.ok(urlSet.has(`${SITE_URL}${page.path}`))
+  for (const page of AU_OCCUPATION_STATE_PAGES) assert.ok(!urlSet.has(`${SITE_URL}${page.path}`))
   for (const path of INDEXABLE_INSTITUTION_PATHS) assert.ok(urlSet.has(`${SITE_URL}${path}`))
 
   assert.ok(urlSet.has(`${SITE_URL}/institutions`))
@@ -87,6 +87,7 @@ test("route pages enforce canonical redirects and strict indexing gates", () => 
   const programs = readFileSync("src/app/(workspace)/programs/page.tsx", "utf8")
   const programDetail = readFileSync("src/app/(workspace)/programs/au/[program]/page.tsx", "utf8")
   const occupation = readFileSync("src/app/(workspace)/occupation/page.tsx", "utf8")
+  const occupationState = readFileSync("src/app/(workspace)/occupation/au/[state]/[occupation]/page.tsx", "utf8")
   const visaExplorer = readFileSync("src/app/(workspace)/visas/visas-explorer.tsx", "utf8")
   const compareRoot = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
   const compareLegacyMode = readFileSync("src/app/(workspace)/compare/[mode]/page.tsx", "utf8")
@@ -97,6 +98,7 @@ test("route pages enforce canonical redirects and strict indexing gates", () => 
   assert.ok(programDetail.includes("permanentRedirect(canonicalPath)"))
   assert.ok(occupation.includes("getIndexableOccupationRoute"))
   assert.ok(occupation.includes("permanentRedirect(canonicalRoute.path)"))
+  assert.ok(occupationState.includes("robots: { index: false, follow: true }"))
   assert.ok(visaExplorer.includes("visaCanonicalPath"))
   assert.ok(compareRoot.includes("resolveCompareModeType"))
   assert.ok(compareRoot.includes("getAuCityComparison"))

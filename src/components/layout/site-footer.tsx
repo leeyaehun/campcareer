@@ -14,7 +14,7 @@ export function SiteFooter({ className }: { className?: string }) {
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <Link href={localizePath("/", locale)} className="campcareer-wordmark text-[hsl(var(--cc-ink))]">campcareer</Link>
+            <Link href={localizePath("/", locale)} prefetch={false} className="campcareer-wordmark text-[hsl(var(--cc-ink))]">campcareer</Link>
             <p className="mt-3 max-w-sm text-sm leading-6 text-[hsl(var(--cc-muted))]">
               {isKo
                 ? "커리어, 학업, 국가 선택을 근거 있는 데이터로 비교하세요."
@@ -22,7 +22,7 @@ export function SiteFooter({ className }: { className?: string }) {
             </p>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "탐색" : "Explore"}</h4>
+            <p className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "탐색" : "Explore"}</p>
             <ul className="mt-3 space-y-2.5">
               <FooterLink href="/careers" locale={locale}>{isKo ? "커리어" : "Careers"}</FooterLink>
               <FooterLink href="/countries" locale={locale}>{isKo ? "국가" : "Countries"}</FooterLink>
@@ -32,7 +32,7 @@ export function SiteFooter({ className }: { className?: string }) {
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "정보" : "Info"}</h4>
+            <p className="text-sm font-semibold text-[hsl(var(--cc-ink))]">{isKo ? "정보" : "Info"}</p>
             <ul className="mt-3 space-y-2.5">
               {locale === "en" && <FooterLink href="/blog" locale={locale}>Blog</FooterLink>}
               <FooterLink href="/sources" locale={locale}>{isKo ? "출처" : "Sources"}</FooterLink>
@@ -52,5 +52,5 @@ export function SiteFooter({ className }: { className?: string }) {
 }
 
 function FooterLink({ href, locale, children }: { href: string; locale: LocaleOption; children: React.ReactNode }) {
-  return <li><Link href={localizePath(href, locale)} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-[hsl(var(--cc-ink))]">{children}</Link></li>
+  return <li><Link href={localizePath(href, locale)} prefetch={false} className="text-sm text-[hsl(var(--cc-muted))] transition hover:text-[hsl(var(--cc-ink))]">{children}</Link></li>
 }

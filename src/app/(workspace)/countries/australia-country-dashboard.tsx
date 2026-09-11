@@ -50,7 +50,7 @@ function MetricCard({
     <>
       <div className="flex items-center gap-2">
         <span className={cn("grid size-8 place-items-center rounded-lg", accent)}>{icon}</span>
-        <p className="text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
+        <p className="text-[11.5px] font-semibold uppercase tracking-[0.08em] text-[#6f6d68]">
           {label}
         </p>
       </div>
@@ -152,7 +152,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
                 className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2.5"
               >
                 <p className="text-[12px] font-semibold text-[#2f5f25]">{major.label}</p>
-                <p className="mt-1 text-[10.5px] leading-4 text-[#66805f]">{major.reason}</p>
+                <p className="mt-1 text-[10.5px] leading-4 text-[#3f6539]">{major.reason}</p>
               </div>
             ))}
           </div>
@@ -171,7 +171,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
               className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-3"
             >
               <p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">{institution.name}</p>
-              <p className="mt-1 text-[10.5px] text-[#9a978f]">
+              <p className="mt-1 text-[10.5px] text-[#6f6d68]">
                 {COUNTRY_INSTITUTION_TYPE_LABELS[institution.type]} · {institution.location}
               </p>
             </div>
@@ -184,7 +184,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
           <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4">
             <MapPin className="size-4 text-[#3e7a2e]" />
             <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2>
-            <span className="ml-auto text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span>
+            <span className="ml-auto text-[11.5px] font-medium text-[#6f6d68]">{cityCount} cities</span>
           </div>
           <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">
             {explorer.regions.map((region) => (

@@ -18,7 +18,6 @@ import { INDEXABLE_SG_PROGRAM_PATHS } from "@/lib/programs/sg-program-seo"
 import { INDEXABLE_UK_PROGRAM_PATHS } from "@/lib/programs/uk-program-seo"
 import { INDEXABLE_NZ_PROGRAM_PATHS } from "@/lib/programs/nz-program-seo"
 import { INDEXABLE_NL_PROGRAM_PATHS } from "@/lib/programs/nl-program-seo"
-import { AU_OCCUPATION_STATE_PAGES } from "@/lib/workspace/au-occupation-state-seo"
 import { INDEXABLE_OCCUPATION_PROFILES, occupationCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { getCompletedVisaCatalog } from "@/lib/workspace/visa-catalog-complete"
 import { getIndexableVisaRoutes } from "@/lib/workspace/visa-routes"
@@ -125,7 +124,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const occupationPages: MetadataRoute.Sitemap = INDEXABLE_OCCUPATION_PROFILES.map((profile) => ({ url: `${SITE_URL}${occupationCanonicalPath(profile.countryCode, profile.careerId)}`, lastModified: new Date(profile.sourceCheckedAt), priority: 0.74, changeFrequency: "weekly" as const }))
   const visaPages: MetadataRoute.Sitemap = getIndexableVisaRoutes(getCompletedVisaCatalog()).map((route) => ({ url: `${SITE_URL}${route.path}`, lastModified, priority: 0.7, changeFrequency: "monthly" as const }))
   const studyPages: MetadataRoute.Sitemap = AU_PROGRAMMATIC_STUDY_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
-  const occupationStatePages: MetadataRoute.Sitemap = AU_OCCUPATION_STATE_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.71, changeFrequency: "monthly" as const }))
   const institutionPages: MetadataRoute.Sitemap = [
     ...INDEXABLE_INSTITUTION_PATHS,
     ...INDEXABLE_UK_INSTITUTION_PATHS,
@@ -144,5 +142,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}${routeGuideHref(guide)}`, lastModified: new Date(guide.lastVerified), priority: 0.95, changeFrequency: "weekly" as const },
     { url: `${SITE_URL}/ko${routeGuideHref(guide)}`, lastModified, priority: 0.9, changeFrequency: "weekly" as const },
   ])
-  return Array.from(new Map([...staticPages, ...programPages, ...occupationPages, ...visaPages, ...studyPages, ...occupationStatePages, ...institutionPages, ...routePages].map((entry) => [entry.url, entry])).values())
+  return Array.from(new Map([...staticPages, ...programPages, ...occupationPages, ...visaPages, ...studyPages, ...institutionPages, ...routePages].map((entry) => [entry.url, entry])).values())
 }

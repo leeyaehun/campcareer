@@ -85,7 +85,7 @@ function BreakdownList({
   emptyMessage: string
 }) {
   if (items.length === 0) {
-    return <p className="text-[12px] leading-5 text-[#8b8881]">{emptyMessage}</p>
+    return <p className="text-[12px] leading-5 text-[#6f6d68]">{emptyMessage}</p>
   }
 
   return (
@@ -93,7 +93,7 @@ function BreakdownList({
       {items.map((item) => (
         <div key={item.name} className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
           <p className="text-[12.5px] leading-5 text-[#4d4c48]">{cleanStudyAreaLabel(item.name)}</p>
-          <span className="shrink-0 rounded-full bg-[#f4f4f1] px-2.5 py-1 text-[10.5px] font-semibold text-[#77746e]">
+          <span className="shrink-0 rounded-full bg-[#f4f4f1] px-2.5 py-1 text-[10.5px] font-semibold text-[#6f6d68]">
             {item.count.toLocaleString()}
           </span>
         </div>
@@ -156,7 +156,7 @@ function CampusList({
                     <p className="mt-1 text-[11.5px] leading-5 text-[#6f6d68]">{location}</p>
                   )}
                   {address ? (
-                    <p className="mt-1 text-[10.5px] leading-4 text-[#9a9790]">{address}</p>
+                    <p className="mt-1 text-[10.5px] leading-4 text-[#6f6d68]">{address}</p>
                   ) : null}
                   {officialUrl ? (
                     <a
@@ -176,7 +176,7 @@ function CampusList({
         })}
       </div>
       {total > campuses.length ? (
-        <p className="mt-3 text-[10.5px] text-[#9c9a94]">
+        <p className="mt-3 text-[10.5px] text-[#6f6d68]">
           Showing {campuses.length} of {total.toLocaleString()} current {isUk ? "location" : "campus"} records.
         </p>
       ) : null}
@@ -189,7 +189,7 @@ function ProgramPreviewContent({ program }: { program: InstitutionProgrammePrevi
     <>
       <div className="flex flex-wrap items-center gap-1.5">
         {program.programmeType ? (
-          <span className="rounded-md bg-[#f4f4f1] px-2 py-1 text-[9.5px] font-semibold uppercase tracking-wide text-[#77746e]">
+          <span className="rounded-md bg-[#f4f4f1] px-2 py-1 text-[9.5px] font-semibold uppercase tracking-wide text-[#6f6d68]">
             {program.programmeType}
           </span>
         ) : null}
@@ -198,7 +198,7 @@ function ProgramPreviewContent({ program }: { program: InstitutionProgrammePrevi
         {program.title}
       </h3>
       {program.fieldName ? (
-        <p className="mt-1 line-clamp-2 text-[11px] leading-4.5 text-[#77746e]">
+        <p className="mt-1 line-clamp-2 text-[11px] leading-4.5 text-[#6f6d68]">
           {cleanStudyAreaLabel(program.fieldName)}
         </p>
       ) : null}
@@ -218,7 +218,7 @@ function ProgramList({
   if (programs.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-6">
-        <p className="text-[12px] text-[#77746e]">No active program records are currently published for this institution.</p>
+        <p className="text-[12px] text-[#6f6d68]">No active program records are currently published for this institution.</p>
       </div>
     )
   }
@@ -250,7 +250,7 @@ function ProgramList({
           return (
             <article key={program.id} className="rounded-xl border border-[#e7e6e3] bg-[#fbfbf9] p-4">
               <ProgramPreviewContent program={program} />
-              <p className="mt-3 text-[10px] font-medium text-[#aaa7a0]">
+              <p className="mt-3 text-[10px] font-medium text-[#6f6d68]">
                 Program detail page not yet published
               </p>
             </article>
@@ -258,7 +258,7 @@ function ProgramList({
         })}
       </div>
       {total > programs.length ? (
-        <p className="mt-3 text-[10.5px] text-[#9c9a94]">
+        <p className="mt-3 text-[10.5px] text-[#6f6d68]">
           Showing {programs.length} of {total.toLocaleString()} active programs.
         </p>
       ) : null}
@@ -282,7 +282,7 @@ export function InstitutionDetailView({
 
   return (
     <>
-      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-[#8f8c85]">
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-[#6f6d68]">
         <Link href="/institutions" className="transition hover:text-[#3e7a2e]">Institutions</Link>
         <span>/</span>
         <Link href={countryPath} className="transition hover:text-[#3e7a2e]">
@@ -337,14 +337,14 @@ export function InstitutionDetailView({
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
               {institution.programCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">Active programs</p>
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">Active programs</p>
           </div>
           <div className="rounded-xl bg-[#fafaf8] p-4">
             <Building2 className="size-4 text-[#3e7a2e]" />
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
               {institution.campusCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">
               {isUk ? "Location records" : "Campus records"}
             </p>
           </div>
@@ -353,7 +353,7 @@ export function InstitutionDetailView({
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
               {institution.cityCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#929089]">
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">
               {isUk ? "Location areas" : "Normalized cities"}
             </p>
           </div>
@@ -367,7 +367,7 @@ export function InstitutionDetailView({
               <GraduationCap className="size-4 text-[#3e7a2e]" />
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Programs</h2>
             </div>
-            <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
+            <p className="mt-1.5 text-[11.5px] leading-5 text-[#6f6d68]">
               {isUk
                 ? "Active canonical program records currently connected to this institution. UK program detail pages are not yet published, so these records are shown as previews without invented links."
                 : "Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages."}
@@ -388,7 +388,7 @@ export function InstitutionDetailView({
                 {isUk ? "Campuses & locations" : "Campuses"}
               </h2>
             </div>
-            <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
+            <p className="mt-1.5 text-[11.5px] leading-5 text-[#6f6d68]">
               {isUk
                 ? "Institution-official campus and study-location records are shown where normalized. Otherwise CampCareer keeps the existing city-level institution location rather than inventing a campus."
                 : "Current campus records from the canonical institution catalogue. Published Australian city names link to their CampCareer city profiles."}
@@ -407,17 +407,17 @@ export function InstitutionDetailView({
               <GraduationCap className="size-4 text-[#3e7a2e]" />
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Program profile</h2>
             </div>
-            <p className="mt-1.5 text-[11.5px] leading-5 text-[#77746e]">
+            <p className="mt-1.5 text-[11.5px] leading-5 text-[#6f6d68]">
               The largest study areas and qualification types among active canonical programs at this institution.
             </p>
 
             <div className="mt-5 grid gap-5 md:grid-cols-2">
               <div>
-                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8b8881]">Study areas</h3>
+                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#6f6d68]">Study areas</h3>
                 <BreakdownList items={institution.studyAreas} emptyMessage="Study-area classification is not currently published." />
               </div>
               <div>
-                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8b8881]">Program types</h3>
+                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#6f6d68]">Program types</h3>
                 <BreakdownList items={institution.programmeTypes} emptyMessage="Program-type classification is not currently published." />
               </div>
             </div>
@@ -433,24 +433,24 @@ export function InstitutionDetailView({
 
             <dl className="mt-4 space-y-4">
               <div>
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">Country</dt>
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">Country</dt>
                 <dd className="mt-1 text-[12.5px] font-medium text-[#4d4c48]">{country?.name ?? institution.countryCode}</dd>
               </div>
               {kind ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">Verified type</dt>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">Verified type</dt>
                   <dd className="mt-1 text-[12.5px] font-medium text-[#4d4c48]">{kind}</dd>
                 </div>
               ) : null}
               {ownership ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">Ownership</dt>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">Ownership</dt>
                   <dd className="mt-1 text-[12.5px] font-medium text-[#4d4c48]">{ownership}</dd>
                 </div>
               ) : null}
               {institution.cityNames.length ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">
                     {isUk ? "Locations" : "Cities"}
                   </dt>
                   <dd className="mt-1 text-[12px] leading-5 text-[#4d4c48]">{institution.cityNames.join(", ")}</dd>
@@ -458,7 +458,7 @@ export function InstitutionDetailView({
               ) : null}
               {isUk && institution.ukprn ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">UKPRN</dt>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">UKPRN</dt>
                   <dd className="mt-1 flex items-center gap-2 text-[12.5px] font-semibold text-[#4d4c48]">
                     {institution.ukprn}
                     {ukprnSource ? (
@@ -477,7 +477,7 @@ export function InstitutionDetailView({
               ) : null}
               {institution.cricosProviderCode ? (
                 <div>
-                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#aaa7a0]">CRICOS provider code</dt>
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#6f6d68]">CRICOS provider code</dt>
                   <dd className="mt-1 flex items-center gap-2 text-[12.5px] font-semibold text-[#4d4c48]">
                     {institution.cricosProviderCode}
                     {cricosSource ? (
@@ -499,7 +499,7 @@ export function InstitutionDetailView({
 
           <section className="rounded-2xl border border-[#e7e6e3] bg-[#fbfbf9] p-5">
             <h2 className="text-[12.5px] font-semibold text-[#4d4c48]">About this profile</h2>
-            <p className="mt-2 text-[10.5px] leading-5 text-[#8b8881]">
+            <p className="mt-2 text-[10.5px] leading-5 text-[#6f6d68]">
               CampCareer shows only source-backed institution identity fields. Missing type, ownership or location details stay unpublished rather than being inferred.
             </p>
           </section>

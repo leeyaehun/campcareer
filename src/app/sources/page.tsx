@@ -91,7 +91,7 @@ export default function SourcesPage() {
             </Link>
             {country.additions.length > 0 ? (
               <div className="mt-5 border-t border-slate-100 pt-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Additional comparison references</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-600">Additional comparison references</h3>
                 <ul className="mt-3 space-y-2">
                   {country.additions.map(([label, url]) => (
                     <li key={url}>

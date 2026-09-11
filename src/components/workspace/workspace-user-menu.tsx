@@ -148,6 +148,7 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
   return (
     <Link
       href={fallbackLoginDestination}
+      prefetch={false}
       onClick={(event) => {
         event.preventDefault()
         const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`

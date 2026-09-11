@@ -31,6 +31,7 @@ export function PrimaryProductNavigation({ pathname, locale, className }: Primar
           <Link
             key={item.href}
             href={localizePath(item.href, locale)}
+            prefetch={false}
             aria-current={active ? "page" : undefined}
             className={cn(
               "rounded-cc-control px-2.5 py-2 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
@@ -53,6 +54,7 @@ export function CompareNavigationAction({ pathname, locale, className }: Primary
   return (
     <Link
       href={localizePath("/compare", locale)}
+      prefetch={false}
       aria-current={active ? "page" : undefined}
       className={cn(
         "hidden min-h-10 rounded-cc-control border px-3 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 lg:inline-flex",
