@@ -4,10 +4,14 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
+const normalizeMigrationSql = (sql: string) =>
+  sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+
+
+const migration = normalizeMigrationSql(readFileSync(
   new URL("../supabase/migrations/20260808205624_australia_environmental_engineer_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Environmental Engineer maps exactly to OSCA 243935 and legacy ANZSCO 233915", () => {
   const career = getCanonicalCareer("environmental-engineer")
