@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809180000_australia_baker_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809132155_australia_baker_profile.sql", import.meta.url), "utf8")
 
 test("Australia Baker uses exact OSCA 322131 scope", () => {
   const career = getCanonicalCareer("baker")
