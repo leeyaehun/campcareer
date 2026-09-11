@@ -17,7 +17,7 @@ test("Australia Horticulturist remains a multi-occupation umbrella", () => {
   assert.ok(career)
   assert.equal(career.categoryId, "environment")
   assert.ok(editorial)
-  assert.match(migration, /No single current six-digit OSCA Horticulturist exists/i)
+  assert.match(migration, /No single current OSCA Horticulturist occupation exists/i)
   assert.match(editorial.overview, /342931 Nurseryperson/i)
   assert.match(editorial.overview, /343134 Horticultural Supervisor or Specialist/i)
 })
