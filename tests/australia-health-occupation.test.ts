@@ -5,8 +5,10 @@ import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "../src/data/au-vocational-progr
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const normalizeMigrationSql = (sql: string) =>
-  sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
 
 
 const readMigration = (file: string) =>
