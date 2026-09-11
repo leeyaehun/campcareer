@@ -70,6 +70,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(document.cookie.split("; ").some(function(item){return item.indexOf("cc_analytics_consent=")===0})){document.documentElement.dataset.ccAnalyticsConsent="set"}}catch(e){}`,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
