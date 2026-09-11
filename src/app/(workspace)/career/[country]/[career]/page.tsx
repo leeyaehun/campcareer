@@ -241,6 +241,11 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
 
           <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
             <EntityPageHeader title={careerName} titleId="career-heading" subtitle={route.country.name} />
+            <p className="mt-4 max-w-2xl text-base leading-7 text-campcareer-ink-secondary">
+              {locale === "ko"
+                ? `${route.country.name}에서 이 커리어의 수요, 보수와 진입 요건을 근거와 함께 확인하세요.`
+                : `See the evidence behind demand, pay and entry requirements for this career in ${route.country.name}.`}
+            </p>
             <Suspense fallback={<CareerScoreFallback />}>
               <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
             </Suspense>
