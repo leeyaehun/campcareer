@@ -1,4 +1,5 @@
 import "server-only"
+import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import {
   buildCountryMetrics,
@@ -133,7 +134,7 @@ async function readPublishedRows(code: string): Promise<PublishedMetricRow[]> {
   return []
 }
 
-export async function getCountryMetrics(countryCode: string): Promise<CountryMetrics> {
+async function loadCountryMetrics(countryCode: string): Promise<CountryMetrics> {
   const code = countryCode.trim().toUpperCase()
   if (!PUBLISHED_METRIC_TABLES[code]) return { sources: [] }
   const rows = await readPublishedRows(code)
@@ -141,4 +142,14 @@ export async function getCountryMetrics(countryCode: string): Promise<CountryMet
   const snapshots: CountryMetricSnapshotRecord[] = rows.map((row) => ({ id: row.id, sourceId: row.id, sourceUrl: row.source_url, dataAsOf: row.data_as_of }))
   const sources: CountryMetricSourceRecord[] = rows.map((row) => ({ id: row.id, organisationName: sourceOrganisation(row), sourceName: row.source_name }))
   return buildCountryMetrics(metrics, snapshots, sources)
+}
+
+const getCachedCountryMetrics = unstable_cache(
+  loadCountryMetrics,
+  ["country-metrics-v1"],
+  { revalidate: 3600, tags: ["country-metrics"] },
+)
+
+export function getCountryMetrics(countryCode: string): Promise<CountryMetrics> {
+  return getCachedCountryMetrics(countryCode.trim().toUpperCase())
 }

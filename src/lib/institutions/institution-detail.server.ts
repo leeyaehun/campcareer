@@ -1,6 +1,7 @@
 import "server-only"
 
 import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"
 import type { InstitutionMvpCountryCode } from "@/lib/institutions/institution-search"
@@ -152,7 +153,7 @@ function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
   })
 }
 
-export const getInstitutionDetail = cache(async (
+async function loadInstitutionDetail(
   countryCode: InstitutionMvpCountryCode,
   slug: string,
 ): Promise<InstitutionDetail | null> => {
@@ -276,4 +277,15 @@ export const getInstitutionDetail = cache(async (
     programmeTypes: parseBreakdown(row.programme_types),
     programs: parsePrograms(row.programme_preview),
   }
-})
+}
+
+const getCachedInstitutionDetail = unstable_cache(
+  loadInstitutionDetail,
+  ["institution-detail-v1"],
+  { revalidate: 3600, tags: ["institution-detail"] },
+)
+
+export const getInstitutionDetail = cache((
+  countryCode: InstitutionMvpCountryCode,
+  slug: string,
+) => getCachedInstitutionDetail(countryCode, slug))
