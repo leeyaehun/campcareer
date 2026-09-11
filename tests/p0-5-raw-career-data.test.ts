@@ -17,12 +17,13 @@ const rawCareerTables = [
   "country_occupation_program_links",
 ]
 
-test("P0.5 sends raw country occupation reads through the controlled server-side gateway", () => {
+test("P0.5 sends raw country occupation reads only through the controlled server-side gateway", () => {
   for (const source of [countryOccupationRead, careerMarketRead, homeOverviewRead]) {
     assert.match(source, /import \{ readRawCareerData \} from "\.\/raw-career-data"/)
   }
-  assert.match(rawCareerDataRead, /const serverResult = await read\(supabaseAdmin\)/)
-  assert.match(rawCareerDataRead, /serverResult\.error\.code !== "42501"/)
+  assert.match(rawCareerDataRead, /return read\(supabaseAdmin\)/)
+  assert.doesNotMatch(rawCareerDataRead, /from "@\/lib\/supabase"/)
+  assert.doesNotMatch(rawCareerDataRead, /42501/)
 })
 
 test("P0.5 removes browser-role policies and privileges from every raw Career table", () => {
