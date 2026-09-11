@@ -13,7 +13,7 @@ const POPULAR_CODES = ["AU", "CA", "US"] as const
 const DEFAULT_IMAGE =
   "https://images.unsplash.com/photo-1570191913384-7b4ff11716e7?w=400&h=250&fit=crop&auto=format"
 
-const heroImage = (url: string) => url.replace(/\?.*$/, "?w=1600&h=700&fit=crop&auto=format")
+const heroImage = (url: string, width: number) => url.replace(/\?.*$/, `?w=${width}&h=${Math.round(width * 0.7)}&fit=crop&auto=format&q=65`)
 
 export function CountryDashboardShell({
   countryCode,
@@ -94,7 +94,11 @@ export function CountryDashboardShell({
 
   const explorer = routeCountry ? getCountryExplorer(routeCountry.code) : null
   const cityCount = explorer?.regions.reduce((total, region) => total + region.cities.length, 0) ?? 0
-  const bgImage = heroImage(routeCountry?.image ?? DEFAULT_IMAGE)
+  const heroSource = routeCountry?.image ?? DEFAULT_IMAGE
+  const bgImage = heroImage(heroSource, 800)
+  const bgImageSrcSet = [640, 800, 1200]
+    .map((width) => `${heroImage(heroSource, width)} ${width}w`)
+    .join(", ")
   const popular = LAUNCH_COUNTRIES.filter((country) =>
     (POPULAR_CODES as readonly string[]).includes(country.code)
   )
@@ -133,9 +137,10 @@ export function CountryDashboardShell({
         <img
           aria-hidden="true"
           src={bgImage}
+          srcSet={bgImageSrcSet}
+          sizes="100vw"
           alt=""
           fetchPriority="high"
-          decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div
