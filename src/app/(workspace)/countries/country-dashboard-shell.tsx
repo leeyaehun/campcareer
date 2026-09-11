@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, BadgeCheck, Globe2, Search } from "lucide-react"
 import { LAUNCH_COUNTRIES, getLaunchCountry } from "@/data/launch-countries"
@@ -129,10 +130,14 @@ export function CountryDashboardShell({
   return (
     <div>
       <section className="relative overflow-hidden">
-        <div
+        <Image
+          src={bgImage}
+          alt=""
+          fill
+          preload
+          sizes="100vw"
+          className="object-cover object-center"
           aria-hidden="true"
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${bgImage})` }}
         />
         <div
           aria-hidden="true"
