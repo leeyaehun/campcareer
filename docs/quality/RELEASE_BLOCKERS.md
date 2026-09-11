@@ -8,13 +8,13 @@ Last reviewed: 2026-09-11
 | --- | --- | --- | --- | --- |
 | P1 | Synthetic LCP baseline misses the Phase 5 target on representative pages | Local production-like Lighthouse measured LCP from 3.46 to 4.95 s on the sampled non-home routes; the target is 2.5 s. This is lab evidence only, but it identifies work required before public launch and field monitoring. | Establish a repeatable budget, remove the measured high-impact bottleneck(s), rerun the lab audit, then monitor field CWV after launch. | Web performance owner |
 | P1 | Manual accessibility evidence is not yet recorded | Automated WCAG scans are clean, but automation cannot prove screen-reader, 200% zoom, touch target, reduced-motion, focus restoration, or keyboard quality. | Record the manual checklist in the quality standard on representative desktop and mobile surfaces; fix any material finding. | Release owner / accessibility reviewer |
-| P1 | Supabase leaked-password protection warning | Supabase Advisor still reports `auth_leaked_password_protection` as a warning. | Enable and verify leaked-password protection in the Supabase Auth dashboard, then record the setting. | Auth owner |
 
 ## Open planned work
 
 | Severity | Item | Evidence | Policy |
 | --- | --- | --- | --- |
 | P2 | RLS-enabled service-only tables have no policy | Supabase Advisor reports these as informational. The six raw Career tables now intentionally join this set after P0.5 because browser roles have no table privilege and no browser SELECT policies. | Inventory and document intended service-role-only tables. Do not add browser policies just to remove the informational lint. |
+| P2 | Supabase leaked-password protection is plan-gated | Security Advisor reports `auth_leaked_password_protection` as WARN, but the production Supabase organization is on the Free plan and Supabase documents leaked-password protection as Pro+ only. Password auth is used, so enable and re-verify this control when the project moves to Pro; do not treat an unavailable paid control as a Free-plan release blocker. | Upgrade-triggered Auth hardening. |
 | P2 | Database index advisor findings | 25 unindexed foreign keys and 83 unused indexes were reported as informational. | Review with production query/index telemetry; do not add or drop indexes mechanically. |
 | P2 | CSP rollout | Security headers are active, but CSP needs a tested Next.js nonce/reporting design. | Introduce in report-only or a controlled staged rollout with E2E coverage. |
 | P2 | Moderate production dependency advisory | `npm audit --omit=dev --audit-level=high` exits successfully but reports one Moderate `baseline-browser-mapping` denial-of-service advisory. | Review the upstream fix through normal dependency updates and rerun the production audit; do not use an unreviewed bulk audit fix. |
@@ -47,6 +47,7 @@ Last reviewed: 2026-09-11
 ## Release decision
 
 **NOT READY FOR PHASE 6.** The P0 migration and raw-Career privilege blockers
-are closed. The remaining P1 performance, manual accessibility, and Auth
-configuration evidence have not been started in this follow-up and must close
+are closed. Supabase leaked-password protection is not available on the current
+Free plan and is tracked as P2 upgrade-triggered hardening rather than a P1.
+The remaining P1 performance and manual accessibility evidence must close
 before release.
