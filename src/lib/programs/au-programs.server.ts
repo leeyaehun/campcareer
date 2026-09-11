@@ -1,6 +1,7 @@
 import "server-only"
 
 import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import {
   programLevelTypes,
@@ -448,4 +449,10 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   }
 }
 
-export const getAuProgramById = cache(loadAuProgramById)
+const getCachedAuProgramById = unstable_cache(
+  loadAuProgramById,
+  ["au-program-detail-v1"],
+  { revalidate: 3600, tags: ["au-program-detail"] },
+)
+
+export const getAuProgramById = cache((id: number) => getCachedAuProgramById(id))

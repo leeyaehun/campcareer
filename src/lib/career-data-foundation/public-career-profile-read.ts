@@ -25,7 +25,7 @@ export const getPublicCareerProfile = cache((countryCode: string, careerId: stri
 
 
 /** Lean read boundary for canonical Career pages; cross-country recommendations are not rendered there. */
-export const getPublicCareerPageProfile = cache(async (countryCode: string, careerId: string) => {
+async function loadPublicCareerPageProfile(countryCode: string, careerId: string) {
   const insight = await getCareerMarketInsight({
     countryCode,
     careerId,
@@ -33,4 +33,14 @@ export const getPublicCareerPageProfile = cache(async (countryCode: string, care
   })
   if (!insight?.country) return null
   return toCareerProfile(insight, insight.foundation)
-})
+}
+
+const getCachedPublicCareerPageProfile = unstable_cache(
+  loadPublicCareerPageProfile,
+  ["public-career-page-profile-v1"],
+  { revalidate: 3600, tags: ["public-career-page-profile"] },
+)
+
+export const getPublicCareerPageProfile = cache((countryCode: string, careerId: string) =>
+  getCachedPublicCareerPageProfile(countryCode.trim().toUpperCase(), careerId),
+)
