@@ -129,6 +129,7 @@ export function CountryDashboardShell({
   return (
     <div>
       <section className="relative overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element -- LCP hero intentionally uses the direct source so fetch priority is not mediated by an optimizer request. */}
         <img
           aria-hidden="true"
           src={bgImage}
