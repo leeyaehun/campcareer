@@ -27,7 +27,7 @@ test("Australia Web Designer uses exact OSCA 242133 scope", () => {
 test("Australia Web Designer uses exact legacy labour and broader vacancy context", () => {
   assert.match(migrationSql, /5300,null,null,null,1852,31,46,36,41/)
   assert.match(migrationSql, /441,'2026-05-01',-7\.68,9\.86,18\.96/)
-  assert.match(migrationSql, /vacancy intensity and trend receive zero credit/i)
+  assert.match(migrationSql, /no intensity or trend credit/i)
 })
 
 test("Australia Web Designer has NS shortage and current migration credit", () => {
