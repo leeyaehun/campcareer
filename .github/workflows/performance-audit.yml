@@ -54,6 +54,7 @@ jobs:
         env:
           LIGHTHOUSE_BASE_URL: http://127.0.0.1:3102
           LIGHTHOUSE_LCP_BUDGET_MS: "2500"
+          LIGHTHOUSE_SAMPLE_COUNT: "3"
         run: npm run audit:lighthouse
       - name: Publish Lighthouse summary
         if: always()
