@@ -1,46 +1,45 @@
 # Phase 5 release audit
 
 Date: 2026-09-11  
-Scope: Phase 1–4 product contracts, production-like build, selected public
-surfaces, linked Supabase project, and release CI. No data migration or remote
-configuration was applied during this audit.
+Scope: Phase 1–4 product contracts, production-like build, representative public
+surfaces, production migration/privilege reconciliation, and release CI.
 
 ## Correctness and testing
 
 | Check | Evidence | Result |
 | --- | --- | --- |
-| Type safety | `npm run typecheck` | Pass |
-| Lint | `npm run lint` | Pass; 84 pre-existing warnings, no new warnings introduced by this work |
-| Unit suite | `npm test` | Pass |
-| Data quality | `npm run check:data` | Pass: 120 source records, 6 required categories, 20 countries |
-| Production build | `npm run build` | Pass |
-| Whitespace | `git diff --check` | Pass |
-| Dependency production audit | `npm audit --omit=dev --audit-level=high` | Pass |
-| Critical E2E | `npm run test:e2e:critical` | Pass: 45 passed, 3 intentional responsive-matrix skips; production build served with `next start` |
+| Type safety | CI #2084 · `npm run typecheck` | Pass |
+| Lint | CI #2084 · `npm run lint` | Pass |
+| Unit suite | CI #2084 · unit test step | Pass |
+| Data quality | Last recorded `npm run check:data`: 120 source records, 6 required categories, 20 countries; performance/accessibility work did not alter the catalogue contract | Pass |
+| Production build | CI #2084 · `npm run build` | Pass |
+| Whitespace | CI #2084 · `git diff --check` | Pass |
+| Dependency production audit | CI #2084 · `npm audit --omit=dev --audit-level=high` | Pass at the High threshold |
+| Secret scan | CI #2084 | Pass |
+| Critical E2E | CI #2084 · `npm run test:e2e:critical` against `next start` | Pass: 49 passed, 15 intentional project-specific skips |
 
-The focused E2E suite covers Careers search to canonical Career evidence,
-Career Compare, Country-aware discovery, and the existing verified
+The focused E2E suite covers Careers country selection/search to canonical
+Career evidence, Career Compare, Country-aware discovery, and the verified
 Program→Institution relationship. It also checks valid/missing Career status,
 invalid country, legacy redirect, malformed Compare recovery, canonical and
-description metadata, security headers, no unexpected browser console/page
-errors, and page-level horizontal overflow.
+description metadata, security headers, responsive overflow, and unexpected
+browser console/page errors.
 
 ## Browser and responsive evidence
 
 | Surface | Browser coverage | Result |
 | --- | --- | --- |
-| Critical journeys and HTTP/metadata | Chromium desktop, Firefox desktop, WebKit desktop, mobile Chromium (iPhone 13 profile) | Pass |
-| Automated accessibility | Same four configurations | Pass |
-| Responsive overflow matrix | Chromium at 360, 390, 768, 1024, 1280, and 1440 px | Pass; homepage, Careers, Career, Country, Program, Institution, and Compare checked |
+| Critical journeys and HTTP/metadata | Chromium desktop, Firefox desktop, WebKit desktop, mobile Chromium | Pass |
+| Automated accessibility | Same four configurations for representative axe scans; targeted keyboard/text-scale/reduced-motion/touch checks on their designated projects | Pass |
+| Responsive overflow matrix | Chromium at 360, 390, 768, 1024, 1280, and 1440 px | Pass on homepage, Careers, Career, Country, Program, Institution, and Compare |
 
-Mobile Compare uses its existing contained comparison surface; the test rejects
-document-level horizontal overflow. Manual keyboard, zoom, screen-reader,
-touch-target, and reduced-motion evidence remains an open P1 release action;
-see [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md).
+Manual accessibility sign-off is the remaining P1. Automated evidence and the
+manual checklist are recorded in
+[PHASE_5_ACCESSIBILITY_EVIDENCE.md](PHASE_5_ACCESSIBILITY_EVIDENCE.md).
 
 ## Accessibility
 
-`@axe-core/playwright` scanned `main` using WCAG 2.0/2.1/2.2 A and AA tags on:
+`@axe-core/playwright` scans `main` with WCAG 2.0/2.1/2.2 A/AA tags on:
 
 - `/careers`
 - `/career/australia/registered-nurse`
@@ -50,36 +49,35 @@ see [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md).
 - the Career Compare context
 - `/sources`
 
-All scans were free of violations. The review corrected two footer labels that
-were incorrectly headings and fixed sampled low-contrast text in Country,
-Program, Institution, and Sources shared surfaces. Automated scans remain a
-partial check, not proof of complete WCAG 2.2 AA conformance.
+The scans are clean. CI also passes targeted checks for visible keyboard focus,
+200% text scaling, reduced-motion preference, and the WCAG 2.2 24×24 CSS px
+minimum mobile target. These are automated risk controls, not a claim of full
+WCAG conformance. Real screen-reader output, full keyboard interaction/focus
+restoration, browser 200% zoom, larger product touch targets, and qualitative
+reduced-motion behaviour remain to be signed off manually.
 
-## Performance baseline
+## Performance release audit
 
-Measurements use local `next build` + `next start` with Lighthouse 13.4.1 and
-headless Chrome. They are synthetic lab observations, not field Core Web
-Vitals. `INP` and production `TTFB` need field telemetry after launch.
+Performance audit #31 ran the production build on commit `4a9b3f60`. The hard
+budget was LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms. Every sampled route
+passed.
 
-| Route | Performance | Accessibility | Best Practices | SEO | LCP |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| `/` | 91 | 98 | 100 | 100 | 3.47 s |
-| `/careers` | 82 | 98 | 100 | 66* | 4.88 s |
-| `/career/australia/registered-nurse` | 90 | 100 | 100 | 100 | 3.62 s |
-| `/countries/au` | 82 | 100 | 100 | 100 | 4.95 s |
-| `/programs/au/1-bachelor-of-arts` | 91 | 100 | 100 | 91† | 3.46 s |
-| `/institutions/au/australian-catholic-university` | 87 | 100 | 100 | 100 | 4.06 s |
-| `/sources` | 91 | 100 | 100 | 100 | 3.46 s |
+| Route | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT | Warm TTFB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `/` | 80 | 98 | 100 | 100 | 2.48 s | 0.000 | 702 ms | 49 ms |
+| `/careers` | 94 | 100 | 100 | 66* | 2.49 s | 0.000 | 215 ms | 93 ms |
+| `/career/australia/registered-nurse` | 88 | 100 | 100 | 100 | 2.47 s | 0.000 | 390 ms | 68 ms |
+| `/countries/au` | 95 | 100 | 100 | 100 | 2.47 s | 0.000 | 164 ms | 21 ms |
+| `/programs/au/1-bachelor-of-arts` | 96 | 100 | 100 | 100 | 2.33 s | 0.000 | 163 ms | 36 ms |
+| `/institutions/au/australian-catholic-university` | 97 | 100 | 100 | 100 | 2.32 s | 0.000 | 143 ms | 18 ms |
+| `/sources` | 96 | 100 | 100 | 100 | 2.33 s | 0.000 | 172 ms | 17 ms |
 
-\* Careers is intentionally `noindex, follow` because it is a dynamic
-discovery/filter surface, so Lighthouse’s crawlability deduction is expected.
+\* Careers is intentionally `noindex, follow`, so Lighthouse’s crawlability
+deduction is expected.
 
-† The HTML and E2E test confirm the Program description includes course type,
-institution, and location. Lighthouse reported a description issue despite the
-rendered meta tag, so it is not treated as missing metadata.
-
-The LCP target is at most 2.5 s, so the sampled baseline is a P1 performance
-item. No broad rendering rewrite was made simply to optimise a lab score.
+These are synthetic lab observations, not field Core Web Vitals. Field INP,
+LCP, CLS, and TTFB monitoring remains a Phase 6 responsibility once traffic
+exists.
 
 ## SEO, canonical, and sitemap audit
 
@@ -87,65 +85,61 @@ item. No broad rendering rewrite was made simply to optimise a lab score.
   `/career/{country-slug}/{career-id}`.
 - Canonical Career requests return 200; missing careers and invalid countries
   return 404; the legacy Career alias returns its 308 canonical redirect.
-- The Careers and Compare query-state surfaces remain non-indexable.
-- Sitemap audit found no duplicate URLs. The resulting sitemap has 2,154 URLs,
-  including 11 canonical Career entries and no state occupation context URLs.
+- Careers and Compare query-state surfaces remain non-indexable.
+- The recorded sitemap audit contains 2,154 URLs, including 11 canonical Career
+  entries and no Australian state occupation context URLs.
 - The 40 valid Australian state occupation pages remain available as contextual
-  evidence, explicitly `noindex, follow`, and are absent from the sitemap.
-- `robots.txt` allows public product routes, blocks API/auth/account and retired
-  surfaces, and declares the primary, blog, and Canadian program sitemaps.
-
-This change avoids a second indexable Career surface without deleting useful
-state-level demand evidence.
+  evidence, explicitly `noindex, follow`, and absent from the sitemap.
+- `robots.txt` keeps public product routes available while blocking
+  API/auth/account and retired surfaces.
 
 ## Data integrity and provenance
 
-`npm run check:data` passed with the existing catalogue gate: 120 source
-records cover all 6 required categories across 20 countries. This review did
-not change score calculation, publication readiness, source selection, or
-missing-data semantics. The Career read model continues to expose source-aware
-missing values rather than manufacturing salary, demand, mapping, readiness,
-or score inputs.
+Production migration lineage and the repository are reconciled at 814
+migrations with zero branch-only or production-only versions. P0.5
+`20260907101500_p0_5_private_raw_career_data` is applied under its intended
+version. The public data contract still represents missing salary, demand,
+mapping, readiness, or score evidence as missing rather than inventing neutral
+values.
+
+All six raw Career tables are service-role-only for reads: `service_role`
+has SELECT, `anon`/`authenticated` do not, and there are no browser SELECT
+policies. A real service-role read succeeded and the application-side
+`42501 → anon` compatibility fallback has been removed.
 
 ## Security and privacy
 
-- CI preserves dependency audit and Git history secret scan; the production
-  dependency audit passed at the High threshold. It still reports one Moderate
-  `baseline-browser-mapping` denial-of-service advisory, tracked as P2 rather
-  than hidden.
-- Public responses now include `nosniff`, strict-origin referrer policy, and a
+- Dependency audit and Git history secret scan pass in CI #2084.
+- Public responses include `nosniff`, strict-origin referrer policy, and a
   restrictive camera/microphone/geolocation permissions policy.
-- Institution rendering no longer requests external favicon URLs, avoiding the
-  observed third-party browser-state cookie before a visitor opens a source.
-- Supabase Advisor classification: 128 `rls_enabled_no_policy` informational
-  findings on intentionally internal/deny-by-default tables, 25 unindexed
-  foreign-key informational findings, 83 unused-index informational findings,
-  and one `auth_leaked_password_protection` warning.
-- No remote database or Auth configuration was mutated in this review.
-
-The unresolved migration history and raw-Career privilege boundary are P0 and
-are detailed in [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md).
+- Institution rendering does not load third-party favicons.
+- Supabase leaked-password protection remains a documented P2 because the
+  current Free plan does not expose the Pro+ control.
+- Advisor informational findings for service-only RLS tables and indexes remain
+  tracked as P2 rather than being mechanically “fixed”.
+- CSP remains a staged P2 item pending a tested nonce/reporting design.
 
 ## Reliability
 
 Critical routes have explicit valid, missing, redirect, and unsupported-state
-coverage. A malformed Compare query returns a recoverable “Comparison not
-available” surface rather than an empty successful page. The E2E helper fails
-on unexpected page errors and browser console errors; no such browser errors
-were observed. During parallel E2E navigation, `next start` logged `The
-destination stream closed early`; it did not fail a request or assertion and is
-tracked as P2 for production reproduction.
+coverage. Malformed Compare input returns a recoverable surface. CI fails on
+unexpected browser page/console errors; the previous WebKit RSC prefetch error
+is closed. Parallel `next start` can still log `The destination stream
+closed early` during intentionally aborted navigation and is tracked as P2.
 
 ## Known blockers and deferred work
 
-Open P0/P1/P2/P3 items, owners, and exit conditions are maintained in
-[RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md). The P0 migration history drift and
-unapplied P0.5 raw-Career privilege migration prevent a public Phase 6 launch.
-This review deliberately did not rewrite migration history, apply DDL, change
-raw-Career policies, or remove the required `42501 → anon` compatibility
-fallback.
+The source of truth is [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md). All migration,
+privilege, critical-browser, and synthetic-performance launch blockers are
+closed. The only remaining P1 is the manual accessibility sign-off in
+[PHASE_5_ACCESSIBILITY_EVIDENCE.md](PHASE_5_ACCESSIBILITY_EVIDENCE.md).
+
+P2/P3 items do not independently block Phase 6 and remain scheduled work.
 
 ## Decision
 
-**NOT READY FOR PHASE 6.** Application quality gates pass, but the unresolved
-P0 migration/privilege boundary and listed P1 launch conditions remain open.
+**NOT READY FOR PHASE 6.** All engineering and performance release gates pass,
+but the Phase 5 standard explicitly requires manual accessibility evidence
+before external launch. Once that checklist is completed without a material
+finding (or findings are fixed and rechecked), update this decision to
+**READY FOR PHASE 6** and move PR #263 out of draft.
