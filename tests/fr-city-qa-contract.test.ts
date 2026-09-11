@@ -7,8 +7,8 @@ const profile = readFileSync("src/lib/cities/fr-city-profile.server.ts", "utf8")
 const compare = readFileSync("src/lib/cities/fr-city-comparison.server.ts", "utf8")
 const page = readFileSync("src/app/(workspace)/cities/fr/[city]/page.tsx", "utf8")
 const sitemap = readFileSync("src/app/sitemap.ts", "utf8")
-const linkageMigration = readFileSync("supabase/migrations/20260810223100_publish_fr_tier_a_city_linkage_v1.sql", "utf8")
-const metricsMigration = readFileSync("supabase/migrations/20260810223200_publish_fr_tier_a_city_metrics_v1.sql", "utf8")
+const linkageMigration = readFileSync("supabase/migration-contracts/20260810223100_publish_fr_tier_a_city_linkage_v1.sql", "utf8")
+const metricsMigration = readFileSync("supabase/migration-contracts/20260810223200_publish_fr_tier_a_city_metrics_v1.sql", "utf8")
 
 const tierA = ["paris", "paris-saclay", "bordeaux", "strasbourg", "grenoble", "aix-marseille", "nice"]
 
@@ -53,7 +53,7 @@ test("France publication keeps profiles indexable while Compare stays noindex", 
 })
 
 test("France geography semantics never collapse registered localities into public metropolitan aliases", () => {
-  const geographyMigration = readFileSync("supabase/migrations/20260810223000_normalize_fr_tier_a_city_geographies_v1.sql", "utf8")
+  const geographyMigration = readFileSync("supabase/migration-contracts/20260810223000_normalize_fr_tier_a_city_geographies_v1.sql", "utf8")
   assert.ok(geographyMigration.includes("paris-saclay"))
   assert.ok(geographyMigration.includes("bordeaux"))
   assert.ok(geographyMigration.includes("grenoble"))

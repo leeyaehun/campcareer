@@ -3,7 +3,7 @@ import fs from "node:fs"
 import test from "node:test"
 
 const locationMigration = fs.readFileSync(
-  "supabase/migrations/20260811023200_verify_fi_tier_a_study_locations_v1.sql",
+  "supabase/migration-contracts/20260811023200_verify_fi_tier_a_study_locations_v1.sql",
   "utf8",
 )
 const readModelMigration = fs.readFileSync(
