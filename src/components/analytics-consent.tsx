@@ -7,7 +7,7 @@ import { localizePath } from "@/lib/i18n/config"
 import { clearOptionalMeasurementCookies, createOptionalMeasurementSession, getAnalyticsConsent, setAnalyticsConsent } from "@/lib/analytics-consent"
 
 export function AnalyticsConsent() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   const locale = useRouteLocale()
   const isKo = locale === "ko"
 
@@ -25,7 +25,7 @@ export function AnalyticsConsent() {
   if (!visible) return null
 
   return (
-    <aside className="fixed inset-x-3 bottom-3 z-[1100] mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:bottom-5" aria-label={isKo ? "개인정보 선택" : "Privacy choices"}>
+    <aside id="cc-analytics-consent" className="fixed inset-x-3 bottom-3 z-[1100] mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:bottom-5" aria-label={isKo ? "개인정보 선택" : "Privacy choices"}>
       <p className="text-sm font-semibold text-slate-900">{isKo ? "CampCareer 개선에 도움을 주세요" : "Help us improve CampCareer"}</p>
       <p className="mt-1 text-xs leading-5 text-slate-600">{isKo ? "선택적 제품 측정은 검색·비교·파트너 링크가 제대로 작동하는지 이해하는 데만 사용합니다. 이메일이나 자유 입력 내용은 포함하지 않습니다." : "Optional product measurement helps us understand whether search, comparison, and partner links work. It never includes your email or free-text answers."}</p>
       <Link href={`${localizePath("/privacy", locale)}#cookies-and-measurement`} className="mt-2 inline-flex text-xs font-semibold text-blue-700 underline underline-offset-2 hover:text-blue-800">
