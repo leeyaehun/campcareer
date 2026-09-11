@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809193000_australia_aircraft_maintenance_technician_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809140216_australia_aircraft_maintenance_technician_profile.sql", import.meta.url), "utf8")
 
 test("Australia Aircraft Maintenance Technician preserves three current OSCA streams", () => {
   const career = getCanonicalCareer("aircraft-maintenance-technician")

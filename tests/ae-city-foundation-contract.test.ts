@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import fs from "node:fs"
 import test from "node:test"
 
-const migration = fs.readFileSync("supabase/migrations/20260812004500_normalize_ae_tier_a_city_geographies_v1.sql", "utf8")
+const migration = fs.readFileSync("supabase/migration-contracts/20260812004500_normalize_ae_tier_a_city_geographies_v1.sql", "utf8")
 const scope = fs.readFileSync("docs/data-foundation/ae-city-scope-v1.md", "utf8")
 
 const expected = ["abu-dhabi", "sharjah", "al-ain", "dubai"] as const

@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809131500_australia_agronomist_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809102450_australia_agronomist_profile.sql", import.meta.url), "utf8")
 
 test("Australia Agronomist maps to current OSCA 244133 and ANZSCO 2022 234115", () => {
   const career = getCanonicalCareer("agronomist")

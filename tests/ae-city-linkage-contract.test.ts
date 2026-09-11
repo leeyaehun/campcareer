@@ -2,8 +2,8 @@ import assert from "node:assert/strict"
 import fs from "node:fs"
 import test from "node:test"
 
-const locations = fs.readFileSync("supabase/migrations/20260812004600_verify_ae_tier_a_study_locations_v1.sql", "utf8")
-const models = fs.readFileSync("supabase/migrations/20260812004700_publish_ae_tier_a_city_read_models_v1.sql", "utf8")
+const locations = fs.readFileSync("supabase/migration-contracts/20260812004600_verify_ae_tier_a_study_locations_v1.sql", "utf8")
+const models = fs.readFileSync("supabase/migration-contracts/20260812004700_publish_ae_tier_a_city_read_models_v1.sql", "utf8")
 
 test("UAE Phase 3 requires verified provider identity, location and accreditation provenance", () => {
   assert.match(locations, /AE_PROVIDER_OFFICIAL_TEACHING_LOCATION/)
