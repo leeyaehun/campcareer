@@ -156,7 +156,7 @@ function parsePrograms(value: unknown): InstitutionProgrammePreview[] {
 async function loadInstitutionDetail(
   countryCode: InstitutionMvpCountryCode,
   slug: string,
-): Promise<InstitutionDetail | null> => {
+): Promise<InstitutionDetail | null> {
   const detailView = countryCode === "UK"
     ? "institution_detail_uk_v1"
     : countryCode === "CA"

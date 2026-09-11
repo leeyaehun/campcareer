@@ -2,7 +2,7 @@ import { UnitedKingdomCountryDashboard } from "../united-kingdom-country-dashboa
 import { CountryDashboardShell } from "../country-dashboard-shell"
 import { getCountryMetrics } from "@/lib/workspace/country-metrics"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 export const metadata = {
   title: "Study and Work in the United Kingdom",
