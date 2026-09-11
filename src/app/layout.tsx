@@ -14,7 +14,7 @@ import { ConsentGatedInsights } from "@/components/consent-gated-insights"
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
+  display: "optional",
 })
 
 const geistMono = localFont({
