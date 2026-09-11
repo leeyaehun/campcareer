@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Suspense } from "react"
 import { headers } from "next/headers"
 import { notFound, permanentRedirect } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { EntityPageHeader } from "@/components/ui/entity-page"
-import { Skeleton } from "@/components/ui/skeleton"
 import { localizePath, type Locale } from "@/lib/i18n/config"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
 import { getPublicCareerPageProfile } from "@/lib/career-data-foundation/public-career-profile-read"
@@ -99,69 +97,6 @@ export async function generateMetadata({ params }: CareerCanonicalPageProps): Pr
   }
 }
 
-function CareerScoreFallback() {
-  return (
-    <div className="mt-8 border-t border-campcareer-border pt-6" aria-hidden="true">
-      <Skeleton className="h-4 w-32" />
-      <Skeleton className="mt-3 h-16 w-40" />
-      <Skeleton className="mt-6 h-16" />
-    </div>
-  )
-}
-
-function CareerSectionsFallback() {
-  return (
-    <div className="mt-8 space-y-4" aria-hidden="true">
-      <Skeleton className="h-5 w-40" />
-      <Skeleton className="h-24 w-full" />
-    </div>
-  )
-}
-
-async function CareerScoreContent({
-  profilePromise,
-  query,
-  locale,
-}: {
-  profilePromise: PublicCareerProfilePromise
-  query: OverviewSearchValues
-  locale: Locale
-}) {
-  const profile = await profilePromise
-  if (!profile?.country) notFound()
-
-  return (
-    <CampCareerScoreHero
-      query={query}
-      locale={locale}
-      initialInsight={profile.compatibility}
-      embedded
-      showHeader={false}
-    />
-  )
-}
-
-async function CareerSectionsContent({
-  profilePromise,
-  query,
-  locale,
-}: {
-  profilePromise: PublicCareerProfilePromise
-  query: OverviewSearchValues
-  locale: Locale
-}) {
-  const profile = await profilePromise
-  if (!profile?.country) notFound()
-
-  return (
-    <CareerCoreSections
-      query={query}
-      locale={locale}
-      initialInsight={profile.compatibility}
-    />
-  )
-}
-
 export default async function CareerCanonicalPage({ params }: CareerCanonicalPageProps) {
   const { country, career } = await params
   const route = getCareerRoute(country, career)
@@ -174,7 +109,8 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
   }
 
   const query: OverviewSearchValues = { country: route.country.code, occupation: route.career.id }
-  const profilePromise = getPublicCareerPageProfile(route.country.code, route.career.id)
+  const profile = await getPublicCareerPageProfile(route.country.code, route.career.id)
+  if (!profile?.country) notFound()
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
   const copy = metadataCopy(careerName, route.country.name, locale)
   const canonicalUrl = `${SITE_URL}${canonicalPath}`
@@ -235,7 +171,7 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
       />
       <main className="min-h-[calc(100vh-4rem)] bg-campcareer-surface px-4 pb-16 pt-5 sm:px-8 sm:pt-8">
         <div className="mx-auto max-w-5xl">
-          <Link href={localizePath("/", locale)} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-2.5 text-sm font-semibold text-campcareer-muted transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+          <Link href={localizePath("/", locale)} prefetch={false} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-2.5 text-sm font-semibold text-campcareer-muted transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <ArrowLeft className="size-4" /> {locale === "ko" ? "다시 검색하기" : "Search again"}
           </Link>
 
@@ -246,16 +182,23 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
                 ? `${route.country.name}에서 이 커리어의 수요, 보수와 진입 요건을 근거와 함께 확인하세요.`
                 : `See the evidence behind demand, pay and entry requirements for this career in ${route.country.name}.`}
             </p>
-            <Suspense fallback={<CareerScoreFallback />}>
-              <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
-            </Suspense>
+            <CampCareerScoreHero
+              query={query}
+              locale={locale}
+              initialInsight={profile.compatibility}
+              embedded
+              showHeader={false}
+            />
           </section>
 
-          <Suspense fallback={<CareerSectionsFallback />}>
-            <CareerSectionsContent profilePromise={profilePromise} query={query} locale={locale} />
-          </Suspense>
-
-          <CareerResultActions query={query} locale={locale} />
+          <div className="[content-visibility:auto] [contain-intrinsic-size:1200px]">
+            <CareerCoreSections
+              query={query}
+              locale={locale}
+              initialInsight={profile.compatibility}
+            />
+            <CareerResultActions query={query} locale={locale} />
+          </div>
         </div>
       </main>
     </>

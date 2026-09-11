@@ -89,7 +89,7 @@ function CareerDiscovery() {
           <div>
             <p className="text-xs font-semibold tracking-[0.08em] text-brand">Start here</p>
             <h2 id="field-discovery-heading" className="mt-2 text-xl font-semibold tracking-[-0.03em] text-campcareer-ink sm:text-2xl">
-              Find a field that fits you
+              Explore career fields
             </h2>
           </div>
           <p className="hidden max-w-52 text-right text-xs leading-5 text-campcareer-muted sm:block">
@@ -98,7 +98,7 @@ function CareerDiscovery() {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {STUDY_CATEGORIES.map((category) => {
+          {STUDY_CATEGORIES.map((category, index) => {
             const careersInCategory = CAREER_CATALOGUE.filter((career) => career.categoryId === category.id)
             const example = careersInCategory[0]
             const Icon = CATEGORY_ICON.get(category.id) ?? BriefcaseBusiness
@@ -107,7 +107,7 @@ function CareerDiscovery() {
                 key={category.id}
                 href={`/careers?category=${category.id}`}
                 prefetch={false}
-                className="group min-h-32 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 text-left shadow-cc-surface transition-colors duration-cc-standard hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 sm:min-h-36"
+                className={`${index >= 6 ? "hidden sm:block" : "block"} group min-h-32 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 text-left shadow-cc-surface transition-colors duration-cc-standard hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 sm:min-h-36`}
               >
                 <span className="grid size-9 place-items-center rounded-cc-surface bg-brand-tint text-brand"><Icon className="size-[18px]" /></span>
                 <span className="mt-3 block text-sm font-semibold leading-5 tracking-[-0.015em] text-campcareer-ink">
