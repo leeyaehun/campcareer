@@ -4,7 +4,10 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809123415_australia_film_editor_profile.sql", import.meta.url), "utf8")
+const normalizeMigrationSql = (sql: string) =>
+  sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+
+const migration = normalizeMigrationSql(readFileSync(new URL("../supabase/migrations/20260809123415_australia_film_editor_profile.sql", import.meta.url), "utf8"))
 
 test("Australia Film Editor uses exact OSCA 231434 scope", () => {
   const career = getCanonicalCareer("film-editor")
