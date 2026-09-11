@@ -4,10 +4,14 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
+const normalizeMigrationSql = (sql: string) =>
+  sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+
+
+const migration = normalizeMigrationSql(readFileSync(
   new URL("../supabase/migrations/20260809083712_australia_auditor_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Auditor is an umbrella across External and Internal Auditor", () => {
   const career = getCanonicalCareer("auditor")
