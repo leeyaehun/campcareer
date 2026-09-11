@@ -92,7 +92,7 @@ export default async function ProgramDetailPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <Link href="/programs" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
+      <Link href="/programs" prefetch={false} className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
         <ArrowLeft className="size-3.5" /> Back to Australian programs
       </Link>
 
@@ -107,13 +107,13 @@ export default async function ProgramDetailPage({ params }: Params) {
             </div>
             <h1 className="mt-5 text-[28px] font-semibold leading-tight tracking-[-0.03em] text-[#1b1b1b] sm:text-[36px]">{program.title}</h1>
             {institutionProfilePath ? (
-              <Link href={institutionProfilePath} className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#4f4d48] transition hover:text-[#3e7a2e] hover:underline">
+              <Link href={institutionProfilePath} prefetch={false} className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#4f4d48] transition hover:text-[#3e7a2e] hover:underline">
                 <Building2 className="size-4" />{program.institutionName}
               </Link>
             ) : (
               <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
             )}
-            {location && <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#77746e]"><MapPin className="size-4" />{location}</p>}
+            {location && <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#6f6d68]"><MapPin className="size-4" />{location}</p>}
             {program.fieldName && <p className="mt-5 text-[13px] leading-6 text-[#65625c]">{program.fieldName}</p>}
           </header>
 
@@ -131,7 +131,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                 <h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Registered delivery locations</h2>
                 <span className="rounded-full bg-[#eef4ff] px-2.5 py-1 text-[10px] font-semibold text-[#2563eb]">Official CRICOS</span>
               </div>
-              <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">
+              <p className="mt-2 text-[11.5px] leading-5 text-[#6f6d68]">
                 These locations come from the Australian Government CRICOS Course Locations register, not the institution&apos;s representative city.
               </p>
               <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
@@ -142,7 +142,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                   const body = (
                     <>
                       <p className="text-[12px] font-semibold leading-5 text-[#1b1b1b]">{item.locationName}</p>
-                      {address && <p className="mt-1 text-[10.5px] text-[#77746e]">{address}</p>}
+                      {address && <p className="mt-1 text-[10.5px] text-[#6f6d68]">{address}</p>}
                       {cityHref && <p className="mt-2 text-[10px] font-semibold text-[#2563eb]">Greater {cityLabel} · open city profile →</p>}
                     </>
                   )
@@ -154,7 +154,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                 })}
               </div>
               {program.locationSourceLastModified && (
-                <p className="mt-3 text-[10px] text-[#9b9891]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>
+                <p className="mt-3 text-[10px] text-[#6f6d68]">CRICOS location dataset updated {new Date(program.locationSourceLastModified).toLocaleDateString("en-AU")}</p>
               )}
             </section>
           )}
@@ -169,7 +169,7 @@ export default async function ProgramDetailPage({ params }: Params) {
           {program.facts.length === 0 && (
             <section className="mt-5 rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-5">
               <h2 className="text-[14px] font-semibold">Detailed admission facts are under review</h2>
-              <p className="mt-2 text-[12.5px] leading-5 text-[#77746e]">The active CRICOS record and registered delivery locations are available now. Entry requirements and intakes appear after the institution page is verified.</p>
+            <p className="mt-2 text-[12.5px] leading-5 text-[#6f6d68]">The active CRICOS record and registered delivery locations are available now. Entry requirements and intakes appear after the institution page is verified.</p>
             </section>
           )}
         </main>
@@ -177,13 +177,13 @@ export default async function ProgramDetailPage({ params }: Params) {
         <aside className="rounded-2xl border border-[#e7e6e3] bg-white p-5 lg:sticky lg:top-20">
           <h2 className="text-[14px] font-semibold">At a glance</h2>
           <dl className="mt-4 space-y-3 text-[11.5px]">
-            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">Provider code</dt><dd className="font-semibold">{program.cricosCode ?? "—"}</dd></div>
-            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">CRICOS course</dt><dd className="font-semibold">{program.courseCode ?? "—"}</dd></div>
-            <div className="flex justify-between gap-4"><dt className="text-[#8f8c85]">AQF level</dt><dd className="font-semibold">{program.aqfLevel ?? "—"}</dd></div>
+            <div className="flex justify-between gap-4"><dt className="text-[#6f6d68]">Provider code</dt><dd className="font-semibold">{program.cricosCode ?? "—"}</dd></div>
+            <div className="flex justify-between gap-4"><dt className="text-[#6f6d68]">CRICOS course</dt><dd className="font-semibold">{program.courseCode ?? "—"}</dd></div>
+            <div className="flex justify-between gap-4"><dt className="text-[#6f6d68]">AQF level</dt><dd className="font-semibold">{program.aqfLevel ?? "—"}</dd></div>
           </dl>
           <div className="mt-5 space-y-2">
             {institutionProfilePath && (
-              <Link href={institutionProfilePath} className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
+              <Link href={institutionProfilePath} prefetch={false} className="flex items-center justify-center gap-2 rounded-lg border border-[#cfd9ca] bg-[#f7faf5] px-4 py-2.5 text-[12px] font-semibold text-[#3e7a2e] transition hover:bg-[#edf5ea]">
                 Institution profile<Building2 className="size-3.5" />
               </Link>
             )}
@@ -191,7 +191,7 @@ export default async function ProgramDetailPage({ params }: Params) {
             {cricosUrl && <SourceLink href={cricosUrl}>View CRICOS record</SourceLink>}
             {institutionUrl && <SourceLink href={institutionUrl}>Institution website</SourceLink>}
           </div>
-          <p className="mt-4 text-[10.5px] leading-5 text-[#aaa7a0]">Fees and admission requirements can change. Confirm current information with the institution before applying.</p>
+          <p className="mt-4 text-[10.5px] leading-5 text-[#6f6d68]">Fees and admission requirements can change. Confirm current information with the institution before applying.</p>
         </aside>
       </div>
     </div>

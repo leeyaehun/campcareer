@@ -32,7 +32,44 @@ jobs:
           name: unit-test-log
           path: test-results.log
           if-no-files-found: ignore
-      - run: npm run build
+      - name: Build production application
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run build
+      - name: Install critical browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Verify CI E2E environment
+        shell: bash
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$NEXT_PUBLIC_SUPABASE_URL"
+          test -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY"
+          test -n "$SUPABASE_SERVICE_ROLE_KEY"
+
+          case "$NEXT_PUBLIC_SUPABASE_URL" in
+            *"babylusxcknjerxtepoc"*)
+              echo "Refusing to run critical E2E against the production Supabase project."
+              exit 1
+              ;;
+            *"jaaiijeftfrqprunwnjf"*)
+              ;;
+            *)
+              echo "Critical E2E must use the dedicated campcareer-ci Supabase project."
+              exit 1
+              ;;
+          esac
+      - name: Run critical E2E release gate
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run test:e2e:critical
       - name: Check diff whitespace
         run: git diff --check
       - name: Scan Git history for secrets

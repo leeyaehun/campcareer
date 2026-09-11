@@ -15,6 +15,7 @@
     "test": "npm run test:unit",
     "test:unit": "tsx --test \"tests/**/*.test.ts\"",
     "test:e2e": "playwright test",
+    "test:e2e:critical": "playwright test --config=playwright.critical.config.ts",
     "policy:check": "tsx scripts/check-policy-sources.ts",
     "policy:snapshot": "tsx scripts/check-policy-sources.ts --update",
     "load:smoke": "node scripts/load-smoke.mjs",
@@ -89,6 +90,7 @@
     "zod": "^4.6.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.60.0",
     "@types/adm-zip": "^0.5.8",
     "@types/mdx": "^2.0.13",
@@ -99,6 +101,7 @@
     "adm-zip": "^0.5.17",
     "eslint": "9.39.1",
     "eslint-config-next": "16.3.4",
+    "lighthouse": "^13.4.1",
     "pg": "^8.22.0",
     "playwright": "^1.60.0",
     "postcss": "8.5.23",

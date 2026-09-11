@@ -18,7 +18,12 @@ export function InstitutionLogo({
     setFailed(false)
   }, [logoUrl])
 
-  const showLogo = Boolean(logoUrl) && !failed
+  // Loading an institution favicon from its source domain lets that third party
+  // set browser state before a visitor has chosen to open the source. Render
+  // only first-party logo assets; the neutral institution mark is the fallback.
+  const showLogo = Boolean(
+    logoUrl && (logoUrl.startsWith("/") || logoUrl.startsWith("https://www.campcareer.com/")),
+  ) && !failed
   const wrapperSize = size === "detail" ? "size-16 rounded-2xl" : "size-11 rounded-xl"
   const imageSize = size === "detail" ? "size-11" : "size-8"
   const iconSize = size === "detail" ? "size-6" : "size-5"

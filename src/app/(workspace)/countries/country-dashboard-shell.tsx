@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
-import { BadgeCheck, Globe2, Search } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, BadgeCheck, Globe2, Search } from "lucide-react"
 import { LAUNCH_COUNTRIES, getLaunchCountry } from "@/data/launch-countries"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
@@ -248,7 +249,7 @@ export function CountryDashboardShell({
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2 px-1">
-            <span className="text-[12px] font-medium text-[#a3a19b]">Popular:</span>
+            <span className="text-[12px] font-medium text-[#6f6d68]">Popular:</span>
             {popular.map((country) => (
               <button
                 key={country.code}
@@ -268,6 +269,15 @@ export function CountryDashboardShell({
               </button>
             ))}
           </div>
+
+          {routeCountry ? (
+            <Link
+              href={`/careers?country=${routeCountry.code}`}
+              className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-1.5 text-sm font-semibold text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            >
+              Explore careers in {routeCountry.name} <ArrowRight className="size-4" />
+            </Link>
+          ) : null}
         </div>
 
         {routeCountry ? (

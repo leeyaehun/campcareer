@@ -12,6 +12,7 @@ import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
 import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
 import { Badge } from "@/components/ui/badge"
 import { EmptyState } from "@/components/ui/status-state"
@@ -217,11 +218,19 @@ export function OccupationExplorer({
   }
 
   function select(career: Career) {
+    const effectiveCountry = selectedCountry?.code || initialCountry
+    const canonicalRoute = isCareerIndex && effectiveCountry
+      ? getIndexableCareerRoute(effectiveCountry, career.id)
+      : null
+    if (canonicalRoute) {
+      router.push(canonicalRoute.path)
+      return
+    }
+
     setSelectedId(career.id)
     const params = new URLSearchParams(searchParams.toString())
     if (query.trim()) params.set("q", query.trim())
     else params.delete("q")
-    const effectiveCountry = selectedCountry?.code || initialCountry
     if (effectiveCountry) params.set("country", effectiveCountry)
     params.set("occupation", career.id)
     router.replace(`${basePath}?${params.toString()}`, { scroll: false })
