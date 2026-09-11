@@ -129,10 +129,13 @@ export function CountryDashboardShell({
   return (
     <div>
       <section className="relative overflow-hidden">
-        <div
+        <img
           aria-hidden="true"
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${bgImage})` }}
+          src={bgImage}
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div
           aria-hidden="true"
