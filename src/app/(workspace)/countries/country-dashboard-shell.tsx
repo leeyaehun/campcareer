@@ -42,12 +42,18 @@ export function CountryDashboardShell({
     if (!hydrated) return
 
     if (routeCode && routeName && routeCurrency) {
-      setSelectedCountry({
-        code: routeCode,
-        name: routeName,
-        currency: routeCurrency,
-      })
       setQuery(routeName)
+
+      if (rememberedCode !== routeCode) {
+        const timer = window.setTimeout(() => {
+          setSelectedCountry({
+            code: routeCode,
+            name: routeName,
+            currency: routeCurrency,
+          })
+        }, 1800)
+        return () => window.clearTimeout(timer)
+      }
       return
     }
 
