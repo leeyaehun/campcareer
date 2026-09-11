@@ -71,8 +71,8 @@ test("Australia Auditor links accounting study routes without generated ids", ()
   const australia = getOccupationEditorial("auditor")?.countries.AU
 
   assert.ok(australia)
-  assert.match(migration, /macquarie-university'\n  and course_code = '099149E'/)
-  assert.match(migration, /macquarie-university'\n  and course_code = '099183C'/)
+  assert.match(migration, /macquarie-university'\s+and course_code = '099149E'/)
+  assert.match(migration, /macquarie-university'\s+and course_code = '099183C'/)
   assert.match(migration, /concat\('au-program:', id\)/)
   assert.doesNotMatch(migration, /'au-program:237'/)
   assert.doesNotMatch(migration, /'au-program:264'/)
