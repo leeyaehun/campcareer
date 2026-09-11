@@ -21,7 +21,7 @@ test("Australia UX Designer uses exact current OSCA 242132 scope", () => {
   assert.equal(career.categoryId, "design")
   assert.deepEqual(career.aliases, ["user experience designer"])
   assert.ok(editorial)
-  assert.match(migrationSql, /Current OSCA 242132 UI \/ UX Designer is exact/i)
+  assert.match(migrationSql, /Current OSCA 242132 UI \/ UX Designer is an exact canonical mapping/i)
   assert.match(migrationSql, /ANZSCO 2022 261113 User Experience Designer/i)
 })
 
