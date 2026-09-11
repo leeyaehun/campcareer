@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
-import { Inter } from "next/font/google"
 import "./globals.css"
 import "./campcareer-brand.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
@@ -10,13 +9,6 @@ import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
 import { AnalyticsConsent } from "@/components/analytics-consent"
 import { ConsentGatedInsights } from "@/components/consent-gated-insights"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-  preload: false,
-})
 
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
@@ -78,7 +70,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistMono.variable} antialiased`}>
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
           <PageViewTracker />

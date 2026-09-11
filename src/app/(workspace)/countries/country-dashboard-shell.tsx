@@ -278,6 +278,7 @@ export function CountryDashboardShell({
           {routeCountry ? (
             <Link
               href={`/careers?country=${routeCountry.code}`}
+              prefetch={false}
               className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-1.5 text-sm font-semibold text-brand transition-colors hover:text-brand-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
             >
               Explore careers in {routeCountry.name} <ArrowRight className="size-4" />
