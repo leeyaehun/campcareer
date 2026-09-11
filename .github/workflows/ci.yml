@@ -70,6 +70,46 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
         run: npm run test:e2e:critical
+      - name: Measure country Lighthouse LCP
+        if: github.head_ref == 'prelaunch/performance-lcp'
+        shell: bash
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          npm run start -- --hostname 127.0.0.1 --port 3102 > /tmp/campcareer-lighthouse.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3102/countries/au > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              cat /tmp/campcareer-lighthouse.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          export CHROME_PATH
+          CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          npx lighthouse http://127.0.0.1:3102/countries/au \
+            --only-categories=performance \
+            --output=json \
+            --output-path=lighthouse-country.json \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --quiet
+
+          node -e '
+            const report = require("./lighthouse-country.json");
+            const lcp = report.audits["largest-contentful-paint"].numericValue;
+            const score = report.categories.performance.score * 100;
+            console.log(`Country Lighthouse performance: ${score}`);
+            console.log(`Country LCP: ${(lcp / 1000).toFixed(2)} s`);
+          '
       - name: Check diff whitespace
         run: git diff --check
       - name: Scan Git history for secrets
