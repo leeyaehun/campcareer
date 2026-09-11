@@ -18,7 +18,6 @@ import {
 import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
-import { OccupationExplorer } from "../occupation/occupation-explorer"
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -26,6 +25,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/careers" },
   robots: { index: false, follow: true },
 }
+
+const SHORT_CATEGORY_LABELS = new Map([
+  ["trades", "Trades & Construction"],
+  ["health", "Health & Care"],
+  ["technology", "Technology"],
+  ["engineering", "Engineering"],
+  ["business", "Business & Law"],
+  ["education", "Education"],
+  ["environment", "Environment"],
+  ["design", "Design & Creative"],
+  ["hospitality", "Hospitality"],
+  ["transport", "Transport & Logistics"],
+])
 
 const CATEGORY_ICON = new Map([
   ["trades", Hammer],
@@ -98,7 +110,10 @@ function CareerDiscovery() {
                 className="group min-h-32 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 text-left shadow-cc-surface transition-colors duration-cc-standard hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 sm:min-h-36"
               >
                 <span className="grid size-9 place-items-center rounded-cc-surface bg-brand-tint text-brand"><Icon className="size-[18px]" /></span>
-                <span className="mt-3 block text-sm font-semibold leading-5 tracking-[-0.015em] text-campcareer-ink">{category.label}</span>
+                <span className="mt-3 block text-sm font-semibold leading-5 tracking-[-0.015em] text-campcareer-ink">
+                  <span className="sm:hidden">{SHORT_CATEGORY_LABELS.get(category.id) ?? category.label}</span>
+                  <span className="hidden sm:inline">{category.label}</span>
+                </span>
                 <span className="mt-1.5 block text-xs font-medium text-campcareer-muted">{careersInCategory.length} roles</span>
                 {example ? <span className="mt-1 hidden truncate text-xs text-campcareer-ink-secondary sm:block">e.g. {example.label}</span> : null}
               </Link>
@@ -138,6 +153,8 @@ export default async function CareersPage({
   if (!q.trim() && !occupation && !country && !category && !browse) {
     return <CareerDiscovery />
   }
+
+  const { OccupationExplorer } = await import("../occupation/occupation-explorer")
 
   return (
     <OccupationExplorer
