@@ -18,6 +18,7 @@ import {
 import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
+import { CareerCountrySelector } from "@/components/workspace/career-country-selector"
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -58,9 +59,12 @@ function CareerDiscovery() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="hidden text-xs font-semibold tracking-[0.08em] text-brand sm:block">Explore</p>
-          <h1 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-campcareer-ink sm:mt-1.5 sm:text-3xl">
-            Careers
-          </h1>
+          <div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3">
+            <h1 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-campcareer-ink sm:text-3xl">
+              Careers
+            </h1>
+            <CareerCountrySelector />
+          </div>
         </div>
       </div>
 

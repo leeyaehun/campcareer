@@ -128,7 +128,7 @@ export function VisaAlertForm({
         />
         <span>
           {va.consentBefore}{" "}
-          <Link href="/privacy" className="underline underline-offset-2 hover:text-slate-700">
+          <Link href="/privacy" prefetch={false} className="underline underline-offset-2 hover:text-slate-700">
             {va.privacyLink}
           </Link>
           {va.consentAfter}

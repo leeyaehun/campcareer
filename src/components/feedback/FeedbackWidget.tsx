@@ -436,9 +436,9 @@ function FeedbackForm({
 
       <p className="text-[11px] leading-relaxed text-slate-400">
         We only include optional details you select. See our{" "}
-        <Link href={localizePath("/privacy", pathLocale)} className="underline hover:text-slate-600 dark:hover:text-slate-200" target="_blank" rel="noreferrer">Privacy Policy</Link>
+        <Link href={localizePath("/privacy", pathLocale)} prefetch={false} className="underline hover:text-slate-600 dark:hover:text-slate-200" target="_blank" rel="noreferrer">Privacy Policy</Link>
         {" "}and{" "}
-        <Link href={localizePath("/terms", pathLocale)} className="underline hover:text-slate-600 dark:hover:text-slate-200" target="_blank" rel="noreferrer">Terms of Service</Link>.
+        <Link href={localizePath("/terms", pathLocale)} prefetch={false} className="underline hover:text-slate-600 dark:hover:text-slate-200" target="_blank" rel="noreferrer">Terms of Service</Link>.
       </p>
 
       <div className="min-h-5" aria-live="polite" aria-atomic="true">

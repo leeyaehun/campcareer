@@ -27,7 +27,7 @@ export function AnalyticsConsent() {
   return (
     <aside id="cc-analytics-consent" className="fixed inset-x-3 bottom-3 z-[1100] mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:bottom-5" aria-label={isKo ? "개인정보 선택" : "Privacy choices"}>
       <p className="text-sm font-semibold text-slate-900">{isKo ? "선택적 분석을 허용할까요?" : "Allow optional analytics?"}</p>
-      <Link href={`${localizePath("/privacy", locale)}#cookies-and-measurement`} className="mt-2 inline-flex text-xs font-semibold text-blue-700 underline underline-offset-2 hover:text-blue-800">
+      <Link href={`${localizePath("/privacy", locale)}#cookies-and-measurement`} prefetch={false} className="mt-2 inline-flex text-xs font-semibold text-blue-700 underline underline-offset-2 hover:text-blue-800">
         {isKo ? "개인정보 상세보기" : "Privacy details"}
       </Link>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
