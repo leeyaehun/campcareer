@@ -33,7 +33,7 @@ test("Canada city UI keeps published program coverage separate from source-backe
 
 test("Canada institution read model intentionally avoids inventing public Canadian programme detail routes", () => {
   const migration = readFileSync(
-    "supabase/migrations/20260807183500_program_institution_bidirectional_links.sql",
+    "supabase/migrations/20260808083700_program_institution_bidirectional_links.sql",
     "utf8",
   )
 
