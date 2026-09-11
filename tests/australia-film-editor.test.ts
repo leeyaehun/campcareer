@@ -23,7 +23,7 @@ test("Australia Film Editor uses exact OSCA 231434 scope", () => {
 test("Australia Film Editor keeps broader vacancy data contextual", () => {
   assert.match(migration, /3300,null,null,null,1852,33,28,33,44/)
   assert.match(migration, /65\.66667,'2026-05-01',-4\.37,9\.71,19\.14/)
-  assert.match(migration, /vacancy intensity and trend receive zero credit/i)
+  assert.match(migration, /no intensity or trend credit/i)
 })
 
 test("Australia Film Editor gets exact shortage but no current visa score", () => {
