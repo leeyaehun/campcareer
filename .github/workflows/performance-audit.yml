@@ -1,0 +1,78 @@
+name: Performance audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "scripts/lighthouse-release-audit.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/performance-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'prelaunch/release-blockers'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Build production application
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run build
+      - name: Verify Chrome
+        run: google-chrome --version
+      - name: Start production application
+        shell: bash
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          set -euo pipefail
+          npm run start -- --hostname 127.0.0.1 --port 3102 > /tmp/campcareer-next.log 2>&1 &
+          echo $! > /tmp/campcareer-next.pid
+          for attempt in {1..90}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3102/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/campcareer-next.log
+          exit 1
+      - name: Run Phase 5 Lighthouse budget
+        env:
+          LIGHTHOUSE_BASE_URL: http://127.0.0.1:3102
+          LIGHTHOUSE_LCP_BUDGET_MS: "2500"
+        run: npm run audit:lighthouse
+      - name: Publish Lighthouse summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f lighthouse-results/summary.md ]; then
+            cat lighthouse-results/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5-lighthouse
+          path: lighthouse-results/
+          if-no-files-found: warn
+      - name: Stop production application
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/campcareer-next.pid ]; then
+            kill "$(cat /tmp/campcareer-next.pid)" || true
+          fi
