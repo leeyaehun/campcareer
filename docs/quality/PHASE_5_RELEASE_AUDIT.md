@@ -8,15 +8,15 @@ surfaces, production migration/privilege reconciliation, and release CI.
 
 | Check | Evidence | Result |
 | --- | --- | --- |
-| Type safety | CI #2084 · `npm run typecheck` | Pass |
-| Lint | CI #2084 · `npm run lint` | Pass |
-| Unit suite | CI #2084 · unit test step | Pass |
+| Type safety | CI #2087 · `npm run typecheck` | Pass |
+| Lint | CI #2087 · `npm run lint` | Pass |
+| Unit suite | CI #2087 · unit test step | Pass |
 | Data quality | Last recorded `npm run check:data`: 120 source records, 6 required categories, 20 countries; performance/accessibility work did not alter the catalogue contract | Pass |
-| Production build | CI #2084 · `npm run build` | Pass |
-| Whitespace | CI #2084 · `git diff --check` | Pass |
-| Dependency production audit | CI #2084 · `npm audit --omit=dev --audit-level=high` | Pass at the High threshold |
-| Secret scan | CI #2084 | Pass |
-| Critical E2E | CI #2084 · `npm run test:e2e:critical` against `next start` | Pass: 49 passed, 15 intentional project-specific skips |
+| Production build | CI #2087 · `npm run build` | Pass |
+| Whitespace | CI #2087 · `git diff --check` | Pass |
+| Dependency production audit | CI #2087 · `npm audit --omit=dev --audit-level=high` | Pass at the High threshold |
+| Secret scan | CI #2087 | Pass |
+| Critical E2E | CI #2087 · `npm run test:e2e:critical` against `next start` | Pass: 49 passed, 15 intentional project-specific skips |
 
 The focused E2E suite covers Careers country selection/search to canonical
 Career evidence, Career Compare, Country-aware discovery, and the verified
@@ -58,19 +58,20 @@ reduced-motion behaviour remain to be signed off manually.
 
 ## Performance release audit
 
-Performance audit #31 ran the production build on commit `4a9b3f60`. The hard
-budget was LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms. Every sampled route
-passed.
+Performance audit #34 ran the production build on commit `cdf05705` using
+three Lighthouse samples per route and the median result for the release gate.
+The hard budget was LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms. Every
+representative route passed.
 
-| Route | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT | Warm TTFB |
+| Route | Performance | Accessibility | Best Practices | SEO | Median LCP | CLS | Median TBT | Median warm TTFB |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `/` | 80 | 98 | 100 | 100 | 2.48 s | 0.000 | 702 ms | 49 ms |
-| `/careers` | 94 | 100 | 100 | 66* | 2.49 s | 0.000 | 215 ms | 93 ms |
-| `/career/australia/registered-nurse` | 88 | 100 | 100 | 100 | 2.47 s | 0.000 | 390 ms | 68 ms |
-| `/countries/au` | 95 | 100 | 100 | 100 | 2.47 s | 0.000 | 164 ms | 21 ms |
-| `/programs/au/1-bachelor-of-arts` | 96 | 100 | 100 | 100 | 2.33 s | 0.000 | 163 ms | 36 ms |
-| `/institutions/au/australian-catholic-university` | 97 | 100 | 100 | 100 | 2.32 s | 0.000 | 143 ms | 18 ms |
-| `/sources` | 96 | 100 | 100 | 100 | 2.33 s | 0.000 | 172 ms | 17 ms |
+| `/` | 97 | 98 | 100 | 100 | 2.32 s | 0.000 | 127 ms | 13 ms |
+| `/careers` | 95 | 100 | 100 | 66* | 2.48 s | 0.000 | 173 ms | 24 ms |
+| `/career/australia/registered-nurse` | 94 | 100 | 100 | 100 | 2.50 s | 0.000 | 195 ms | 18 ms |
+| `/countries/au` | 97 | 100 | 100 | 100 | 2.32 s | 0.000 | 147 ms | 10 ms |
+| `/programs/au/1-bachelor-of-arts` | 95 | 100 | 100 | 100 | 2.34 s | 0.000 | 164 ms | 17 ms |
+| `/institutions/au/australian-catholic-university` | 97 | 100 | 100 | 100 | 2.32 s | 0.000 | 115 ms | 10 ms |
+| `/sources` | 97 | 100 | 100 | 100 | 2.32 s | 0.000 | 143 ms | 10 ms |
 
 \* Careers is intentionally `noindex, follow`, so Lighthouse’s crawlability
 deduction is expected.
@@ -109,7 +110,7 @@ policies. A real service-role read succeeded and the application-side
 
 ## Security and privacy
 
-- Dependency audit and Git history secret scan pass in CI #2084.
+- Dependency audit and Git history secret scan pass in CI #2087.
 - Public responses include `nosniff`, strict-origin referrer policy, and a
   restrictive camera/microphone/geolocation permissions policy.
 - Institution rendering does not load third-party favicons.
@@ -138,7 +139,7 @@ P2/P3 items do not independently block Phase 6 and remain scheduled work.
 
 ## Decision
 
-**NOT READY FOR PHASE 6.** All engineering and performance release gates pass,
+**NOT READY FOR PHASE 6.** All automated engineering and performance release gates pass,
 but the Phase 5 standard explicitly requires manual accessibility evidence
 before external launch. Once that checklist is completed without a material
 finding (or findings are fixed and rechecked), update this decision to

@@ -9,7 +9,7 @@ as a substitute for a real screen-reader and human interaction review.
 
 ## Automated evidence
 
-CI #2084 on commit `4a9b3f60` completed successfully against the production
+CI #2087 on commit `cdf05705` completed successfully against the production
 build served with `next start`. The critical suite ran 64 project/test
 combinations: 49 passed and 15 intentional project-specific skips.
 

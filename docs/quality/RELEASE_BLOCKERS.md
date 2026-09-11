@@ -32,7 +32,7 @@ Last reviewed: 2026-09-11
 - The application-side `42501 → anon` fallback is removed; raw Career reads
   are server-role-only.
 - Critical browser journeys run from the production build on Chromium, Firefox,
-  WebKit, and mobile Chromium. CI #2084 on commit `4a9b3f60` passed every
+  WebKit, and mobile Chromium. CI #2087 on commit `cdf05705` passed every
   release step, including critical E2E, whitespace, and secret scanning.
 - Automatic navigation prefetch no longer produces Safari/WebKit RSC console
   errors in the critical journeys.
@@ -40,8 +40,7 @@ Last reviewed: 2026-09-11
   Additional CI checks pass for keyboard focus visibility, high text scaling,
   reduced motion, and the WCAG 2.2 minimum 24 px mobile target size.
 - Synthetic performance is within the Phase 5 release budget on all seven
-  representative routes. Performance audit #31 on commit `4a9b3f60` passed
-  LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms on every sampled route.
+  representative routes. Performance audit #34 on commit `cdf05705` passed the stricter three-sample median gate: LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms on every representative route.
 - Third-party institution favicon loading was removed from the rendered page.
 - The 40 Australian state occupation context pages are `noindex, follow` and
   excluded from the sitemap; canonical Career routes remain the only indexable
