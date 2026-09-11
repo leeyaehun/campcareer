@@ -17,7 +17,7 @@ test("Australia Farm Manager is a production-specific umbrella rather than a fak
   assert.ok(career)
   assert.equal(career.categoryId, "environment")
   assert.ok(editorial)
-  assert.match(migration, /No generic six-digit OSCA Farm Manager exists/i)
+  assert.match(migration, /no generic current six-digit Farm Manager occupation/i)
   assert.match(editorial.overview, /classified by the type of production/i)
 })
 
