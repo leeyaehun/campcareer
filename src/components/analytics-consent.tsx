@@ -26,10 +26,9 @@ export function AnalyticsConsent() {
 
   return (
     <aside id="cc-analytics-consent" className="fixed inset-x-3 bottom-3 z-[1100] mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:bottom-5" aria-label={isKo ? "개인정보 선택" : "Privacy choices"}>
-      <p className="text-sm font-semibold text-slate-900">{isKo ? "CampCareer 개선에 도움을 주세요" : "Help us improve CampCareer"}</p>
-      <p className="mt-1 text-xs leading-5 text-slate-600">{isKo ? "선택적 측정은 CampCareer 개선에만 사용하며 이메일이나 자유 입력 내용은 포함하지 않습니다." : "Optional analytics helps improve CampCareer and never includes your email or free-text answers."}</p>
+      <p className="text-sm font-semibold text-slate-900">{isKo ? "선택적 분석을 허용할까요?" : "Allow optional analytics?"}</p>
       <Link href={`${localizePath("/privacy", locale)}#cookies-and-measurement`} className="mt-2 inline-flex text-xs font-semibold text-blue-700 underline underline-offset-2 hover:text-blue-800">
-        {isKo ? "개인정보 처리방침 읽기" : "Read the Privacy Policy"}
+        {isKo ? "개인정보 상세보기" : "Privacy details"}
       </Link>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <button type="button" onClick={() => void choose("denied")} className="min-h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">{isKo ? "필수 기능만 사용" : "Use essential only"}</button>
