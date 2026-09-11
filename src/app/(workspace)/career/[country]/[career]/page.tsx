@@ -8,7 +8,7 @@ import { EntityPageHeader } from "@/components/ui/entity-page"
 import { Skeleton } from "@/components/ui/skeleton"
 import { localizePath, type Locale } from "@/lib/i18n/config"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
-import { getPublicCareerProfile } from "@/lib/career-data-foundation/public-career-profile-read"
+import { getPublicCareerPageProfile } from "@/lib/career-data-foundation/public-career-profile-read"
 import { getCareerRoute, getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
 import type { OverviewSearchValues } from "../../../home/home-overview-config"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
@@ -21,7 +21,7 @@ type CareerCanonicalPageProps = {
   params: Promise<{ country: string; career: string }>
 }
 
-type PublicCareerProfilePromise = ReturnType<typeof getPublicCareerProfile>
+type PublicCareerProfilePromise = ReturnType<typeof getPublicCareerPageProfile>
 
 async function getRouteLocale(): Promise<Locale> {
   const routeLocale = (await headers()).get("x-campcareer-route-locale")
@@ -174,7 +174,7 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
   }
 
   const query: OverviewSearchValues = { country: route.country.code, occupation: route.career.id }
-  const profilePromise = getPublicCareerProfile(route.country.code, route.career.id)
+  const profilePromise = getPublicCareerPageProfile(route.country.code, route.career.id)
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
   const copy = metadataCopy(careerName, route.country.name, locale)
   const canonicalUrl = `${SITE_URL}${canonicalPath}`

@@ -118,12 +118,14 @@ export function OccupationExplorer({
   initialOccupation,
   initialCountry,
   initialCategory,
+  initialBrowseAll = false,
 }: {
   basePath?: "/careers" | "/occupation"
   initialQuery: string
   initialOccupation: string
   initialCountry: string
   initialCategory: string
+  initialBrowseAll?: boolean
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -132,7 +134,7 @@ export function OccupationExplorer({
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>(() => STUDY_CATEGORIES.some((item) => item.id === initialCategory) ? initialCategory : "all")
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [showAllOccupations, setShowAllOccupations] = useState(false)
+  const [showAllOccupations, setShowAllOccupations] = useState(initialBrowseAll)
   const [countryProfile, setCountryProfile] = useState<CountryOccupationProfile | null>(null)
   const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
   const isCareerIndex = basePath === "/careers"

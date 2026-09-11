@@ -34,6 +34,16 @@ import { SpainInstitutionDetailView } from "../../spain-institution-detail"
 import { UsInstitutionDetailView } from "../../us-institution-detail"
 
 export const revalidate = 3600
+
+export function generateStaticParams() {
+  return INDEXABLE_INSTITUTION_ROUTES
+    .filter(([countryCode]) => countryCode === "AU")
+    .map(([countryCode, slug]) => ({
+      country: countryCode.toLowerCase(),
+      institution: slug,
+    }))
+}
+
 type InstitutionDetailPageProps = { params: Promise<{ country: string; institution: string }> }
 function isEuFastpathCountry(countryCode: string): countryCode is EuFastpathCountryCode { return countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK" }
 function isAuthorityFastpathCountry(countryCode: string): countryCode is AuthorityFastpathCountryCode { return countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" }
