@@ -89,7 +89,6 @@ export function CountryDashboardShell({
   const explorer = routeCountry ? getCountryExplorer(routeCountry.code) : null
   const cityCount = explorer?.regions.reduce((total, region) => total + region.cities.length, 0) ?? 0
   const heroSource = routeCountry?.image ?? DEFAULT_IMAGE
-  const bgImage = heroImage(heroSource, 800)
   const bgImageSrcSet = [640, 800, 1200]
     .map((width) => `${heroImage(heroSource, width)} ${width}w`)
     .join(", ")
