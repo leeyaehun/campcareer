@@ -5,20 +5,24 @@ import { AU_VOCATIONAL_PROGRAM_SHORTLIST } from "../src/data/au-vocational-progr
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
+const normalizeMigrationSql = (sql: string) =>
+  sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+
+
 const readMigration = (file: string) =>
-  readFileSync(new URL(`../supabase/migrations/${file}`, import.meta.url), "utf8")
+  normalizeMigrationSql(readFileSync(new URL(`../supabase/migrations/${file}`, import.meta.url), "utf8"))
 
 const migrations = {
-  midwife: readMigration("20260807191500_australia_midwife_profile.sql"),
-  careWorker: readMigration("20260807195500_australia_care_worker_profile.sql"),
-  physiotherapist: readMigration("20260807211500_australia_physiotherapist_profile.sql"),
+  midwife: readMigration("20260807183555_australia_midwife_profile.sql"),
+  careWorker: readMigration("20260807185954_australia_care_worker_profile.sql"),
+  physiotherapist: readMigration("20260807205909_australia_physiotherapist_profile.sql"),
   medicalLaboratoryTechnician: readMigration(
-    "20260808103000_australia_medical_laboratory_technician_profile.sql"
+    "20260808091600_australia_medical_laboratory_technician_profile.sql"
   ),
-  radiographer: readMigration("20260808110000_australia_radiographer_profile.sql"),
-  pharmacist: readMigration("20260808113000_australia_pharmacist_profile.sql"),
+  radiographer: readMigration("20260808091726_australia_radiographer_profile.sql"),
+  pharmacist: readMigration("20260808091934_australia_pharmacist_profile.sql"),
   occupationalTherapist: readMigration(
-    "20260808120000_australia_occupational_therapist_profile.sql"
+    "20260808092152_australia_occupational_therapist_profile.sql"
   ),
 }
 
