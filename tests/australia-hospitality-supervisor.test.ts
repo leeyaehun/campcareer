@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809184500_australia_hospitality_supervisor_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809132917_australia_hospitality_supervisor_profile.sql", import.meta.url), "utf8")
 
 test("Australia Hospitality Supervisor uses OSCA 4715 umbrella scope", () => {
   const career = getCanonicalCareer("hospitality-supervisor")
