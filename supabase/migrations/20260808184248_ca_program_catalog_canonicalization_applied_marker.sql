@@ -1,5 +1,0 @@
--- Migration-history marker.
--- The Canada program catalog canonicalization was applied to production through
--- the Supabase connector under version 20260808184248. The canonical migration
--- logic remains in 20260808183500_ca_program_catalog_canonicalization.sql.
--- This file is intentionally a no-op so local and remote histories align.

@@ -1,3 +1,0 @@
--- Applied remotely by the Supabase connector as 20260808221139.
--- Canonical implementation lives in:
--- 20260808233000_de_excellence_university_identity_foundation.sql

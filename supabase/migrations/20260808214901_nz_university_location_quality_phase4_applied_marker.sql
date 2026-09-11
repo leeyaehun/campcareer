@@ -1,3 +1,0 @@
--- Applied remotely by the Supabase connector as 20260808214901.
--- Canonical implementation lives in:
--- 20260808225500_nz_university_location_quality.sql

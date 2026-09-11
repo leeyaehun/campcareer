@@ -1,5 +1,0 @@
--- Applied through the Supabase connector on 2026-08-08.
--- Canonical migration logic is retained in:
---   20260808102500_uk_institution_foundation.sql
---   20260808105000_uk_institution_identity_qa.sql
--- This no-op marker keeps the connector-generated remote migration version aligned locally.

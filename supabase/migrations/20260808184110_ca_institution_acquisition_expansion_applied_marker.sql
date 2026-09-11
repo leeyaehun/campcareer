@@ -1,5 +1,0 @@
--- Migration-history marker.
--- The Canada institution acquisition expansion was applied to production through
--- the Supabase connector under version 20260808184110. The canonical migration
--- logic remains in 20260808173500_ca_institution_acquisition_expansion.sql.
--- This file is intentionally a no-op so local and remote histories align.

@@ -1,3 +1,0 @@
--- Production-applied marker for Supabase-generated migration version 20260809081710.
--- Canonical source migration: 20260809094000_es_publication_read_models.sql
--- The production DDL was applied through the connected Supabase migration tool.
