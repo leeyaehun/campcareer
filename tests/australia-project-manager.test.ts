@@ -68,7 +68,7 @@ test("Australia Project Manager links direct project-management programs without
   const australia = getOccupationEditorial("project-manager")?.countries.AU
 
   assert.ok(australia)
-  assert.match(migrationSql, /bond-university'\n  and course_code = '0101294'/)
+  assert.match(migrationSql, /bond-university'\s+and course_code = '0101294'/)
   assert.match(migrationSql, /bond-university'\n  and course_code = '078813G'/)
   assert.match(migrationSql, /concat\('au-program:', id\)/)
   assert.doesNotMatch(migrationSql, /'au-program:1179'/)
