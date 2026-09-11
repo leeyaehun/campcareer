@@ -110,3 +110,10 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* First-time visitors see the consent choice in initial HTML so it cannot
+   become a late-hydration LCP. Returning visitors are hidden before paint by
+   the small root-layout cookie marker, then React removes the prompt. */
+html[data-cc-analytics-consent="set"] #cc-analytics-consent {
+  display: none;
+}
