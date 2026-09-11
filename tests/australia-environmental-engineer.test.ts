@@ -88,7 +88,7 @@ test("Australia Environmental Engineer links verified RMIT study routes without 
   assert.match(migration, /course_code = '110998M'/)
   assert.match(migration, /course_code = '087983C'/)
   assert.match(migration, /'au-program:'\s*\|\|\s*id::text,\s*'direct'/)
-  assert.match(migration, /'au-program:' \|\| id::text, 'graduate_entry'/)
+  assert.match(migration, /'au-program:'\s*\|\|\s*id::text,\s*'graduate_entry'/)
   assert.match(migration, /RMIT — Bachelor of Engineering \(Environmental Engineering\) \(Honours\)/)
   assert.match(migration, /RMIT — Master of Engineering \(Environmental Engineering\)/)
   assert.match(migration, /official_url_status = 'verified'/)
