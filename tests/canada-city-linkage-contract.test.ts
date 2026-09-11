@@ -37,7 +37,8 @@ test("Canada institution read model intentionally avoids inventing public Canadi
     "utf8",
   )
 
-  assert.ok(migration.includes("Canada keeps canonical program previews but no public program URL"))
+  assert.ok(migration.includes("i.country_code in ('AU', 'CA')"))
   assert.ok(migration.includes("programme_preview"))
   assert.ok(migration.includes("legacyProgramId"))
+  assert.ok(!migration.includes("programUrl"))
 })
