@@ -24,7 +24,7 @@ test("Australia Interior Designer uses exact OSCA 242431 scope", () => {
 test("Australia Interior Designer keeps broader labour contextual", () => {
   assert.match(migration, /'AU:interior-designer','2026-05-01',null,null,null,null/)
   assert.match(migration, /244\.33333,'2026-05-01',36\.75,11\.05,20\.02/)
-  assert.match(migration, /vacancy intensity and trend receive zero credit/i)
+  assert.match(migration, /no intensity or trend credit/i)
 })
 
 test("Australia Interior Designer has NS shortage and exact migration path", () => {
