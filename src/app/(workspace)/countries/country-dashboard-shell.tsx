@@ -43,17 +43,6 @@ export function CountryDashboardShell({
 
     if (routeCode && routeName && routeCurrency) {
       setQuery(routeName)
-
-      if (rememberedCode !== routeCode) {
-        const timer = window.setTimeout(() => {
-          setSelectedCountry({
-            code: routeCode,
-            name: routeName,
-            currency: routeCurrency,
-          })
-        }, 1800)
-        return () => window.clearTimeout(timer)
-      }
       return
     }
 
@@ -78,7 +67,6 @@ export function CountryDashboardShell({
     routeCurrency,
     routeName,
     router,
-    setSelectedCountry,
   ])
 
   const results = useMemo(() => {
@@ -139,16 +127,16 @@ export function CountryDashboardShell({
   return (
     <div>
       <section className="relative overflow-hidden bg-[#273444]">
-        {/* eslint-disable-next-line @next/next/no-img-element -- LCP hero intentionally uses the direct source so fetch priority is not mediated by an optimizer request. */}
-        <img
-          aria-hidden="true"
-          src={bgImage}
-          srcSet={bgImageSrcSet}
-          sizes="100vw"
-          alt=""
-          fetchPriority="high"
-          className="absolute inset-0 hidden h-full w-full object-cover object-center sm:block"
-        />
+        <picture aria-hidden="true">
+          <source media="(min-width: 640px)" srcSet={bgImageSrcSet} sizes="100vw" />
+          {/* eslint-disable-next-line @next/next/no-img-element -- desktop-only decorative hero source; mobile uses the solid fallback. */}
+          <img
+            src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+            alt=""
+            fetchPriority="high"
+            className="absolute inset-0 hidden h-full w-full object-cover object-center sm:block"
+          />
+        </picture>
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20"
@@ -165,6 +153,9 @@ export function CountryDashboardShell({
               <p className="mt-2 text-[14px] font-medium text-white/85">
                 {routeCountry.code} · {explorer?.regions.length ?? 0} regions · {cityCount} cities ·{" "}
                 {routeCountry.currency}
+              </p>
+              <p className="mt-4 max-w-xl text-sm leading-6 text-white/85">
+                Explore career demand, study options and regional context across {routeCountry.name} before comparing your next step.
               </p>
             </>
           ) : (
