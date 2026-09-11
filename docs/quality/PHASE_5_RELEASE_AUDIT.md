@@ -33,8 +33,8 @@ browser console/page errors.
 | Automated accessibility | Same four configurations for representative axe scans; targeted keyboard/text-scale/reduced-motion/touch checks on their designated projects | Pass |
 | Responsive overflow matrix | Chromium at 360, 390, 768, 1024, 1280, and 1440 px | Pass on homepage, Careers, Career, Country, Program, Institution, and Compare |
 
-Manual accessibility sign-off is the remaining P1. Automated evidence and the
-manual checklist are recorded in
+Manual accessibility sign-off is complete. Automated evidence and the release
+owner's manual checklist result are recorded in
 [PHASE_5_ACCESSIBILITY_EVIDENCE.md](PHASE_5_ACCESSIBILITY_EVIDENCE.md).
 
 ## Accessibility
@@ -51,10 +51,11 @@ manual checklist are recorded in
 
 The scans are clean. CI also passes targeted checks for visible keyboard focus,
 200% text scaling, reduced-motion preference, and the WCAG 2.2 24×24 CSS px
-minimum mobile target. These are automated risk controls, not a claim of full
-WCAG conformance. Real screen-reader output, full keyboard interaction/focus
-restoration, browser 200% zoom, larger product touch targets, and qualitative
-reduced-motion behaviour remain to be signed off manually.
+minimum mobile target. The release owner subsequently confirmed the manual
+screen-reader, complete keyboard/focus-restoration, browser 200% zoom, mobile
+touch-quality, and reduced-motion checks on representative desktop/mobile use.
+No material release-blocking accessibility finding was reported. Exact
+browser/device identifiers were not separately captured in this project chat.
 
 ## Performance release audit
 
@@ -130,17 +131,15 @@ closed early` during intentionally aborted navigation and is tracked as P2.
 
 ## Known blockers and deferred work
 
-The source of truth is [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md). All migration,
-privilege, critical-browser, and synthetic-performance launch blockers are
-closed. The only remaining P1 is the manual accessibility sign-off in
-[PHASE_5_ACCESSIBILITY_EVIDENCE.md](PHASE_5_ACCESSIBILITY_EVIDENCE.md).
+The source of truth is [RELEASE_BLOCKERS.md](RELEASE_BLOCKERS.md). All P0/P1
+migration, privilege, critical-browser, synthetic-performance, and manual
+accessibility launch blockers are closed.
 
 P2/P3 items do not independently block Phase 6 and remain scheduled work.
 
 ## Decision
 
-**NOT READY FOR PHASE 6.** All automated engineering and performance release gates pass,
-but the Phase 5 standard explicitly requires manual accessibility evidence
-before external launch. Once that checklist is completed without a material
-finding (or findings are fixed and rechecked), update this decision to
-**READY FOR PHASE 6** and move PR #263 out of draft.
+**READY FOR PHASE 6.** Automated engineering/performance gates pass and the
+release owner has completed the required manual accessibility sign-off without
+reporting a material release-blocking finding. PR #263 can move out of draft
+and proceed to merge once the latest head checks are green.

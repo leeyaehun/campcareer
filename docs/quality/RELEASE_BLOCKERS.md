@@ -4,9 +4,7 @@ Last reviewed: 2026-09-11
 
 ## Open launch blockers
 
-| Severity | Item | Evidence and impact | Exit condition | Owner |
-| --- | --- | --- | --- | --- |
-| P1 | Manual accessibility sign-off is not yet recorded | CI now provides clean WCAG 2.2 AA scans plus automated keyboard focus, high text scaling, reduced-motion, and mobile minimum-target evidence. Automation still does not prove real screen-reader output, browser 200% zoom behaviour, complete keyboard/menu/dialog/filter/Compare interaction quality, focus restoration, or the larger 40/44 px product touch-target standard. | Complete and record the manual checklist in [PHASE_5_ACCESSIBILITY_EVIDENCE.md](PHASE_5_ACCESSIBILITY_EVIDENCE.md) on representative desktop and mobile surfaces; fix any material finding. | Release owner / accessibility reviewer |
+None. All P0/P1 Phase 5 launch blockers are closed.
 
 ## Open planned work
 
@@ -39,6 +37,11 @@ Last reviewed: 2026-09-11
 - Representative `@axe-core/playwright` WCAG 2.2 AA scans are clean.
   Additional CI checks pass for keyboard focus visibility, high text scaling,
   reduced motion, and the WCAG 2.2 minimum 24 px mobile target size.
+- The release owner confirmed completion of the manual accessibility checklist
+  on representative desktop/mobile use, including screen-reader structure,
+  keyboard interaction/focus restoration, 200% browser zoom, mobile touch
+  quality, and reduced-motion behaviour. No material release-blocking finding
+  was reported.
 - Synthetic performance is within the Phase 5 release budget on all seven
   representative routes. Performance audit #34 on commit `cdf05705` passed the stricter three-sample median gate: LCP ≤ 2.5 s, CLS ≤ 0.10, and warm TTFB ≤ 800 ms on every representative route.
 - Third-party institution favicon loading was removed from the rendered page.
@@ -48,7 +51,6 @@ Last reviewed: 2026-09-11
 
 ## Release decision
 
-**NOT READY FOR PHASE 6.** The migration, raw-Career privilege, critical
-browser, and performance blockers are closed. Supabase leaked-password
-protection remains a P2 plan-gated hardening item. The only open launch-critical
-P1 is the manual accessibility sign-off described above.
+**READY FOR PHASE 6.** All P0/P1 Phase 5 release blockers are closed.
+Supabase leaked-password protection and the other listed P2/P3 items remain
+tracked follow-up work and do not independently block Phase 6.

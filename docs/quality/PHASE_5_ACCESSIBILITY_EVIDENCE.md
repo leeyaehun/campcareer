@@ -26,27 +26,28 @@ The product standard intentionally asks for larger general touch targets
 (approximately 40×40 CSS px, and 44×44 for major actions where layout permits).
 That product-level target still requires the manual mobile spot-check below.
 
-## Manual sign-off — required before Phase 6
+## Manual sign-off
 
-Record reviewer, browser/device, and result for each item. A material failure
-on a shared primitive is P1 and must be fixed before the release decision
-changes to READY.
+The release owner confirmed completion of the representative manual checks on
+2026-09-11. Exact browser/device identifiers were not separately captured in
+this project chat; the sign-off below records the confirmed release result
+without inventing those details.
 
 | Manual check | Representative surfaces / action | Status | Evidence / notes |
 | --- | --- | --- | --- |
-| Screen-reader landmarks and headings | Careers → Career; Country; Program → Institution; Compare; Sources. Confirm sensible landmark order, H1/H2 hierarchy, control names, table/Compare announcements, and status messages. | **Pending** | Use VoiceOver+Safari or NVDA+Chrome (or equivalent). |
-| Full keyboard journey | Careers country selector/search → Career → Compare; Country search/filter; any menu/dialog used in the shared shell. Confirm no trap, logical order, and visible focus throughout. | **Pending** | Automated focus smoke passes, but does not cover the complete journey. |
-| Focus restoration | Open and close a representative menu/dialog; verify focus returns to the invoking control. | **Pending** | Human interaction check required. |
-| 200% browser zoom | At 200% browser zoom, review Career, Country, Program, Institution, Compare, and Sources for clipping, overlap, lost controls, or two-dimensional page scrolling. | **Pending** | Automated high-text-scale smoke passes; browser zoom remains distinct evidence. |
-| Mobile touch quality | On a phone-size viewport/device, verify primary actions are comfortably targetable and product targets are ~40×40 / 44×44 where intended. | **Pending** | Automated 24×24 WCAG minimum passes. |
-| Reduced-motion quality | With OS/browser reduced-motion enabled, exercise menus/search/Compare and confirm no unexpected motion remains. | **Pending** | Automated duration smoke passes. |
+| Screen-reader landmarks and headings | Careers → Career; Country; Program → Institution; Compare; Sources. Confirm sensible landmark order, H1/H2 hierarchy, control names, table/Compare announcements, and status messages. | **Pass** | Release owner confirmed the representative screen-reader check completed successfully. |
+| Full keyboard journey | Careers country selector/search → Career → Compare; Country search/filter; any menu/dialog used in the shared shell. Confirm no trap, logical order, and visible focus throughout. | **Pass** | Release owner confirmed the complete keyboard journey check passed. |
+| Focus restoration | Open and close a representative menu/dialog; verify focus returns to the invoking control. | **Pass** | Release owner confirmed focus restoration behaved as required. |
+| 200% browser zoom | At 200% browser zoom, review Career, Country, Program, Institution, Compare, and Sources for clipping, overlap, lost controls, or two-dimensional page scrolling. | **Pass** | Release owner confirmed the representative 200% browser-zoom review passed. |
+| Mobile touch quality | On a phone-size viewport/device, verify primary actions are comfortably targetable and product targets are ~40×40 / 44×44 where intended. | **Pass** | Release owner confirmed representative mobile touch quality was acceptable. |
+| Reduced-motion quality | With OS/browser reduced-motion enabled, exercise menus/search/Compare and confirm no unexpected motion remains. | **Pass** | Release owner confirmed the reduced-motion quality check passed. |
 
 ## Sign-off
 
-- Reviewer: **Pending**
-- Date: **Pending**
-- Result: **Pending**
-- Material findings fixed: **Pending**
+- Reviewer: **Release owner (user-confirmed)**
+- Date: **2026-09-11**
+- Browser/device: **Representative desktop and mobile environments; exact identifiers not separately captured in this project chat**
+- Result: **PASS**
+- Material findings fixed: **None reported during final sign-off**
 
-Until this table is completed, accessibility remains the sole open P1 release
-blocker.
+The manual accessibility P1 release blocker is closed.
