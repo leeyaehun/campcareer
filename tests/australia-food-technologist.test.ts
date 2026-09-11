@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809140000_australia_food_technologist_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809111132_australia_food_technologist_profile.sql", import.meta.url), "utf8")
 
 test("Australia Food Technologist maps exactly to current OSCA 244232", () => {
   const career = getCanonicalCareer("food-technologist")
