@@ -19,6 +19,7 @@
     "policy:check": "tsx scripts/check-policy-sources.ts",
     "policy:snapshot": "tsx scripts/check-policy-sources.ts --update",
     "load:smoke": "node scripts/load-smoke.mjs",
+    "audit:lighthouse": "node scripts/lighthouse-release-audit.mjs",
     "check:map-payload": "node scripts/check-map-payloads.mjs",
     "refresh:no-regions": "node scripts/refresh-no-regions.mjs",
     "refresh:nordic-regions": "node scripts/refresh-nordic-regions.mjs",

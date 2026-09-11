@@ -1,5 +1,0 @@
--- Migration-history marker.
--- The Canada campus/location quality migration was applied to production through
--- the Supabase connector under version 20260808184031. The canonical migration
--- logic remains in 20260808121000_ca_campus_location_quality.sql.
--- This file is intentionally a no-op so local and remote histories align.

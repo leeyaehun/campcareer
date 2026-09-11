@@ -1,3 +1,0 @@
--- Applied remotely by the Supabase connector as 20260808214819.
--- Canonical implementation lives in:
--- 20260808225000_nz_university_identity_foundation.sql

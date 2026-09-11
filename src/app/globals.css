@@ -23,7 +23,7 @@
 }
 
 .campcareer-wordmark {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.06em;
@@ -109,4 +109,11 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* First-time visitors see the consent choice in initial HTML so it cannot
+   become a late-hydration LCP. Returning visitors are hidden before paint by
+   the small root-layout cookie marker, then React removes the prompt. */
+html[data-cc-analytics-consent="set"] #cc-analytics-consent {
+  display: none;
 }

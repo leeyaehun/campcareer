@@ -2,9 +2,8 @@ import { AustraliaCountryDashboard } from "../australia-country-dashboard"
 import { CountryDashboardShell } from "../country-dashboard-shell"
 import { getCountryMetrics } from "@/lib/workspace/country-metrics"
 
-// Country metrics are read from the canonical evidence schema per request.
-// Rendering remains dynamic so builds do not require production database credentials.
-export const dynamic = "force-dynamic"
+// Country metrics are stable public evidence and are revalidated hourly.
+export const revalidate = 3600
 
 export const metadata = {
   title: "Study and Work in Australia",

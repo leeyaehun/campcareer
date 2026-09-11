@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BriefcaseBusiness, ChevronDown, Factory, HandHeart, Hammer, HeartPulse, Landmark, Laptop, MousePointerClick, Palette, Plane, ShoppingBag, SlidersHorizontal, Sprout } from "lucide-react"
 import { CAREER_CATALOGUE, type Career } from "@/lib/career-data-foundation/career-catalogue"
@@ -13,7 +14,6 @@ import { CountryPill } from "@/components/workspace/country-pill"
 import { useSelectedCountry } from "@/components/workspace/country-context"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
-import { CountryAwareOccupationDetail } from "./country-aware-occupation-detail"
 import { Badge } from "@/components/ui/badge"
 import { EmptyState } from "@/components/ui/status-state"
 import { FilterBar, FilterChip } from "@/components/ui/filter-bar"
@@ -34,6 +34,18 @@ const CATEGORY_ICON = new Map([
 ])
 
 type CountryProfileStatus = "idle" | "loading" | "ready" | "missing" | "error"
+
+const CountryAwareOccupationDetail = dynamic(
+  () => import("./country-aware-occupation-detail").then((module) => module.CountryAwareOccupationDetail),
+  {
+    loading: () => (
+      <div
+        className="min-h-[420px] rounded-cc-large border border-campcareer-border bg-campcareer-surface"
+        aria-hidden="true"
+      />
+    ),
+  },
+)
 
 function OccupationDiscovery({ locale, onChoose, onBrowseAll, isCareerIndex }: { locale: string; onChoose: (categoryId: string) => void; onBrowseAll: () => void; isCareerIndex: boolean }) {
   return (
@@ -106,12 +118,14 @@ export function OccupationExplorer({
   initialOccupation,
   initialCountry,
   initialCategory,
+  initialBrowseAll = false,
 }: {
   basePath?: "/careers" | "/occupation"
   initialQuery: string
   initialOccupation: string
   initialCountry: string
   initialCategory: string
+  initialBrowseAll?: boolean
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -120,7 +134,7 @@ export function OccupationExplorer({
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState<string>(() => STUDY_CATEGORIES.some((item) => item.id === initialCategory) ? initialCategory : "all")
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [showAllOccupations, setShowAllOccupations] = useState(false)
+  const [showAllOccupations, setShowAllOccupations] = useState(initialBrowseAll)
   const [countryProfile, setCountryProfile] = useState<CountryOccupationProfile | null>(null)
   const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
   const isCareerIndex = basePath === "/careers"

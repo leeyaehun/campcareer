@@ -1,5 +1,7 @@
 import "server-only"
 
+import { cache } from "react"
+
 import { campCareerScoreFromFoundationComponents } from "@/lib/campcareer-score"
 import { supabase } from "@/lib/supabase"
 import { foundationScoreConfidence } from "./opportunity-score"
@@ -236,7 +238,7 @@ const rawNumber = (observations: CareerFoundationRawObservation[], metricKey: st
 const rawObservation = (observations: CareerFoundationRawObservation[], metricKey: string) =>
   observations.find((item) => item.metricKey === metricKey) ?? null
 
-export async function getCareerDataFoundation({
+async function getCareerDataFoundationUncached({
   countryCode,
   careerId,
 }: {
@@ -540,6 +542,20 @@ export async function getCareerDataFoundation({
     blockers,
     entryPoints,
   }
+}
+
+const getCareerDataFoundationCached = cache((countryCode: string, careerId: string) =>
+  getCareerDataFoundationUncached({ countryCode, careerId })
+)
+
+export function getCareerDataFoundation({
+  countryCode,
+  careerId,
+}: {
+  countryCode: string
+  careerId: string
+}) {
+  return getCareerDataFoundationCached(countryCode.trim().toUpperCase(), careerId)
 }
 
 export async function getFoundationCountriesForCareer(careerId: string) {

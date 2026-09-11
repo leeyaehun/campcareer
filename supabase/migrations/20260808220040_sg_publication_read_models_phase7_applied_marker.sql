@@ -1,3 +1,0 @@
--- Applied remotely by the Supabase connector as 20260808220040.
--- Canonical implementation lives in:
--- 20260808232000_sg_publication_read_models.sql

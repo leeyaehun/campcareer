@@ -1,0 +1,23 @@
+create table public.program_catalog_ca_staging (
+  id bigint generated always as identity primary key,
+  source_name text not null,
+  source_program_key text not null,
+  institution_name text not null,
+  institution_id text,
+  title text not null,
+  credential_type text,
+  education_level text,
+  field_name text,
+  language text,
+  province text,
+  city text,
+  duration_years numeric,
+  tuition_fee_cad integer,
+  program_code text,
+  official_program_url text,
+  source_url text not null,
+  source_as_of date,
+  source_status text not null default 'catalogued',
+  collected_at timestamptz not null default now(),
+  unique (source_name, source_program_key)
+);;

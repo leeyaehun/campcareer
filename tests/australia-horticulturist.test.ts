@@ -4,7 +4,12 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809143000_australia_horticulturist_profile.sql", import.meta.url), "utf8")
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+const migration = normalizeMigrationSql(readFileSync(new URL("../supabase/migrations/20260809111859_australia_horticulturist_profile.sql", import.meta.url), "utf8"))
 
 test("Australia Horticulturist remains a multi-occupation umbrella", () => {
   const career = getCanonicalCareer("horticulturist")
@@ -12,7 +17,7 @@ test("Australia Horticulturist remains a multi-occupation umbrella", () => {
   assert.ok(career)
   assert.equal(career.categoryId, "environment")
   assert.ok(editorial)
-  assert.match(migration, /No single current six-digit OSCA Horticulturist exists/i)
+  assert.match(migration, /No single current OSCA Horticulturist occupation exists/i)
   assert.match(editorial.overview, /342931 Nurseryperson/i)
   assert.match(editorial.overview, /343134 Horticultural Supervisor or Specialist/i)
 })

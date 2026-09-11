@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
-import { Inter } from "next/font/google"
 import "./globals.css"
 import "./campcareer-brand.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
@@ -11,16 +10,11 @@ import { PageViewTracker } from "@/components/analytics/page-view-tracker"
 import { AnalyticsConsent } from "@/components/analytics-consent"
 import { ConsentGatedInsights } from "@/components/consent-gated-insights"
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+  preload: false,
 })
 
 export const metadata: Metadata = {
@@ -69,7 +63,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={DEFAULT_LOCALE} suppressHydrationWarning>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(document.cookie.split("; ").some(function(item){return item.indexOf("cc_analytics_consent=")===0})){document.documentElement.dataset.ccAnalyticsConsent="set"}}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className={`${geistMono.variable} antialiased`}>
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
           <PageViewTracker />

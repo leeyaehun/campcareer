@@ -1,6 +1,7 @@
 import "server-only"
 
 import { cache } from "react"
+import { unstable_cache } from "next/cache"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import {
   programLevelTypes,
@@ -415,19 +416,21 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   if (!data) return null
 
   const course = data as unknown as CourseRow
-  const institutions = await institutionMap(course.institution_id ? [course.institution_id] : [])
+  const [institutions, factsResult] = await Promise.all([
+    institutionMap(course.institution_id ? [course.institution_id] : []),
+    supabaseAdmin
+      .from("program_page_facts_au")
+      .select("field_key, value, source_url, review_status, extracted_at")
+      .eq("course_id", id)
+      .eq("review_status", "verified")
+      .order("field_key", { ascending: true })
+      .order("extracted_at", { ascending: true }),
+  ])
 
-  const { data: factRows, error: factsError } = await supabaseAdmin
-    .from("program_page_facts_au")
-    .select("field_key, value, source_url, review_status, extracted_at")
-    .eq("course_id", id)
-    .eq("review_status", "verified")
-    .order("field_key", { ascending: true })
-    .order("extracted_at", { ascending: true })
-
-  if (factsError) {
-    throw new Error(`Unable to load Australian program facts: ${factsError.message}`)
+  if (factsResult.error) {
+    throw new Error(`Unable to load Australian program facts: ${factsResult.error.message}`)
   }
+  const factRows = factsResult.data
 
   const program = mapProgram(
     course,
@@ -446,4 +449,10 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   }
 }
 
-export const getAuProgramById = cache(loadAuProgramById)
+const getCachedAuProgramById = unstable_cache(
+  loadAuProgramById,
+  ["au-program-detail-v1"],
+  { revalidate: 3600, tags: ["au-program-detail"] },
+)
+
+export const getAuProgramById = cache((id: number) => getCachedAuProgramById(id))

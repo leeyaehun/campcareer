@@ -4,9 +4,9 @@ import test from "node:test"
 
 const read = (path: string) => readFileSync(path, "utf8")
 
-const foundation = read("supabase/migrations/20260809152000_no_program_staging_foundation.sql")
-const canonical = read("supabase/migrations/20260809152500_no_program_canonicalization_publication.sql")
-const security = read("supabase/migrations/20260809153000_no_program_publication_security_invoker.sql")
+const foundation = read("supabase/migration-contracts/20260809152000_no_program_staging_foundation.sql")
+const canonical = read("supabase/migration-contracts/20260809152500_no_program_canonicalization_publication.sql")
+const security = read("supabase/migration-contracts/20260809153000_no_program_publication_security_invoker.sql")
 const server = read("src/lib/programs/no-programs.server.ts")
 const seo = read("src/lib/programs/no-program-seo.ts")
 const detail = read("src/app/(workspace)/programs/no/[program]/page.tsx")

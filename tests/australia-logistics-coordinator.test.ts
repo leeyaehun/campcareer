@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809191500_australia_logistics_coordinator_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809135937_australia_logistics_coordinator_profile.sql", import.meta.url), "utf8")
 
 test("Australia Logistics Coordinator uses exact OSCA 571131 alternative title", () => {
   const career = getCanonicalCareer("logistics-coordinator")

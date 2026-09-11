@@ -5,22 +5,22 @@ import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
 const softwareDeveloperMigration = readFileSync(
-  new URL("../supabase/migrations/20260808123000_australia_software_developer_profile.sql", import.meta.url),
+  new URL("../supabase/migrations/20260808104602_australia_software_developer_profile.sql", import.meta.url),
   "utf8",
 )
 
 const softwareDeveloperProgramAlignment = readFileSync(
-  new URL("../supabase/migrations/20260808123500_australia_software_developer_program_alignment.sql", import.meta.url),
+  new URL("../supabase/migrations/20260808104953_australia_software_developer_program_alignment.sql", import.meta.url),
   "utf8",
 )
 
 const dataAnalystMigration = readFileSync(
-  new URL("../supabase/migrations/20260808124500_australia_data_analyst_profile.sql", import.meta.url),
+  new URL("../supabase/migrations/20260808112800_australia_data_analyst_profile.sql", import.meta.url),
   "utf8",
 )
 
 const dataEngineerMigration = readFileSync(
-  new URL("../supabase/migrations/20260808131500_australia_data_engineer_profile.sql", import.meta.url),
+  new URL("../supabase/migrations/20260808113455_australia_data_engineer_profile.sql", import.meta.url),
   "utf8",
 )
 

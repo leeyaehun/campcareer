@@ -11,8 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
-        display: ["var(--font-inter)", ...fontFamily.sans],
+        sans: [...fontFamily.sans],
+        display: [...fontFamily.sans],
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
         pixel: ["var(--font-press-start)", "'Press Start 2P'", "monospace"],
       },

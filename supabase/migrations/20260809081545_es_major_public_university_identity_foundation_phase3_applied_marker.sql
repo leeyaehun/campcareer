@@ -1,3 +1,0 @@
--- Production-applied marker for Supabase-generated migration version 20260809081545.
--- Canonical source migration: 20260809093000_es_major_public_university_identity_foundation.sql
--- The production DDL was applied through the connected Supabase migration tool.

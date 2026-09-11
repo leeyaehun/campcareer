@@ -8,8 +8,8 @@ const compareServer = fs.readFileSync("src/lib/cities/ae-city-comparison.server.
 const compareMatrix = fs.readFileSync("src/app/(workspace)/compare/uae-cities-compare-matrix.tsx", "utf8")
 const profilePage = fs.readFileSync("src/app/(workspace)/cities/ae/[city]/page.tsx", "utf8")
 const sitemap = fs.readFileSync("src/app/sitemap.ts", "utf8")
-const readModels = fs.readFileSync("supabase/migrations/20260812004700_publish_ae_tier_a_city_read_models_v1.sql", "utf8")
-const metricsMigration = fs.readFileSync("supabase/migrations/20260812004800_publish_ae_tier_a_city_metrics_v1.sql", "utf8")
+const readModels = fs.readFileSync("supabase/migration-contracts/20260812004700_publish_ae_tier_a_city_read_models_v1.sql", "utf8")
+const metricsMigration = fs.readFileSync("supabase/migration-contracts/20260812004800_publish_ae_tier_a_city_metrics_v1.sql", "utf8")
 
 const metrics = [
   "city_population",

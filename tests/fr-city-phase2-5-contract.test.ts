@@ -6,9 +6,9 @@ const routes = readFileSync("src/lib/cities/city-routes.ts", "utf8")
 const profile = readFileSync("src/lib/cities/fr-city-profile.server.ts", "utf8")
 const page = readFileSync("src/app/(workspace)/cities/fr/[city]/page.tsx", "utf8")
 const dashboard = readFileSync("src/app/(workspace)/cities/france-city-dashboard.tsx", "utf8")
-const phase2 = readFileSync("supabase/migrations/20260810223000_normalize_fr_tier_a_city_geographies_v1.sql", "utf8")
-const phase3 = readFileSync("supabase/migrations/20260810223100_publish_fr_tier_a_city_linkage_v1.sql", "utf8")
-const phase4 = readFileSync("supabase/migrations/20260810223200_publish_fr_tier_a_city_metrics_v1.sql", "utf8")
+const phase2 = readFileSync("supabase/migration-contracts/20260810223000_normalize_fr_tier_a_city_geographies_v1.sql", "utf8")
+const phase3 = readFileSync("supabase/migration-contracts/20260810223100_publish_fr_tier_a_city_linkage_v1.sql", "utf8")
+const phase4 = readFileSync("supabase/migration-contracts/20260810223200_publish_fr_tier_a_city_metrics_v1.sql", "utf8")
 
 const published = ["paris", "paris-saclay", "bordeaux", "strasbourg", "grenoble", "aix-marseille", "nice"]
 

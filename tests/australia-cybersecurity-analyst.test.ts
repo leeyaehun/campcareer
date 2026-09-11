@@ -4,10 +4,16 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
-  new URL("../supabase/migrations/20260808133000_australia_cybersecurity_analyst_profile.sql", import.meta.url),
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+
+const migration = normalizeMigrationSql(readFileSync(
+  new URL("../supabase/migrations/20260808123305_australia_cybersecurity_analyst_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Cybersecurity Analyst maps current OSCA 271133 to ANZSCO 262116", () => {
   const career = getCanonicalCareer("cybersecurity-analyst")

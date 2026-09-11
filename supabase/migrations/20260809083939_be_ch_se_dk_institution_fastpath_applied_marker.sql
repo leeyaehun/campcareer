@@ -1,2 +1,0 @@
--- Applied to production through the Supabase connector as version 20260809083939.
--- Canonical rollout logic is retained in 20260809114500_be_ch_se_dk_institution_fastpath.sql.

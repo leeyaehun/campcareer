@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809190000_australia_truck_driver_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809135501_australia_truck_driver_profile.sql", import.meta.url), "utf8")
 
 test("Australia Truck Driver preserves the current OSCA split", () => {
   const career = getCanonicalCareer("truck-driver")

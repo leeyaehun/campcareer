@@ -348,7 +348,15 @@ type VisaRow = {
   last_verified_on: string
 }
 
-export async function getCareerMarketInsight({ countryCode, careerId }: { countryCode: string; careerId: string }): Promise<CareerMarketInsight | null> {
+export async function getCareerMarketInsight({
+  countryCode,
+  careerId,
+  includeRecommendations = true,
+}: {
+  countryCode: string
+  careerId: string
+  includeRecommendations?: boolean
+}): Promise<CareerMarketInsight | null> {
   const country = countryCode.trim().toUpperCase()
   const career = CANONICAL_CAREER_BY_ID.get(careerId)
   if (!career || (country !== "NOT-SURE" && !/^[A-Z]{2}$/.test(country))) return null
@@ -372,14 +380,16 @@ export async function getCareerMarketInsight({ countryCode, careerId }: { countr
       foundation: null,
       readModelSource: "editorial_only",
       demand: null,
-      recommendations: await getCareerCountryRecommendations(careerId),
+      recommendations: includeRecommendations ? await getCareerCountryRecommendations(careerId) : [],
       visas: [],
     }
   }
 
   const [foundation, recommendations] = await Promise.all([
     getCareerDataFoundation({ countryCode: country, careerId }),
-    getCareerCountryRecommendations(careerId),
+    includeRecommendations
+      ? getCareerCountryRecommendations(careerId)
+      : Promise.resolve([] as CareerMarketRecommendation[]),
   ])
 
   if (foundation && foundationHasPublicScore(foundation)) {

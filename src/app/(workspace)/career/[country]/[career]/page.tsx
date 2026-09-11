@@ -1,12 +1,16 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Suspense } from "react"
 import { headers } from "next/headers"
 import { notFound, permanentRedirect } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
+import { EntityPageHeader } from "@/components/ui/entity-page"
+import { Skeleton } from "@/components/ui/skeleton"
 import { localizePath, type Locale } from "@/lib/i18n/config"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
-import { getPublicCareerProfile } from "@/lib/career-data-foundation/public-career-profile-read"
+import { getPublicCareerPageProfile } from "@/lib/career-data-foundation/public-career-profile-read"
 import { getCareerRoute, getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
+import type { OverviewSearchValues } from "../../../home/home-overview-config"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
 import { CareerCoreSections } from "../../career-core-sections"
 import { CareerResultActions } from "../../career-result-actions"
@@ -17,50 +21,25 @@ type CareerCanonicalPageProps = {
   params: Promise<{ country: string; career: string }>
 }
 
-const verdictLabel = {
-  excellent: "Excellent",
-  strong: "Strong",
-  mixed: "Mixed",
-  challenging: "Challenging",
-  tough: "Tough",
-} as const
+type PublicCareerProfilePromise = ReturnType<typeof getPublicCareerPageProfile>
 
 async function getRouteLocale(): Promise<Locale> {
   const routeLocale = (await headers()).get("x-campcareer-route-locale")
   return routeLocale === "ko" ? "ko" : "en"
 }
 
-function getScore(profile: Awaited<ReturnType<typeof getPublicCareerProfile>>) {
-  return profile?.score ?? null
-}
-
-function metadataCopy(
-  careerName: string,
-  countryName: string,
-  score: NonNullable<ReturnType<typeof getScore>> | null,
-  locale: Locale,
-) {
+function metadataCopy(careerName: string, countryName: string, locale: Locale) {
   if (locale === "ko") {
-    return score
-      ? {
-          title: `${countryName} ${careerName}: CampCareer Score ${score.total}`,
-          description: `${countryName} ${careerName}의 CampCareer Score는 ${score.total}/100 (${verdictLabel[score.verdict]})입니다. 수요, 보수, 진입 요건, 근거, 과정과 일자리 경로를 확인하세요.`,
-        }
-      : {
-          title: `${countryName} ${careerName}: 커리어 경로`,
-          description: `${countryName}에서 ${careerName}로 진입하기 위한 수요, 보수, 자격 요건, 과정과 일자리 경로를 확인하세요.`,
-        }
+    return {
+      title: `${countryName} ${careerName}: 커리어 경로`,
+      description: `${countryName}에서 ${careerName}로 진입하기 위한 수요, 보수, 자격 요건, 과정과 일자리 경로를 확인하세요.`,
+    }
   }
 
-  return score
-    ? {
-        title: `${careerName} in ${countryName}: CampCareer Score ${score.total}`,
-        description: `CampCareer Score ${score.total}/100 (${verdictLabel[score.verdict]}) for ${careerName} in ${countryName}. See demand, pay, entry requirements, evidence, study routes and jobs.`,
-      }
-    : {
-        title: `${careerName} in ${countryName}: Career Path`,
-        description: `See demand, pay, entry requirements, evidence, study routes and jobs for ${careerName} in ${countryName}.`,
-      }
+  return {
+    title: `${careerName} in ${countryName}: Career Path`,
+    description: `See demand, pay, entry requirements, evidence, study routes and jobs for ${careerName} in ${countryName}.`,
+  }
 }
 
 export async function generateMetadata({ params }: CareerCanonicalPageProps): Promise<Metadata> {
@@ -68,14 +47,10 @@ export async function generateMetadata({ params }: CareerCanonicalPageProps): Pr
   const route = getCareerRoute(country, career)
   if (!route) return { title: "Career", robots: { index: false, follow: false } }
 
-  const [locale, profile] = await Promise.all([
-    getRouteLocale(),
-    getPublicCareerProfile(route.country.code, route.career.id),
-  ])
-  const score = getScore(profile)
-  const indexable = Boolean(getIndexableCareerRoute(route.country.code, route.career.id) && score)
+  const locale = await getRouteLocale()
+  const indexable = Boolean(getIndexableCareerRoute(route.country.code, route.career.id))
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
-  const copy = metadataCopy(careerName, route.country.name, score, locale)
+  const copy = metadataCopy(careerName, route.country.name, locale)
   const canonicalPath = localizePath(route.path, locale)
   const canonicalUrl = `${SITE_URL}${canonicalPath}`
 
@@ -124,6 +99,69 @@ export async function generateMetadata({ params }: CareerCanonicalPageProps): Pr
   }
 }
 
+function CareerScoreFallback() {
+  return (
+    <div className="mt-8 border-t border-campcareer-border pt-6" aria-hidden="true">
+      <Skeleton className="h-4 w-32" />
+      <Skeleton className="mt-3 h-16 w-40" />
+      <Skeleton className="mt-6 h-16" />
+    </div>
+  )
+}
+
+function CareerSectionsFallback() {
+  return (
+    <div className="mt-8 space-y-4" aria-hidden="true">
+      <Skeleton className="h-5 w-40" />
+      <Skeleton className="h-24 w-full" />
+    </div>
+  )
+}
+
+async function CareerScoreContent({
+  profilePromise,
+  query,
+  locale,
+}: {
+  profilePromise: PublicCareerProfilePromise
+  query: OverviewSearchValues
+  locale: Locale
+}) {
+  const profile = await profilePromise
+  if (!profile?.country) notFound()
+
+  return (
+    <CampCareerScoreHero
+      query={query}
+      locale={locale}
+      initialInsight={profile.compatibility}
+      embedded
+      showHeader={false}
+    />
+  )
+}
+
+async function CareerSectionsContent({
+  profilePromise,
+  query,
+  locale,
+}: {
+  profilePromise: PublicCareerProfilePromise
+  query: OverviewSearchValues
+  locale: Locale
+}) {
+  const profile = await profilePromise
+  if (!profile?.country) notFound()
+
+  return (
+    <CareerCoreSections
+      query={query}
+      locale={locale}
+      initialInsight={profile.compatibility}
+    />
+  )
+}
+
 export default async function CareerCanonicalPage({ params }: CareerCanonicalPageProps) {
   const { country, career } = await params
   const route = getCareerRoute(country, career)
@@ -135,13 +173,10 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
     permanentRedirect(canonicalPath)
   }
 
-  const profile = await getPublicCareerProfile(route.country.code, route.career.id)
-  if (!profile?.country) notFound()
-
-  const query = { country: route.country.code, occupation: route.career.id }
-  const score = getScore(profile)
+  const query: OverviewSearchValues = { country: route.country.code, occupation: route.career.id }
+  const profilePromise = getPublicCareerPageProfile(route.country.code, route.career.id)
   const careerName = locale === "ko" ? route.career.labelKo : route.career.label
-  const copy = metadataCopy(careerName, route.country.name, score, locale)
+  const copy = metadataCopy(careerName, route.country.name, locale)
   const canonicalUrl = `${SITE_URL}${canonicalPath}`
   const countryUrl = `${SITE_URL}/countries/${route.country.code.toLowerCase()}`
   const jsonLd = {
@@ -200,21 +235,26 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
       />
       <main className="min-h-[calc(100vh-4rem)] bg-campcareer-surface px-4 pb-16 pt-5 sm:px-8 sm:pt-8">
         <div className="mx-auto max-w-5xl">
-          <Link href={localizePath("/", locale)} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-2.5 text-sm font-semibold text-campcareer-muted transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+          <Link href={localizePath("/", locale)} prefetch={false} className="inline-flex min-h-10 items-center gap-1.5 rounded-cc-control px-2.5 text-sm font-semibold text-campcareer-muted transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <ArrowLeft className="size-4" /> {locale === "ko" ? "다시 검색하기" : "Search again"}
           </Link>
-          <CampCareerScoreHero
-            key={`score-${route.country.code}-${route.career.id}`}
-            query={query}
-            locale={locale}
-            initialInsight={profile.compatibility}
-          />
-          <CareerCoreSections
-            key={`sections-${route.country.code}-${route.career.id}`}
-            query={query}
-            locale={locale}
-            initialInsight={profile.compatibility}
-          />
+
+          <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
+            <EntityPageHeader title={careerName} titleId="career-heading" subtitle={route.country.name} />
+            <p className="mt-4 max-w-xl text-sm leading-6 text-campcareer-ink-secondary sm:text-base sm:leading-7">
+              {locale === "ko"
+                ? `${route.country.name}에서 수요, 보수와 진입 요건의 근거를 확인하세요.`
+                : `Compare demand, pay and entry evidence for this career in ${route.country.name}.`}
+            </p>
+            <Suspense fallback={<CareerScoreFallback />}>
+              <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
+            </Suspense>
+          </section>
+
+          <Suspense fallback={<CareerSectionsFallback />}>
+            <CareerSectionsContent profilePromise={profilePromise} query={query} locale={locale} />
+          </Suspense>
+
           <CareerResultActions query={query} locale={locale} />
         </div>
       </main>

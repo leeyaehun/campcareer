@@ -4,10 +4,16 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
-  new URL("../supabase/migrations/20260809110000_australia_early_childhood_teacher_profile.sql", import.meta.url),
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+
+const migration = normalizeMigrationSql(readFileSync(
+  new URL("../supabase/migrations/20260809090328_australia_early_childhood_teacher_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Early Childhood Teacher maps exactly to current OSCA 251131", () => {
   const career = getCanonicalCareer("early-childhood-teacher")
@@ -50,7 +56,7 @@ test("Australia Early Childhood Teacher links verified Deakin initial-teacher-ed
   assert.ok(australia)
   assert.match(migration, /deakin-university' and course_code = '102806B'/)
   assert.match(migration, /deakin-university' and course_code = '114296J'/)
-  assert.match(migration, /'au-program:' \|\| id::text/)
+  assert.match(migration, /'au-program:'\s*\|\|\s*id::text/)
   assert.doesNotMatch(migration, /'au-program:3952'/)
   assert.doesNotMatch(migration, /'au-program:3992'/)
   assert.match(australia.entryPathway, /ACECQA/i)

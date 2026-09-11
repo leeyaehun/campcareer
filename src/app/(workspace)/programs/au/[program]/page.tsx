@@ -17,6 +17,7 @@ import {
 } from "../../program-detail-components"
 
 const BASE_URL = "https://www.campcareer.com"
+export const revalidate = 3600
 const CITY_PROFILE_SLUGS = new Set(["sydney", "melbourne", "brisbane", "perth", "adelaide"])
 
 type Params = { params: Promise<{ program: string }> }
@@ -114,7 +115,7 @@ export default async function ProgramDetailPage({ params }: Params) {
               <p className="mt-3 text-[14px] font-semibold text-[#4f4d48]">{program.institutionName}</p>
             )}
             {location && <p className="mt-2 flex items-center gap-2 text-[12.5px] text-[#6f6d68]"><MapPin className="size-4" />{location}</p>}
-            {program.fieldName && <p className="mt-5 text-[13px] leading-6 text-[#65625c]">{program.fieldName}</p>}
+            {program.fieldName && <p className="mt-5 hidden text-[13px] leading-6 text-[#65625c] sm:block">{program.fieldName}</p>}
           </header>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -147,7 +148,7 @@ export default async function ProgramDetailPage({ params }: Params) {
                     </>
                   )
                   return cityHref ? (
-                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">{body}</Link>
+                    <Link key={item.campusId ?? `${item.locationName}-${index}`} href={cityHref} prefetch={false} className="rounded-lg border border-[#dbe5f7] bg-[#f8faff] p-3.5 transition hover:border-[#9db7e8] hover:bg-white">{body}</Link>
                   ) : (
                     <div key={item.campusId ?? `${item.locationName}-${index}`} className="rounded-lg border border-[#eeece8] bg-[#fafaf8] p-3.5">{body}</div>
                   )

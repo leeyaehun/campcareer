@@ -17,6 +17,7 @@ export function WorkspaceTopbar() {
       <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-6 max-sm:px-[18px]">
         <Link
           href={localizePath("/", locale)}
+          prefetch={false}
           className="campcareer-wordmark shrink-0 text-campcareer-ink"
           aria-label="CampCareer career search"
         >

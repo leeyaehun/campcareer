@@ -4,7 +4,7 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809183000_australia_event_planner_profile.sql", import.meta.url), "utf8")
+const migration = readFileSync(new URL("../supabase/migrations/20260809132638_australia_event_planner_profile.sql", import.meta.url), "utf8")
 
 test("Australia Event Planner uses exact Event Manager specialisation scope", () => {
   const career = getCanonicalCareer("event-planner")

@@ -4,7 +4,12 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809153000_australia_multimedia_designer_profile.sql", import.meta.url), "utf8")
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+const migration = normalizeMigrationSql(readFileSync(new URL("../supabase/migrations/20260809121638_australia_multimedia_designer_profile.sql", import.meta.url), "utf8"))
 
 test("Australia Multimedia Designer uses exact current OSCA 242131 scope", () => {
   const career = getCanonicalCareer("multimedia-designer")
@@ -12,12 +17,12 @@ test("Australia Multimedia Designer uses exact current OSCA 242131 scope", () =>
   assert.ok(career)
   assert.equal(career.categoryId, "design")
   assert.ok(editorial)
-  assert.match(migration, /Current OSCA 242131 Multimedia Designer is exact/i)
+  assert.match(migration, /Current OSCA 242131 Multimedia Designer is an exact canonical occupation/i)
   assert.match(editorial.overview, /exact current OSCA occupation, 242131 Multimedia Designer/i)
 })
 
 test("Australia Multimedia Designer preserves split ANZSCO correspondence", () => {
-  assert.match(migration, /232413 Multimedia Designer and 261211 Multimedia Specialist/i)
+  assert.match(migration, /232413 Multimedia Designer.*261211 Multimedia Specialist/i)
   assert.match(migration, /'AU:multimedia-designer','2026-05-01',null,null,null,null/)
   assert.match(migration, /'employment_total',4600/)
   assert.match(migration, /'employment_total',1100/)

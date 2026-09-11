@@ -7,7 +7,7 @@ import type { User } from "@supabase/supabase-js"
 import { Bookmark, LogIn, LogOut, Settings } from "lucide-react"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
-import { createClient } from "@/lib/supabase-client"
+import type { SupabaseClient } from "@supabase/supabase-js"
 import { cn } from "@/lib/utils"
 
 type WorkspaceUserMenuProps = {
@@ -21,7 +21,7 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
   const loginPath = localizePath("/login", locale)
   const homePath = localizePath("/", locale)
   const fallbackLoginDestination = `${loginPath}?next=${encodeURIComponent(homePath)}`
-  const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null)
+  const supabaseRef = useRef<SupabaseClient | null>(null)
   const [user, setUser] = useState<User | null>(null)
   const [avatarFailed, setAvatarFailed] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -30,21 +30,38 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const supabase = createClient()
-    supabaseRef.current = supabase
     let active = true
+    let timer: number | undefined
+    let unsubscribe: (() => void) | undefined
 
-    void supabase.auth.getUser().then(({ data }) => {
-      if (active) setUser(data.user)
-    })
+    const initializeAuth = async () => {
+      const { createClient } = await import("@/lib/supabase-client")
+      if (!active) return
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (active) setUser(session?.user ?? null)
-    })
+      const supabase = createClient()
+      supabaseRef.current = supabase
+      const { data } = await supabase.auth.getUser()
+      if (!active) return
+      setUser(data.user)
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setUser(session?.user ?? null)
+      })
+      unsubscribe = () => subscription.unsubscribe()
+    }
+
+    const scheduleAuth = () => {
+      timer = window.setTimeout(() => void initializeAuth(), 0)
+    }
+
+    if (document.readyState === "complete") scheduleAuth()
+    else window.addEventListener("load", scheduleAuth, { once: true })
 
     return () => {
       active = false
-      subscription.unsubscribe()
+      window.removeEventListener("load", scheduleAuth)
+      if (timer !== undefined) window.clearTimeout(timer)
+      unsubscribe?.()
       supabaseRef.current = null
     }
   }, [])

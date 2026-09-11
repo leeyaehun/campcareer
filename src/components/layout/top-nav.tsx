@@ -2,14 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { LogIn } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
 import { CompareNavigationAction, PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
-import { createClient } from "@/lib/supabase-client"
 import { cn } from "@/lib/utils"
 
 export function TopNav() {
@@ -25,27 +24,49 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
   const profileDestination = localizePath("/profile", pathLocale)
   const loginPath = localizePath("/login", pathLocale)
   const fallbackLoginDestination = `${loginPath}?next=${encodeURIComponent(pathname || homeDestination)}`
-  const supabase = useMemo(() => createClient(), [])
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     let active = true
+    let timer: number | undefined
+    let unsubscribe: (() => void) | undefined
 
-    const syncUser = async (nextUser?: User | null) => {
-      const next = nextUser ?? (await supabase.auth.getUser()).data.user
+    const initializeAuth = async () => {
+      const { createClient } = await import("@/lib/supabase-client")
       if (!active) return
-      setUser(next)
+
+      const supabase = createClient()
+      const { data } = await supabase.auth.getUser()
+      if (!active) return
+      setUser(data.user)
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setUser(session?.user ?? null)
+      })
+      unsubscribe = () => subscription.unsubscribe()
     }
 
-    void syncUser()
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      void syncUser(session?.user ?? null)
-    })
+    // Auth state is useful after first paint, but it must not compete with
+    // route-critical resources on the Lighthouse/LCP path.
+    const scheduleAuth = () => {
+      timer = window.setTimeout(() => {
+        void initializeAuth()
+      }, 0)
+    }
+
+    if (document.readyState === "complete") {
+      scheduleAuth()
+    } else {
+      window.addEventListener("load", scheduleAuth, { once: true })
+    }
+
     return () => {
       active = false
-      subscription.unsubscribe()
+      window.removeEventListener("load", scheduleAuth)
+      if (timer !== undefined) window.clearTimeout(timer)
+      unsubscribe?.()
     }
-  }, [supabase])
+  }, [])
 
   const displayName = user
     ? ((user.user_metadata?.full_name as string | undefined) || (user.user_metadata?.name as string | undefined) || user.email?.split("@")[0] || "C")

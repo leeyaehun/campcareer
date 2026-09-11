@@ -4,10 +4,16 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
-  new URL("../supabase/migrations/20260809100000_australia_auditor_profile.sql", import.meta.url),
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+
+const migration = normalizeMigrationSql(readFileSync(
+  new URL("../supabase/migrations/20260809083712_australia_auditor_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Auditor is an umbrella across External and Internal Auditor", () => {
   const career = getCanonicalCareer("auditor")
@@ -65,8 +71,8 @@ test("Australia Auditor links accounting study routes without generated ids", ()
   const australia = getOccupationEditorial("auditor")?.countries.AU
 
   assert.ok(australia)
-  assert.match(migration, /macquarie-university'\n  and course_code = '099149E'/)
-  assert.match(migration, /macquarie-university'\n  and course_code = '099183C'/)
+  assert.match(migration, /macquarie-university'\s+and course_code = '099149E'/)
+  assert.match(migration, /macquarie-university'\s+and course_code = '099183C'/)
   assert.match(migration, /concat\('au-program:', id\)/)
   assert.doesNotMatch(migration, /'au-program:237'/)
   assert.doesNotMatch(migration, /'au-program:264'/)

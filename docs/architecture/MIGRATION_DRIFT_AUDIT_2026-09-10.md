@@ -3,11 +3,11 @@
 ## Scope
 
 Compared repository migration filenames with the linked CampCareer Supabase
-project (`babylusxcknjerxtepoc`) migration history, then ran the normal
-`supabase db push --dry-run` workflow using the configured server-only database
-connection.
+project (`babylusxcknjerxtepoc`) migration history. The original Phase 4/5
+audit found a divergent local lineage and deliberately avoided production
+history repair or direct privilege changes.
 
-## Result
+## Original result
 
 | Check | Result |
 | --- | --- |
@@ -17,38 +17,73 @@ connection.
 | Deployed-only versions | 296 |
 | P0.5 `20260907101500_p0_5_private_raw_career_data` | repository-only; not deployed |
 
-The dry run correctly refused to push because remote history contains versions
-that are absent from this checkout. No migration repair, history rewrite,
-manual DDL, or direct privilege change was attempted.
+The earlier linked dry run correctly refused to push because remote history
+contained versions absent from the checkout.
 
-## P0.5 status
+## Reconciliation completed — 2026-09-11
 
-The existing P0.5 migration is internally consistent with its target state:
-it grants `service_role` SELECT for the six raw country-occupation tables,
-drops their public-read policies, and revokes `PUBLIC`, `anon`, and
-`authenticated` privileges. Before the migration, the deployed tables had RLS
-enabled but public SELECT policies/grants, while `service_role` had no explicit
-SELECT grant. The deployed application already tries its server-only
-service-role read first and falls back only on `42501`.
+On `prelaunch/release-blockers`, the migration directory was reconciled to
+the deployed production lineage without deleting or rewriting existing
+production migration history.
 
-It is deliberately **not applied** in this phase. Applying it outside the
-normal migration workflow would create another divergent history record. The
-temporary fallback remains until the history is reconciled.
+Immediately before P0.5 application:
 
-## Resolution path
+| Check | Result |
+| --- | --- |
+| Production migration rows | 813 |
+| Canonical production migration paths present in branch | 813 / 813 |
+| Additional pending migrations | 1 — `20260907101500_p0_5_private_raw_career_data.sql` |
+| Missing production migration paths | 0 |
+| Non-P0.5 extra migration paths | 0 |
+| Duplicate migration versions in branch | 0 |
+| Total migration files in branch | 814 |
 
-1. Identify the approved repository lineage containing the deployed-only
-   migrations and reconcile it through normal Git integration; do not mark
-   versions repaired solely to unblock a push.
-2. Re-run `supabase db push --dry-run` until it identifies only the intended
-   P0.5 migration.
-3. Apply the existing P0.5 file through `supabase db push`, preserving its
-   `20260907101500` version.
-4. Verify migration history, service-role SELECT, anon/authenticated denial,
-   canonical Career routes, Career API/read-model output, and fallback
-   semantics.
-5. Remove the `42501` anon fallback in a focused follow-up only after those
-   checks pass.
+The final comparison used the same migration identity that Supabase documents
+for `migration list` / `db push`: migration timestamps, with names also
+checked as an additional guard. The connected execution environment does not
+expose a linked local Supabase CLI, so the post-reconciliation verification
+was performed by comparing the GitHub migration tree directly with
+`supabase_migrations.schema_migrations`.
 
-This report is a reconciliation blocker, not evidence that either history
-should be rewritten or that data should be deleted.
+## P0.5 applied — 2026-09-11
+
+The exact SQL from
+`20260907101500_p0_5_private_raw_career_data.sql` was applied to production
+inside one explicit transaction. The transaction asserted the intended
+privilege boundary before recording the migration history row with the exact
+version `20260907101500`, name `p0_5_private_raw_career_data`, and migration
+statements.
+
+This preserved the intended migration identity rather than generating a new
+timestamp.
+
+Post-application verification:
+
+| Check | Result |
+| --- | --- |
+| Production migration rows | 814 |
+| Branch migration files | 814 |
+| Branch-only migrations | 0 |
+| Production-only migrations | 0 |
+| P0.5 history rows | 1 |
+| `service_role` SELECT on all six raw Career tables | yes |
+| `anon` SELECT on all six raw Career tables | no |
+| `authenticated` SELECT on all six raw Career tables | no |
+| Browser SELECT policies on all six raw Career tables | 0 |
+
+A real `service_role` role read also succeeded across all six raw Career
+tables. Supabase Security Advisor now reports those six tables as
+`RLS enabled, no policy`, which is expected for this server-only boundary.
+
+## Application follow-up
+
+The application-side `42501 → anon` compatibility fallback has been removed
+from `src/lib/workspace/raw-career-data.ts` on
+`prelaunch/release-blockers`. Raw Career reads now use `supabaseAdmin`
+only, and the P0.5 contract test rejects reintroduction of the anon fallback.
+
+## P0 status
+
+**CLOSED.** Repository and production migration histories converge at 814
+migrations, P0.5 is applied under its intended version, the raw Career tables
+are server-role-only, and the temporary browser fallback has been retired.

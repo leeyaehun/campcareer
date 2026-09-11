@@ -135,10 +135,14 @@ export function CampCareerScoreHero({
   query,
   locale,
   initialInsight = null,
+  embedded = false,
+  showHeader = true,
 }: {
   query: OverviewSearchValues
   locale: Locale
   initialInsight?: CareerMarketInsight | null
+  embedded?: boolean
+  showHeader?: boolean
 }) {
   const [insight, setInsight] = useState<CareerMarketInsight | null>(initialInsight)
   const [failed, setFailed] = useState(false)
@@ -190,8 +194,8 @@ export function CampCareerScoreHero({
 
   if (!score) {
     return (
-      <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
-        <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} />
+      <section className={embedded ? "" : "mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8"} aria-labelledby="career-heading">
+        {showHeader ? <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} /> : null}
         <div className="mt-8 border-t border-campcareer-border pt-6">
           <p className="text-sm font-semibold text-brand">CampCareer Score</p>
           <h2 className="mt-3 text-3xl font-bold tracking-[-0.045em] text-campcareer-ink">{locale === "ko" ? "점수 준비 중" : "Score not ready yet"}</h2>
@@ -209,8 +213,8 @@ export function CampCareerScoreHero({
   ]
 
   return (
-    <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
-      <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} />
+    <section className={embedded ? "" : "mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8"} aria-labelledby="career-heading">
+      {showHeader ? <EntityPageHeader title={careerName} titleId="career-heading" subtitle={insight.country.name} /> : null}
 
       <div className="mt-8 border-t border-campcareer-border pt-6">
         <Score total={score.total} verdict={verdictLabel[score.verdict]} dimensions={dimensions} outOfLabel={locale === "ko" ? "100점 만점" : "out of 100"} />

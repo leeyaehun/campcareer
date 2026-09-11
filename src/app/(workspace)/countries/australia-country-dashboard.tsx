@@ -64,7 +64,7 @@ function MetricCard({
 
   if (href) {
     return (
-      <Link href={href} className={cn(className, "block hover:border-[#c9d7f5] hover:shadow-sm")}>
+      <Link href={href} prefetch={false} className={cn(className, "block hover:border-[#c9d7f5] hover:shadow-sm")}>
         {content}
       </Link>
     )
@@ -200,6 +200,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
                       <Link
                         key={city}
                         href={href}
+                        prefetch={false}
                         className="rounded-md border border-[#bfcff0] bg-[#eef4ff] px-2.5 py-1 text-[12px] font-semibold text-[#2563eb] transition hover:border-[#2563eb] hover:bg-white"
                       >
                         {city}
@@ -220,6 +221,7 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
           <div className="border-t border-[#f0efec] px-5 py-4">
             <Link
               href="/cities/au/compare"
+              prefetch={false}
               className="text-[11.5px] font-semibold text-[#3e7a2e] hover:underline"
             >
               Compare Sydney vs Melbourne →

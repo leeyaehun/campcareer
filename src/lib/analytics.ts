@@ -1,7 +1,5 @@
 "use client"
 
-import { track as vercelTrack } from "@vercel/analytics"
-
 type EventValue = string | number | boolean | undefined
 
 const ALLOWED_EVENTS = new Set([
@@ -46,7 +44,9 @@ export function track(eventName: string, params?: Record<string, EventValue>) {
       .map(([key, value]) => [key, typeof value === "string" ? value.slice(0, 80) : value]),
   ) as Record<string, string | number | boolean>
 
-  vercelTrack(eventName, properties)
+  void import("@vercel/analytics")
+    .then(({ track: vercelTrack }) => vercelTrack(eventName, properties))
+    .catch(() => undefined)
 }
 
 function analyticsConsentGranted() {

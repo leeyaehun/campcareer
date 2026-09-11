@@ -4,10 +4,16 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
-  new URL("../supabase/migrations/20260808205000_australia_environmental_engineer_profile.sql", import.meta.url),
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+
+const migration = normalizeMigrationSql(readFileSync(
+  new URL("../supabase/migrations/20260808205624_australia_environmental_engineer_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Environmental Engineer maps exactly to OSCA 243935 and legacy ANZSCO 233915", () => {
   const career = getCanonicalCareer("environmental-engineer")
@@ -19,7 +25,7 @@ test("Australia Environmental Engineer maps exactly to OSCA 243935 and legacy AN
   assert.ok(editorial)
   assert.ok(australia)
   assert.ok(editorial.tasks.length >= 6)
-  assert.match(migration, /Exact current occupation: OSCA 243935 Environmental Engineer/)
+  assert.match(migration, /Current OSCA 243935 Environmental Engineer/)
   assert.match(migration, /'AU:environmental-engineer'/)
   assert.match(migration, /'OSCA', '2024 v1\.0', '2439'/)
   assert.match(migration, /'243935', 'Environmental Engineer', 'ANZSCO', '2022', '233915'/)
@@ -81,8 +87,8 @@ test("Australia Environmental Engineer stores shortage in all eight regions", ()
 test("Australia Environmental Engineer links verified RMIT study routes without generated IDs", () => {
   assert.match(migration, /course_code = '110998M'/)
   assert.match(migration, /course_code = '087983C'/)
-  assert.match(migration, /'au-program:' \|\| id::text, 'direct'/)
-  assert.match(migration, /'au-program:' \|\| id::text, 'graduate_entry'/)
+  assert.match(migration, /'au-program:'\s*\|\|\s*id::text,\s*'direct'/)
+  assert.match(migration, /'au-program:'\s*\|\|\s*id::text,\s*'graduate_entry'/)
   assert.match(migration, /RMIT — Bachelor of Engineering \(Environmental Engineering\) \(Honours\)/)
   assert.match(migration, /RMIT — Master of Engineering \(Environmental Engineering\)/)
   assert.match(migration, /official_url_status = 'verified'/)

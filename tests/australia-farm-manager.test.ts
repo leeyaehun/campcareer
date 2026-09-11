@@ -4,7 +4,12 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(new URL("../supabase/migrations/20260809133000_australia_farm_manager_profile.sql", import.meta.url), "utf8")
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+const migration = normalizeMigrationSql(readFileSync(new URL("../supabase/migrations/20260809102844_australia_farm_manager_profile.sql", import.meta.url), "utf8"))
 
 test("Australia Farm Manager is a production-specific umbrella rather than a fake six-digit occupation", () => {
   const career = getCanonicalCareer("farm-manager")
@@ -12,7 +17,7 @@ test("Australia Farm Manager is a production-specific umbrella rather than a fak
   assert.ok(career)
   assert.equal(career.categoryId, "environment")
   assert.ok(editorial)
-  assert.match(migration, /No generic six-digit OSCA Farm Manager exists/i)
+  assert.match(migration, /no generic current six-digit Farm Manager occupation/i)
   assert.match(editorial.overview, /classified by the type of production/i)
 })
 

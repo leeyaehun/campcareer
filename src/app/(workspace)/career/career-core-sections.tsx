@@ -337,7 +337,7 @@ export function CareerCoreSections({
         />
         <div className="mt-7 divide-y divide-campcareer-border border-y border-campcareer-border">
           {evidence.map((row) => (
-            <div key={row.label} className="grid gap-2 py-5 sm:grid-cols-[9rem_1fr] sm:gap-6">
+            <div key={row.label} className="grid gap-2 py-5 md:grid-cols-[9rem_minmax(0,1fr)] md:gap-6">
               <div className="flex items-baseline gap-2">
                 <p className="text-sm font-semibold text-campcareer-ink">{row.label}</p>
                 {row.score != null && <span className="text-sm font-bold tabular-nums text-brand">{row.score}</span>}
@@ -349,7 +349,7 @@ export function CareerCoreSections({
         {sources.length > 0 && (
           <div className="mt-7">
             <p className="text-xs font-semibold text-campcareer-muted">{tr(locale, "주요 출처", "Key sources")}</p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="mt-3 grid gap-2 md:grid-cols-2">
               {sources.map((source) => <ResourceRow key={source.key} resource={source} />)}
             </div>
           </div>
@@ -364,7 +364,7 @@ export function CareerCoreSections({
         />
         <ol className="mt-7 divide-y divide-campcareer-border border-y border-campcareer-border">
           {steps.map((step, index) => (
-            <li key={`${step.title}-${index}`} className="grid gap-3 py-5 sm:grid-cols-[3rem_1fr_auto] sm:items-start sm:gap-5">
+            <li key={`${step.title}-${index}`} className="grid gap-3 py-5 md:grid-cols-[3rem_minmax(0,1fr)_auto] md:items-start md:gap-5">
               <span className="text-sm font-bold tabular-nums text-brand">{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <h3 className="text-base font-semibold text-campcareer-ink">{step.title}</h3>
@@ -384,7 +384,7 @@ export function CareerCoreSections({
         />
         {study.length > 0 ? (
           <div className="mt-7">
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 md:grid-cols-2">
               {study.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<GraduationCap className="size-4" />} />)}
             </div>
             <Link href={programsHref} className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand transition hover:opacity-80">
@@ -410,7 +410,7 @@ export function CareerCoreSections({
           description={tr(locale, "점수와 경로를 확인한 뒤, 실제 고용주와 채용 공고에서 요구 조건을 검증하세요.", "After reviewing the score and path, validate the requirements in real employer and job listings.")}
         />
         {jobs.length > 0 ? (
-          <div className="mt-7 grid gap-3 sm:grid-cols-2">
+          <div className="mt-7 grid gap-3 md:grid-cols-2">
             {jobs.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<BriefcaseBusiness className="size-4" />} />)}
           </div>
         ) : (

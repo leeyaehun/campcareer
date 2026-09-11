@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { Bookmark, Check, Scale } from "lucide-react"
 import { localizePath } from "@/lib/i18n/config"
-import { createClient } from "@/lib/supabase-client"
+import type { SupabaseClient } from "@supabase/supabase-js"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 import { buildCareerResultHref, getCareerResultCompareHref } from "./career-result-context"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -13,7 +13,7 @@ type Locale = "en" | "ko"
 type AuthState = "loading" | "signed-out" | "signed-in"
 
 export function CareerResultActions({ query, locale }: { query: OverviewSearchValues; locale: Locale }) {
-  const supabase = useMemo(() => createClient(), [])
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null)
   const [authState, setAuthState] = useState<AuthState>("loading")
   const [userId, setUserId] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
@@ -34,6 +34,30 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
   }, [])
 
   useEffect(() => {
+    let active = true
+    let timer: number | undefined
+
+    const initialize = async () => {
+      const { createClient } = await import("@/lib/supabase-client")
+      if (!active) return
+      setSupabase(createClient())
+    }
+    const schedule = () => {
+      timer = window.setTimeout(() => void initialize(), 0)
+    }
+
+    if (document.readyState === "complete") schedule()
+    else window.addEventListener("load", schedule, { once: true })
+
+    return () => {
+      active = false
+      window.removeEventListener("load", schedule)
+      if (timer !== undefined) window.clearTimeout(timer)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return
     let active = true
     void supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!active) return
@@ -59,7 +83,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
   }, [query.country, query.occupation, supabase])
 
   async function toggleSaved() {
-    if (!userId || saveBusy) return
+    if (!supabase || !userId || saveBusy) return
     setSaveBusy(true)
     setSaveError(false)
 
@@ -98,7 +122,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
     <div className="mt-6 border-t border-campcareer-border pt-5" aria-label={locale === "ko" ? "보조 작업" : "Secondary career actions"}>
       <div className="flex flex-wrap items-center gap-2">
         {authState === "signed-out" ? (
-          <Link href={signedOutSaveHref} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+          <Link href={signedOutSaveHref} prefetch={false} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Bookmark className="size-4" /> {locale === "ko" ? "저장" : "Save"}
           </Link>
         ) : (
@@ -115,7 +139,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
         )}
 
         {compareHref ? (
-          <Link href={localizePath(compareHref, locale)} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+          <Link href={localizePath(compareHref, locale)} prefetch={false} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Scale className="size-4" /> {locale === "ko" ? "비교" : "Compare"}
           </Link>
         ) : null}

@@ -1,5 +1,0 @@
--- Migration-history marker.
--- The Canada identity foundation was applied to production through the Supabase
--- connector under version 20260808183830. The canonical migration logic remains
--- in 20260808113500_ca_institution_identity_foundation.sql for fresh databases.
--- This file is intentionally a no-op so local and remote migration histories align.

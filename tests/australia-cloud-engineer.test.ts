@@ -4,10 +4,16 @@ import test from "node:test"
 import { getCanonicalCareer } from "../src/data/career-comparison-catalog"
 import { getOccupationEditorial } from "../src/data/occupation-editorial"
 
-const migration = readFileSync(
-  new URL("../supabase/migrations/20260808140000_australia_cloud_engineer_profile.sql", import.meta.url),
+const normalizeMigrationSql = (sql: string) => {
+  const normalized = sql.replace(/\s+/g, " ").replace(/,\s*/g, ", ").replace(/\s*=\s*/g, " = ").trim()
+  return `${sql}\n${normalized}`
+}
+
+
+const migration = normalizeMigrationSql(readFileSync(
+  new URL("../supabase/migrations/20260808125154_australia_cloud_engineer_profile.sql", import.meta.url),
   "utf8",
-)
+))
 
 test("Australia Cloud Engineer maps exactly to OSCA 273331", () => {
   const career = getCanonicalCareer("cloud-engineer")

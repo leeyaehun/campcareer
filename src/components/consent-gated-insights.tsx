@@ -1,8 +1,16 @@
 "use client"
 
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
+
+const Analytics = dynamic(
+  () => import("@vercel/analytics/react").then((module) => module.Analytics),
+  { ssr: false },
+)
+const SpeedInsights = dynamic(
+  () => import("@vercel/speed-insights/next").then((module) => module.SpeedInsights),
+  { ssr: false },
+)
 
 const CONSENT_COOKIE = "cc_analytics_consent=granted"
 

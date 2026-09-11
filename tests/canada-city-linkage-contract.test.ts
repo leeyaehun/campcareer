@@ -33,11 +33,12 @@ test("Canada city UI keeps published program coverage separate from source-backe
 
 test("Canada institution read model intentionally avoids inventing public Canadian programme detail routes", () => {
   const migration = readFileSync(
-    "supabase/migrations/20260807183500_program_institution_bidirectional_links.sql",
+    "supabase/migrations/20260808083700_program_institution_bidirectional_links.sql",
     "utf8",
   )
 
-  assert.ok(migration.includes("Canada keeps canonical program previews but no public program URL"))
+  assert.ok(migration.includes("i.country_code in ('AU', 'CA')"))
   assert.ok(migration.includes("programme_preview"))
   assert.ok(migration.includes("legacyProgramId"))
+  assert.ok(!migration.includes("programUrl"))
 })
