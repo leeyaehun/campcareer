@@ -32,7 +32,12 @@ jobs:
           name: unit-test-log
           path: test-results.log
           if-no-files-found: ignore
-      - run: npm run build
+      - name: Build production application
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.CI_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.CI_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CI_SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run build
       - name: Install critical browser engines
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Verify CI E2E environment
