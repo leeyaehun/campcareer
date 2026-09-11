@@ -2,6 +2,12 @@ import { LEGACY_SEO_REDIRECTS } from "./src/lib/seo-routes.mjs"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Next 16.3 inlines the small Tailwind stylesheet in production so first-time
+  // visitors avoid an extra render-blocking CSS round trip. Phase 5 CI and the
+  // Lighthouse audit verify this experimental optimization before release.
+  experimental: {
+    inlineCss: true,
+  },
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
     remotePatterns: [
