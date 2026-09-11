@@ -56,7 +56,7 @@ test("Australia Early Childhood Teacher links verified Deakin initial-teacher-ed
   assert.ok(australia)
   assert.match(migration, /deakin-university' and course_code = '102806B'/)
   assert.match(migration, /deakin-university' and course_code = '114296J'/)
-  assert.match(migration, /'au-program:' \|\| id::text/)
+  assert.match(migration, /'au-program:'\s*\|\|\s*id::text/)
   assert.doesNotMatch(migration, /'au-program:3952'/)
   assert.doesNotMatch(migration, /'au-program:3992'/)
   assert.match(australia.entryPathway, /ACECQA/i)
