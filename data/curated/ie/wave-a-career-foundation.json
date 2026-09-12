@@ -80,7 +80,10 @@
           "maxScore": 10,
           "directness": "direct",
           "evidenceStatus": "derived",
-          "source": "solasNsb2025"
+          "source": "solasNsb2025",
+          "normalizedValue": 8.7,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -88,7 +91,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Broader ICT professionals forecast."
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -165,7 +171,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses ICT professionals n.e.c. growth."
+          "proxyReason": "Uses ICT professionals n.e.c. growth.",
+          "normalizedValue": 5.6,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -173,7 +182,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Broader ICT professionals forecast."
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -250,7 +262,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses the broader ICT professionals n.e.c. growth series."
+          "proxyReason": "Uses the broader ICT professionals n.e.c. growth series.",
+          "normalizedValue": 5.6,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -258,7 +273,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Broader ICT professionals forecast."
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -335,7 +353,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses the combined civil engineer/construction project manager growth series."
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series.",
+          "normalizedValue": 1.2,
+          "scoreValue": 8,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -343,7 +364,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Uses broader Science & engineering professionals forecast."
+          "proxyReason": "Uses broader Science & engineering professionals forecast.",
+          "normalizedValue": -0.4018,
+          "scoreValue": 4,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -420,7 +444,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses the combined civil engineer/construction project manager growth series."
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series.",
+          "normalizedValue": 1.2,
+          "scoreValue": 8,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -428,7 +455,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Production & specialised services managers explicitly includes managers in construction."
+          "proxyReason": "Production & specialised services managers explicitly includes managers in construction.",
+          "normalizedValue": 1.4833,
+          "scoreValue": 8.71,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -500,7 +530,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses accountants & tax experts group growth."
+          "proxyReason": "Uses accountants & tax experts group growth.",
+          "normalizedValue": 3.5,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -508,7 +541,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Uses broader Business & administration professionals forecast."
+          "proxyReason": "Uses broader Business & administration professionals forecast.",
+          "normalizedValue": 0.4847,
+          "scoreValue": 6.21,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "normalized",
@@ -580,7 +616,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses Architects & town planners group growth."
+          "proxyReason": "Uses Architects & town planners group growth.",
+          "normalizedValue": 0.8,
+          "scoreValue": 7,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -588,7 +627,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Uses broader Science & engineering professionals forecast."
+          "proxyReason": "Uses broader Science & engineering professionals forecast.",
+          "normalizedValue": -0.4018,
+          "scoreValue": 4,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "pending",
@@ -653,7 +695,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
-          "proxyReason": "Uses broader other-healthcare-professionals growth."
+          "proxyReason": "Uses broader other-healthcare-professionals growth.",
+          "normalizedValue": 1.8,
+          "scoreValue": 9.5,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "projected_growth": {
           "status": "normalized",
@@ -661,7 +706,10 @@
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasForecast2023",
-          "proxyReason": "Uses broader Health professionals forecast and retains the SOLAS caveat."
+          "proxyReason": "Uses broader Health professionals forecast and retains the SOLAS caveat.",
+          "normalizedValue": -1.1693,
+          "scoreValue": 2.08,
+          "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
           "status": "pending",
