@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 
-import { buildIrelandWaveABackfillSql } from "../scripts/generate-ie-wave-a-foundation-backfill"
+import { buildIrelandWaveABackfillSql } from "../src/lib/career-data-foundation/ie-wave-a-foundation-backfill-generator"
 
 const sql = buildIrelandWaveABackfillSql()
 const migrationSql = readFileSync(
