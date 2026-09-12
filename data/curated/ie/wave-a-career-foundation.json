@@ -169,6 +169,13 @@
       "url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/",
       "sourceType": "official_primary",
       "note": "Occupation-level immigration context only. Visa/work-right evidence is excluded from CampCareer Score v1."
+    },
+    "csoSoc2010": {
+      "authority": "Central Statistics Office Ireland",
+      "title": "SOC 2010 detailed occupation classification",
+      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-cp11eoi/cp11eoi/bgn/",
+      "sourceType": "official_primary",
+      "note": "Official Irish statistical occupation-classification reference used to anchor the canonical Ireland SOC mappings."
     }
   },
   "careers": [
@@ -180,7 +187,10 @@
         "code": "2136",
         "title": "Programmers and software development professionals",
         "relation": "exact",
-        "quality": "high"
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer software-developer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
       },
       "labourMarket": {
         "employed2024": 54800,
@@ -313,7 +323,10 @@
         "code": "2139",
         "title": "Information technology and telecommunications professionals n.e.c. — cyber-security analyst scope",
         "relation": "narrower",
-        "quality": "medium"
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer cybersecurity-analyst intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
       },
       "labourMarket": {
         "employed2024": 25200,
@@ -448,7 +461,10 @@
         "code": "2135",
         "title": "IT business analysts, architects and systems designers — data engineering / architecture scope",
         "relation": "narrower",
-        "quality": "medium"
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer data-engineer intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
       },
       "labourMarket": {
         "employed2024": 25200,
@@ -583,7 +599,10 @@
         "code": "2121",
         "title": "Civil engineers",
         "relation": "exact",
-        "quality": "high"
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer civil-engineer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
       },
       "labourMarket": {
         "employed2024": 22400,
@@ -718,7 +737,10 @@
         "code": "2436",
         "title": "Construction project managers and related professionals",
         "relation": "exact",
-        "quality": "high"
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer construction-manager is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
       },
       "labourMarket": {
         "employed2024": 22400,
@@ -853,7 +875,10 @@
         "code": "2421",
         "title": "Chartered and certified accountants — accountant scope",
         "relation": "narrower",
-        "quality": "medium"
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer accountant intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
       },
       "labourMarket": {
         "employed2024": 56600,
@@ -973,7 +998,10 @@
         "code": "2431",
         "title": "Architects and town planners — Architect",
         "relation": "narrower",
-        "quality": "medium"
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer architect intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
       },
       "labourMarket": {
         "employed2024": 13900,
@@ -1092,7 +1120,10 @@
         "code": "2217",
         "title": "Radiographers — diagnostic and therapeutic radiography scope",
         "relation": "exact",
-        "quality": "high"
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer radiographer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
       },
       "labourMarket": {
         "employed2024": 29200,
