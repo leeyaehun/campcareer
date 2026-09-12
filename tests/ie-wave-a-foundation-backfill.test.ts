@@ -10,8 +10,8 @@ test("Ireland Wave A backfill is transactional and non-activating", () => {
   assert.match(sql, /\nbegin;\n/)
   assert.match(sql, /\ncommit;$/)
   assert.equal((sql.match(/insert into public\.career_foundation_profiles/g) ?? []).length, 8)
-  assert.match(sql, /decision_ready,false/)
-  assert.doesNotMatch(sql, /decision_ready,true/)
+  assert.equal((sql.match(/'EUR',false,/g) ?? []).length, 8)
+  assert.doesNotMatch(sql, /'EUR',true,/)
   assert.match(sql, /Ireland Wave A backfill unexpectedly activated decision_ready/)
 })
 
@@ -70,4 +70,12 @@ test("generated backfill contains nine component rows per Ireland Career and no 
 test("generated backfill uses formula v4 and never changes the app public score allowlist", () => {
   assert.match(sql, /career-opportunity-v4-foundation/)
   assert.doesNotMatch(sql, /SCORE_READY_CAREER_PROFILES/)
+})
+
+
+test("generated raw observations preserve source reference periods instead of using the review date as the statistic period", () => {
+  assert.match(sql, /employment_momentum','2019-2024'/)
+  assert.match(sql, /projected_growth','2021-2035'/)
+  assert.match(sql, /relative_salary','2022'/)
+  assert.match(sql, /vacancy_intensity','2024-2025'/)
 })
