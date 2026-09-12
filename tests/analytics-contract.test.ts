@@ -13,6 +13,8 @@ import { entityTypeForPath, nextDecisionSessionState } from "../src/components/a
 test("Phase 6 event names remain stable lower_snake_case identifiers", () => {
   assert.ok(CORE_ANALYTICS_EVENTS.includes("search"))
   assert.ok(CORE_ANALYTICS_EVENTS.includes("compare_view"))
+  assert.ok(CORE_ANALYTICS_EVENTS.includes("compare_complete"))
+  assert.ok(CORE_ANALYTICS_EVENTS.includes("compare_share"))
   assert.ok(CORE_ANALYTICS_EVENTS.includes("decision_session"))
   for (const eventName of CORE_ANALYTICS_EVENTS) assert.match(eventName, /^[a-z]+(?:_[a-z]+)*$/)
 })
