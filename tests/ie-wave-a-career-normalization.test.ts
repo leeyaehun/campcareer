@@ -200,8 +200,16 @@ test("industry diversity uses a conservative HHI upper bound from published SOLA
 
   for (const career of data.careers) {
     const derived = conservativeIndustryDiversityFromPublishedShares(groupShares[career.careerId])
-    assert.ok(derived, career.careerId)
     const diversity = career.components.industry_diversity
+
+    if (career.careerId === "accountant") {
+      assert.equal(derived, null)
+      assert.equal(diversity?.status, "pending")
+      assert.ok(diversity?.reason?.includes("70%"))
+      continue
+    }
+
+    assert.ok(derived, career.careerId)
     assert.equal(diversity?.status, "normalized", career.careerId)
     assert.equal(diversity?.normalizedValue, derived.hhiUpperBound, career.careerId)
     assert.equal(diversity?.scoreValue, derived.scoreValue, career.careerId)
