@@ -6,6 +6,7 @@ import {
   conservativeIndustryDiversityFromPublishedShares,
   normalizeEmploymentMomentum,
   normalizeProjectedGrowth,
+  stagedIrelandCampCareerScore,
 } from "../src/lib/career-data-foundation/ireland-wave-a-normalization"
 
 type Component = {
@@ -267,4 +268,35 @@ test("regulated Wave A Careers retain materially lower Entry Burden scores", () 
   assert.equal(radiographer?.components.entry_burden?.scoreValue, 1)
   assert.ok(architect?.components.entry_burden?.reason?.includes("protected title"))
   assert.ok(radiographer?.components.entry_burden?.reason?.includes("CORU"))
+})
+
+
+test("only fully normalized Wave A Careers receive a staged CampCareer Score candidate", () => {
+  const expected: Record<string, number | null> = {
+    "software-developer": 78,
+    "cybersecurity-analyst": 78,
+    "data-engineer": 78,
+    "civil-engineer": 74,
+    "construction-manager": 72,
+    accountant: null,
+    architect: null,
+    radiographer: null,
+  }
+
+  for (const career of data.careers) {
+    const score = stagedIrelandCampCareerScore(career.components)
+    assert.equal(score?.total ?? null, expected[career.careerId], career.careerId)
+
+    if (score) {
+      assert.equal(score.total, score.demand * 4 + score.pay * 3 + score.entry * 3, career.careerId)
+    }
+  }
+})
+
+test("incomplete Careers stay unscored instead of converting pending evidence to zero", () => {
+  for (const careerId of ["accountant", "architect", "radiographer"]) {
+    const career = data.careers.find((item) => item.careerId === careerId)
+    assert.ok(career)
+    assert.equal(stagedIrelandCampCareerScore(career.components), null)
+  }
 })
