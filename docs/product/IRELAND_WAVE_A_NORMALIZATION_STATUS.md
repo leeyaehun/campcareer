@@ -14,12 +14,12 @@ Current staged Career Decision Ready candidates:
 3. Data Engineer
 4. Civil Engineer
 5. Construction Manager
+6. Radiographer
 
 Current intentionally incomplete Careers:
 
-- Accountant — shortage signal and industry-diversity coverage remain incomplete.
-- Architect — shortage signal and vacancy-intensity evidence remain incomplete.
-- Radiographer — shortage evidence remains explicitly inconclusive.
+- Accountant — industry-diversity coverage remains incomplete. Current labour-market evidence is normalized as **pressure**, not a confirmed shortage.
+- Architect — shortage signal and vacancy-intensity evidence remain incomplete. Quantity Surveyor evidence is not borrowed.
 
 ## What is normalized
 
@@ -52,7 +52,7 @@ public readiness allowlist.
 | Construction Manager | 6 | 10 | 6 | 72 |
 | Accountant | — | 10 | 8 | Not ready |
 | Architect | — | 10 | 3 | Not ready |
-| Radiographer | — | 10 | 3 | Not ready |
+| Radiographer | 3 | 10 | 3 | 51 |
 
 A missing component produces no total. It is never converted to zero.
 
@@ -95,6 +95,9 @@ This currently applies to:
 
 Radiographer receives only `3 / 15` because it is named in the 2024 survey but
 not repeated in the 2025 health summary.
+
+Radiographer receives only `3 / 15` vacancy intensity because it is named in
+the 2024 survey but not repeated in the 2025 health summary.
 
 Architect remains unscored: reviewed difficult-to-fill mentions in the
 relevant construction group referred to Quantity Surveyors, and that evidence
@@ -152,8 +155,10 @@ Data backfill and public activation should not be the same irreversible step.
 
 **NORMALIZATION STAGING SUBSTANTIALLY COMPLETE — PRODUCTION BACKFILL NOT YET APPLIED.**
 
-The evidence work has deliberately stopped short of inventing shortage or
-vacancy classifications for Accountant, Architect, and Radiographer.
+The evidence work deliberately distinguishes **pressure** from **shortage**.
+Accountant and Radiographer use 5/20 pressure signals where SOLAS documents
+recruitment/demand pressure without a confirmed shortage designation.
+Architect remains incomplete rather than borrowing Quantity Surveyor evidence.
 
 The next engineering task is to prepare the data-backfill migration package
 from this staging dataset, then validate it before any public activation.
