@@ -13,6 +13,9 @@ test("Ireland Wave A backfill is transactional and non-activating", () => {
   assert.equal((sql.match(/'EUR',false,/g) ?? []).length, 8)
   assert.doesNotMatch(sql, /'EUR',true,/)
   assert.match(sql, /Ireland Wave A backfill unexpectedly activated decision_ready/)
+  assert.match(sql, /expected 8 foundation profiles/)
+  assert.match(sql, /expected 6 evidence-complete score rows/)
+  assert.match(sql, /unexpectedly produced % publish-ready rows/)
 })
 
 test("Ireland Wave A backfill creates one mapping and one nine-component snapshot per Career", () => {
