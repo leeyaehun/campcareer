@@ -11,6 +11,8 @@ import {
 } from "lucide-react"
 import { COUNTRY_INSTITUTION_TYPE_LABELS } from "@/data/australia-occupation-country-profile"
 import { IRELAND_OCCUPATION_COUNTRY_PROFILE } from "@/data/ireland-occupation-country-profile"
+import { IRELAND_VERIFIED_INSTITUTIONS } from "@/lib/institutions/ireland-institution-contract"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { formatMoneyRange, formatRankingValue, type CountryMetrics } from "@/lib/workspace/country-metric-contract"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
@@ -79,8 +81,8 @@ export function IrelandCountryDashboard({ metrics }: { metrics: CountryMetrics }
         </section>
       </div>
       <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5">
-        <div className="flex items-center gap-2 text-[#6d4fc4]"><Building2 className="size-4" /><h2 className="text-[14.5px] font-semibold">Major universities and colleges</h2></div>
-        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">{profile.majorInstitutions.map((institution) => <div key={institution.name} className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-3"><p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">{institution.name}</p><p className="mt-1 text-[10.5px] text-[#9a978f]">{COUNTRY_INSTITUTION_TYPE_LABELS[institution.type]} · {institution.location}</p></div>)}</div>
+        <div className="flex flex-wrap items-center gap-2 text-[#6d4fc4]"><Building2 className="size-4" /><h2 className="text-[14.5px] font-semibold">Verified universities and colleges</h2><Link href="/institutions/ie" className="ml-auto text-[11px] font-semibold text-[#6d4fc4] hover:underline">View all {IRELAND_VERIFIED_INSTITUTIONS.length}</Link></div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{IRELAND_VERIFIED_INSTITUTIONS.map((institution) => <Link key={institution.slug} href={institutionDetailPath("IE", institution.slug)} className="rounded-lg border border-[#f0efec] bg-[#fafaf8] px-3 py-3 transition hover:border-[#d8d0ed] hover:bg-[#f8f6fc]"><p className="text-[12px] font-semibold leading-4 text-[#1b1b1b]">{institution.name}</p><p className="mt-1 text-[10.5px] text-[#9a978f]">{COUNTRY_INSTITUTION_TYPE_LABELS[institution.kind]} · {institution.city}</p></Link>)}</div>
       </section>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <section className="min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
