@@ -213,7 +213,8 @@
           "directness": "direct",
           "evidenceStatus": "direct_verified",
           "source": "solasNsb2025",
-          "explanation": "SOLAS 2025 lists software developers/engineers as a national shortage."
+          "explanation": "SOLAS 2025 lists software developers/engineers as a national shortage.",
+          "scoreValue": 12
         },
         "employment_momentum": {
           "status": "normalized",
@@ -350,7 +351,8 @@
           "directness": "proxy",
           "evidenceStatus": "proxy",
           "source": "solasNsb2025",
-          "proxyReason": "SOLAS shortage wording is IT analysts/engineers and difficult-to-fill evidence includes cyber/security specialisms."
+          "proxyReason": "SOLAS shortage wording is IT analysts/engineers and difficult-to-fill evidence includes cyber/security specialisms.",
+          "scoreValue": 12
         },
         "employment_momentum": {
           "status": "normalized",
@@ -488,7 +490,8 @@
           "directness": "proxy",
           "evidenceStatus": "proxy",
           "source": "solasNsb2025",
-          "proxyReason": "SOLAS identifies IT analysts/engineers as shortage roles; Data Engineer is a constrained scope within the mapped official group."
+          "proxyReason": "SOLAS identifies IT analysts/engineers as shortage roles; Data Engineer is a constrained scope within the mapped official group.",
+          "scoreValue": 12
         },
         "employment_momentum": {
           "status": "normalized",
@@ -626,7 +629,8 @@
           "directness": "proxy",
           "evidenceStatus": "proxy",
           "source": "solasNsb2025",
-          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage."
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage.",
+          "scoreValue": 12
         },
         "employment_momentum": {
           "status": "normalized",
@@ -764,7 +768,8 @@
           "directness": "proxy",
           "evidenceStatus": "proxy",
           "source": "solasNsb2025",
-          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage."
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage.",
+          "scoreValue": 12
         },
         "employment_momentum": {
           "status": "normalized",
