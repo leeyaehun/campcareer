@@ -35,7 +35,7 @@ function safeWebsiteUrl(value: string | null) {
 }
 function usesLocationLanguage(countryCode: InstitutionMvpCountryCode) { return countryCode !== "AU" }
 function hasPendingProgrammeCatalog(countryCode: InstitutionMvpCountryCode) {
-  return countryCode === "NL" || countryCode === "NZ" || countryCode === "SG" || countryCode === "DE"
+  return countryCode === "IE" || countryCode === "NL" || countryCode === "NZ" || countryCode === "SG" || countryCode === "DE"
     || countryCode === "FR" || countryCode === "ES" || countryCode === "BE" || countryCode === "CH"
     || countryCode === "SE" || countryCode === "DK" || countryCode === "FI" || countryCode === "NO"
     || countryCode === "JP" || countryCode === "KR" || countryCode === "AE" || countryCode === "US"
