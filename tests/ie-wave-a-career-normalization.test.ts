@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 
 import {
+  conservativeIndustryDiversityFromPublishedShares,
   normalizeEmploymentMomentum,
   normalizeProjectedGrowth,
 } from "../src/lib/career-data-foundation/ireland-wave-a-normalization"
@@ -185,8 +186,40 @@ test("official CSO Pay evidence is normalized only as a broad Professional-occup
   }
 })
 
-test("no Wave A Career is falsely declared score-ready while Industry Diversity remains pending", () => {
-  for (const career of data.careers) {
-    assert.equal(career.components.industry_diversity?.status, "pending", career.careerId)
+test("industry diversity uses a conservative HHI upper bound from published SOLAS sector shares", () => {
+  const groupShares: Record<string, number[]> = {
+    "software-developer": [65, 9, 8],
+    "cybersecurity-analyst": [65, 9, 8],
+    "data-engineer": [65, 9, 8],
+    "civil-engineer": [73, 13, 5],
+    "construction-manager": [73, 13, 5],
+    accountant: [31, 22, 9, 8],
+    architect: [73, 13, 5],
+    radiographer: [87, 7],
   }
+
+  for (const career of data.careers) {
+    const derived = conservativeIndustryDiversityFromPublishedShares(groupShares[career.careerId])
+    assert.ok(derived, career.careerId)
+    const diversity = career.components.industry_diversity
+    assert.equal(diversity?.status, "normalized", career.careerId)
+    assert.equal(diversity?.normalizedValue, derived.hhiUpperBound, career.careerId)
+    assert.equal(diversity?.scoreValue, derived.scoreValue, career.careerId)
+    assert.equal(diversity?.directness, "proxy", career.careerId)
+    assert.ok(diversity?.proxyReason?.includes("broader"), career.careerId)
+  }
+})
+
+test("radiographer vacancy evidence stays conservative without a 2025 persistence bonus", () => {
+  const career = data.careers.find((item) => item.careerId === "radiographer")
+  assert.ok(career)
+  assert.equal(career.components.vacancy_intensity?.status, "normalized")
+  assert.equal(career.components.vacancy_intensity?.scoreValue, 3)
+  assert.ok(career.components.vacancy_intensity?.reason?.includes("3/15"))
+})
+
+test("Architect remains explicitly incomplete where the RAS evidence referred to quantity surveyors", () => {
+  const career = data.careers.find((item) => item.careerId === "architect")
+  assert.ok(career)
+  assert.equal(career.components.vacancy_intensity?.status, "pending")
 })
