@@ -173,10 +173,20 @@ test("2025 difficult-to-fill evidence only unlocks conservative vacancy fallback
   }
 })
 
-test("no Wave A Career is falsely declared score-ready while Pay and Industry Diversity remain pending", () => {
+test("official CSO Pay evidence is normalized only as a broad Professional-occupation proxy", () => {
   for (const career of data.careers) {
-    for (const componentKey of ["relative_salary", "industry_diversity"]) {
-      assert.equal(career.components[componentKey]?.status, "pending", `${career.careerId} ${componentKey}`)
-    }
+    const pay = career.components.relative_salary
+    assert.equal(pay?.status, "normalized", career.careerId)
+    assert.equal(pay?.normalizedValue, 1.6832, career.careerId)
+    assert.equal(pay?.scoreValue, 10, career.careerId)
+    assert.equal(pay?.directness, "proxy", career.careerId)
+    assert.ok(pay?.proxyReason?.includes("Professional occupations"), career.careerId)
+    assert.ok(pay?.reason?.includes("must not be displayed as an exact Career salary"), career.careerId)
+  }
+})
+
+test("no Wave A Career is falsely declared score-ready while Industry Diversity remains pending", () => {
+  for (const career of data.careers) {
+    assert.equal(career.components.industry_diversity?.status, "pending", career.careerId)
   }
 })
