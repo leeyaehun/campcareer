@@ -24,7 +24,7 @@ function json(body: Record<string, unknown>, status = 200) {
 
 function isLegacyFeedbackSchemaError(error: { code?: string; message?: string } | null) {
   if (!error) return false
-  return error.code === "42703" || error.code === "PGRST204" || /column.+feedback|schema cache/i.test(error.message ?? "")
+  return error.code === "42703" || error.code === "PGRST204" || /column.+(feedback|page_path|entity_type|entity_id|status)|schema cache/i.test(error.message ?? "")
 }
 
 async function removeUploadedScreenshot(
@@ -93,6 +93,7 @@ export async function POST(request: Request) {
     const verified = await verifyScreenshot(supabase, parsed.data.screenshot)
     const metadata: Record<string, unknown> = {
       schema_version: 2,
+      ...(parsed.data.context ? { page_context: parsed.data.context } : {}),
       ...(parsed.data.systemInfo ? { system_info: parsed.data.systemInfo } : {}),
       ...(verified.warning ? { screenshot_status: "not_attached" } : {}),
     }
@@ -108,6 +109,10 @@ export async function POST(request: Request) {
       screenshot_path: verified.screenshot?.reference.path ?? null,
       screenshot_content_type: verified.screenshot?.contentType ?? null,
       screenshot_size_bytes: verified.screenshot?.sizeBytes ?? null,
+      page_path: parsed.data.context?.pagePath ?? null,
+      entity_type: parsed.data.context?.entityType ?? null,
+      entity_id: parsed.data.context?.entityId ?? null,
+      status: "new",
       metadata,
     }
 

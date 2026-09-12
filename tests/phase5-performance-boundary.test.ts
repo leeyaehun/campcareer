@@ -7,6 +7,10 @@ const rootLayout = readFileSync("src/app/layout.tsx", "utf8")
 const lighthouseAudit = readFileSync("scripts/lighthouse-release-audit.mjs", "utf8")
 const analyticsConsent = readFileSync("src/components/analytics-consent.tsx", "utf8")
 const countryDashboard = readFileSync("src/app/(workspace)/countries/country-dashboard-shell.tsx", "utf8")
+const countrySearchControl = readFileSync(
+  "src/app/(workspace)/countries/country-search-control.tsx",
+  "utf8",
+)
 const careerFoundationRead = readFileSync("src/lib/career-data-foundation/read.ts", "utf8")
 
 test("global navigation defers the Supabase browser client until after initial load", () => {
@@ -15,8 +19,11 @@ test("global navigation defers the Supabase browser client until after initial l
   assert.match(topNav, /window\.addEventListener\(["']load["']/)
 })
 
-test("the global mono font is not preloaded on every route", () => {
-  assert.match(rootLayout, /geistMono\s*=\s*localFont\([\s\S]*?preload:\s*false/)
+test("the global mono font is defined without a next/font preload on every route", () => {
+  assert.doesNotMatch(rootLayout, /geistMono\s*=\s*localFont/)
+  const globals = readFileSync("src/app/globals.css", "utf8")
+  assert.match(globals, /@font-face[\s\S]*?font-family:\s*["']Geist Mono["']/)
+  assert.match(globals, /font-display:\s*swap/)
 })
 
 test("the Phase 5 Lighthouse audit preserves the representative route set and LCP budget", () => {
@@ -42,9 +49,10 @@ test("consent prompt is present in initial HTML and returning visitors are hidde
   assert.match(rootLayout, /dataset\.ccAnalyticsConsent\s*=\s*["']set["']/)
 })
 
-test("country hero exposes its LCP image with high browser fetch priority", () => {
-  assert.match(countryDashboard, /fetchPriority=["']high["']/)
+test("the country search keeps its option index out of the initial document", () => {
+  assert.doesNotMatch(countryDashboard, /fetchPriority=["']high["']/)
   assert.doesNotMatch(countryDashboard, /style=\{\{\s*backgroundImage:/)
+  assert.match(countrySearchControl, /import\(["']@\/lib\/workspace\/country-search-options-data["']\)/)
 })
 
 test("career foundation reads are deduplicated with primitive cache keys", () => {

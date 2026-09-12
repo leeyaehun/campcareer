@@ -98,6 +98,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...PUBLISHED_SE_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/se/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     ...PUBLISHED_DK_CITY_SLUGS.map((slug) => ({ url: `${SITE_URL}/cities/dk/${slug}`, lastModified, priority: 0.8, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/methodology`, lastModified, priority: 0.5, changeFrequency: "monthly" },
+    { url: `${SITE_URL}/sources`, lastModified, priority: 0.5, changeFrequency: "monthly" },
+    { url: `${SITE_URL}/data-policy`, lastModified: new Date("2026-09-11"), priority: 0.4, changeFrequency: "monthly" },
     ...methodologies.map((slug) => ({ url: `${SITE_URL}/methodology/${slug}`, lastModified, priority: 0.45, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/privacy`, lastModified, priority: 0.2, changeFrequency: "yearly" },
     { url: `${SITE_URL}/terms`, lastModified, priority: 0.2, changeFrequency: "yearly" },

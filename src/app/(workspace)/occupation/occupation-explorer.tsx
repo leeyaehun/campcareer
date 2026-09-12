@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { EmptyState } from "@/components/ui/status-state"
 import { FilterBar, FilterChip } from "@/components/ui/filter-bar"
 import { cn } from "@/lib/utils"
+import { trackAnalyticsEvent } from "@/lib/analytics"
 
 const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
 const CATEGORY_ICON = new Map([
@@ -219,6 +220,24 @@ export function OccupationExplorer({
     return [...map.entries()]
   }, [filtered])
 
+  // Search terms are user input. The shared boundary removes obvious PII and
+  // the debounce records the settled result set rather than every keystroke.
+  useEffect(() => {
+    if (!query.trim()) return
+    const timer = window.setTimeout(() => {
+      trackAnalyticsEvent({
+        name: "search",
+        params: {
+          search_location: "careers",
+          result_count: filtered.length,
+          ...(category !== "all" ? { entity_filter: category } : {}),
+          search_term: query,
+        },
+      })
+    }, 600)
+    return () => window.clearTimeout(timer)
+  }, [category, filtered.length, query])
+
   function updateCountry(code: string | null) {
     const params = new URLSearchParams(searchParams.toString())
     if (code) params.set("country", code)
@@ -251,6 +270,11 @@ export function OccupationExplorer({
   }
 
   function chooseCategory(categoryId: string) {
+    if (categoryId === "all" && category !== "all") {
+      trackAnalyticsEvent({ name: "filter_clear", params: { search_location: "careers", entity_filter: category } })
+    } else if (categoryId !== "all" && categoryId !== category) {
+      trackAnalyticsEvent({ name: "filter_apply", params: { search_location: "careers", entity_filter: categoryId } })
+    }
     setCategory(categoryId)
     setShowAllOccupations(true)
     setFiltersOpen(false)

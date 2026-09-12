@@ -22,12 +22,14 @@ export function CountrySearchControl({
 }: {
   routeCountry: { code: string; name: string; currency: string } | null
   initialQuery: string
-  options: CountrySearchOption[]
+  options?: CountrySearchOption[]
 }) {
   const router = useRouter()
   const { selectedCountry, setSelectedCountry, hydrated } = useSelectedCountry()
+  const [loadedOptions, setLoadedOptions] = useState<CountrySearchOption[] | null>(null)
+  const resolvedOptions = options ?? loadedOptions ?? []
   const rememberedCountry = selectedCountry
-    ? options.find((country) => country.code === selectedCountry.code) ?? null
+    ? resolvedOptions.find((country) => country.code === selectedCountry.code) ?? null
     : null
   const routeCode = routeCountry?.code
   const routeName = routeCountry?.name
@@ -70,12 +72,27 @@ export function CountrySearchControl({
     router,
   ])
 
+  useEffect(() => {
+    if (options) return
+    let active = true
+    import("@/lib/workspace/country-search-options-data")
+      .then((module) => {
+        if (active) setLoadedOptions(module.loadCountrySearchOptions())
+      })
+      .catch(() => {
+        if (active) setLoadedOptions([])
+      })
+    return () => {
+      active = false
+    }
+  }, [options])
+
   const results = useMemo(() => {
     const normalized = query.trim().toLowerCase()
-    return options.filter((country) => !normalized || country.searchText.includes(normalized))
-  }, [options, query])
+    return resolvedOptions.filter((country) => !normalized || country.searchText.includes(normalized))
+  }, [resolvedOptions, query])
 
-  const popular = options.filter((country) => country.popular)
+  const popular = resolvedOptions.filter((country) => country.popular)
 
   function pickCountry(country: CountrySearchOption) {
     setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })
@@ -187,26 +204,34 @@ export function CountrySearchControl({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2 px-1">
+      <div className="mt-3 flex min-h-8 items-center gap-2 px-1">
         <span className="text-[12px] font-medium text-[#6f6d68]">Popular:</span>
-        {popular.map((country) => (
-          <button
-            key={country.code}
-            type="button"
-            onMouseDown={(event) => {
-              event.preventDefault()
-              pickCountry(country)
-            }}
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12.5px] font-medium transition",
-              routeCode === country.code
-                ? "border-[#2563eb] bg-[#eef4ff] text-[#2563eb]"
-                : "border-[#e0dfdb] bg-white text-[#4d4c48] hover:border-[#2563eb] hover:text-[#2563eb]",
-            )}
-          >
-            <Globe2 className="size-3" /> {country.name}
-          </button>
-        ))}
+        {popular.length > 0 ? (
+          popular.map((country) => (
+            <button
+              key={country.code}
+              type="button"
+              onMouseDown={(event) => {
+                event.preventDefault()
+                pickCountry(country)
+              }}
+              className={cn(
+                "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12.5px] font-medium transition",
+                routeCode === country.code
+                  ? "border-[#2563eb] bg-[#eef4ff] text-[#2563eb]"
+                  : "border-[#e0dfdb] bg-white text-[#4d4c48] hover:border-[#2563eb] hover:text-[#2563eb]",
+              )}
+            >
+              <Globe2 className="size-3" /> {country.name}
+            </button>
+          ))
+        ) : (
+          <>
+            <span className="h-8 w-20 rounded-full bg-[#f0efec]" aria-hidden="true" />
+            <span className="h-8 w-24 rounded-full bg-[#f0efec]" aria-hidden="true" />
+            <span className="h-8 w-28 rounded-full bg-[#f0efec]" aria-hidden="true" />
+          </>
+        )}
       </div>
     </>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 const HARVARD_ID = "ebef5a65-3759-458c-8086-d4c082a37c1d"
 const UNSW_ID = "50c5abe9-4a93-4410-864d-0d191d0f5d69"

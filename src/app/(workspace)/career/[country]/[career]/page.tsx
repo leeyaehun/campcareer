@@ -14,6 +14,7 @@ import type { OverviewSearchValues } from "../../../home/home-overview-config"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
 import { CareerCoreSections } from "../../career-core-sections"
 import { CareerResultActions } from "../../career-result-actions"
+import { PageFeedback } from "@/components/feedback/page-feedback"
 
 export const dynamic = "force-dynamic"
 
@@ -256,6 +257,7 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
           </Suspense>
 
           <CareerResultActions query={query} locale={locale} />
+          <PageFeedback entityType="career" entityId={`${route.country.code}:${route.career.id}`} />
         </div>
       </main>
     </>

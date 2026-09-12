@@ -125,3 +125,30 @@ test("rejects forged bucket and path references", () => {
   assert.equal(result.ok, false)
   if (!result.ok) assert.equal(result.code, "INVALID_SCREENSHOT_REFERENCE")
 })
+
+test("accepts bounded page context but never accepts a browser-selected review status", () => {
+  const result = parseFeedbackSubmission({
+    type: "issue",
+    category: "data_outdated",
+    description: "The source date needs review.",
+    status: "resolved",
+    context: { pagePath: "/sources?country=au", entityType: "source" },
+  })
+
+  assert.equal(result.ok, true)
+  if (!result.ok) return
+  assert.deepEqual(result.data.context, { pagePath: "/sources", entityType: "source" })
+  assert.equal("status" in result.data, false)
+})
+
+test("rejects forged or unbounded page context", () => {
+  const result = parseFeedbackSubmission({
+    type: "issue",
+    category: "data_missing",
+    description: "A value is missing.",
+    context: { pagePath: "https://outside.example", entityType: "admin" },
+  })
+
+  assert.equal(result.ok, false)
+  if (!result.ok) assert.equal(result.code, "INVALID_CONTEXT")
+})

@@ -6,7 +6,8 @@ import { IconPicker, type PickerOption } from '@/components/ui/icon-picker'
 import { getStudyCategoryVisual } from '@/components/ui/au-career-category-visuals'
 import { useRouter } from 'next/navigation'
 import { localizePath } from '@/lib/i18n/config'
-import { useRouteLocale, useRouteTranslations } from '@/lib/i18n/locale-provider'
+import { useRouteLocale } from '@/lib/i18n/locale-provider'
+import { useRouteTranslations } from '@/lib/i18n/use-translations'
 
 type StudyLevel = 'all' | 'vocational' | 'bachelor' | 'postgraduate'
 type FilterValues = { field: string; category: string; state: string; level: StudyLevel }

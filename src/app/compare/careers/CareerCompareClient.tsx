@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 type CareerOption = {
   code: string

@@ -11,7 +11,8 @@ import {
   COUNTRY_META,
   layerNoteText,
 } from "@/lib/degree-risk"
-import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
+import { useLocale } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 type Nationality = "india" | "china" | "other"
 const STUDY_YEARS = 4 // bachelor default, mirrors ImmigrationTimeline

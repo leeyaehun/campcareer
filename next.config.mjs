@@ -2,12 +2,9 @@ import { LEGACY_SEO_REDIRECTS } from "./src/lib/seo-routes.mjs"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Next 16.3 inlines the small Tailwind stylesheet in production so first-time
-  // visitors avoid an extra render-blocking CSS round trip. Phase 5 CI and the
-  // Lighthouse audit verify this experimental optimization before release.
-  experimental: {
-    inlineCss: true,
-  },
+  // Leave CSS as stylesheet assets. In Next 16.3, inlineCss duplicates global
+  // CSS in SSR markup and the RSC payload; the release audit shows its
+  // document cost delays text LCP on all primary routes.
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
     remotePatterns: [

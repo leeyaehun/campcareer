@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { ArrowRight } from "lucide-react"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 import { WISE, AIRALO, partnerExitPath, type Partner } from "@/lib/partners"
 import { track } from "@/lib/analytics"
 

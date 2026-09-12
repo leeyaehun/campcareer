@@ -4,7 +4,8 @@ import { useState } from "react"
 import { GraduationCap, Briefcase, Landmark, ArrowRight, AlertTriangle, ExternalLink, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { type CountryCode, type LayerMeta, type PrPathway, layerNoteText } from "@/lib/degree-risk"
-import { useTranslations, useLocale } from "@/lib/i18n/locale-provider"
+import { useLocale } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 type Level = "bachelor" | "master"
 const STUDY_YEARS: Record<Level, number> = { bachelor: 4, master: 1.5 }

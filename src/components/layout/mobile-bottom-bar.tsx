@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useRouteLocale, useRouteTranslations } from "@/lib/i18n/locale-provider"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
+import { useRouteTranslations } from "@/lib/i18n/use-translations"
 import { localeFromPathname, localizePath, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 import { Search, Scale, ClipboardList, LogIn } from "lucide-react"

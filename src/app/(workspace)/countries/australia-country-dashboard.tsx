@@ -91,8 +91,6 @@ export function AustraliaCountryDashboard({ metrics }: { metrics: CountryMetrics
 
   return (
     <div>
-      <p className="mb-4 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">{profile.introduction}</p>
-
       <div className="grid gap-4 sm:grid-cols-3">
         <MetricCard
           icon={<Stamp className="size-4 text-[#6d4fc4]" />}
