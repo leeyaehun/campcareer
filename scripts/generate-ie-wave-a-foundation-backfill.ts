@@ -118,7 +118,16 @@ const componentConfidence = (component: Component) => {
   return component.directness === "direct" ? 0.95 : 0.8
 }
 
-const rawPayloadFor = (career: Career, componentKey: string, component: Component) => {
+const recordValue = (value: unknown): Record<string, unknown> =>
+  value != null && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : { value }
+
+const rawPayloadFor = (
+  career: Career,
+  componentKey: string,
+  component: Component,
+): Record<string, unknown> => {
   switch (componentKey) {
     case "employment_momentum":
       return {
@@ -131,7 +140,7 @@ const rawPayloadFor = (career: Career, componentKey: string, component: Componen
         nationalBenchmark: data.benchmarks.projectedNationalGrowthAnnualPct,
       }
     case "relative_salary":
-      return data.benchmarks.pay
+      return recordValue(data.benchmarks.pay)
     case "industry_diversity":
       return {
         derivedHhiUpperBound: component.derivedHhiUpperBound ?? null,
@@ -216,6 +225,9 @@ for (const career of data.careers) {
 
     const metricKey = `${career.profileKey}:${componentKey}:wave-a-v1`
     const available = component.status === "normalized"
+    if (available && (component.normalizedValue == null || !Number.isFinite(component.normalizedValue))) {
+      throw new Error(`Normalized component missing value: ${career.careerId} ${componentKey}`)
+    }
     const normalizedValue = available ? String(component.normalizedValue) : "null"
     const reason = available ? "null" : q(component.reason ?? "Evidence is not yet sufficient for normalization.")
     const directness = component.directness ?? "proxy"
