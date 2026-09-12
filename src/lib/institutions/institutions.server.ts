@@ -2,6 +2,7 @@ import "server-only"
 
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"
+import { getIrelandVerifiedInstitution } from "@/lib/institutions/ireland-institution-contract"
 import type {
   InstitutionMvpCountryCode,
   InstitutionSearchFilters,
@@ -26,6 +27,15 @@ type InstitutionExplorerRow = {
 type InstitutionLogoRow = {
   institution_id: string
   logo_url: string | null
+}
+
+type IrelandInstitutionDirectoryRow = {
+  institution_id: string
+  institution_slug: string
+  institution_name: string
+  website_url: string | null
+  campus_id: string
+  campus_city: string | null
 }
 
 export type InstitutionExplorerItem = {
@@ -109,10 +119,84 @@ async function loadInstitutionLogos(ids: string[]) {
   return logos
 }
 
+async function searchIrelandInstitutions(
+  filters: InstitutionSearchFilters,
+): Promise<InstitutionSearchResult> {
+  const { data, error } = await supabaseAdmin
+    .from("city_institution_directory_ie_v1")
+    .select("institution_id,institution_slug,institution_name,website_url,campus_id,campus_city")
+    .order("institution_name", { ascending: true })
+
+  if (error) throw new Error(`Unable to load Ireland institution explorer: ${error.message}`)
+
+  const grouped = new Map<string, {
+    id: string
+    slug: string
+    name: string
+    kind: string
+    websiteUrl: string | null
+    campusIds: Set<string>
+    cities: Set<string>
+  }>()
+
+  for (const row of (data ?? []) as unknown as IrelandInstitutionDirectoryRow[]) {
+    const verified = getIrelandVerifiedInstitution(row.institution_slug)
+    if (!verified) continue
+    const current = grouped.get(row.institution_id) ?? {
+      id: row.institution_id,
+      slug: row.institution_slug,
+      name: row.institution_name,
+      kind: verified.kind,
+      websiteUrl: row.website_url,
+      campusIds: new Set<string>(),
+      cities: new Set<string>(),
+    }
+    current.campusIds.add(row.campus_id)
+    if (row.campus_city) current.cities.add(row.campus_city)
+    grouped.set(row.institution_id, current)
+  }
+
+  const search = safeSearchTerm(filters.q).toLowerCase()
+  const city = filters.city.trim().toLowerCase()
+  const filtered = [...grouped.values()]
+    .filter((institution) => !search || institution.name.toLowerCase().includes(search))
+    .filter((institution) => !city || [...institution.cities].some((value) => value.toLowerCase() === city))
+    .filter((institution) => filters.kind === "all" || institution.kind === filters.kind)
+    .sort((a, b) => a.name.localeCompare(b.name))
+
+  const total = filtered.length
+  const from = (filters.page - 1) * INSTITUTION_PAGE_SIZE
+  const pageRows = filtered.slice(from, from + INSTITUTION_PAGE_SIZE)
+  const logos = await loadInstitutionLogos(pageRows.map((row) => row.id))
+
+  return {
+    institutions: pageRows.map((row) => ({
+      id: row.id,
+      countryCode: "IE" as const,
+      slug: row.slug,
+      name: row.name,
+      institutionKind: row.kind,
+      ownershipType: null,
+      websiteUrl: row.websiteUrl,
+      logoUrl: logos.get(row.id) ?? null,
+      programCount: 0,
+      campusCount: row.campusIds.size,
+      cityCount: row.cities.size,
+      cityNames: [...row.cities].sort(),
+    })),
+    total,
+    page: filters.page,
+    pageSize: INSTITUTION_PAGE_SIZE,
+    pageCount: total === 0 ? 0 : Math.ceil(total / INSTITUTION_PAGE_SIZE),
+  }
+}
+
 export async function searchInstitutions(
   countryCode: InstitutionMvpCountryCode,
   filters: InstitutionSearchFilters,
 ): Promise<InstitutionSearchResult> {
+  if (countryCode === "IE") return searchIrelandInstitutions(filters)
+
   const explorerView = countryCode === "UK"
     ? "institution_explorer_uk_v1"
     : countryCode === "CA"
