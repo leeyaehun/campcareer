@@ -50,3 +50,24 @@ test("generator retains explicit lineage tables", () => {
   assert.match(sql, /career_score_component_metric_inputs/)
   assert.match(sql, /career_score_component_raw_inputs/)
 })
+
+
+test("generated backfill contains nine component rows per Ireland Career and no invalid numeric literals", () => {
+  const blocks = [...sql.matchAll(
+    /insert into public\.career_score_components[\s\S]*?values\n([\s\S]*?)\non conflict \(snapshot_key,component_key\)/g,
+  )]
+  assert.equal(blocks.length, 8)
+
+  for (const block of blocks) {
+    const rows = block[1].split("\n").filter((line) => line.trim().startsWith("("))
+    assert.equal(rows.length, 9)
+  }
+
+  assert.doesNotMatch(sql, /\bundefined\b/)
+  assert.doesNotMatch(sql, /\bNaN\b/)
+})
+
+test("generated backfill uses formula v4 and never changes the app public score allowlist", () => {
+  assert.match(sql, /career-opportunity-v4-foundation/)
+  assert.doesNotMatch(sql, /SCORE_READY_CAREER_PROFILES/)
+})
