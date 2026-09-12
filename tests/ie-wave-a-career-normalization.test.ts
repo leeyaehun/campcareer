@@ -300,3 +300,69 @@ test("incomplete Careers stay unscored instead of converting pending evidence to
     assert.equal(stagedIrelandCampCareerScore(career.components), null)
   }
 })
+
+
+test("vacancy persistence keeps both official survey periods in lineage", () => {
+  for (const careerId of [
+    "software-developer",
+    "cybersecurity-analyst",
+    "data-engineer",
+    "civil-engineer",
+    "construction-manager",
+    "accountant",
+  ]) {
+    const career = data.careers.find((item) => item.careerId === careerId)
+    assert.ok(career)
+    assert.deepEqual(
+      (career.components.vacancy_intensity as Component & { sourceRefs?: string[] }).sourceRefs,
+      ["solasRas2024", "solasRas2025"],
+      careerId,
+    )
+  }
+
+  const radiographer = data.careers.find((item) => item.careerId === "radiographer")
+  assert.ok(radiographer)
+  assert.deepEqual(
+    (radiographer.components.vacancy_intensity as Component & { sourceRefs?: string[] }).sourceRefs,
+    ["solasRas2024"],
+  )
+})
+
+test("visa evidence is normalized as context but remains outside the public Score", () => {
+  for (const career of data.careers) {
+    const visa = career.components.visa_accessibility
+    assert.equal(visa?.status, "normalized", career.careerId)
+    assert.ok(visa?.reason?.includes("does not contribute to CampCareer Score v1"), career.careerId)
+  }
+  assert.equal(
+    data.careers.find((item) => item.careerId === "accountant")?.components.visa_accessibility?.scoreValue,
+    8,
+  )
+})
+
+test("machine-readable readiness exposes the five complete and three incomplete Wave A Careers", () => {
+  const readiness = (data as WaveAData & {
+    readiness: {
+      careers: Record<string, {
+        careerDecisionReady: boolean
+        pendingPublicComponents: string[]
+        visaContextReady: boolean
+      }>
+    }
+  }).readiness
+
+  const ready = Object.entries(readiness.careers)
+    .filter(([, value]) => value.careerDecisionReady)
+    .map(([careerId]) => careerId)
+
+  assert.deepEqual(ready, [
+    "software-developer",
+    "cybersecurity-analyst",
+    "data-engineer",
+    "civil-engineer",
+    "construction-manager",
+  ])
+  assert.deepEqual(readiness.careers.accountant.pendingPublicComponents, ["shortage_signal", "industry_diversity"])
+  assert.deepEqual(readiness.careers.architect.pendingPublicComponents, ["shortage_signal", "vacancy_intensity"])
+  assert.deepEqual(readiness.careers.radiographer.pendingPublicComponents, ["shortage_signal"])
+})
