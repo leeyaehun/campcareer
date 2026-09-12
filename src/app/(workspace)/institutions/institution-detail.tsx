@@ -9,7 +9,7 @@ import {
 } from "lucide-react"
 import { InstitutionLogo } from "@/components/institution-logo"
 import { getLaunchCountry } from "@/data/launch-countries"
-import { auCityPath } from "@/lib/cities/city-routes"
+import { auCityPath, ieCityPath } from "@/lib/cities/city-routes"
 import {
   institutionCountryPath,
 } from "@/lib/institutions/institution-search"
@@ -112,6 +112,7 @@ function CampusList({
   countryCode: InstitutionDetail["countryCode"]
 }) {
   const isUk = countryCode === "UK"
+  const isIreland = countryCode === "IE"
 
   if (campuses.length === 0) {
     return (
@@ -131,7 +132,11 @@ function CampusList({
         {campuses.map((campus) => {
           const officialUrl = safeWebsiteUrl(campus.officialUrl)
           const address = campusAddress(campus)
-          const cityHref = countryCode === "AU" ? auCityPath(campus.citySlug) : null
+          const cityHref = countryCode === "AU"
+            ? auCityPath(campus.citySlug)
+            : countryCode === "IE"
+              ? ieCityPath(campus.city ?? campus.reportedCity)
+              : null
           const location = campusLocationLabel(campus)
 
           return (
@@ -142,7 +147,7 @@ function CampusList({
                 </span>
                 <div className="min-w-0">
                   <h3 className="text-[13px] font-semibold leading-5 text-[#1b1b1b]">
-                    {campus.name ?? (isUk ? "Location" : "Campus")}
+                    {campus.name ?? (isUk || isIreland ? "Location" : "Campus")}
                   </h3>
                   {cityHref ? (
                     <Link
@@ -165,7 +170,7 @@ function CampusList({
                       rel="noreferrer"
                       className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline"
                     >
-                      {isUk ? "Official location page" : "Campus website"}
+                      {isUk || isIreland ? "Official location page" : "Campus website"}
                       <ExternalLink className="size-3" />
                     </a>
                   ) : null}
@@ -177,7 +182,7 @@ function CampusList({
       </div>
       {total > campuses.length ? (
         <p className="mt-3 text-[10.5px] text-[#6f6d68]">
-          Showing {campuses.length} of {total.toLocaleString()} current {isUk ? "location" : "campus"} records.
+          Showing {campuses.length} of {total.toLocaleString()} current {isUk || isIreland ? "location" : "campus"} records.
         </p>
       ) : null}
     </>
@@ -279,6 +284,7 @@ export function InstitutionDetailView({
   const ukprnSource = safeWebsiteUrl(institution.ukprnSourceUrl)
   const countryPath = institutionCountryPath(institution.countryCode)
   const isUk = institution.countryCode === "UK"
+  const isIreland = institution.countryCode === "IE"
 
   return (
     <>
@@ -335,9 +341,11 @@ export function InstitutionDetailView({
           <div className="rounded-xl bg-[#fafaf8] p-4">
             <GraduationCap className="size-4 text-[#3e7a2e]" />
             <p className="mt-2 text-[22px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">
-              {institution.programCount.toLocaleString()}
+              {isIreland ? "Pending" : institution.programCount.toLocaleString()}
             </p>
-            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">Active programs</p>
+            <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">
+              {isIreland ? "Program publication" : "Active programs"}
+            </p>
           </div>
           <div className="rounded-xl bg-[#fafaf8] p-4">
             <Building2 className="size-4 text-[#3e7a2e]" />
@@ -345,7 +353,7 @@ export function InstitutionDetailView({
               {institution.campusCount.toLocaleString()}
             </p>
             <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">
-              {isUk ? "Location records" : "Campus records"}
+              {isUk || isIreland ? "Location records" : "Campus records"}
             </p>
           </div>
           <div className="rounded-xl bg-[#fafaf8] p-4">
@@ -354,7 +362,7 @@ export function InstitutionDetailView({
               {institution.cityCount.toLocaleString()}
             </p>
             <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.06em] text-[#6f6d68]">
-              {isUk ? "Location areas" : "Normalized cities"}
+              {isUk || isIreland ? "Location areas" : "Normalized cities"}
             </p>
           </div>
         </div>
@@ -368,16 +376,24 @@ export function InstitutionDetailView({
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Programs</h2>
             </div>
             <p className="mt-1.5 text-[11.5px] leading-5 text-[#6f6d68]">
-              {isUk
-                ? "Active canonical program records currently connected to this institution. UK program detail pages are not yet published, so these records are shown as previews without invented links."
-                : "Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages."}
+              {isIreland
+                ? "Ireland program publication remains gated until exact current program-level international eligibility is verified. No legacy or Tier B program is promoted here as a public option."
+                : isUk
+                  ? "Active canonical program records currently connected to this institution. UK program detail pages are not yet published, so these records are shown as previews without invented links."
+                  : "Active canonical programs connected to this institution. Australian records link directly to the existing CampCareer program detail pages."}
             </p>
             <div className="mt-4">
-              <ProgramList
-                programs={institution.programs}
-                total={institution.programCount}
-                countryCode={institution.countryCode}
-              />
+              {isIreland ? (
+                <div className="rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-6">
+                  <p className="text-[12px] leading-5 text-[#6f6d68]">Program catalog pending verification.</p>
+                </div>
+              ) : (
+                <ProgramList
+                  programs={institution.programs}
+                  total={institution.programCount}
+                  countryCode={institution.countryCode}
+                />
+              )}
             </div>
           </section>
 
@@ -402,7 +418,7 @@ export function InstitutionDetailView({
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+          {!isIreland ? <section className="rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <GraduationCap className="size-4 text-[#3e7a2e]" />
               <h2 className="text-[16px] font-semibold text-[#1b1b1b]">Program profile</h2>
@@ -421,7 +437,7 @@ export function InstitutionDetailView({
                 <BreakdownList items={institution.programmeTypes} emptyMessage="Program-type classification is not currently published." />
               </div>
             </div>
-          </section>
+          </section> : null}
         </main>
 
         <aside className="space-y-5">
