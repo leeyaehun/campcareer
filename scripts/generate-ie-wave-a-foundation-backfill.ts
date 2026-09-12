@@ -273,8 +273,16 @@ for (const career of data.careers) {
   sql.push("")
 }
 
-sql.push("-- Safety assertion: this generated backfill must never activate Ireland foundation profiles.")
-sql.push("do $$ begin if exists (select 1 from public.career_foundation_profiles where country_code='IE' and canonical_occupation_id in ('software-developer','cybersecurity-analyst','data-engineer','civil-engineer','construction-manager','accountant','architect','radiographer') and decision_ready=true) then raise exception 'Ireland Wave A backfill unexpectedly activated decision_ready'; end if; end $$;")
+sql.push("-- Safety assertions: backfill shape is fixed and public activation must remain off.")
+sql.push(`do $ declare v_profiles integer; v_score_ready integer; v_publish_ready integer; begin
+  select count(*) into v_profiles from public.career_foundation_result_v1 where country_code='IE' and canonical_occupation_id in ('software-developer','cybersecurity-analyst','data-engineer','civil-engineer','construction-manager','accountant','architect','radiographer');
+  select count(*) into v_score_ready from public.career_foundation_result_v1 where country_code='IE' and canonical_occupation_id in ('software-developer','cybersecurity-analyst','data-engineer','civil-engineer','construction-manager','accountant','architect','radiographer') and score_ready=true;
+  select count(*) into v_publish_ready from public.career_foundation_result_v1 where country_code='IE' and canonical_occupation_id in ('software-developer','cybersecurity-analyst','data-engineer','civil-engineer','construction-manager','accountant','architect','radiographer') and publish_ready=true;
+  if v_profiles <> 8 then raise exception 'Ireland Wave A expected 8 foundation profiles, got %', v_profiles; end if;
+  if v_score_ready <> 6 then raise exception 'Ireland Wave A expected 6 evidence-complete score rows, got %', v_score_ready; end if;
+  if v_publish_ready <> 0 then raise exception 'Ireland Wave A backfill unexpectedly produced % publish-ready rows', v_publish_ready; end if;
+  if exists (select 1 from public.career_foundation_profiles where country_code='IE' and canonical_occupation_id in ('software-developer','cybersecurity-analyst','data-engineer','civil-engineer','construction-manager','accountant','architect','radiographer') and decision_ready=true) then raise exception 'Ireland Wave A backfill unexpectedly activated decision_ready'; end if;
+end $;`)
 sql.push("commit;")
 
 return sql.join("\n")
