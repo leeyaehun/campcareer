@@ -61,7 +61,8 @@
     "data:ingest:package-build": "python3 scripts/data-foundation/common-ingestion/runner.py package-build",
     "data:ingest:report-generate": "python3 scripts/data-foundation/common-ingestion/runner.py report-generate",
     "data:ingest:checksum-verify": "python3 scripts/data-foundation/common-ingestion/runner.py checksum-verify",
-    "data:ingest:duplicate-queue": "python3 scripts/data-foundation/common-ingestion/runner.py duplicate-queue"
+    "data:ingest:duplicate-queue": "python3 scripts/data-foundation/common-ingestion/runner.py duplicate-queue",
+    "generate:ie-wave-a-backfill": "tsx scripts/generate-ie-wave-a-foundation-backfill.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

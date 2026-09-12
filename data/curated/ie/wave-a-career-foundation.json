@@ -1,0 +1,1322 @@
+{
+  "version": "ie-wave-a-career-normalization-v1",
+  "checkedOn": "2026-09-12",
+  "status": "staging_only",
+  "policy": {
+    "publicScoreFormula": "Demand 40 / Pay 30 / Entry 30",
+    "missingEvidenceRule": "Missing evidence is unavailable, never numeric zero.",
+    "publicationRule": "No Career becomes public score-ready from this staging file alone."
+  },
+  "benchmarks": {
+    "recentEmploymentGrowthAnnualAvgPct": 3.4,
+    "recentEmploymentGrowthPeriod": "2019-2024",
+    "projectedNationalGrowthAnnualPct": 1.7,
+    "projectionPeriod": "2021-2035",
+    "pay": {
+      "statistic": "median_hourly_earnings",
+      "period": "2022",
+      "allOccupationsEurPerHour": 19.6,
+      "professionalOccupationsEurPerHour": 32.99,
+      "professionalToAllRatio": 1.6832,
+      "source": "csoSes2022"
+    },
+    "industryDiversity": {
+      "method": "conservative_hhi_upper_bound",
+      "rule": "Square the published broad-sector shares and treat all unpublished residual employment as one 'other' bucket. This can only overstate concentration relative to a fully disaggregated residual.",
+      "groups": {
+        "ict": {
+          "publishedSharesPct": [
+            65,
+            9,
+            8
+          ],
+          "residualOtherPct": 18,
+          "hhiUpperBound": 0.4694,
+          "scoreValue": 1
+        },
+        "construction": {
+          "publishedSharesPct": [
+            73,
+            13,
+            5
+          ],
+          "residualOtherPct": 9,
+          "hhiUpperBound": 0.5604,
+          "scoreValue": 1
+        },
+        "businessFinancial": {
+          "publishedSharesPct": [
+            31,
+            22,
+            9,
+            8
+          ],
+          "residualOtherPct": 30,
+          "hhiUpperBound": 0.249,
+          "scoreValue": null,
+          "status": "insufficient_coverage"
+        },
+        "healthcare": {
+          "publishedSharesPct": [
+            87,
+            7
+          ],
+          "residualOtherPct": 6,
+          "hhiUpperBound": 0.7654,
+          "scoreValue": 0
+        }
+      }
+    }
+  },
+  "sources": {
+    "solasNsb2025": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "National Skills Bulletin 2025",
+      "url": "https://www.solas.ie/f/70398/x/893ebacfd9/national-skills-bulletin-2025.pdf",
+      "sourceType": "government_aggregator",
+      "note": "Sector-share rows are used only as broader occupational-family proxies. Unpublished residual employment is grouped into one 'other' bucket to produce a conservative HHI upper bound."
+    },
+    "solasForecast2023": {
+      "authority": "SOLAS Skills and Labour Market Research Unit / Cedefop",
+      "title": "Summer Skills Bulletin 2023 — Cedefop forecasts 2021-2035",
+      "url": "https://www.solas.ie/f/70398/x/756240fc66/summer-skills-bulletin-2023.pdf",
+      "sourceType": "government_aggregator"
+    },
+    "csoSes2022": {
+      "authority": "Central Statistics Office Ireland",
+      "title": "Structure of Earnings Survey 2022 — Occupation and Education",
+      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-ses/structureofearningssurvey2022/occupationandeducation/",
+      "sourceType": "official_primary",
+      "note": "CSO publishes Professional occupations median hourly earnings of EUR 32.99 and All Occupational Groups EUR 19.60. All Wave A SOC 2010 codes sit in major group 2 Professional Occupations. This is therefore an official but broad Pay proxy, not an exact Career salary."
+    },
+    "solasRas2025": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "Recruitment Agency Survey on difficult-to-fill vacancies — November 2025",
+      "url": "https://a.storyblok.com/f/70398/x/b5123eb8c0/solas-difficult-to-fill-vacancies-survey.pdf",
+      "sourceType": "government_aggregator",
+      "note": "Official selected-recruitment-agency survey. Used only as a conservative vacancy fallback because it does not publish an occupation-level vacancy numerator/denominator."
+    },
+    "ieSoftwareEntry": {
+      "authority": "Dublin City University",
+      "title": "BSc Computer Science",
+      "url": "https://www.dcu.ie/courses/undergraduate/school-computing/computer-science",
+      "sourceType": "official_service"
+    },
+    "ieCyberEntry": {
+      "authority": "Generation Apprenticeship",
+      "title": "Cybersecurity Associate Level 6",
+      "url": "https://apprenticeship.ie/career-seekers/get-started/learn-more/ict/Cybersecurity-Associate-L6",
+      "sourceType": "official_service"
+    },
+    "ieDataEngineerEntry": {
+      "authority": "Dublin City University",
+      "title": "BSc Data Science & Artificial Intelligence",
+      "url": "https://www.dcu.ie/courses/undergraduate/school-computing/data-science-and-artificial-intelligence",
+      "sourceType": "official_service"
+    },
+    "ieCivilEntry": {
+      "authority": "Engineers Ireland",
+      "title": "Accredited third level courses",
+      "url": "https://www.engineersireland.ie/Professionals/Membership/Become-a-member/Accredited-third-level-courses",
+      "sourceType": "official_service"
+    },
+    "ieConstructionEntry": {
+      "authority": "Technological University Dublin",
+      "title": "BSc Construction Management",
+      "url": "https://www.tudublin.ie/study/undergraduate/courses/construction-management-tu833/",
+      "sourceType": "official_service"
+    },
+    "ieAccountantEntry": {
+      "authority": "Generation Apprenticeship",
+      "title": "Accounting Technician",
+      "url": "https://apprenticeship.ie/career-seekers/get-started/learn-more/finance/Accounting-Technician",
+      "sourceType": "official_service"
+    },
+    "ieArchitectEntry": {
+      "authority": "Royal Institute of the Architects of Ireland",
+      "title": "How to Become an Architect",
+      "url": "https://www.riai.ie/careers-in-architecture/how-to-become-an-architect",
+      "sourceType": "official_service"
+    },
+    "ieRadiographerEntry": {
+      "authority": "CORU",
+      "title": "Approved Qualifications",
+      "url": "https://coru.ie/health-and-social-care-professionals/education/approved-qualifications/",
+      "sourceType": "official_service"
+    },
+    "ieArchitectRegistration": {
+      "authority": "Royal Institute of the Architects of Ireland",
+      "title": "Register as an Architect",
+      "url": "https://www.riai.ie/join-the-riai/registering-as-an-architect",
+      "sourceType": "official_service"
+    },
+    "ieRadiographerRegistration": {
+      "authority": "CORU",
+      "title": "Registration and protected radiographer titles",
+      "url": "https://coru.ie/health-and-social-care-professionals/registration/",
+      "sourceType": "official_service"
+    },
+    "solasRas2024": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "Recruitment Agency Survey on difficult-to-fill vacancies — November 2024",
+      "url": "https://a.storyblok.com/f/70398/x/16b38e96de/solas-recruitment-agency-survey.pdf",
+      "sourceType": "government_aggregator",
+      "note": "Earlier official selected-recruitment-agency survey used only to establish repeated-period persistence where the same Career/family also appears in 2025."
+    },
+    "deteCriticalSkills": {
+      "authority": "Department of Enterprise, Tourism and Employment",
+      "title": "Critical Skills Occupations List",
+      "url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/",
+      "sourceType": "official_primary",
+      "note": "Occupation-level immigration context only. Visa/work-right evidence is excluded from CampCareer Score v1."
+    },
+    "csoSoc2010": {
+      "authority": "Central Statistics Office Ireland",
+      "title": "SOC 2010 detailed occupation classification",
+      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-cp11eoi/cp11eoi/bgn/",
+      "sourceType": "official_primary",
+      "note": "Official Irish statistical occupation-classification reference used to anchor the canonical Ireland SOC mappings."
+    }
+  },
+  "careers": [
+    {
+      "careerId": "software-developer",
+      "profileKey": "IE:software-developer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2136",
+        "title": "Programmers and software development professionals",
+        "relation": "exact",
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer software-developer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
+      },
+      "labourMarket": {
+        "employed2024": 54800,
+        "annualAverageGrowthPct2019To2024": 12.1,
+        "directness": "direct",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop publishes the forecast at the broader ICT professionals group; the bulletin also warns the 2021 ICT baseline is understated."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "direct",
+          "evidenceStatus": "direct_verified",
+          "source": "solasNsb2025",
+          "explanation": "SOLAS 2025 lists software developers/engineers as a national shortage.",
+          "scoreValue": 12
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "direct",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "normalizedValue": 8.7,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names software developers; 2024 evidence also named software developers/engineers, so persistence is supported. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieSoftwareEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 Computer Science route confirms a realistic newcomer education pathway; no single degree is asserted as universally mandatory."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieSoftwareEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Ireland Software Developer pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "cybersecurity-analyst",
+      "profileKey": "IE:cybersecurity-analyst",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2139",
+        "title": "Information technology and telecommunications professionals n.e.c. — cyber-security analyst scope",
+        "relation": "narrower",
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer cybersecurity-analyst intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
+      },
+      "labourMarket": {
+        "employed2024": 25200,
+        "annualAverageGrowthPct2019To2024": 9,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes ICT professionals n.e.c. as the broader employment group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is for ICT professionals, broader than cyber-security analysis."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS shortage wording is IT analysts/engineers and difficult-to-fill evidence includes cyber/security specialisms.",
+          "scoreValue": 12
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses ICT professionals n.e.c. growth.",
+          "normalizedValue": 5.6,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey names security engineering within ICT; 2024 evidence also included security roles. This is a broader specialist proxy for Cybersecurity Analyst.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieCyberEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "The national Cybersecurity Associate Level 6 apprenticeship provides a structured work-based entry route alongside degree/certification routes."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieCyberEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Cybersecurity Analyst pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "data-engineer",
+      "profileKey": "IE:data-engineer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2135",
+        "title": "IT business analysts, architects and systems designers — data engineering / architecture scope",
+        "relation": "narrower",
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer data-engineer intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
+      },
+      "labourMarket": {
+        "employed2024": 25200,
+        "annualAverageGrowthPct2019To2024": 9,
+        "directness": "proxy",
+        "proxyReason": "The published SOLAS group is broader than Data Engineer.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is for ICT professionals."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS identifies IT analysts/engineers as shortage roles; Data Engineer is a constrained scope within the mapped official group.",
+          "scoreValue": 12
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the broader ICT professionals n.e.c. growth series.",
+          "normalizedValue": 5.6,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast.",
+          "normalizedValue": 0.7765,
+          "scoreValue": 6.94,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names data engineers and related data roles; 2024 evidence also included data specialists. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieDataEngineerEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 data-science education provides a realistic technical entry route; equivalent technical experience remains possible."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieDataEngineerEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Data Engineer pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "civil-engineer",
+      "profileKey": "IE:civil-engineer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2121",
+        "title": "Civil engineers",
+        "relation": "exact",
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer civil-engineer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
+      },
+      "labourMarket": {
+        "employed2024": 22400,
+        "annualAverageGrowthPct2019To2024": 4.6,
+        "directness": "proxy",
+        "proxyReason": "SOLAS combines civil engineers and construction project managers in the published 2025 chart.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Science & engineering professionals",
+        "employment2021Thousands": 96,
+        "netChangeTo2035Thousands": 19,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Civil Engineer."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage.",
+          "scoreValue": 12
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series.",
+          "normalizedValue": 1.2,
+          "scoreValue": 8,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Science & engineering professionals forecast.",
+          "normalizedValue": -0.4018,
+          "scoreValue": 4,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names site/civil engineers; 2024 evidence also named civil/site engineers. The fallback remains broader than a clean vacancy-rate statistic.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieCivilEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Engineers Ireland publishes accredited engineering programmes as the standard professional education route."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieCivilEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Engineers Ireland professional titles and accreditation matter, but generic Civil Engineer employment is not treated as one universally licensed personal statutory occupation."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "construction-manager",
+      "profileKey": "IE:construction-manager",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2436",
+        "title": "Construction project managers and related professionals",
+        "relation": "exact",
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer construction-manager is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
+      },
+      "labourMarket": {
+        "employed2024": 22400,
+        "annualAverageGrowthPct2019To2024": 4.6,
+        "directness": "proxy",
+        "proxyReason": "SOLAS combines civil engineers and construction project managers in the published 2025 chart.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Production & specialised services managers",
+        "employment2021Thousands": 69,
+        "netChangeTo2035Thousands": 38,
+        "directness": "proxy",
+        "proxyReason": "The Cedefop manager group explicitly includes managers in construction, but is much broader than Construction Project Manager."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage.",
+          "scoreValue": 12
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series.",
+          "normalizedValue": 1.2,
+          "scoreValue": 8,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Production & specialised services managers explicitly includes managers in construction.",
+          "normalizedValue": 1.4833,
+          "scoreValue": 8.71,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names project/site managers; 2024 evidence also named project/site managers. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 6,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 6,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieConstructionEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 Construction Management education provides a clear route, while substantial sector/project experience remains material."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 4,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieConstructionEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory Construction Manager register is asserted; role/site competence and construction-specific requirements still create some entry burden."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "accountant",
+      "profileKey": "IE:accountant",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2421",
+        "title": "Chartered and certified accountants — accountant scope",
+        "relation": "narrower",
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer accountant intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
+      },
+      "labourMarket": {
+        "employed2024": 56600,
+        "annualAverageGrowthPct2019To2024": 6.9,
+        "directness": "proxy",
+        "proxyReason": "SOLAS reports the broader accountants & tax experts group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Business & administration professionals",
+        "employment2021Thousands": 150,
+        "netChangeTo2035Thousands": 53,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Accountants."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_20",
+          "scoreValue": 5,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes the broader 'Accountants & tax experts' group. It documents strong employment growth and difficult-to-fill accountant mentions, but does not classify generic Accountant as a confirmed shortage.",
+          "reason": "CampCareer maps this to methodology severity 'pressure' (5/20), not 'shortage'. This preserves the distinction between recruitment pressure and an official shortage designation."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses accountants & tax experts group growth.",
+          "normalizedValue": 3.5,
+          "scoreValue": 10,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Business & administration professionals forecast.",
+          "normalizedValue": 0.4847,
+          "scoreValue": 6.21,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names several accountant specialisms; 2024 evidence also named accountants. This supports persistence but not a numeric vacancy rate.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "SOLAS publishes 31% Financial activities, 22% Professional activities, 9% Industry and 8% ICT for the broader Business & Financial family, totalling 70%. This is below the Career Data Foundation's roughly 80% usable-coverage gate, so no HHI score is produced.",
+          "source": "solasNsb2025"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieAccountantEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "The national Accounting Technician apprenticeship demonstrates a structured work-based route alongside degree and professional-accountancy pathways."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieAccountantEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Generic Accountant employment is not modelled as a single universally licensed profession; permit-specific recognition requirements remain separate context."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 8,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Current Critical Skills treatment for SOC 2421 is conditional on specified chartered/certified and specialist accountancy scopes; the generic Accountant Career is not given universal full credit.",
+          "reason": "Conditional 8/10 is retained as internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "architect",
+      "profileKey": "IE:architect",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2431",
+        "title": "Architects and town planners — Architect",
+        "relation": "narrower",
+        "quality": "medium",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer architect intentionally uses a narrower product scope inside the stated SOC 2010 occupation group; proxy use in market metrics remains separately disclosed."
+      },
+      "labourMarket": {
+        "employed2024": 13900,
+        "annualAverageGrowthPct2019To2024": 4.2,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes Architects & town planners as the broader group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Science & engineering professionals",
+        "employment2021Thousands": 96,
+        "netChangeTo2035Thousands": 19,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is much broader than Architect."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "pending",
+          "reason": "SOLAS identifies Quantity Surveyors—not generic Architects—as the explicit shortage within the relevant construction discussion; this evidence must not be borrowed.",
+          "source": "solasNsb2025"
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses Architects & town planners group growth.",
+          "normalizedValue": 0.8,
+          "scoreValue": 7,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Science & engineering professionals forecast.",
+          "normalizedValue": -0.4018,
+          "scoreValue": 4,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Grouped recruitment evidence exists, but a defensible Architect-only numeric intensity input is not yet normalized.",
+          "source": "solasNsb2025"
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 4,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieArchitectEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "RIAI states the typical Irish route is a prescribed five-year architecture qualification, at least two years of approved postgraduate professional training and a Professional Practice Examination."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieArchitectRegistration",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Architect is a protected title in Ireland and admission to the statutory Register is required to use the title."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    },
+    {
+      "careerId": "radiographer",
+      "profileKey": "IE:radiographer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2217",
+        "title": "Radiographers — diagnostic and therapeutic radiography scope",
+        "relation": "exact",
+        "quality": "high",
+        "source": "csoSoc2010",
+        "verifiedOn": "2026-09-12",
+        "rationale": "CampCareer radiographer is anchored to the stated SOC 2010 occupation scope without broadening beyond the reviewed Career definition."
+      },
+      "labourMarket": {
+        "employed2024": 29200,
+        "annualAverageGrowthPct2019To2024": 5.2,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes a broader 'other healthcare professionals' group that includes radiographers.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Health professionals",
+        "employment2021Thousands": 104,
+        "netChangeTo2035Thousands": 8,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Radiographer and SOLAS cautions that healthcare demand may be stronger than the baseline forecast."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_20",
+          "scoreValue": 5,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS groups radiographers within 'Other healthcare professionals'. The report says demand is evident while the extent of shortages is difficult to determine because speciality employment counts are small.",
+          "reason": "CampCareer maps the directly documented demand pressure to methodology severity 'pressure' (5/20). It is explicitly not represented as a confirmed Radiographer shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses broader other-healthcare-professionals growth.",
+          "normalizedValue": 1.8,
+          "scoreValue": 9.5,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Health professionals forecast and retains the SOLAS caveat.",
+          "normalizedValue": -1.1693,
+          "scoreValue": 2.08,
+          "normalizedUnit": "percentage_points_per_year"
+        },
+        "vacancy_intensity": {
+          "status": "normalized",
+          "normalizedValue": 3,
+          "scoreValue": 3,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasNsb2025",
+          "proxyReason": "The November 2024 SOLAS Recruitment Agency Survey directly named radiographers as difficult to fill. The November 2025 survey's health summary does not repeat radiographers, so no persistence bonus is applied.",
+          "reason": "Conservative fallback uses low vacancy intensity only (3/15). There is no clean occupation-level vacancy numerator/denominator.",
+          "sourceRefs": [
+            "solasRas2024"
+          ]
+        },
+        "industry_diversity": {
+          "status": "normalized",
+          "normalizedValue": 0,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 0,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader healthcare occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 94% of the occupational family; the remaining 6% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.7654,
+          "metricUnit": "hhi_upper_bound"
+        },
+        "relative_salary": {
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
+        },
+        "entry_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 6,
+          "normalizedUnit": "points_of_15",
+          "scoreValue": 6,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieRadiographerEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "CORU-approved qualifications define the professional route into radiography."
+        },
+        "entry_burden": {
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "ieRadiographerRegistration",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Radiographer is a regulated/protected profession requiring CORU registration."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
+        }
+      }
+    }
+  ],
+  "readiness": {
+    "policy": "Career Decision Ready requires all eight public CampCareer Score evidence components to be normalized. Internal visa context does not complete a missing public component.",
+    "careers": {
+      "software-developer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "cybersecurity-analyst": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "data-engineer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "civil-engineer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "construction-manager": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "accountant": {
+        "careerDecisionReady": false,
+        "pendingPublicComponents": [
+          "industry_diversity"
+        ],
+        "visaContextReady": true
+      },
+      "architect": {
+        "careerDecisionReady": false,
+        "pendingPublicComponents": [
+          "shortage_signal",
+          "vacancy_intensity"
+        ],
+        "visaContextReady": true
+      },
+      "radiographer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      }
+    }
+  }
+}
