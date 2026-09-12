@@ -1,6 +1,6 @@
 # Career Coverage Inventory
 
-Snapshot date: 2026-08-15
+Snapshot date: 2026-09-12
 
 This document is the operating inventory for expanding CampCareer from a reference Career Page into a country-by-country Career Score database plus action pathways.
 
@@ -63,7 +63,7 @@ For Pay, CampCareer prefers an exact official occupation earnings measure. If a 
 | Canada | 0 | 0 | 80 | 0 | 6.2 |
 | United States | 0 | 0 | 64 | 16 | 4.1 |
 | New Zealand | 0 | 0 | 47 | 33 | 5.0 |
-| Ireland | 0 | 0 | 80 | 0 | 6.0 |
+| Ireland | 6 | 1 | 73 | 0 | 5.5 |
 | Japan | 0 | 0 | 80 | 0 | 8.0 |
 | South Korea | 0 | 0 | 80 | 0 | 8.0 |
 | Singapore | 0 | 0 | 80 | 0 | 8.0 |
@@ -312,17 +312,38 @@ The current canonical Career ID is `medical-laboratory-technician`.
 
 ## Ireland
 
-All 80 canonical careers are `Profile ready`.
+Ireland Golden Slice Wave A adds six strict public-score Careers on 2026-09-12.
 
-77 careers:
+### Ready — 6
 
-`pay + vacancy_intensity + employer_diversity + demand_trend + growth + publication_review`
+- `software-developer` — Demand 6 · Pay 10 · Entry 8 → 78
+- `cybersecurity-analyst` — Demand 6 · Pay 10 · Entry 8 → 78
+- `data-engineer` — Demand 6 · Pay 10 · Entry 8 → 78
+- `civil-engineer` — Demand 5 · Pay 10 · Entry 8 → 74
+- `construction-manager` — Demand 6 · Pay 10 · Entry 6 → 72
+- `radiographer` — Demand 3 · Pay 10 · Entry 3 → 51
 
-3 careers additionally have a `shortage` blocker:
+These scores use the Career Data Foundation and strict public evidence gate.
+Broader official proxies remain explicitly Estimated. The current Pay input is
+the CSO Professional-occupations earnings proxy and must not be presented as an
+exact Career salary.
 
-- `bricklayer`
-- `hvac-technician`
-- `wall-floor-tiler`
+### Needs one gap — 1
+
+- `accountant` — industry-diversity evidence remains below the usable coverage gate.
+
+Accountant's labour-market signal is recorded as **pressure**, not a confirmed
+shortage.
+
+### Profile ready — 73
+
+- `architect` remains blocked by shortage and vacancy-intensity evidence.
+  Quantity Surveyor evidence is not borrowed.
+- the remaining 72 Ireland Careers remain on the earlier strict-audit blocker
+  families until they are normalized through the Career Data Foundation.
+
+The original legacy Ireland provisional totals remain non-authoritative for
+public CampCareer Score.
 
 ## Japan
 
@@ -374,11 +395,11 @@ For each country below, all 80 canonical careers are `Not ready`:
 
 The expansion order should optimize for the smallest number of blockers before content publication.
 
-1. Australia Ready 11: publish/use for content now.
-2. Australia publication-review-only 8: `auditor`, `chemical-engineer`, `database-administrator`, `environmental-engineer`, `human-resources-specialist`, `ict-support-technician`, `industrial-engineer`, `mechanical-engineer`.
-3. Resolve the remaining five Australian Pay gaps only where a defensible official earnings measure can be chosen: `engineering-technician`, `farm-manager`, `horticulturist`, `hospitality-supervisor`, `wall-floor-tiler`.
-4. Then close the smallest remaining Demand/Entry blocker families before opening a new country batch.
-5. Choose the next country based on evidence-system work, not raw profile count. UK/US/NZ have strong Pay coverage but still need several Demand inputs; Canada also needs Demand plus more Entry validation.
+1. Ireland Golden Slice Ready 6: use these as the first deep Country → Career → Education decision cohort.
+2. Ireland `accountant`: close the single industry-diversity gap.
+3. Ireland `architect`: close shortage and vacancy-intensity evidence without borrowing adjacent occupations.
+4. Australia Ready 11 remains available for existing content/product use.
+5. Continue country expansion only after the Ireland Golden Slice graph is complete enough to prove the end-to-end journey.
 
 ## Coverage KPI
 
@@ -390,9 +411,9 @@ Use:
 
 Current strict snapshot:
 
-- Ready: 11 / 1,600
-- Needs one gap: 8 / 1,600
-- Profile ready: 652 / 1,600
+- Ready: 17 / 1,600
+- Needs one gap: 9 / 1,600
+- Profile ready: 645 / 1,600
 - Not ready: 929 / 1,600
 
 The purpose of the inventory is to move rows upward one state at a time while content production consumes the Ready queue immediately.

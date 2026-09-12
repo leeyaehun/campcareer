@@ -119,8 +119,9 @@ test("career insight exposes foundation data only after the explicit public Read
   assert.match(readModel, /const foundationHasPublicScore/)
   assert.match(readModel, /if \(foundation && foundationHasPublicScore\(foundation\)\)/)
   assert.match(readModel, /const campCareerScore = isCareerScoreReady\(profile\.country_code, careerId\) \? scoreCandidate : null/)
-  assert.match(readModel, /if \(byCountry\.has\(foundation\.countryCode\)\) continue/)
   assert.match(readModel, /if \(!isCareerScoreReady\(foundation\.countryCode, careerId\)\) continue/)
+  assert.match(readModel, /if \(!foundation\.strictPublicScoreEvidence\) continue/)
+  assert.doesNotMatch(readModel, /if \(byCountry\.has\(foundation\.countryCode\)\) continue/)
   assert.match(readModel, /if \(!profile && foundation\) \{[\s\S]*?profile: null,[\s\S]*?readModelSource: "editorial_only"/)
 })
 

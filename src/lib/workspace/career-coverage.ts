@@ -26,6 +26,12 @@ export const SCORE_READY_CAREER_PROFILES: readonly ScoreReadyCareerProfile[] = [
   { countryCode: "AU", careerId: "radiographer", sourceCheckedAt: "2026-08-15" },
   { countryCode: "AU", careerId: "registered-nurse", sourceCheckedAt: "2026-08-06" },
   { countryCode: "AU", careerId: "welder", sourceCheckedAt: "2026-08-14" },
+  { countryCode: "IE", careerId: "civil-engineer", sourceCheckedAt: "2026-09-12" },
+  { countryCode: "IE", careerId: "construction-manager", sourceCheckedAt: "2026-09-12" },
+  { countryCode: "IE", careerId: "cybersecurity-analyst", sourceCheckedAt: "2026-09-12" },
+  { countryCode: "IE", careerId: "data-engineer", sourceCheckedAt: "2026-09-12" },
+  { countryCode: "IE", careerId: "radiographer", sourceCheckedAt: "2026-09-12" },
+  { countryCode: "IE", careerId: "software-developer", sourceCheckedAt: "2026-09-12" },
 ] as const
 
 const scoreReadyKeys = new Set(
