@@ -896,9 +896,16 @@
       },
       "components": {
         "shortage_signal": {
-          "status": "pending",
-          "reason": "SOLAS reports strong demand and difficult-to-fill accountant roles but does not publish a blanket accountant shortage finding; absence is not converted into confirmed-not-shortage.",
-          "source": "solasNsb2025"
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_20",
+          "scoreValue": 5,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes the broader 'Accountants & tax experts' group. It documents strong employment growth and difficult-to-fill accountant mentions, but does not classify generic Accountant as a confirmed shortage.",
+          "reason": "CampCareer maps this to methodology severity 'pressure' (5/20), not 'shortage'. This preserves the distinction between recruitment pressure and an official shortage designation."
         },
         "employment_momentum": {
           "status": "normalized",
@@ -1145,9 +1152,16 @@
       },
       "components": {
         "shortage_signal": {
-          "status": "pending",
-          "reason": "SOLAS marks shortage evidence for the wider other-healthcare-professionals group as inconclusive; this cannot be converted to a confirmed radiographer shortage or confirmed-not-shortage.",
-          "source": "solasNsb2025"
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_20",
+          "scoreValue": 5,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS groups radiographers within 'Other healthcare professionals'. The report says demand is evident while the extent of shortages is difficult to determine because speciality employment counts are small.",
+          "reason": "CampCareer maps the directly documented demand pressure to methodology severity 'pressure' (5/20). It is explicitly not represented as a confirmed Radiographer shortage."
         },
         "employment_momentum": {
           "status": "normalized",
@@ -1281,7 +1295,6 @@
       "accountant": {
         "careerDecisionReady": false,
         "pendingPublicComponents": [
-          "shortage_signal",
           "industry_diversity"
         ],
         "visaContextReady": true
@@ -1295,10 +1308,8 @@
         "visaContextReady": true
       },
       "radiographer": {
-        "careerDecisionReady": false,
-        "pendingPublicComponents": [
-          "shortage_signal"
-        ],
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
         "visaContextReady": true
       }
     }
