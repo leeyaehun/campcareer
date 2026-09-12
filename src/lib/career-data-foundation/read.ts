@@ -576,16 +576,17 @@ export async function getFoundationCountriesForCareer(careerId: string) {
   }>
   const snapshotKeys = rows.map((row) => row.snapshot_key).filter(Boolean)
   const componentsBySnapshot = new Map<string, Array<{
-    componentKey: string
+    componentKey: FoundationComponentKey
     scoreValue: number | null
     maxScore: number
     availability: "available" | "unavailable"
+    evidenceStatus: FoundationEvidenceStatus
   }>>()
 
   if (snapshotKeys.length) {
     const componentQuery = await supabase
       .from("career_score_components")
-      .select("snapshot_key,component_key,score_value,max_score,availability")
+      .select("snapshot_key,component_key,score_value,max_score,availability,evidence_status")
       .in("snapshot_key", snapshotKeys)
     if (componentQuery.error) throw componentQuery.error
 
@@ -593,24 +594,54 @@ export async function getFoundationCountriesForCareer(careerId: string) {
       const snapshotKey = String(row.snapshot_key)
       const items = componentsBySnapshot.get(snapshotKey) ?? []
       items.push({
-        componentKey: String(row.component_key),
+        componentKey: String(row.component_key) as FoundationComponentKey,
         scoreValue: numberOrNull(row.score_value as number | string | null),
         maxScore: Number(row.max_score),
         availability: row.availability as "available" | "unavailable",
+        evidenceStatus: row.evidence_status as FoundationEvidenceStatus,
       })
       componentsBySnapshot.set(snapshotKey, items)
     }
   }
 
+  const publicComponentKeys: readonly FoundationComponentKey[] = [
+    "shortage_signal",
+    "vacancy_intensity",
+    "industry_diversity",
+    "employment_momentum",
+    "projected_growth",
+    "relative_salary",
+    "entry_accessibility",
+    "entry_burden",
+  ]
+  const missingEvidence = new Set<FoundationEvidenceStatus>([
+    "no_evidence_found",
+    "insufficient_industry_coverage",
+  ])
+
   return rows.map((row) => {
+    const components = componentsBySnapshot.get(row.snapshot_key) ?? []
     const campCareerScore = row.score_ready
-      ? campCareerScoreFromFoundationComponents(componentsBySnapshot.get(row.snapshot_key) ?? [])
+      ? campCareerScoreFromFoundationComponents(components)
       : null
+    const componentsByKey = new Map(components.map((component) => [component.componentKey, component]))
+    const strictPublicScoreEvidence = publicComponentKeys.every((componentKey) => {
+      const component = componentsByKey.get(componentKey)
+      return Boolean(
+        component
+        && component.availability === "available"
+        && component.scoreValue != null
+        && Number.isFinite(component.scoreValue)
+        && !missingEvidence.has(component.evidenceStatus),
+      )
+    })
+
     return {
       countryCode: String(row.country_code),
       decisionReady: Boolean(row.decision_ready),
       scoreReady: Boolean(row.score_ready) && campCareerScore != null,
       publishReady: Boolean(row.publish_ready),
+      strictPublicScoreEvidence,
       opportunityScore: campCareerScore?.total ?? null,
       campCareerScore,
       legacyOpportunityScore: numberOrNull(row.opportunity_score),
