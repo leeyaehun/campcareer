@@ -4,6 +4,8 @@ Last reviewed: 12 September 2026
 
 Current production inventory and reuse/gap findings are recorded in
 [IRELAND_GOLDEN_SLICE_CURRENT_STATE.md](IRELAND_GOLDEN_SLICE_CURRENT_STATE.md).
+Career cohort and decision-readiness criteria are defined in
+[IRELAND_GOLDEN_SLICE_CAREER_READINESS.md](IRELAND_GOLDEN_SLICE_CAREER_READINESS.md).
 
 ## Purpose
 
