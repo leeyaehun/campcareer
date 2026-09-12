@@ -93,9 +93,6 @@ This currently applies to:
 - Construction Manager
 - Accountant
 
-Radiographer receives only `3 / 15` because it is named in the 2024 survey but
-not repeated in the 2025 health summary.
-
 Radiographer receives only `3 / 15` vacancy intensity because it is named in
 the 2024 survey but not repeated in the 2025 health summary.
 
@@ -135,8 +132,8 @@ Verify in the target database that:
 - every source reference resolves;
 - every proxy has a proxy reason;
 - every normalized metric reconstructs its component;
-- the five complete Careers reconstruct the staged public totals;
-- the three incomplete Careers remain unscored;
+- the six complete Careers reconstruct the staged public totals;
+- the two incomplete Careers remain unscored;
 - no existing AU/US/UK foundation result regresses;
 - RLS/grants remain unchanged and secure.
 
