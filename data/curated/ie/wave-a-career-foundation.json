@@ -155,6 +155,20 @@
       "title": "Registration and protected radiographer titles",
       "url": "https://coru.ie/health-and-social-care-professionals/registration/",
       "sourceType": "official_service"
+    },
+    "solasRas2024": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "Recruitment Agency Survey on difficult-to-fill vacancies — November 2024",
+      "url": "https://a.storyblok.com/f/70398/x/16b38e96de/solas-recruitment-agency-survey.pdf",
+      "sourceType": "government_aggregator",
+      "note": "Earlier official selected-recruitment-agency survey used only to establish repeated-period persistence where the same Career/family also appears in 2025."
+    },
+    "deteCriticalSkills": {
+      "authority": "Department of Enterprise, Tourism and Employment",
+      "title": "Critical Skills Occupations List",
+      "url": "https://enterprise.gov.ie/en/what-we-do/workplace-and-skills/employment-permits/employment-permit-eligibility/highly-skilled-eligible-occupations-list/",
+      "sourceType": "official_primary",
+      "note": "Occupation-level immigration context only. Visa/work-right evidence is excluded from CampCareer Score v1."
     }
   },
   "careers": [
@@ -221,7 +235,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey explicitly names software developers; 2024 evidence also named software developers/engineers, so persistence is supported. No occupation-level denominator is published.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -270,6 +288,18 @@
           "source": "ieSoftwareEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "No universal statutory personal registration requirement is present in the reviewed Ireland Software Developer pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -338,7 +368,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey names security engineering within ICT; 2024 evidence also included security roles. This is a broader specialist proxy for Cybersecurity Analyst.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -387,6 +421,18 @@
           "source": "ieCyberEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "No universal statutory personal registration requirement is present in the reviewed Cybersecurity Analyst pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -455,7 +501,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey explicitly names data engineers and related data roles; 2024 evidence also included data specialists. No occupation-level denominator is published.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -504,6 +554,18 @@
           "source": "ieDataEngineerEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "No universal statutory personal registration requirement is present in the reviewed Data Engineer pathway evidence."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -572,7 +634,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey explicitly names site/civil engineers; 2024 evidence also named civil/site engineers. The fallback remains broader than a clean vacancy-rate statistic.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -621,6 +687,18 @@
           "source": "ieCivilEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "Engineers Ireland professional titles and accreditation matter, but generic Civil Engineer employment is not treated as one universally licensed personal statutory occupation."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -689,7 +767,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey explicitly names project/site managers; 2024 evidence also named project/site managers. No occupation-level denominator is published.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -738,6 +820,18 @@
           "source": "ieConstructionEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "No universal statutory Construction Manager register is asserted; role/site competence and construction-specific requirements still create some entry burden."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -801,7 +895,11 @@
           "evidenceStatus": "fallback",
           "source": "solasRas2025",
           "proxyReason": "2025 survey explicitly names several accountant specialisms; 2024 evidence also named accountants. This supports persistence but not a numeric vacancy rate.",
-          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator.",
+          "sourceRefs": [
+            "solasRas2024",
+            "solasRas2025"
+          ]
         },
         "industry_diversity": {
           "status": "pending",
@@ -842,6 +940,18 @@
           "source": "ieAccountantEntry",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "Generic Accountant employment is not modelled as a single universally licensed profession; permit-specific recognition requirements remain separate context."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 8,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Current Critical Skills treatment for SOC 2421 is conditional on specified chartered/certified and specialist accountancy scopes; the generic Accountant Career is not given universal full credit.",
+          "reason": "Conditional 8/10 is retained as internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -947,6 +1057,18 @@
           "source": "ieArchitectRegistration",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "Architect is a protected title in Ireland and admission to the statutory Register is required to use the title."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     },
@@ -1010,7 +1132,10 @@
           "evidenceStatus": "fallback",
           "source": "solasNsb2025",
           "proxyReason": "The November 2024 SOLAS Recruitment Agency Survey directly named radiographers as difficult to fill. The November 2025 survey's health summary does not repeat radiographers, so no persistence bonus is applied.",
-          "reason": "Conservative fallback uses low vacancy intensity only (3/15). There is no clean occupation-level vacancy numerator/denominator."
+          "reason": "Conservative fallback uses low vacancy intensity only (3/15). There is no clean occupation-level vacancy numerator/denominator.",
+          "sourceRefs": [
+            "solasRas2024"
+          ]
         },
         "industry_diversity": {
           "status": "normalized",
@@ -1059,8 +1184,73 @@
           "source": "ieRadiographerRegistration",
           "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
           "reason": "Radiographer is a regulated/protected profession requiring CORU registration."
+        },
+        "visa_accessibility": {
+          "status": "normalized",
+          "normalizedValue": 10,
+          "normalizedUnit": "points_of_10",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "deteCriticalSkills",
+          "proxyReason": "Official occupation-level Critical Skills eligibility is mapped into the internal CampCareer visa-accessibility rubric. This is structural Career context, not personal immigration eligibility.",
+          "reason": "10/10 is internal pathway context only and does not contribute to CampCareer Score v1."
         }
       }
     }
-  ]
+  ],
+  "readiness": {
+    "policy": "Career Decision Ready requires all eight public CampCareer Score evidence components to be normalized. Internal visa context does not complete a missing public component.",
+    "careers": {
+      "software-developer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "cybersecurity-analyst": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "data-engineer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "civil-engineer": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "construction-manager": {
+        "careerDecisionReady": true,
+        "pendingPublicComponents": [],
+        "visaContextReady": true
+      },
+      "accountant": {
+        "careerDecisionReady": false,
+        "pendingPublicComponents": [
+          "shortage_signal",
+          "industry_diversity"
+        ],
+        "visaContextReady": true
+      },
+      "architect": {
+        "careerDecisionReady": false,
+        "pendingPublicComponents": [
+          "shortage_signal",
+          "vacancy_intensity"
+        ],
+        "visaContextReady": true
+      },
+      "radiographer": {
+        "careerDecisionReady": false,
+        "pendingPublicComponents": [
+          "shortage_signal"
+        ],
+        "visaContextReady": true
+      }
+    }
+  }
 }
