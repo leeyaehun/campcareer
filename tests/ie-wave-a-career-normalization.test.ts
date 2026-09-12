@@ -223,3 +223,40 @@ test("Architect remains explicitly incomplete where the RAS evidence referred to
   assert.ok(career)
   assert.equal(career.components.vacancy_intensity?.status, "pending")
 })
+
+
+test("Wave A Entry evidence is normalized from official pathway or regulator sources", () => {
+  const expected: Record<string, { access: number; burden: number }> = {
+    "software-developer": { access: 8, burden: 5 },
+    "cybersecurity-analyst": { access: 8, burden: 5 },
+    "data-engineer": { access: 8, burden: 5 },
+    "civil-engineer": { access: 8, burden: 5 },
+    "construction-manager": { access: 6, burden: 4 },
+    accountant: { access: 8, burden: 5 },
+    architect: { access: 4, burden: 1 },
+    radiographer: { access: 6, burden: 1 },
+  }
+
+  for (const career of data.careers) {
+    const wanted = expected[career.careerId]
+    const access = career.components.entry_accessibility
+    const burden = career.components.entry_burden
+    assert.equal(access?.status, "normalized", career.careerId)
+    assert.equal(access?.scoreValue, wanted.access, career.careerId)
+    assert.equal(access?.directness, "proxy", career.careerId)
+    assert.ok(access?.proxyReason?.includes("CampCareer Entry Accessibility"), career.careerId)
+    assert.equal(burden?.status, "normalized", career.careerId)
+    assert.equal(burden?.scoreValue, wanted.burden, career.careerId)
+    assert.equal(burden?.directness, "proxy", career.careerId)
+    assert.ok(burden?.proxyReason?.includes("CampCareer Entry Burden"), career.careerId)
+  }
+})
+
+test("regulated Wave A Careers retain materially lower Entry Burden scores", () => {
+  const architect = data.careers.find((item) => item.careerId === "architect")
+  const radiographer = data.careers.find((item) => item.careerId === "radiographer")
+  assert.equal(architect?.components.entry_burden?.scoreValue, 1)
+  assert.equal(radiographer?.components.entry_burden?.scoreValue, 1)
+  assert.ok(architect?.components.entry_burden?.reason?.includes("protected title"))
+  assert.ok(radiographer?.components.entry_burden?.reason?.includes("CORU"))
+})
