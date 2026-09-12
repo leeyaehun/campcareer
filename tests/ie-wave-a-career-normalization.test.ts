@@ -116,6 +116,8 @@ test("employment momentum is normalized against the 3.4% Ireland benchmark deter
       nationalAnnualGrowthPct: data.benchmarks.recentEmploymentGrowthAnnualAvgPct,
     })
     assert.equal(result.scoreValue, expectedScores[career.careerId], career.careerId)
+    assert.equal(career.components.employment_momentum?.normalizedValue, result.excessPp, career.careerId)
+    assert.equal(career.components.employment_momentum?.scoreValue, result.scoreValue, career.careerId)
   }
 })
 
@@ -140,6 +142,8 @@ test("Cedefop projection proxies normalize reproducibly and retain the source-gr
     })
     assert.ok(result)
     assert.equal(result.scoreValue, expectedScores[career.careerId], career.careerId)
+    assert.equal(career.components.projected_growth?.normalizedValue, result.excessPp, career.careerId)
+    assert.equal(career.components.projected_growth?.scoreValue, result.scoreValue, career.careerId)
     assert.equal(career.projection.directness, "proxy")
     assert.ok(career.projection.proxyReason?.trim())
   }
