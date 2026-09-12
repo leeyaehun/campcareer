@@ -6,6 +6,8 @@ Current production inventory and reuse/gap findings are recorded in
 [IRELAND_GOLDEN_SLICE_CURRENT_STATE.md](IRELAND_GOLDEN_SLICE_CURRENT_STATE.md).
 Career cohort and decision-readiness criteria are defined in
 [IRELAND_GOLDEN_SLICE_CAREER_READINESS.md](IRELAND_GOLDEN_SLICE_CAREER_READINESS.md).
+Wave A official-source candidates and unresolved evidence gaps are mapped in
+[IRELAND_GOLDEN_SLICE_EVIDENCE_SOURCE_MAP.md](IRELAND_GOLDEN_SLICE_EVIDENCE_SOURCE_MAP.md).
 
 ## Purpose
 
