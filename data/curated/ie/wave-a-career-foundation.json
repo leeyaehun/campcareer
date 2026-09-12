@@ -1,0 +1,652 @@
+{
+  "version": "ie-wave-a-career-normalization-v1",
+  "checkedOn": "2026-09-12",
+  "status": "staging_only",
+  "policy": {
+    "publicScoreFormula": "Demand 40 / Pay 30 / Entry 30",
+    "missingEvidenceRule": "Missing evidence is unavailable, never numeric zero.",
+    "publicationRule": "No Career becomes public score-ready from this staging file alone."
+  },
+  "benchmarks": {
+    "recentEmploymentGrowthAnnualAvgPct": 3.4,
+    "recentEmploymentGrowthPeriod": "2019-2024",
+    "projectedNationalGrowthAnnualPct": 1.7,
+    "projectionPeriod": "2021-2035"
+  },
+  "sources": {
+    "solasNsb2025": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "National Skills Bulletin 2025",
+      "url": "https://www.solas.ie/f/70398/x/893ebacfd9/national-skills-bulletin-2025.pdf",
+      "sourceType": "government_aggregator"
+    },
+    "solasForecast2023": {
+      "authority": "SOLAS Skills and Labour Market Research Unit / Cedefop",
+      "title": "Summer Skills Bulletin 2023 — Cedefop forecasts 2021-2035",
+      "url": "https://www.solas.ie/f/70398/x/756240fc66/summer-skills-bulletin-2023.pdf",
+      "sourceType": "government_aggregator"
+    },
+    "solasRas2024": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "Difficult-to-fill vacancies survey — November 2024",
+      "url": "https://www.solas.ie/f/70398/x/16b38e96de/solas-recruitment-agency-survey.pdf",
+      "sourceType": "government_aggregator"
+    },
+    "csoSes2022": {
+      "authority": "Central Statistics Office",
+      "title": "Structure of Earnings Survey 2022 — detailed occupation earnings tables",
+      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-ses/structureofearningssurvey2022/data/",
+      "sourceType": "official_primary",
+      "note": "SES05/SES06 are identified as the preferred Pay candidates; exact Wave A rows are not yet normalized."
+    }
+  },
+  "careers": [
+    {
+      "careerId": "software-developer",
+      "profileKey": "IE:software-developer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2136",
+        "title": "Programmers and software development professionals",
+        "relation": "exact",
+        "quality": "high"
+      },
+      "labourMarket": {
+        "employed2024": 54800,
+        "annualAverageGrowthPct2019To2024": 12.1,
+        "directness": "direct",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop publishes the forecast at the broader ICT professionals group; the bulletin also warns the 2021 ICT baseline is understated."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "direct",
+          "evidenceStatus": "direct_verified",
+          "source": "solasNsb2025",
+          "explanation": "SOLAS 2025 lists software developers/engineers as a national shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "direct",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025"
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Difficult-to-fill evidence is confirmed, but a defensible numeric vacancy-intensity normalization has not yet been selected."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "SOLAS publishes sector shares for the wider ICT occupation family, not a complete comparable sector distribution for software developers alone."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "CSO SES05/SES06 detailed occupation earnings must be extracted and mapped before Pay can be scored."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Legacy Ireland evidence describes degree and work-based ICT routes but needs Career Data Foundation source records before publication."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "Legacy Ireland evidence records no universal statutory professional registration; source record still needs normalization."
+        }
+      }
+    },
+    {
+      "careerId": "cybersecurity-analyst",
+      "profileKey": "IE:cybersecurity-analyst",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2139",
+        "title": "Information technology and telecommunications professionals n.e.c. — cyber-security analyst scope",
+        "relation": "narrower",
+        "quality": "medium"
+      },
+      "labourMarket": {
+        "employed2024": 25200,
+        "annualAverageGrowthPct2019To2024": 9,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes ICT professionals n.e.c. as the broader employment group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is for ICT professionals, broader than cyber-security analysis."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS shortage wording is IT analysts/engineers and difficult-to-fill evidence includes cyber/security specialisms."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses ICT professionals n.e.c. growth."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "SOLAS RAS confirms difficult-to-fill cyber/security roles but does not provide a clean occupation vacancy denominator for the scoring rubric."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "No complete cyber-security occupation-by-industry share distribution has been normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Existing official apprenticeship/education evidence needs normalization into Career Data Foundation."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "No universal statutory registration is currently recorded; source-level normalization remains."
+        }
+      }
+    },
+    {
+      "careerId": "data-engineer",
+      "profileKey": "IE:data-engineer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2135",
+        "title": "IT business analysts, architects and systems designers — data engineering / architecture scope",
+        "relation": "narrower",
+        "quality": "medium"
+      },
+      "labourMarket": {
+        "employed2024": 25200,
+        "annualAverageGrowthPct2019To2024": 9,
+        "directness": "proxy",
+        "proxyReason": "The published SOLAS group is broader than Data Engineer.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "ICT professionals",
+        "employment2021Thousands": 71,
+        "netChangeTo2035Thousands": 29,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is for ICT professionals."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS identifies IT analysts/engineers as shortage roles; Data Engineer is a constrained scope within the mapped official group."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the broader ICT professionals n.e.c. growth series."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Broader ICT professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Difficult-to-fill data engineering evidence exists, but numeric vacancy-intensity input is not yet defensible."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "No complete Data Engineer occupation-by-industry distribution has been normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Legacy official pathway evidence requires Career Data Foundation normalization."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "No universal statutory registration is currently recorded; source-level normalization remains."
+        }
+      }
+    },
+    {
+      "careerId": "civil-engineer",
+      "profileKey": "IE:civil-engineer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2121",
+        "title": "Civil engineers",
+        "relation": "exact",
+        "quality": "high"
+      },
+      "labourMarket": {
+        "employed2024": 22400,
+        "annualAverageGrowthPct2019To2024": 4.6,
+        "directness": "proxy",
+        "proxyReason": "SOLAS combines civil engineers and construction project managers in the published 2025 chart.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Science & engineering professionals",
+        "employment2021Thousands": 96,
+        "netChangeTo2035Thousands": 19,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Civil Engineer."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Science & engineering professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Difficult-to-fill evidence exists but no clean numeric vacancy intensity has been normalized."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "Published construction-family sector shares are broader than Civil Engineer."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Existing Engineers Ireland accredited-program route needs Career Data Foundation normalization."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "Professional titles are valuable but generic Civil Engineer practice is not recorded as universally subject to one personal statutory register."
+        }
+      }
+    },
+    {
+      "careerId": "construction-manager",
+      "profileKey": "IE:construction-manager",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2436",
+        "title": "Construction project managers and related professionals",
+        "relation": "exact",
+        "quality": "high"
+      },
+      "labourMarket": {
+        "employed2024": 22400,
+        "annualAverageGrowthPct2019To2024": 4.6,
+        "directness": "proxy",
+        "proxyReason": "SOLAS combines civil engineers and construction project managers in the published 2025 chart.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Production & specialised services managers",
+        "employment2021Thousands": 69,
+        "netChangeTo2035Thousands": 38,
+        "directness": "proxy",
+        "proxyReason": "The Cedefop manager group explicitly includes managers in construction, but is much broader than Construction Project Manager."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "normalized",
+          "normalizedValue": 12,
+          "maxScore": 20,
+          "directness": "proxy",
+          "evidenceStatus": "proxy",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS lists the combined national group 'Civil engineers & construction project managers' as a shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses the combined civil engineer/construction project manager growth series."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Production & specialised services managers explicitly includes managers in construction."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Recruitment Agency Survey identifies project/site managers as difficult to fill, but a numeric intensity input is not yet normalized."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "No complete Construction Project Manager occupation-by-industry distribution has been normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 6,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Legacy Ireland evidence uses degree/technical education plus experience; source-level normalization remains."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 4,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "No universal statutory construction-manager register is recorded; role/site requirements still need normalized blocker evidence."
+        }
+      }
+    },
+    {
+      "careerId": "accountant",
+      "profileKey": "IE:accountant",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2421",
+        "title": "Chartered and certified accountants — accountant scope",
+        "relation": "narrower",
+        "quality": "medium"
+      },
+      "labourMarket": {
+        "employed2024": 56600,
+        "annualAverageGrowthPct2019To2024": 6.9,
+        "directness": "proxy",
+        "proxyReason": "SOLAS reports the broader accountants & tax experts group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Business & administration professionals",
+        "employment2021Thousands": 150,
+        "netChangeTo2035Thousands": 53,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Accountants."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "pending",
+          "reason": "SOLAS reports strong demand and difficult-to-fill accountant roles but does not publish a blanket accountant shortage finding; absence is not converted into confirmed-not-shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses accountants & tax experts group growth."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Business & administration professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Difficult-to-fill accountant evidence is present, but numeric vacancy-intensity normalization is pending."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "SOLAS describes cross-sector demand but the exact complete sector-share vector required for HHI is not normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 8,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "Professional qualification, degree and apprenticeship routes exist; exact rubric inputs still need normalization."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 5,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "Generic accountancy is not treated as one universally licensed occupation; employment-permit recognition rules remain separate context."
+        }
+      }
+    },
+    {
+      "careerId": "architect",
+      "profileKey": "IE:architect",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2431",
+        "title": "Architects and town planners — Architect",
+        "relation": "narrower",
+        "quality": "medium"
+      },
+      "labourMarket": {
+        "employed2024": 13900,
+        "annualAverageGrowthPct2019To2024": 4.2,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes Architects & town planners as the broader group.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Science & engineering professionals",
+        "employment2021Thousands": 96,
+        "netChangeTo2035Thousands": 19,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is much broader than Architect."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "pending",
+          "reason": "SOLAS identifies Quantity Surveyors—not generic Architects—as the explicit shortage within the relevant construction discussion; this evidence must not be borrowed."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses Architects & town planners group growth."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Science & engineering professionals forecast."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "Grouped recruitment evidence exists, but a defensible Architect-only numeric intensity input is not yet normalized."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "No complete Architect occupation-by-industry share vector has been normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "RIAI route is sourced, but the current point conversion still needs Career Data Foundation raw/normalized records."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "Architect is a protected title with a statutory registration pathway; exact rubric inputs remain to be normalized."
+        }
+      }
+    },
+    {
+      "careerId": "radiographer",
+      "profileKey": "IE:radiographer",
+      "mapping": {
+        "taxonomy": "SOC 2010",
+        "code": "2217",
+        "title": "Radiographers — diagnostic and therapeutic radiography scope",
+        "relation": "exact",
+        "quality": "high"
+      },
+      "labourMarket": {
+        "employed2024": 29200,
+        "annualAverageGrowthPct2019To2024": 5.2,
+        "directness": "proxy",
+        "proxyReason": "SOLAS publishes a broader 'other healthcare professionals' group that includes radiographers.",
+        "source": "solasNsb2025"
+      },
+      "projection": {
+        "group": "Health professionals",
+        "employment2021Thousands": 104,
+        "netChangeTo2035Thousands": 8,
+        "directness": "proxy",
+        "proxyReason": "Cedefop forecast is broader than Radiographer and SOLAS cautions that healthcare demand may be stronger than the baseline forecast."
+      },
+      "components": {
+        "shortage_signal": {
+          "status": "pending",
+          "reason": "SOLAS marks shortage evidence for the wider other-healthcare-professionals group as inconclusive; this cannot be converted to a confirmed radiographer shortage or confirmed-not-shortage."
+        },
+        "employment_momentum": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "Uses broader other-healthcare-professionals growth."
+        },
+        "projected_growth": {
+          "status": "normalized",
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasForecast2023",
+          "proxyReason": "Uses broader Health professionals forecast and retains the SOLAS caveat."
+        },
+        "vacancy_intensity": {
+          "status": "pending",
+          "reason": "SOLAS difficult-to-fill survey names radiographers, but no clean numeric vacancy denominator/intensity has been normalized."
+        },
+        "industry_diversity": {
+          "status": "pending",
+          "reason": "Healthcare concentration must be measured as real concentration, not replaced with a missing-data zero; exact shares are not yet normalized."
+        },
+        "relative_salary": {
+          "status": "pending",
+          "reason": "HSE pay scales are useful context but are not silently treated as a national occupation median; CSO SES mapping remains under review."
+        },
+        "entry_accessibility": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 6,
+          "maxScore": 15,
+          "directness": "proxy",
+          "proxyReason": "CORU-approved qualification route is sourced; exact rubric inputs still need normalization."
+        },
+        "entry_burden": {
+          "status": "carry_forward_candidate",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "proxyReason": "CORU protected-title registration is a real burden; exact rubric inputs remain to be normalized."
+        }
+      }
+    }
+  ]
+}
