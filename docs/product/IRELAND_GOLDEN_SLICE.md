@@ -2,6 +2,9 @@
 
 Last reviewed: 12 September 2026
 
+Current production inventory and reuse/gap findings are recorded in
+[IRELAND_GOLDEN_SLICE_CURRENT_STATE.md](IRELAND_GOLDEN_SLICE_CURRENT_STATE.md).
+
 ## Purpose
 
 Ireland is the first deep validation market. Its purpose is to prove that a
