@@ -1,6 +1,6 @@
 # CampCareer privacy foundation inventory
 
-Last reviewed: 11 September 2026
+Last reviewed: 12 September 2026
 Owner: Yaehun Lee, operating CampCareer
 Privacy contact: leeyaehun@gmail.com
 
@@ -44,6 +44,11 @@ The current allowed custom-event context is limited to low-cardinality product
 fields such as country, concept, goal, locale, route ID, link type, event
 counts and entity families. Search text is omitted when it resembles obvious
 PII. Feedback text is never sent to analytics.
+
+Existing Wise and Airalo outbound links are commercial relationships. A
+consented click may record only the partner ID and the documented pseudonymous
+attribution context. Without affirmative measurement consent, the redirect
+still works and no affiliate-click measurement record is written.
 
 ## Release checklist
 
