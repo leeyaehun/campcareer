@@ -10,12 +10,14 @@ import { INDEXABLE_DE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-
 import { INDEXABLE_ES_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-es"
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-eu-fastpath"
 import { INDEXABLE_FR_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-fr"
+import { INDEXABLE_IE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-ie"
 import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-sg"
 import { INDEXABLE_UK_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-us"
 import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions/institution-detail.server"
+import { getIrelandInstitutionDetail } from "@/lib/institutions/ireland-institution-detail.server"
 import { getAeInstitutionDetail, type AeInstitutionDetailResult } from "@/lib/institutions/ae-institution-detail.server"
 import { getAuthorityFastpathInstitutionDetail, type AuthorityFastpathCountryCode, type AuthorityFastpathInstitutionDetailResult } from "@/lib/institutions/authority-fastpath-institution-detail.server"
 import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFastpathInstitutionDetailResult } from "@/lib/institutions/eu-fastpath-institution-detail.server"
@@ -55,6 +57,7 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
     || INDEXABLE_SG_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_DE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_FR_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_IE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_ES_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
@@ -68,7 +71,8 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
   const slug = normalizeInstitutionSlugSegment(institution)
   if (!countryCode || !slug) return { title: "Institution not found", robots: { index: false, follow: true } }
   try {
-    const detail = countryCode === "ES" ? (await getSpainInstitutionDetail(slug))?.institution ?? null
+    const detail = countryCode === "IE" ? await getIrelandInstitutionDetail(slug)
+      : countryCode === "ES" ? (await getSpainInstitutionDetail(slug))?.institution ?? null
       : countryCode === "AE" ? (await getAeInstitutionDetail(slug))?.institution ?? null
       : countryCode === "US" ? (await getUsInstitutionDetail(slug))?.institution ?? null
       : isEuFastpathCountry(countryCode) ? (await getEuFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
@@ -77,7 +81,9 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
     if (!detail) return { title: "Institution not found", robots: { index: false, follow: true } }
     const canonicalPath = institutionDetailPath(countryCode, detail.slug)
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
-    const description = countryCode === "US"
+    const description = countryCode === "IE"
+      ? `Explore ${detail.name} verified Higher Education Authority identity and official Ireland location evidence on CampCareer. Ireland program publication remains gated pending exact program-level eligibility.`
+      : countryCode === "US"
       ? `Explore ${detail.name} verified NCES/IPEDS UNITID identity, NCSES launch-cohort context and city-level ${locationLabel} on CampCareer. The US degree-program catalogue is pending.`
       : countryCode === "NL" ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
       : countryCode === "NZ" ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
@@ -100,6 +106,12 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   const canonicalPath = institutionDetailPath(countryCode, slug)
   if (country !== countryCode.toLowerCase() || institution !== slug) permanentRedirect(canonicalPath)
 
+  if (countryCode === "IE") {
+    let detail: InstitutionDetail | null = null
+    try { detail = await getIrelandInstitutionDetail(slug) } catch (error) { console.error("Unable to load Ireland institution detail page", error); return <InstitutionUnavailable /> }
+    if (!detail) notFound()
+    return <InstitutionDetailView institution={detail} />
+  }
   if (countryCode === "ES") {
     let result: SpainInstitutionDetailResult | null = null
     try { result = await getSpainInstitutionDetail(slug) } catch (error) { console.error("Unable to load Spain institution detail page", error); return <InstitutionUnavailable /> }

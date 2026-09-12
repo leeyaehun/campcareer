@@ -1,4 +1,4 @@
-export const INSTITUTION_MVP_COUNTRIES = ["AU", "CA", "UK", "NL", "NZ", "SG", "DE", "FR", "ES", "BE", "CH", "SE", "DK", "FI", "NO", "JP", "KR", "AE", "US"] as const
+export const INSTITUTION_MVP_COUNTRIES = ["AU", "CA", "UK", "IE", "NL", "NZ", "SG", "DE", "FR", "ES", "BE", "CH", "SE", "DK", "FI", "NO", "JP", "KR", "AE", "US"] as const
 export type InstitutionMvpCountryCode = (typeof INSTITUTION_MVP_COUNTRIES)[number]
 
 export const INSTITUTION_KIND_VALUES = [

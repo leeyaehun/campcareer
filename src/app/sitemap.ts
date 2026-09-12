@@ -27,6 +27,7 @@ import { INDEXABLE_DE_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_ES_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-es"
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-eu-fastpath"
 import { INDEXABLE_FR_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-fr"
+import { INDEXABLE_IE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-ie"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
 import { INDEXABLE_NL_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nz"
@@ -61,6 +62,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/au`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ca`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/uk`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/ie`, lastModified: new Date("2026-09-12"), priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/nl`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/nz`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/sg`, lastModified, priority: 0.82, changeFrequency: "weekly" },
@@ -142,6 +144,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...INDEXABLE_SG_INSTITUTION_PATHS,
     ...INDEXABLE_DE_INSTITUTION_PATHS,
     ...INDEXABLE_FR_INSTITUTION_PATHS,
+    ...INDEXABLE_IE_INSTITUTION_PATHS,
     ...INDEXABLE_ES_INSTITUTION_PATHS,
     ...INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS,
     ...INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_PATHS,
