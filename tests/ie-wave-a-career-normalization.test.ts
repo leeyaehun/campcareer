@@ -212,8 +212,13 @@ test("industry diversity uses a conservative HHI upper bound from published SOLA
 
     assert.ok(derived, career.careerId)
     assert.equal(diversity?.status, "normalized", career.careerId)
-    assert.equal(diversity?.normalizedValue, derived.hhiUpperBound, career.careerId)
+    assert.equal(diversity?.normalizedValue, derived.scoreValue, career.careerId)
     assert.equal(diversity?.scoreValue, derived.scoreValue, career.careerId)
+    assert.equal(
+      (diversity as Component & { derivedHhiUpperBound?: number }).derivedHhiUpperBound,
+      derived.hhiUpperBound,
+      career.careerId,
+    )
     assert.equal(diversity?.directness, "proxy", career.careerId)
     assert.ok(diversity?.proxyReason?.includes("broader"), career.careerId)
   }
