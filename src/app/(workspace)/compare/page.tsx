@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes"
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
@@ -43,12 +44,58 @@ import { SwedenCitiesCompareMatrix } from "./sweden-cities-compare-matrix"
 import { UnitedKingdomCitiesCompareMatrix } from "./united-kingdom-cities-compare-matrix"
 import { UnitedStatesCitiesCompareMatrix } from "./united-states-cities-compare-matrix"
 import { ComparePageHeader } from "./compare-mode-navigation"
+import { SITE_URL } from "@/lib/seo-routes.mjs"
 
 export const dynamic = "force-dynamic"
-export const metadata = { title: "Compare pathways", description: "Compare reviewed programs, countries, cities and careers with explicit context and source-aware missing values.", robots: { index: false, follow: false } as const }
 
 type ComparePageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> }
 function toSearchParams(values: Record<string, string | string[] | undefined>) { const params = new URLSearchParams(); for (const [key, value] of Object.entries(values)) { if (typeof value === "string") params.set(key, value); else if (Array.isArray(value) && value[0]) params.set(key, value[0]) } return params }
+
+const compareMetadata = {
+  title: "Compare pathways",
+  description: "Compare reviewed programs, countries, cities and careers with explicit context and source-aware missing values.",
+}
+
+/**
+ * Compare state remains noindex and self-contained in the query. A populated
+ * Australian career comparison gets a descriptive social preview while its
+ * canonical stays at /compare, preventing query combinations from becoming a
+ * crawlable page family.
+ */
+export async function generateMetadata({ searchParams }: ComparePageProps): Promise<Metadata> {
+  const params = toSearchParams(await searchParams)
+  const comparison = parseCareerComparisonState(params)
+  const isShareableCareerComparison = comparison.contextState === "supported" && comparison.careers.length >= 2
+  const names = comparison.careers.map((career) => career.label)
+  const title = isShareableCareerComparison ? `Compare ${names.join(" and ")}` : compareMetadata.title
+  const description = isShareableCareerComparison
+    ? `Compare verified Australian career pathways, requirements and outcomes for ${names.join(" and ")}.`
+    : compareMetadata.description
+  const shareHref = isShareableCareerComparison
+    ? buildCareerCompareCanonicalHref({ city: comparison.citySlug, careers: comparison.careerIds })
+    : "/compare"
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "/compare" },
+    robots: { index: false, follow: false },
+    openGraph: {
+      type: "website",
+      siteName: "CampCareer",
+      url: `${SITE_URL}${shareHref}`,
+      title,
+      description,
+      images: [{ url: "/og-career-path.png", width: 1200, height: 630, alt: "CampCareer career comparison" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/og-career-path.png"],
+    },
+  }
+}
 
 export default async function ComparePage({ searchParams }: ComparePageProps) {
   const params = toSearchParams(await searchParams)

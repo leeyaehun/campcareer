@@ -1,12 +1,36 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { withoutLocalePrefix } from "@/lib/i18n/config"
 import { trackAnalyticsEvent, type AnalyticsEntityType } from "@/lib/analytics"
 
 type SessionState = { viewedPaths: string[]; entityTypes: AnalyticsEntityType[]; decisionRecorded: boolean }
 const STORAGE_KEY = "cc_decision_session_v1"
+
+type CompareAnalyticsDetails = {
+  entity_count: number
+  comparison_category: "career" | "country" | "city" | "program" | "institution" | "universal"
+}
+
+function countDelimitedValues(value: string | null) {
+  return new Set((value ?? "").split(",").map((item) => item.trim()).filter(Boolean)).size
+}
+
+/**
+ * Compare routes keep their reconstructable state in a small, public query.
+ * This extracts only the mode and count for measurement; no selected IDs or
+ * other URL values are sent to analytics.
+ */
+export function getCompareAnalyticsDetails(searchParams: Pick<URLSearchParams, "get">): CompareAnalyticsDetails {
+  const type = searchParams.get("type")
+  if (type === "career") return { comparison_category: "career", entity_count: countDelimitedValues(searchParams.get("careers")) }
+  if (type === "country") return { comparison_category: "country", entity_count: countDelimitedValues(searchParams.get("locations")) }
+  if (type === "city") return { comparison_category: "city", entity_count: countDelimitedValues([searchParams.get("left"), searchParams.get("right")].filter(Boolean).join(",")) }
+  if (type === "program") return { comparison_category: "program", entity_count: countDelimitedValues(searchParams.get("items")) }
+  if (type === null) return { comparison_category: "program", entity_count: 0 }
+  return { comparison_category: "universal", entity_count: 0 }
+}
 
 export function entityTypeForPath(pathname: string): AnalyticsEntityType | null {
   const path = withoutLocalePrefix(pathname)
@@ -54,6 +78,7 @@ function writeState(state: SessionState) {
  */
 export function DecisionSessionTracker() {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const previousType = useRef<AnalyticsEntityType | null>(null)
 
   useEffect(() => {
@@ -71,7 +96,7 @@ export function DecisionSessionTracker() {
     previousType.current = entityType
 
     if (entityType === "compare" && isNewView) {
-      trackAnalyticsEvent({ name: "compare_view", params: { entity_count: 0, comparison_category: "universal" } })
+      trackAnalyticsEvent({ name: "compare_view", params: getCompareAnalyticsDetails(searchParams) })
     }
 
     if (!state.decisionRecorded) {
@@ -86,7 +111,7 @@ export function DecisionSessionTracker() {
       }
     }
     writeState(state)
-  }, [pathname])
+  }, [pathname, searchParams])
 
   return null
 }

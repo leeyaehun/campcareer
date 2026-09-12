@@ -16,6 +16,8 @@ export const CORE_ANALYTICS_EVENTS = [
   "compare_add",
   "compare_remove",
   "compare_view",
+  "compare_complete",
+  "compare_share",
   "source_open",
   "methodology_open",
   "entity_save",
@@ -33,7 +35,9 @@ export type CoreAnalyticsEvent =
   | { name: "filter_apply"; params: { search_location: "careers"; entity_filter: string } }
   | { name: "filter_clear"; params: { search_location: "careers"; entity_filter: string } }
   | { name: "compare_add" | "compare_remove"; params: { entity_type: AnalyticsEntityType; entity_count: number; comparison_category: "career" | "country" | "program" | "institution" } }
-  | { name: "compare_view"; params: { entity_count: number; comparison_category: "career" | "country" | "program" | "institution" | "universal" } }
+  | { name: "compare_view"; params: { entity_count: number; comparison_category: "career" | "country" | "city" | "program" | "institution" | "universal" } }
+  | { name: "compare_complete"; params: { entity_count: number; comparison_category: "career" | "country" | "city" | "program" | "institution" } }
+  | { name: "compare_share"; params: { entity_count: number; comparison_category: "career" | "country" | "city" | "program" | "institution"; share_method: "native" | "clipboard" } }
   | { name: "source_open"; params: { source_surface: "sources" | "career" } }
   | { name: "methodology_open"; params: { source_surface: "sources" | "career" | "data_policy" } }
   | { name: "entity_save"; params: { entity_type: AnalyticsEntityType } }

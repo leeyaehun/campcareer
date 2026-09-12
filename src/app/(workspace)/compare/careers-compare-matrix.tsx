@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown, Plus, X } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import {
   appendCareer,
   buildCareerCompareHref,
@@ -29,6 +30,8 @@ import {
 import { CompareCell, CompareShell } from "@/components/ui/compare"
 import { DataTable, DataTableHeader, DataTableRow } from "@/components/ui/data-table"
 import { Dialog, DialogCloseButton, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
+import { ShareComparisonButton } from "@/components/compare/share-comparison-button"
+import { trackAnalyticsEvent } from "@/lib/analytics"
 
 type CareerDisplaySection = {
   title: string
@@ -38,6 +41,7 @@ type CareerDisplaySection = {
 export default function CareersCompareMatrix() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const locale = useRouteLocale()
   const comparison = parseCareerComparisonState(searchParams)
   const [thirdOpen, setThirdOpen] = useState(comparison.careerIds.length >= CAREER_COMPARE_MAX_CAREERS)
   const [chooserSlot, setChooserSlot] = useState<number | null>(null)
@@ -53,6 +57,15 @@ export default function CareersCompareMatrix() {
   const canCompare = comparison.careers.length >= 2
   const showAdd = comparison.careerIds.length === 2 && !thirdOpen
   const sections = buildCareerSections(comparison.careers)
+  const completedComparison = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!canCompare) return
+    const signature = comparison.careerIds.join(",")
+    if (completedComparison.current === signature) return
+    completedComparison.current = signature
+    trackAnalyticsEvent({ name: "compare_complete", params: { entity_count: comparison.careers.length, comparison_category: "career" } })
+  }, [canCompare, comparison.careerIds, comparison.careers.length])
 
   const updateUrl = (citySlug: string | null, careerIds: readonly CareerCompareId[]) => {
     router.replace(buildCareerCompareHref(citySlug, careerIds), { scroll: false })
@@ -91,6 +104,18 @@ export default function CareersCompareMatrix() {
 
       {!canCompare ? (
         <p className="mb-3 text-sm font-medium text-campcareer-ink-secondary" role="status">{getCareerSelectionStatusMessage(comparison.careers.length)}</p>
+      ) : null}
+
+      {canCompare ? (
+        <div className="mb-4 flex justify-end">
+          <ShareComparisonButton
+            href={buildCareerCompareHref(comparison.citySlug, comparison.careerIds)}
+            title={`Compare ${comparison.careers.map((career) => career.label).join(" and ")}`}
+            description="Compare verified Australian career pathways, requirements and outcomes on CampCareer."
+            entityCount={comparison.careers.length}
+            locale={locale}
+          />
+        </div>
       ) : null}
 
       <DesktopMatrix

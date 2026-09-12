@@ -37,6 +37,17 @@ test("Journey A–B: Career discovery reaches evidence, then a supported Compare
   assertNoBrowserErrors()
 })
 
+test("Completed Career Compare is shareable without becoming an indexed query page", async ({ page }) => {
+  const response = await page.goto("/compare?type=career&country=AU&profile=starting-from-scratch&careers=registered-nurse,software-engineer")
+  expect(response?.status()).toBe(200)
+
+  await expect(page).toHaveTitle(/Compare Registered Nurse and Software Engineer/)
+  await expect(page.getByRole("button", { name: "Share comparison" })).toBeVisible()
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow")
+  await expectCanonical(page, "/compare")
+  await expectNoHorizontalPageOverflow(page)
+})
+
 test("Journey C: Country context retains its country when opening Career discovery", async ({ page }) => {
   const assertNoBrowserErrors = observeUnexpectedBrowserErrors(page)
   const response = await page.goto("/countries/au")
