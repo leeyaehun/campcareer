@@ -123,6 +123,22 @@ const recordValue = (value: unknown): Record<string, unknown> =>
     ? value as Record<string, unknown>
     : { value }
 
+const referencePeriodFor = (componentKey: string, component: Component) => {
+  if (componentKey === "employment_momentum") return String(data.benchmarks.recentEmploymentGrowthPeriod ?? "2019-2024")
+  if (componentKey === "projected_growth") return String(data.benchmarks.projectionPeriod ?? "2021-2035")
+  if (componentKey === "relative_salary") {
+    const pay = recordValue(data.benchmarks.pay)
+    return String(pay.period ?? "2022")
+  }
+  if (componentKey === "vacancy_intensity") {
+    if (component.sourceRefs?.includes("solasRas2024") && component.sourceRefs?.includes("solasRas2025")) return "2024-2025"
+    if (component.sourceRefs?.includes("solasRas2024")) return "2024"
+    return "2025 evidence review"
+  }
+  if (["shortage_signal", "industry_diversity"].includes(componentKey)) return "2025"
+  return `Current evidence checked ${data.checkedOn}`
+}
+
 const rawPayloadFor = (
   career: Career,
   componentKey: string,
@@ -220,7 +236,7 @@ for (const career of data.careers) {
         ? q(component.proxyReason ?? component.reason ?? "Current evidence is broader than the canonical Career scope.")
         : "null"
 
-      sql.push(`insert into public.career_raw_observations (observation_key,profile_key,mapping_key,source_key,metric_key,reference_period,as_of_date,raw_value,unit,availability,reason,directness,mapping_quality,proxy_reason,source_type,quality,confidence,last_verified_on,explanation) values (${q(observationKey)},${q(career.profileKey)},${q(mappingKey)},${q(sourceKey)},${q(componentKey)},${q(data.checkedOn)},${q(data.checkedOn)},${rawValue},${nullableText(component.normalizedUnit)},${q(available ? "available" : "unavailable")},${reason},${q(directness)},${q(componentMappingQuality(component, career))},${proxyReason},${q(source.sourceType)},${q(componentQuality(component))},${componentConfidence(component)},${q(data.checkedOn)},${q(component.reason ?? component.proxyReason ?? `Wave A ${componentKey} evidence.`)}) on conflict (observation_key) do update set source_key=excluded.source_key,metric_key=excluded.metric_key,reference_period=excluded.reference_period,as_of_date=excluded.as_of_date,raw_value=excluded.raw_value,unit=excluded.unit,availability=excluded.availability,reason=excluded.reason,directness=excluded.directness,mapping_quality=excluded.mapping_quality,proxy_reason=excluded.proxy_reason,source_type=excluded.source_type,quality=excluded.quality,confidence=excluded.confidence,last_verified_on=excluded.last_verified_on,explanation=excluded.explanation;`)
+      sql.push(`insert into public.career_raw_observations (observation_key,profile_key,mapping_key,source_key,metric_key,reference_period,as_of_date,raw_value,unit,availability,reason,directness,mapping_quality,proxy_reason,source_type,quality,confidence,last_verified_on,explanation) values (${q(observationKey)},${q(career.profileKey)},${q(mappingKey)},${q(sourceKey)},${q(componentKey)},${q(referencePeriodFor(componentKey, component))},${q(data.checkedOn)},${rawValue},${nullableText(component.normalizedUnit)},${q(available ? "available" : "unavailable")},${reason},${q(directness)},${q(componentMappingQuality(component, career))},${proxyReason},${q(source.sourceType)},${q(componentQuality(component))},${componentConfidence(component)},${q(data.checkedOn)},${q(component.reason ?? component.proxyReason ?? `Wave A ${componentKey} evidence.`)}) on conflict (observation_key) do update set source_key=excluded.source_key,metric_key=excluded.metric_key,reference_period=excluded.reference_period,as_of_date=excluded.as_of_date,raw_value=excluded.raw_value,unit=excluded.unit,availability=excluded.availability,reason=excluded.reason,directness=excluded.directness,mapping_quality=excluded.mapping_quality,proxy_reason=excluded.proxy_reason,source_type=excluded.source_type,quality=excluded.quality,confidence=excluded.confidence,last_verified_on=excluded.last_verified_on,explanation=excluded.explanation;`)
     }
 
     const metricKey = `${career.profileKey}:${componentKey}:wave-a-v1`
