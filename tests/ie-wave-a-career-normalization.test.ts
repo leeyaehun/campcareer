@@ -169,6 +169,10 @@ test("2025 difficult-to-fill evidence only unlocks conservative vacancy fallback
       assert.equal(vacancy?.scoreValue, 4, career.careerId)
       assert.equal(vacancy?.directness, "proxy", career.careerId)
       assert.ok(vacancy?.proxyReason?.trim(), career.careerId)
+    } else if (career.careerId === "radiographer") {
+      assert.equal(vacancy?.status, "normalized", career.careerId)
+      assert.equal(vacancy?.normalizedValue, 3, career.careerId)
+      assert.equal(vacancy?.scoreValue, 3, career.careerId)
     } else {
       assert.equal(vacancy?.status, "pending", career.careerId)
     }
