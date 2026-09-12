@@ -294,11 +294,12 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
     })
   }
 
-  // Foundation summaries are used only when there is no reviewed legacy
-  // profile for the country and the pair is already in the explicit Ready pool.
+  // A foundation row may replace a legacy recommendation only after it
+  // passes the same explicit public gate used by the Career detail page.
+  // This keeps recommendation scores aligned with the reviewed public source
+  // instead of falling back to an older provisional country snapshot.
   for (const foundation of foundationRows) {
-    if (byCountry.has(foundation.countryCode)) continue
-    if (!isCareerScoreReady(foundation.countryCode, careerId)) continue
+    if (!foundationHasPublicScore(foundation)) continue
     if (!isFoundationRankable({
       decisionReady: foundation.decisionReady,
       scoreReady: foundation.scoreReady,
