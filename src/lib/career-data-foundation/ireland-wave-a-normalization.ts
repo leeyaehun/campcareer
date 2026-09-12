@@ -1,5 +1,6 @@
+import { campCareerScoreFromFoundationComponents } from "../campcareer-score"
 import { scoreFoundationComponent } from "./opportunity-score"
-import { FOUNDATION_FORMULA_VERSION } from "./types"
+import { FOUNDATION_COMPONENT_MAXIMA, FOUNDATION_FORMULA_VERSION, type FoundationComponentKey } from "./types"
 
 const round = (value: number, digits = 4) => {
   const factor = 10 ** digits
@@ -105,4 +106,46 @@ export function conservativeIndustryDiversityFromPublishedShares(
     topIndustrySharePct,
     scoreValue: score,
   }
+}
+
+
+const IRELAND_PUBLIC_SCORE_COMPONENTS: readonly FoundationComponentKey[] = [
+  "shortage_signal",
+  "vacancy_intensity",
+  "industry_diversity",
+  "employment_momentum",
+  "projected_growth",
+  "relative_salary",
+  "entry_accessibility",
+  "entry_burden",
+] as const
+
+export type IrelandStagedComponent = {
+  status: string
+  scoreValue?: number | null
+  maxScore?: number | null
+}
+
+export function stagedIrelandCampCareerScore(
+  components: Record<string, IrelandStagedComponent>,
+) {
+  const inputs = []
+  for (const componentKey of IRELAND_PUBLIC_SCORE_COMPONENTS) {
+    const component = components[componentKey]
+    if (
+      !component
+      || component.status !== "normalized"
+      || component.scoreValue == null
+      || !Number.isFinite(component.scoreValue)
+    ) return null
+
+    inputs.push({
+      componentKey,
+      scoreValue: component.scoreValue,
+      maxScore: component.maxScore ?? FOUNDATION_COMPONENT_MAXIMA[componentKey],
+      availability: "available" as const,
+    })
+  }
+
+  return campCareerScoreFromFoundationComponents(inputs)
 }
