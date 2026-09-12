@@ -48,7 +48,11 @@ test("Ireland activation migration is strict, bounded and keeps incomplete Caree
 test("reviewed foundation recommendations replace older provisional legacy scores", () => {
   assert.match(
     marketReadSource,
-    /if \(!foundationHasPublicScore\(foundation\)\) continue/,
+    /if \(!isCareerScoreReady\(foundation\.countryCode, careerId\)\) continue/,
+  )
+  assert.match(
+    marketReadSource,
+    /if \(!foundation\.strictPublicScoreEvidence\) continue/,
   )
   assert.doesNotMatch(
     marketReadSource,
