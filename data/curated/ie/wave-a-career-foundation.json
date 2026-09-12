@@ -94,6 +94,66 @@
       "url": "https://a.storyblok.com/f/70398/x/b5123eb8c0/solas-difficult-to-fill-vacancies-survey.pdf",
       "sourceType": "government_aggregator",
       "note": "Official selected-recruitment-agency survey. Used only as a conservative vacancy fallback because it does not publish an occupation-level vacancy numerator/denominator."
+    },
+    "ieSoftwareEntry": {
+      "authority": "Dublin City University",
+      "title": "BSc Computer Science",
+      "url": "https://www.dcu.ie/courses/undergraduate/school-computing/computer-science",
+      "sourceType": "official_service"
+    },
+    "ieCyberEntry": {
+      "authority": "Generation Apprenticeship",
+      "title": "Cybersecurity Associate Level 6",
+      "url": "https://apprenticeship.ie/career-seekers/get-started/learn-more/ict/Cybersecurity-Associate-L6",
+      "sourceType": "official_service"
+    },
+    "ieDataEngineerEntry": {
+      "authority": "Dublin City University",
+      "title": "BSc Data Science & Artificial Intelligence",
+      "url": "https://www.dcu.ie/courses/undergraduate/school-computing/data-science-and-artificial-intelligence",
+      "sourceType": "official_service"
+    },
+    "ieCivilEntry": {
+      "authority": "Engineers Ireland",
+      "title": "Accredited third level courses",
+      "url": "https://www.engineersireland.ie/Professionals/Membership/Become-a-member/Accredited-third-level-courses",
+      "sourceType": "official_service"
+    },
+    "ieConstructionEntry": {
+      "authority": "Technological University Dublin",
+      "title": "BSc Construction Management",
+      "url": "https://www.tudublin.ie/study/undergraduate/courses/construction-management-tu833/",
+      "sourceType": "official_service"
+    },
+    "ieAccountantEntry": {
+      "authority": "Generation Apprenticeship",
+      "title": "Accounting Technician",
+      "url": "https://apprenticeship.ie/career-seekers/get-started/learn-more/finance/Accounting-Technician",
+      "sourceType": "official_service"
+    },
+    "ieArchitectEntry": {
+      "authority": "Royal Institute of the Architects of Ireland",
+      "title": "How to Become an Architect",
+      "url": "https://www.riai.ie/careers-in-architecture/how-to-become-an-architect",
+      "sourceType": "official_service"
+    },
+    "ieRadiographerEntry": {
+      "authority": "CORU",
+      "title": "Approved Qualifications",
+      "url": "https://coru.ie/health-and-social-care-professionals/education/approved-qualifications/",
+      "sourceType": "official_service"
+    },
+    "ieArchitectRegistration": {
+      "authority": "Royal Institute of the Architects of Ireland",
+      "title": "Register as an Architect",
+      "url": "https://www.riai.ie/join-the-riai/registering-as-an-architect",
+      "sourceType": "official_service"
+    },
+    "ieRadiographerRegistration": {
+      "authority": "CORU",
+      "title": "Registration and protected radiographer titles",
+      "url": "https://coru.ie/health-and-social-care-professionals/registration/",
+      "sourceType": "official_service"
     }
   },
   "careers": [
@@ -187,18 +247,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 8,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Legacy Ireland evidence describes degree and work-based ICT routes but needs Career Data Foundation source records before publication."
+          "evidenceStatus": "proxy",
+          "source": "ieSoftwareEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 Computer Science route confirms a realistic newcomer education pathway; no single degree is asserted as universally mandatory."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 5,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "Legacy Ireland evidence records no universal statutory professional registration; source record still needs normalization."
+          "evidenceStatus": "proxy",
+          "source": "ieSoftwareEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Ireland Software Developer pathway evidence."
         }
       }
     },
@@ -294,18 +364,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 8,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Existing official apprenticeship/education evidence needs normalization into Career Data Foundation."
+          "evidenceStatus": "proxy",
+          "source": "ieCyberEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "The national Cybersecurity Associate Level 6 apprenticeship provides a structured work-based entry route alongside degree/certification routes."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 5,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "No universal statutory registration is currently recorded; source-level normalization remains."
+          "evidenceStatus": "proxy",
+          "source": "ieCyberEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Cybersecurity Analyst pathway evidence."
         }
       }
     },
@@ -401,18 +481,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 8,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Legacy official pathway evidence requires Career Data Foundation normalization."
+          "evidenceStatus": "proxy",
+          "source": "ieDataEngineerEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 data-science education provides a realistic technical entry route; equivalent technical experience remains possible."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 5,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "No universal statutory registration is currently recorded; source-level normalization remains."
+          "evidenceStatus": "proxy",
+          "source": "ieDataEngineerEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory personal registration requirement is present in the reviewed Data Engineer pathway evidence."
         }
       }
     },
@@ -508,18 +598,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 8,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Existing Engineers Ireland accredited-program route needs Career Data Foundation normalization."
+          "evidenceStatus": "proxy",
+          "source": "ieCivilEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Engineers Ireland publishes accredited engineering programmes as the standard professional education route."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 5,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "Professional titles are valuable but generic Civil Engineer practice is not recorded as universally subject to one personal statutory register."
+          "evidenceStatus": "proxy",
+          "source": "ieCivilEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Engineers Ireland professional titles and accreditation matter, but generic Civil Engineer employment is not treated as one universally licensed personal statutory occupation."
         }
       }
     },
@@ -615,18 +715,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 6,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 6,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Legacy Ireland evidence uses degree/technical education plus experience; source-level normalization remains."
+          "evidenceStatus": "proxy",
+          "source": "ieConstructionEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "Official Level 8 Construction Management education provides a clear route, while substantial sector/project experience remains material."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 4,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 4,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "No universal statutory construction-manager register is recorded; role/site requirements still need normalized blocker evidence."
+          "evidenceStatus": "proxy",
+          "source": "ieConstructionEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "No universal statutory Construction Manager register is asserted; role/site competence and construction-specific requirements still create some entry burden."
         }
       }
     },
@@ -717,18 +827,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 8,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 8,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "Professional qualification, degree and apprenticeship routes exist; exact rubric inputs still need normalization."
+          "evidenceStatus": "proxy",
+          "source": "ieAccountantEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "The national Accounting Technician apprenticeship demonstrates a structured work-based route alongside degree and professional-accountancy pathways."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 5,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 5,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "Generic accountancy is not treated as one universally licensed occupation; employment-permit recognition rules remain separate context."
+          "evidenceStatus": "proxy",
+          "source": "ieAccountantEntry",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Generic Accountant employment is not modelled as a single universally licensed profession; permit-specific recognition requirements remain separate context."
         }
       }
     },
@@ -812,18 +932,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 4,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 4,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "RIAI route is sourced, but the current point conversion still needs Career Data Foundation raw/normalized records."
+          "evidenceStatus": "proxy",
+          "source": "ieArchitectEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "RIAI states the typical Irish route is a prescribed five-year architecture qualification, at least two years of approved postgraduate professional training and a Professional Practice Examination."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "Architect is a protected title with a statutory registration pathway; exact rubric inputs remain to be normalized."
+          "evidenceStatus": "proxy",
+          "source": "ieArchitectRegistration",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Architect is a protected title in Ireland and admission to the statutory Register is required to use the title."
         }
       }
     },
@@ -914,18 +1044,28 @@
           "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 6,
+          "normalizedUnit": "points_of_15",
           "scoreValue": 6,
           "maxScore": 15,
           "directness": "proxy",
-          "proxyReason": "CORU-approved qualification route is sourced; exact rubric inputs still need normalization."
+          "evidenceStatus": "proxy",
+          "source": "ieRadiographerEntry",
+          "proxyReason": "Official pathway evidence is converted into the frozen CampCareer Entry Accessibility rubric; the source itself does not publish a CampCareer score.",
+          "reason": "CORU-approved qualifications define the professional route into radiography."
         },
         "entry_burden": {
-          "status": "carry_forward_candidate",
+          "status": "normalized",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
-          "proxyReason": "CORU protected-title registration is a real burden; exact rubric inputs remain to be normalized."
+          "evidenceStatus": "proxy",
+          "source": "ieRadiographerRegistration",
+          "proxyReason": "Official pathway/regulation evidence is converted into the frozen CampCareer Entry Burden rubric; higher means lower burden.",
+          "reason": "Radiographer is a regulated/protected profession requiring CORU registration."
         }
       }
     }
