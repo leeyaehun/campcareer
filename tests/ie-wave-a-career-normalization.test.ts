@@ -285,7 +285,7 @@ test("only fully normalized Wave A Careers receive a staged CampCareer Score can
     "construction-manager": 72,
     accountant: null,
     architect: null,
-    radiographer: null,
+    radiographer: 51,
   }
 
   for (const career of data.careers) {
@@ -299,7 +299,7 @@ test("only fully normalized Wave A Careers receive a staged CampCareer Score can
 })
 
 test("incomplete Careers stay unscored instead of converting pending evidence to zero", () => {
-  for (const careerId of ["accountant", "architect", "radiographer"]) {
+  for (const careerId of ["accountant", "architect"]) {
     const career = data.careers.find((item) => item.careerId === careerId)
     assert.ok(career)
     assert.equal(stagedIrelandCampCareerScore(career.components), null)
@@ -345,7 +345,7 @@ test("visa evidence is normalized as context but remains outside the public Scor
   )
 })
 
-test("machine-readable readiness exposes the five complete and three incomplete Wave A Careers", () => {
+test("machine-readable readiness exposes six complete and two incomplete Wave A Careers", () => {
   const readiness = (data as WaveAData & {
     readiness: {
       careers: Record<string, {
@@ -366,8 +366,22 @@ test("machine-readable readiness exposes the five complete and three incomplete 
     "data-engineer",
     "civil-engineer",
     "construction-manager",
+    "radiographer",
   ])
-  assert.deepEqual(readiness.careers.accountant.pendingPublicComponents, ["shortage_signal", "industry_diversity"])
+  assert.deepEqual(readiness.careers.accountant.pendingPublicComponents, ["industry_diversity"])
   assert.deepEqual(readiness.careers.architect.pendingPublicComponents, ["shortage_signal", "vacancy_intensity"])
-  assert.deepEqual(readiness.careers.radiographer.pendingPublicComponents, ["shortage_signal"])
+  assert.deepEqual(readiness.careers.radiographer.pendingPublicComponents, [])
+})
+
+
+test("Accountant and Radiographer use pressure without claiming a confirmed shortage", () => {
+  for (const careerId of ["accountant", "radiographer"]) {
+    const career = data.careers.find((item) => item.careerId === careerId)
+    assert.ok(career)
+    const shortage = career.components.shortage_signal
+    assert.equal(shortage?.status, "normalized")
+    assert.equal(shortage?.scoreValue, 5)
+    assert.ok(shortage?.reason?.includes("pressure"))
+    assert.ok(shortage?.reason?.includes("not") || shortage?.reason?.includes("not represented"))
+  }
 })
