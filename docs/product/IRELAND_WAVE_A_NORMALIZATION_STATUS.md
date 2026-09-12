@@ -4,6 +4,47 @@ Last reviewed: 12 September 2026
 
 ## Status
 
+## Scope decision — Career MVP closes at six reviewed Careers
+
+For the first Ireland Golden Slice release, the Career layer is intentionally
+bounded to these six reviewed Careers:
+
+1. Software Developer
+2. Cybersecurity Analyst
+3. Data Engineer
+4. Civil Engineer
+5. Construction Manager
+6. Radiographer
+
+These six define the **Ireland Career MVP** for the Golden Slice.
+
+The following are explicitly deferred and are **not blockers** for closing the
+first Career layer:
+
+- Accountant
+- Architect
+- Data Analyst
+- Financial Analyst
+- Registered Nurse
+- Pharmacist
+- the remaining Ireland Career inventory
+
+Deferred Careers may be added later through the same Career Data Foundation
+evidence gate. They must not delay the first complete Ireland decision journey.
+
+Career-layer completion for the Golden Slice therefore means:
+
+- the six reviewed Careers are backfilled and public-ready;
+- their Career pages use the reviewed Foundation evidence;
+- their public Score / source / demand / pay / entry presentation passes QA;
+- Compare works for the six;
+- each Career has at least one valid downstream education path when the later
+  Degree / Program layer is completed.
+
+Breadth expansion happens only after this six-Career journey is working
+end-to-end.
+
+
 Wave A normalization now has a machine-readable staging package for all eight
 Careers. The package is intentionally not a production publication switch.
 
