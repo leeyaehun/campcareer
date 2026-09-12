@@ -42,3 +42,14 @@ export async function clearOptionalMeasurementCookies() {
     // future preference change is safer than blocking the visitor's choice.
   }
 }
+
+/**
+ * Shared, dependency-free consent check for browser and server measurement
+ * boundaries. A redirect may still work without consent; optional measurement
+ * must not.
+ */
+export function hasGrantedAnalyticsConsent(cookieHeader: string | null | undefined) {
+  return cookieHeader
+    ?.split(";")
+    .some((item) => item.trim() === `${ANALYTICS_CONSENT_COOKIE}=granted`) ?? false
+}

@@ -1,5 +1,7 @@
 "use client"
 
+import { hasGrantedAnalyticsConsent } from "@/lib/analytics-consent"
+
 /**
  * Phase 6 measurement contract. This is the only browser boundary allowed to
  * send product events to measurement providers. Event names are deliberately
@@ -98,7 +100,7 @@ export function isGoogleAnalyticsMeasurementId(value: string | undefined): value
 }
 
 export function analyticsConsentGranted() {
-  return typeof window !== "undefined" && document.cookie.split("; ").some((item) => item === "cc_analytics_consent=granted")
+  return typeof window !== "undefined" && hasGrantedAnalyticsConsent(document.cookie)
 }
 
 /** Returns a normalised search phrase only when it contains no obvious PII. */
