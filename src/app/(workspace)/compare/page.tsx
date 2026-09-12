@@ -4,6 +4,12 @@ import { AU_NURSING_PROGRAM_IDS } from "@/lib/data-foundation/compare-adapters/a
 import { AU_NURSING_PROGRAM_COMPARE_REPOSITORY } from "@/lib/data-foundation/compare-adapters/au-nursing-programmes-repository"
 import { parseCareerComparisonState, type CareerComparisonState } from "@/lib/career-comparison"
 import { parseCountryComparisonState, type CountryComparisonState } from "@/lib/country-comparison"
+import {
+  buildIrelandCareerCompareHref,
+  IE_CAREER_COMPARE_LABELS,
+  parseIrelandCareerComparisonState,
+} from "@/lib/ireland-career-comparison"
+import { getIrelandCareerCompareCatalog } from "@/lib/ireland-career-comparison.server"
 import { getAeCityComparison } from "@/lib/cities/ae-city-comparison.server"
 import { getAuCityComparison } from "@/lib/cities/au-city-comparison.server"
 import { getBeCityComparison } from "@/lib/cities/be-city-comparison.server"
@@ -26,6 +32,7 @@ import { buildCareerCompareCanonicalHref, buildCityCompareCanonicalHref, buildCo
 import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
+import { IrelandCareersCompareMatrix } from "./ireland-careers-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { UaeCitiesCompareMatrix } from "./uae-cities-compare-matrix"
 import { BelgiumCitiesCompareMatrix } from "./belgium-cities-compare-matrix"
@@ -64,16 +71,32 @@ const compareMetadata = {
  */
 export async function generateMetadata({ searchParams }: ComparePageProps): Promise<Metadata> {
   const params = toSearchParams(await searchParams)
-  const comparison = parseCareerComparisonState(params)
-  const isShareableCareerComparison = comparison.contextState === "supported" && comparison.careers.length >= 2
-  const names = comparison.careers.map((career) => career.label)
+  const countryCode = params.get("country")?.trim().toUpperCase() ?? null
+  const irelandComparison = countryCode === "IE" ? parseIrelandCareerComparisonState(params) : null
+  const australiaComparison = parseCareerComparisonState(params)
+
+  const irelandShareable = Boolean(
+    irelandComparison?.contextState === "supported"
+    && irelandComparison.careerIds.length >= 2,
+  )
+  const australiaShareable = australiaComparison.contextState === "supported"
+    && australiaComparison.careers.length >= 2
+
+  const names = irelandShareable && irelandComparison
+    ? irelandComparison.careerIds.map((careerId) => IE_CAREER_COMPARE_LABELS[careerId])
+    : australiaComparison.careers.map((career) => career.label)
+  const isShareableCareerComparison = irelandShareable || australiaShareable
   const title = isShareableCareerComparison ? `Compare ${names.join(" and ")}` : compareMetadata.title
-  const description = isShareableCareerComparison
-    ? `Compare verified Australian career pathways, requirements and outcomes for ${names.join(" and ")}.`
-    : compareMetadata.description
-  const shareHref = isShareableCareerComparison
-    ? buildCareerCompareCanonicalHref({ city: comparison.citySlug, careers: comparison.careerIds })
-    : "/compare"
+  const description = irelandShareable
+    ? `Compare reviewed Ireland Career MVP scores, evidence confidence and entry requirements for ${names.join(" and ")}.`
+    : australiaShareable
+      ? `Compare verified Australian career pathways, requirements and outcomes for ${names.join(" and ")}.`
+      : compareMetadata.description
+  const shareHref = irelandShareable && irelandComparison
+    ? buildIrelandCareerCompareHref(irelandComparison.careerIds)
+    : australiaShareable
+      ? buildCareerCompareCanonicalHref({ city: australiaComparison.citySlug, careers: australiaComparison.careerIds })
+      : "/compare"
 
   return {
     title,
@@ -102,7 +125,11 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const pageType = resolveCompareModeType(params.get("type"))
   if (pageType === "country") return <CountriesCompare comparison={parseCountryComparisonState(params)} />
   if (pageType === "city") return <CitiesCompare countryCode={params.get("country")?.toUpperCase() ?? "AU"} params={params} />
-  if (pageType === "career") { const country = params.get("country")?.toUpperCase() ?? "AU"; return <CareersCompare comparison={parseCareerComparisonState(params)} countryCode={country} /> }
+  if (pageType === "career") {
+    const country = params.get("country")?.toUpperCase() ?? "AU"
+    if (country === "IE") return <IrelandCareersCompare params={params} />
+    return <CareersCompare comparison={parseCareerComparisonState(params)} countryCode={country} />
+  }
   if (pageType === "unsupported") return <UnsupportedComparisonType />
   return <ProgramsCompare params={params} />
 }
@@ -224,6 +251,22 @@ async function CitiesCompare({ countryCode, params }: { countryCode: string; par
 }
 
 function SingaporeCityStateDecision() { return <section className="w-full pb-4" aria-label="Singapore city-state comparison guidance"><ComparePageHeader activeType="city" countryCode="SG" /><div className="max-w-2xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700">Singapore city-state</p><h2 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">There is no Singapore city shortlist to compare</h2><p className="mt-2 text-sm leading-6 text-[#6f6d68]">CampCareer treats Singapore as one country-level study destination. Central, East, North, North-East, West and CBD remain living and commute contexts rather than separate canonical study cities.</p><div className="mt-5 flex flex-wrap gap-3"><Link href="/maps?country=sg" className="inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Explore Singapore map</Link><Link href="/map?country=sg&area=central" className="inline-flex min-h-11 items-center rounded-xl border border-[#e7e6e3] px-4 text-sm font-semibold text-[#1b1b1b]">Compare living areas</Link><Link href={buildCountryCompareCanonicalHref()} className="inline-flex min-h-11 items-center rounded-xl border border-[#e7e6e3] px-4 text-sm font-semibold text-[#1b1b1b]">Compare countries</Link></div></div></section> }
+
+async function IrelandCareersCompare({ params }: { params: URLSearchParams }) {
+  const comparison = parseIrelandCareerComparisonState(params)
+  if (comparison.contextState === "unsupported") {
+    return <UnsupportedSurface type="Careers" href={buildIrelandCareerCompareHref()} label="Compare Ireland careers" activeType="career" countryCode="IE" />
+  }
+
+  const catalog = await getIrelandCareerCompareCatalog()
+  return (
+    <section className="w-full pb-4" aria-label="Ireland careers comparison">
+      <ComparePageHeader activeType="career" countryCode="IE" />
+      <IrelandCareersCompareMatrix catalog={catalog} />
+    </section>
+  )
+}
+
 function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) { if (comparison.contextState === "unsupported") return <UnsupportedSurface type="Careers" href={buildCareerCompareCanonicalHref()} label="Compare Australian careers" activeType="career" countryCode={countryCode} />; return <section className="w-full pb-4" aria-label="Careers comparison"><ComparePageHeader activeType="career" countryCode={countryCode} /><CareersCompareMatrix /></section> }
 function UnsupportedCountryComparison() { return <UnsupportedSurface type="Countries" href={buildCountryCompareCanonicalHref()} label="Start a country comparison" activeType="country" /> }
 function UnsupportedComparisonType() { return <section className="w-full pb-4" aria-label="Compare unavailable"><div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6"><h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1><p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p><Link href={buildProgramCompareCanonicalHref()} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Programs Compare</Link></div></section> }

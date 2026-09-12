@@ -48,6 +48,37 @@ test("Completed Career Compare is shareable without becoming an indexed query pa
   await expectNoHorizontalPageOverflow(page)
 })
 
+
+test("Ireland Career MVP moves from reviewed Career evidence into a two-Career comparison", async ({ page }) => {
+  const assertNoBrowserErrors = observeUnexpectedBrowserErrors(page)
+  const response = await page.goto("/career/ireland/software-developer")
+  expect(response?.status()).toBe(200)
+
+  await expect(page.getByRole("heading", { name: "Software Developer", exact: true })).toBeVisible()
+  await expect(page.getByLabel(/CampCareer Score 78 out of 100/)).toBeVisible()
+  await expect(page.getByText("Key sources")).toBeVisible()
+
+  const actions = page.getByLabel("Secondary career actions")
+  const compare = actions.getByRole("link", { name: "Compare" })
+  await expect(compare).toHaveAttribute(
+    "href",
+    "/compare?type=career&country=IE&profile=ireland-career-mvp-v1&careers=software-developer",
+  )
+  await compare.click()
+
+  await expect(page.getByRole("heading", { name: "Compare careers" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Compare reviewed Ireland careers" })).toBeVisible()
+  await page.getByLabel("Choose career 2").selectOption("civil-engineer")
+
+  await expect(page).toHaveURL(/country=IE.*careers=software-developer%2Ccivil-engineer/)
+  await expect(page.getByRole("table", { name: "Ireland career comparison" })).toContainText("78/100")
+  await expect(page.getByRole("table", { name: "Ireland career comparison" })).toContainText("74/100")
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow")
+  await expectCanonical(page, "/compare")
+  await expectNoHorizontalPageOverflow(page)
+  assertNoBrowserErrors()
+})
+
 test("Journey C: Country context retains its country when opening Career discovery", async ({ page }) => {
   const assertNoBrowserErrors = observeUnexpectedBrowserErrors(page)
   const response = await page.goto("/countries/au")
