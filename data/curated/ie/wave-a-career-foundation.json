@@ -11,7 +11,15 @@
     "recentEmploymentGrowthAnnualAvgPct": 3.4,
     "recentEmploymentGrowthPeriod": "2019-2024",
     "projectedNationalGrowthAnnualPct": 1.7,
-    "projectionPeriod": "2021-2035"
+    "projectionPeriod": "2021-2035",
+    "pay": {
+      "statistic": "median_hourly_earnings",
+      "period": "2022",
+      "allOccupationsEurPerHour": 19.6,
+      "professionalOccupationsEurPerHour": 32.99,
+      "professionalToAllRatio": 1.6832,
+      "source": "csoSes2022"
+    }
   },
   "sources": {
     "solasNsb2025": {
@@ -27,11 +35,11 @@
       "sourceType": "government_aggregator"
     },
     "csoSes2022": {
-      "authority": "Central Statistics Office",
-      "title": "Structure of Earnings Survey 2022 — detailed occupation earnings tables",
-      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-ses/structureofearningssurvey2022/data/",
+      "authority": "Central Statistics Office Ireland",
+      "title": "Structure of Earnings Survey 2022 — Occupation and Education",
+      "url": "https://www.cso.ie/en/releasesandpublications/ep/p-ses/structureofearningssurvey2022/occupationandeducation/",
       "sourceType": "official_primary",
-      "note": "SES05/SES06 are identified as the preferred Pay candidates; exact Wave A rows are not yet normalized."
+      "note": "CSO publishes Professional occupations median hourly earnings of EUR 32.99 and All Occupational Groups EUR 19.60. All Wave A SOC 2010 codes sit in major group 2 Professional Occupations. This is therefore an official but broad Pay proxy, not an exact Career salary."
     },
     "solasRas2025": {
       "authority": "SOLAS Skills and Labour Market Research Unit",
@@ -112,8 +120,16 @@
           "reason": "SOLAS publishes sector shares for the wider ICT occupation family, not a complete comparable sector distribution for software developers alone."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "CSO SES05/SES06 detailed occupation earnings must be extracted and mapped before Pay can be scored."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -203,8 +219,16 @@
           "reason": "No complete cyber-security occupation-by-industry share distribution has been normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -294,8 +318,16 @@
           "reason": "No complete Data Engineer occupation-by-industry distribution has been normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -385,8 +417,16 @@
           "reason": "Published construction-family sector shares are broader than Civil Engineer."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -476,8 +516,16 @@
           "reason": "No complete Construction Project Manager occupation-by-industry distribution has been normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -562,8 +610,16 @@
           "reason": "SOLAS describes cross-sector demand but the exact complete sector-share vector required for HHI is not normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -641,8 +697,16 @@
           "reason": "No complete Architect occupation-by-industry share vector has been normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "Detailed official earnings row/proxy has not yet been extracted from CSO SES."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
@@ -720,8 +784,16 @@
           "reason": "Healthcare concentration must be measured as real concentration, not replaced with a missing-data zero; exact shares are not yet normalized."
         },
         "relative_salary": {
-          "status": "pending",
-          "reason": "HSE pay scales are useful context but are not silently treated as a national occupation median; CSO SES mapping remains under review."
+          "status": "normalized",
+          "normalizedValue": 1.6832,
+          "normalizedUnit": "occupation_group_to_all_occupations_ratio",
+          "scoreValue": 10,
+          "maxScore": 10,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "csoSes2022",
+          "proxyReason": "CSO's official 2022 earnings release provides the closest defensible published Pay measure at SOC major-group scope: Professional occupations. This is broader than the canonical Career and therefore Estimated evidence.",
+          "reason": "All eight Wave A Careers map to SOC 2010 major group 2 (Professional occupations). The same broad proxy is intentionally used consistently; it must not be displayed as an exact Career salary or used to claim Pay differences within Wave A."
         },
         "entry_accessibility": {
           "status": "carry_forward_candidate",
