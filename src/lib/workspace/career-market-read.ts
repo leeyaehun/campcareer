@@ -299,7 +299,8 @@ export async function getCareerCountryRecommendations(careerId: string): Promise
   // This keeps recommendation scores aligned with the reviewed public source
   // instead of falling back to an older provisional country snapshot.
   for (const foundation of foundationRows) {
-    if (!foundationHasPublicScore(foundation)) continue
+    if (!isCareerScoreReady(foundation.countryCode, careerId)) continue
+    if (!foundation.strictPublicScoreEvidence) continue
     if (!isFoundationRankable({
       decisionReady: foundation.decisionReady,
       scoreReady: foundation.scoreReady,
