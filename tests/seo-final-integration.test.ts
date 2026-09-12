@@ -25,7 +25,7 @@ function sitemapUrls() {
 
 test("final SEO publication inventories remain intentionally bounded", () => {
   assert.equal(INDEXABLE_AU_PROGRAMS.length, 53)
-  assert.equal(SCORE_READY_CAREER_PROFILES.length, 11)
+  assert.equal(SCORE_READY_CAREER_PROFILES.length, 17)
   assert.equal(INDEXABLE_OCCUPATION_PROFILES.length, SCORE_READY_CAREER_PROFILES.length)
   assert.equal(AU_PROGRAMMATIC_STUDY_PAGES.length, 42)
   assert.equal(AU_OCCUPATION_STATE_PAGES.length, 40)
@@ -44,6 +44,10 @@ test("Career Score and indexing follow the strict Ready coverage pool", () => {
   assert.equal(isCareerScoreReady("AU", "medical-laboratory-technician"), true)
   assert.equal(isCareerScoreReady("AU", "auditor"), false)
   assert.equal(isCareerScoreReady("AU", "bricklayer"), false)
+  assert.equal(isCareerScoreReady("IE", "software-developer"), true)
+  assert.equal(isCareerScoreReady("IE", "radiographer"), true)
+  assert.equal(isCareerScoreReady("IE", "accountant"), false)
+  assert.equal(isCareerScoreReady("IE", "architect"), false)
 
   assert.ok(getIndexableCareerRoute("AU", "care-worker"))
   assert.ok(getIndexableCareerRoute("AU", "welder"))
@@ -52,6 +56,10 @@ test("Career Score and indexing follow the strict Ready coverage pool", () => {
   assert.ok(getIndexableCareerRoute("AU", "medical-laboratory-technician"))
   assert.equal(getIndexableCareerRoute("AU", "auditor"), null)
   assert.equal(getIndexableCareerRoute("AU", "bricklayer"), null)
+  assert.ok(getIndexableCareerRoute("IE", "software-developer"))
+  assert.ok(getIndexableCareerRoute("IE", "radiographer"))
+  assert.equal(getIndexableCareerRoute("IE", "accountant"), null)
+  assert.equal(getIndexableCareerRoute("IE", "architect"), null)
 })
 
 test("sitemap contains every explicit SEO inventory exactly once", () => {
