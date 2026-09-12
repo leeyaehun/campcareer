@@ -243,15 +243,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.4694,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -376,15 +378,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.4694,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -509,15 +513,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.4694,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.4694,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -642,15 +648,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.5604,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -775,15 +783,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.5604,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -1012,15 +1022,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.5604,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 1,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 1,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.5604,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
@@ -1139,15 +1151,17 @@
         },
         "industry_diversity": {
           "status": "normalized",
-          "normalizedValue": 0.7654,
-          "normalizedUnit": "hhi_upper_bound",
+          "normalizedValue": 0,
+          "normalizedUnit": "points_of_5",
           "scoreValue": 0,
           "maxScore": 5,
           "directness": "proxy",
           "evidenceStatus": "derived",
           "source": "solasNsb2025",
           "proxyReason": "SOLAS publishes main-sector shares for the broader healthcare occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 94% of the occupational family; the remaining 6% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "reason": "Published shares cover 94% of the occupational family; the remaining 6% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI. Component normalized_value stores the derived 0–5 diversity points; HHI remains separately preserved as derivedHhiUpperBound for provenance.",
+          "derivedHhiUpperBound": 0.7654,
+          "metricUnit": "hhi_upper_bound"
         },
         "relative_salary": {
           "status": "normalized",
