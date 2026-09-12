@@ -69,7 +69,6 @@ async function loadRelations(countryCode: string, careerId?: string, degreeConce
     .from("career_degree_relation_read_v1")
     .select("canonical_career_id,degree_id,degree_key,degree_slug,degree_name,degree_description,relation_type,directness,relationship_strength,rationale,source_authority,source_title,source_url,reference_period,source_checked_at")
     .eq("country_code", countryCode)
-    .eq("review_status", "reviewed")
 
   if (careerId) query = query.eq("canonical_career_id", careerId)
   if (degreeConceptId) query = query.eq("degree_id", degreeConceptId)
