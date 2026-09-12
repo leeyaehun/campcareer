@@ -22,7 +22,9 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const locationLabel = countryCode === "AU" ? "campuses" : "locations"
   const euFastpath = countryCode === "BE" || countryCode === "CH" || countryCode === "SE" || countryCode === "DK"
   const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
-  const description = countryCode === "US"
+  const description = countryCode === "IE"
+    ? `Explore the verified Ireland higher-education cohort backed by Higher Education Authority provider and official location evidence. Program publication remains gated pending exact program-level eligibility.`
+    : countryCode === "US"
     ? `Explore the CampCareer US launch cohort of 25 research universities with NCES/IPEDS UNITID identity, NCSES selection context and source-backed city-level ${locationLabel}. The US degree-program catalogue is pending.`
     : countryCode === "NL"
       ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
