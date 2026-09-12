@@ -1,7 +1,5 @@
 import type { Metadata } from "next"
-import localFont from "next/font/local"
 import "./globals.css"
-import "./campcareer-brand.css"
 import { LayoutShell } from "@/components/layout/layout-shell"
 import { DEFAULT_LOCALE } from "@/lib/i18n/config"
 import { LocaleProvider } from "@/lib/i18n/locale-provider"
@@ -9,13 +7,6 @@ import { LocaleInit } from "@/components/locale-init"
 import { PageViewTracker } from "@/components/analytics/page-view-tracker"
 import { AnalyticsConsent } from "@/components/analytics-consent"
 import { ConsentGatedInsights } from "@/components/consent-gated-insights"
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-  preload: false,
-})
 
 export const metadata: Metadata = {
   title: {
@@ -54,6 +45,9 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
 }
 
 export default function RootLayout({
@@ -70,7 +64,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${geistMono.variable} antialiased`}>
+      <body className="antialiased">
         <LocaleProvider locale={DEFAULT_LOCALE}>
           <LocaleInit />
           <PageViewTracker />

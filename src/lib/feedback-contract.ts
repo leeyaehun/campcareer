@@ -9,6 +9,8 @@ export const FEEDBACK_SCREENSHOT_MIME_TYPES = [
   "image/webp",
 ] as const
 
+import { z } from "zod"
+
 export const FEEDBACK_ISSUE_OPTIONS = [
   { value: "search_filters", label: "Search or filters" },
   { value: "map_location", label: "Map or location" },
@@ -17,6 +19,10 @@ export const FEEDBACK_ISSUE_OPTIONS = [
   { value: "account_saved_items", label: "Sign in, profile or saved items" },
   { value: "layout_accessibility", label: "Layout or accessibility" },
   { value: "performance_loading", label: "Performance or loading" },
+  { value: "data_outdated", label: "Outdated data" },
+  { value: "data_incorrect", label: "Incorrect data" },
+  { value: "data_wrong_source", label: "Wrong source" },
+  { value: "data_missing", label: "Missing data" },
   { value: "other", label: "Other" },
 ] as const
 
@@ -33,6 +39,12 @@ export type FeedbackSystemInfo = {
   viewportHeight?: number
 }
 
+export type FeedbackPageContext = {
+  pagePath: string
+  entityType?: "career" | "country" | "program" | "institution" | "compare" | "source" | "methodology" | "data_policy" | "other"
+  entityId?: string
+}
+
 export type FeedbackScreenshotReference = {
   bucket: typeof FEEDBACK_SCREENSHOT_BUCKET
   path: string
@@ -46,6 +58,7 @@ export type ParsedFeedbackSubmission = {
   email: string | null
   systemInfoConsent: boolean
   systemInfo: FeedbackSystemInfo | null
+  context: FeedbackPageContext | null
   screenshot: FeedbackScreenshotReference | null
 }
 
@@ -64,6 +77,19 @@ export type ValidationResult<T> = ValidationSuccess<T> | ValidationFailure
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+const feedbackPageContextSchema = z.object({
+  pagePath: z.string().trim().min(1).max(500).refine((value) => value.startsWith("/"), "page path must begin with /").transform((value) => value.split(/[?#]/, 1)[0]),
+  entityType: z.enum(["career", "country", "program", "institution", "compare", "source", "methodology", "data_policy", "other"]).optional(),
+  entityId: z.string().trim().min(1).max(120).regex(/^[a-zA-Z0-9_./:-]+$/).optional(),
+}).strict()
+
+export function parseFeedbackPageContext(value: unknown): ValidationResult<FeedbackPageContext | null> {
+  if (value === undefined || value === null) return { ok: true, data: null }
+  const parsed = feedbackPageContextSchema.safeParse(value)
+  if (!parsed.success) return { ok: false, code: "INVALID_CONTEXT", error: "Invalid page context" }
+  return { ok: true, data: parsed.data }
 }
 
 function isIssueCategory(value: unknown): value is FeedbackIssueCategory {
@@ -210,6 +236,8 @@ export function parseFeedbackSubmission(
 
   const systemInfoConsent = value.systemInfoConsent === true
   const systemInfo = systemInfoConsent ? sanitizeFeedbackSystemInfo(value.systemInfo) : null
+  const context = parseFeedbackPageContext(value.context)
+  if (!context.ok) return context
 
   let screenshot: FeedbackScreenshotReference | null = null
   if (value.screenshot !== undefined && value.screenshot !== null) {
@@ -240,6 +268,7 @@ export function parseFeedbackSubmission(
       email: emailConsent ? emailValue : null,
       systemInfoConsent,
       systemInfo,
+      context: context.data,
       screenshot,
     },
   }

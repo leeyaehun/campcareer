@@ -7,7 +7,7 @@ import { Maximize2 } from "lucide-react"
 import { STATE_CODES, STATE_NAMES, IE_COUNTY_NAMES, IE_GEOJSON_COUNTY_TO_CODE, IE_CITY_TO_COUNTY, UK_GEOJSON_ITL1_TO_NAME, DE_BUNDESLAND_NAMES, NL_PROVINCE_NAMES, BE_REGION_NAMES, JP_PREFECTURE_NAMES, KR_SIDO_NAMES, FR_REGION_NAMES, AE_EMIRATE_NAMES, type StateCode, type IECountyCode, type AEEmirateCode } from "./states"
 import { SA4_BY_STATE, type SA4Region } from "@/data/sa4-regions"
 import { WHV_REGIONS } from "@/data/whv-regions"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 import type { MapData } from "@/lib/map-data"
 import { metropolitanFranceOnly } from "./france-geometry"
 

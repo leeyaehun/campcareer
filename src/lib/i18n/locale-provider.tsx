@@ -3,7 +3,6 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { DEFAULT_LOCALE, LOCALE_COOKIE, localeForUi, localeFromPathname, type Locale } from './config'
-import { dictionaries, type Dictionary } from './dictionaries'
 
 type LocaleContextValue = {
   locale: Locale
@@ -48,10 +47,6 @@ export function useSetLocale(): (locale: Locale) => void {
   return useContext(LocaleContext).setLocale
 }
 
-export function useTranslations(): Dictionary {
-  return dictionaries[useContext(LocaleContext).locale] ?? dictionaries.en
-}
-
 /**
  * URL-prefixed locales are explicit and must win over a cookie or a delayed
  * hydration update. This keeps shared Korean product links fully Korean.
@@ -60,8 +55,4 @@ export function useRouteLocale(): Locale {
   const pathname = usePathname()
   const selectedLocale = useLocale()
   return localeForUi(localeFromPathname(pathname) ?? selectedLocale)
-}
-
-export function useRouteTranslations(): Dictionary {
-  return dictionaries[useRouteLocale()] ?? dictionaries.en
 }

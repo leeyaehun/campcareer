@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
+import { GoogleAnalytics } from "@/components/analytics/google-analytics"
+import { DecisionSessionTracker } from "@/components/analytics/decision-session-tracker"
 
 const Analytics = dynamic(
   () => import("@vercel/analytics/react").then((module) => module.Analytics),
@@ -33,5 +35,5 @@ export function ConsentGatedInsights() {
   }, [])
 
   if (!enabled) return null
-  return <><Analytics /><SpeedInsights /></>
+  return <><Analytics /><SpeedInsights /><GoogleAnalytics /><DecisionSessionTracker /></>
 }

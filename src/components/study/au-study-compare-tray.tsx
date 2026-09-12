@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 import { BarChart3, Check, Plus, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { localizePath } from '@/lib/i18n/config'
-import { useRouteLocale, useRouteTranslations } from '@/lib/i18n/locale-provider'
+import { useRouteLocale } from '@/lib/i18n/locale-provider'
+import { useRouteTranslations } from '@/lib/i18n/use-translations'
 
 type CompareOption = {
   id: string

@@ -19,6 +19,7 @@ import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
 import { CareerCountrySelector } from "@/components/workspace/career-country-selector"
+import { LazyOccupationExplorer } from "./occupation-explorer-lazy"
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -159,11 +160,8 @@ export default async function CareersPage({
     return <CareerDiscovery />
   }
 
-  const { OccupationExplorer } = await import("../occupation/occupation-explorer")
-
   return (
-    <OccupationExplorer
-      basePath="/careers"
+    <LazyOccupationExplorer
       initialQuery={q}
       initialOccupation={occupation}
       initialCountry={country.toUpperCase() === "GB" ? "UK" : country.toUpperCase()}

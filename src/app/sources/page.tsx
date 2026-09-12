@@ -2,6 +2,8 @@ import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { JsonLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { pageMetadata } from "@/lib/seo"
+import { DataIssueReport } from "@/components/feedback/data-issue-report"
+import { MethodologyLink, SourceLink } from "@/components/analytics/tracked-link"
 
 export const metadata = pageMetadata({
   title: "Sources — Country Data and Official References",
@@ -77,9 +79,10 @@ export default function SourcesPage() {
       <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
         Official and primary references are organised by country. Each country record explains which data is used, how it is interpreted, its coverage and its limits. Method definitions and calculation rules are documented separately.
       </p>
-      <Link href="/methodology" className="mt-5 inline-flex text-sm font-semibold text-blue-600 hover:underline">
+      <MethodologyLink sourceSurface="sources" className="mt-5 inline-flex text-sm font-semibold text-blue-600 hover:underline">
         Read the methodology
-      </Link>
+      </MethodologyLink>
+      <Link href="/data-policy" className="ml-5 inline-flex text-sm font-semibold text-blue-600 hover:underline">Data policy</Link>
 
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         {countries.map((country) => (
@@ -95,10 +98,10 @@ export default function SourcesPage() {
                 <ul className="mt-3 space-y-2">
                   {country.additions.map(([label, url]) => (
                     <li key={url}>
-                      <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-slate-600 hover:text-blue-600">
+                      <SourceLink href={url} className="inline-flex items-center gap-1.5 text-sm text-slate-600 hover:text-blue-600">
                         {label}
                         <ExternalLink className="size-3.5" aria-hidden="true" />
-                      </a>
+                      </SourceLink>
                     </li>
                   ))}
                 </ul>
@@ -113,11 +116,12 @@ export default function SourcesPage() {
         <p className="mt-2 text-sm leading-6 text-slate-600">
           Currency conversion is a display aid and does not replace the original local-currency record.
         </p>
-        <a href="https://frankfurter.app/" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline">
+        <SourceLink href="https://frankfurter.app/" className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:underline">
           Frankfurter exchange rates
           <ExternalLink className="size-3.5" aria-hidden="true" />
-        </a>
+        </SourceLink>
       </section>
+      <div className="mt-8"><DataIssueReport entityType="source" /></div>
     </main>
   )
 }

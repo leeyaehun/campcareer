@@ -8,6 +8,7 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 import { buildCareerResultHref, getCareerResultCompareHref } from "./career-result-context"
 import { Skeleton } from "@/components/ui/skeleton"
+import { trackAnalyticsEvent } from "@/lib/analytics"
 
 type Locale = "en" | "ko"
 type AuthState = "loading" | "signed-out" | "signed-in"
@@ -108,6 +109,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
       setSaveError(true)
       return
     }
+    trackAnalyticsEvent({ name: "entity_save", params: { entity_type: "career" } })
     setSaved((current) => !current)
   }
 
@@ -139,7 +141,7 @@ export function CareerResultActions({ query, locale }: { query: OverviewSearchVa
         )}
 
         {compareHref ? (
-          <Link href={localizePath(compareHref, locale)} prefetch={false} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+          <Link href={localizePath(compareHref, locale)} prefetch={false} onClick={() => trackAnalyticsEvent({ name: "compare_add", params: { entity_type: "career", entity_count: 1, comparison_category: "career" } })} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3.5 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Scale className="size-4" /> {locale === "ko" ? "비교" : "Compare"}
           </Link>
         ) : null}

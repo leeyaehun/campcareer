@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Search } from "lucide-react"
-import { useLocale, useTranslations } from "@/lib/i18n/locale-provider"
+import { useLocale } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 // 맵 툴바용 직업 검색 드롭다운 — 이미 로드된 (주 단위) 직업 목록을 클라이언트에서 즉시 필터.
 // API 호출 없이 검색하고, 선택하면 onSelect(anzsco_code) 로 직업 카드를 연다.

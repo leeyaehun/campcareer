@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { Info } from "lucide-react"
-import { useTranslations } from "@/lib/i18n/locale-provider"
+import { useTranslations } from "@/lib/i18n/use-translations"
 
 export function RoiInfo({ className }: { className?: string }) {
   const [open, setOpen] = useState(false)

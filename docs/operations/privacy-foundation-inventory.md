@@ -1,6 +1,6 @@
 # CampCareer privacy foundation inventory
 
-Last reviewed: 8 August 2026
+Last reviewed: 11 September 2026
 Owner: Yaehun Lee, operating CampCareer
 Privacy contact: leeyaehun@gmail.com
 
@@ -15,6 +15,7 @@ legal advice.
 | --- | --- | --- |
 | Supabase | Authentication, database, private storage | Account identifiers, saved plans, feedback and support-request records |
 | Vercel | Hosting, optional Analytics and Speed Insights | Page and performance measurement after visitor consent |
+| Google Analytics 4 | Optional product measurement when a production measurement ID is configured | Consent-gated product events and page measurement |
 | Resend | Transactional and separately consented email | Email address and the message/alert metadata required to deliver it |
 
 An external school, agency, insurer, money-transfer provider, communications
@@ -34,13 +35,15 @@ or after the visitor gives the specific consent displayed for a support request.
 ## Measurement gate
 
 Before affirmative measurement consent, CampCareer must not initialise Vercel
-Analytics, Vercel Speed Insights, or custom product-event requests. Custom
+Analytics, Vercel Speed Insights, Google Analytics 4, or custom product-event requests. Custom
 events use an allow-list and must not include email addresses, free-text
 answers, full URLs with user input, passport data, payment data, or special
 category data.
 
 The current allowed custom-event context is limited to low-cardinality product
-fields such as country, concept, goal, locale, route ID, and link type.
+fields such as country, concept, goal, locale, route ID, link type, event
+counts and entity families. Search text is omitted when it resembles obvious
+PII. Feedback text is never sent to analytics.
 
 ## Release checklist
 

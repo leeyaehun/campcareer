@@ -31,6 +31,7 @@ export default function MethodologyPage() {
         This page explains CampCareer&apos;s calculation rules, release standards and limitations. Official references are maintained separately in the country-by-country Sources library.
       </p>
       <Link href="/sources" className="mt-4 inline-flex text-sm font-semibold text-blue-600 hover:underline">Browse sources</Link>
+      <Link href="/data-policy" className="ml-5 inline-flex text-sm font-semibold text-blue-600 hover:underline">Data policy</Link>
 
       <div className="mt-10 space-y-10 text-sm leading-relaxed text-slate-600">
         <section id="career-comparison">
