@@ -897,7 +897,8 @@
       "components": {
         "shortage_signal": {
           "status": "pending",
-          "reason": "SOLAS reports strong demand and difficult-to-fill accountant roles but does not publish a blanket accountant shortage finding; absence is not converted into confirmed-not-shortage."
+          "reason": "SOLAS reports strong demand and difficult-to-fill accountant roles but does not publish a blanket accountant shortage finding; absence is not converted into confirmed-not-shortage.",
+          "source": "solasNsb2025"
         },
         "employment_momentum": {
           "status": "normalized",
@@ -938,7 +939,8 @@
         },
         "industry_diversity": {
           "status": "pending",
-          "reason": "SOLAS publishes 31% Financial activities, 22% Professional activities, 9% Industry and 8% ICT for the broader Business & Financial family, totalling 70%. This is below the Career Data Foundation's roughly 80% usable-coverage gate, so no HHI score is produced."
+          "reason": "SOLAS publishes 31% Financial activities, 22% Professional activities, 9% Industry and 8% ICT for the broader Business & Financial family, totalling 70%. This is below the Career Data Foundation's roughly 80% usable-coverage gate, so no HHI score is produced.",
+          "source": "solasNsb2025"
         },
         "relative_salary": {
           "status": "normalized",
@@ -1020,7 +1022,8 @@
       "components": {
         "shortage_signal": {
           "status": "pending",
-          "reason": "SOLAS identifies Quantity Surveyors—not generic Architects—as the explicit shortage within the relevant construction discussion; this evidence must not be borrowed."
+          "reason": "SOLAS identifies Quantity Surveyors—not generic Architects—as the explicit shortage within the relevant construction discussion; this evidence must not be borrowed.",
+          "source": "solasNsb2025"
         },
         "employment_momentum": {
           "status": "normalized",
@@ -1046,7 +1049,8 @@
         },
         "vacancy_intensity": {
           "status": "pending",
-          "reason": "Grouped recruitment evidence exists, but a defensible Architect-only numeric intensity input is not yet normalized."
+          "reason": "Grouped recruitment evidence exists, but a defensible Architect-only numeric intensity input is not yet normalized.",
+          "source": "solasNsb2025"
         },
         "industry_diversity": {
           "status": "normalized",
@@ -1142,7 +1146,8 @@
       "components": {
         "shortage_signal": {
           "status": "pending",
-          "reason": "SOLAS marks shortage evidence for the wider other-healthcare-professionals group as inconclusive; this cannot be converted to a confirmed radiographer shortage or confirmed-not-shortage."
+          "reason": "SOLAS marks shortage evidence for the wider other-healthcare-professionals group as inconclusive; this cannot be converted to a confirmed radiographer shortage or confirmed-not-shortage.",
+          "source": "solasNsb2025"
         },
         "employment_momentum": {
           "status": "normalized",
