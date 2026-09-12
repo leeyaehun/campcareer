@@ -84,6 +84,8 @@ export function conservativeIndustryDiversityFromPublishedShares(
   // Treat all unpublished residual employment as one "other" bucket. This is a
   // conservative HHI upper bound: splitting that residual across real sectors
   // can only lower HHI and therefore maintain or improve the diversity score.
+  if (publishedTotal < 80) return null
+
   const residual = 100 - publishedTotal
   const shares = residual > 0 ? [...publishedSharesPct, residual] : [...publishedSharesPct]
   const hhi = round(shares.reduce((sum, share) => sum + (share / 100) ** 2, 0))
