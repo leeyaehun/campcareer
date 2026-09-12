@@ -53,7 +53,8 @@
           ],
           "residualOtherPct": 30,
           "hhiUpperBound": 0.249,
-          "scoreValue": 3
+          "scoreValue": null,
+          "status": "insufficient_coverage"
         },
         "healthcare": {
           "publishedSharesPct": [
@@ -803,16 +804,8 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "normalized",
-          "normalizedValue": 0.249,
-          "normalizedUnit": "hhi_upper_bound",
-          "scoreValue": 3,
-          "maxScore": 5,
-          "directness": "proxy",
-          "evidenceStatus": "derived",
-          "source": "solasNsb2025",
-          "proxyReason": "SOLAS publishes main-sector shares for the broader businessFinancial occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
-          "reason": "Published shares cover 70% of the occupational family; the remaining 30% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
+          "status": "pending",
+          "reason": "SOLAS publishes 31% Financial activities, 22% Professional activities, 9% Industry and 8% ICT for the broader Business & Financial family, totalling 70%. This is below the Career Data Foundation's roughly 80% usable-coverage gate, so no HHI score is produced."
         },
         "relative_salary": {
           "status": "normalized",
