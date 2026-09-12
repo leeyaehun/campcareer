@@ -18,6 +18,10 @@ function sitemapUrls() {
   return sitemap().map((entry) => entry.url)
 }
 
+const PUBLISHED_PROGRAM_COUNTRIES = [
+  "AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
+] as const
+
 test("the canonical home is root and retired /home stays out of the sitemap", () => {
   const urls = sitemapUrls()
   const homeSource = readFileSync("src/app/page.tsx", "utf8")
@@ -91,6 +95,21 @@ test("sitemap URLs are unique and the Programs base canonical matches the sitema
   assert.equal(programsCanonicalPath("AU"), "/programs")
   assert.ok(programsSource.includes("programsCanonicalPath(filters.country)"))
   assert.ok(urls.includes(`${SITE_URL}${programsCanonicalPath("AU")}`))
+})
+
+test("published Program country hubs are canonical sitemap URLs with crawlable links", () => {
+  const urls = sitemapUrls()
+  const headerSource = readFileSync("src/app/(workspace)/programs/programs-header.tsx", "utf8")
+
+  for (const countryCode of PUBLISHED_PROGRAM_COUNTRIES) {
+    assert.ok(
+      urls.includes(`${SITE_URL}${programsCanonicalPath(countryCode)}`),
+      `${countryCode} Program hub must be present in the sitemap`,
+    )
+  }
+
+  assert.match(headerSource, /programsCanonicalPath\(country\.code\)/)
+  assert.match(headerSource, /aria-label=.*Published program countries/)
 })
 
 test("robots includes the production root sitemap without blocking canonical country pages", () => {

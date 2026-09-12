@@ -34,7 +34,7 @@ import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_UK_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-uk"
 import { INDEXABLE_US_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-us"
 import { PUBLISHED_AE_CITY_SLUGS, PUBLISHED_BE_CITY_SLUGS, PUBLISHED_DE_CITY_SLUGS, PUBLISHED_DK_CITY_SLUGS, PUBLISHED_ES_CITY_SLUGS, PUBLISHED_FI_CITY_SLUGS, PUBLISHED_FR_CITY_SLUGS, PUBLISHED_IE_CITY_SLUGS, PUBLISHED_KR_CITY_SLUGS, PUBLISHED_NL_CITY_SLUGS, PUBLISHED_NO_CITY_SLUGS, PUBLISHED_NZ_CITY_SLUGS, PUBLISHED_SE_CITY_SLUGS, PUBLISHED_UK_CITY_SLUGS, PUBLISHED_US_CITY_SLUGS } from "@/lib/cities/city-routes"
-import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath } from "@/lib/seo-routes.mjs"
+import { CANONICAL_COUNTRY_SLUGS, SITE_URL, countryCanonicalPath, programsCanonicalPath } from "@/lib/seo-routes.mjs"
 
 const lastModified = new Date("2026-08-10")
 const franceCityLastModified = new Date("2026-08-11")
@@ -42,13 +42,21 @@ const spainCityLastModified = new Date("2026-08-11")
 const norwayCityLastModified = new Date("2026-08-11")
 const uaeCityLastModified = new Date("2026-08-12")
 const koreaCityLastModified = new Date("2026-08-12")
+const PUBLISHED_PROGRAM_COUNTRIES = [
+  "AU", "CA", "UK", "NZ", "NL", "AE", "KR", "JP", "NO", "FI", "DK", "SE", "CH", "BE", "ES", "FR", "DE", "SG",
+] as const
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified, priority: 1, changeFrequency: "weekly" },
     { url: `${SITE_URL}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
-    { url: `${SITE_URL}/programs`, lastModified, priority: 0.85, changeFrequency: "weekly" },
+    ...PUBLISHED_PROGRAM_COUNTRIES.map((countryCode) => ({
+      url: `${SITE_URL}${programsCanonicalPath(countryCode)}`,
+      lastModified,
+      priority: 0.85,
+      changeFrequency: "weekly" as const,
+    })),
     { url: `${SITE_URL}/institutions`, lastModified, priority: 0.85, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/au`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ca`, lastModified, priority: 0.82, changeFrequency: "weekly" },

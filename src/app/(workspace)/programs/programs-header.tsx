@@ -9,6 +9,7 @@ import { useSelectedCountry } from "@/components/workspace/country-context"
 import { localizePath } from "@/lib/i18n/config"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { PROGRAM_LEVELS, type ProgramSearchFilters } from "@/lib/programs/program-search"
+import { programsCanonicalPath } from "@/lib/seo-routes.mjs"
 import { cn } from "@/lib/utils"
 import { getCareerRoute } from "@/lib/workspace/occupation-routes"
 import { useProgramNavigation } from "./programs-navigation"
@@ -186,6 +187,31 @@ export function ProgramsHeader({
           </label>
         </form>
       )}
+
+      <nav
+        aria-label={locale === "ko" ? "공개된 프로그램 국가" : "Published program countries"}
+        className="mt-4 flex gap-1.5 overflow-x-auto pb-1"
+      >
+        {LAUNCH_COUNTRIES.filter((country) => PUBLISHED_PROGRAM_COUNTRIES.has(country.code)).map((country) => {
+          const isCurrent = country.code === filters.country
+          return (
+            <Link
+              key={country.code}
+              href={localizePath(programsCanonicalPath(country.code), locale)}
+              aria-current={isCurrent ? "page" : undefined}
+              onClick={() => setSelectedCountry({ code: country.code, name: country.name, currency: country.currency })}
+              className={cn(
+                "shrink-0 rounded-lg border px-3 py-1.5 text-[11.5px] font-medium transition",
+                isCurrent
+                  ? "border-brand/30 bg-[hsl(var(--brand-tint))] text-brand"
+                  : "border-[hsl(var(--cc-border))] bg-white text-[hsl(var(--cc-ink-secondary))] hover:border-brand/40 hover:text-brand",
+              )}
+            >
+              {country.name}
+            </Link>
+          )
+        })}
+      </nav>
 
       {filters.country === "AU" && (
         <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
