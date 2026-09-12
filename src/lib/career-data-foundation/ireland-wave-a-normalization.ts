@@ -72,3 +72,35 @@ export function normalizeProjectedGrowth({
     scoreValue,
   }
 }
+
+
+export function conservativeIndustryDiversityFromPublishedShares(
+  publishedSharesPct: number[],
+) {
+  if (!publishedSharesPct.length || publishedSharesPct.some((share) => share < 0 || share > 100)) return null
+  const publishedTotal = publishedSharesPct.reduce((sum, share) => sum + share, 0)
+  if (publishedTotal > 100) return null
+
+  // Treat all unpublished residual employment as one "other" bucket. This is a
+  // conservative HHI upper bound: splitting that residual across real sectors
+  // can only lower HHI and therefore maintain or improve the diversity score.
+  const residual = 100 - publishedTotal
+  const shares = residual > 0 ? [...publishedSharesPct, residual] : [...publishedSharesPct]
+  const hhi = round(shares.reduce((sum, share) => sum + (share / 100) ** 2, 0))
+  const topIndustrySharePct = Math.max(...shares)
+
+  let score = 5
+  if (topIndustrySharePct >= 75 || hhi >= 0.6) score = 0
+  else if (hhi >= 0.45) score = 1
+  else if (hhi >= 0.3) score = 2
+  else if (hhi >= 0.2) score = 3
+  else if (hhi >= 0.12) score = 4
+
+  return {
+    publishedCoveragePct: publishedTotal,
+    residualOtherPct: residual,
+    hhiUpperBound: hhi,
+    topIndustrySharePct,
+    scoreValue: score,
+  }
+}
