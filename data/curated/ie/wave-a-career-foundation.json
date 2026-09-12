@@ -26,18 +26,19 @@
       "url": "https://www.solas.ie/f/70398/x/756240fc66/summer-skills-bulletin-2023.pdf",
       "sourceType": "government_aggregator"
     },
-    "solasRas2024": {
-      "authority": "SOLAS Skills and Labour Market Research Unit",
-      "title": "Difficult-to-fill vacancies survey — November 2024",
-      "url": "https://www.solas.ie/f/70398/x/16b38e96de/solas-recruitment-agency-survey.pdf",
-      "sourceType": "government_aggregator"
-    },
     "csoSes2022": {
       "authority": "Central Statistics Office",
       "title": "Structure of Earnings Survey 2022 — detailed occupation earnings tables",
       "url": "https://www.cso.ie/en/releasesandpublications/ep/p-ses/structureofearningssurvey2022/data/",
       "sourceType": "official_primary",
       "note": "SES05/SES06 are identified as the preferred Pay candidates; exact Wave A rows are not yet normalized."
+    },
+    "solasRas2025": {
+      "authority": "SOLAS Skills and Labour Market Research Unit",
+      "title": "Recruitment Agency Survey on difficult-to-fill vacancies — November 2025",
+      "url": "https://a.storyblok.com/f/70398/x/b5123eb8c0/solas-difficult-to-fill-vacancies-survey.pdf",
+      "sourceType": "government_aggregator",
+      "note": "Official selected-recruitment-agency survey. Used only as a conservative vacancy fallback because it does not publish an occupation-level vacancy numerator/denominator."
     }
   },
   "careers": [
@@ -90,8 +91,15 @@
           "proxyReason": "Broader ICT professionals forecast."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "Difficult-to-fill evidence is confirmed, but a defensible numeric vacancy-intensity normalization has not yet been selected."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names software developers; 2024 evidence also named software developers/engineers, so persistence is supported. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
@@ -168,8 +176,15 @@
           "proxyReason": "Broader ICT professionals forecast."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "SOLAS RAS confirms difficult-to-fill cyber/security roles but does not provide a clean occupation vacancy denominator for the scoring rubric."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey names security engineering within ICT; 2024 evidence also included security roles. This is a broader specialist proxy for Cybersecurity Analyst.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
@@ -246,8 +261,15 @@
           "proxyReason": "Broader ICT professionals forecast."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "Difficult-to-fill data engineering evidence exists, but numeric vacancy-intensity input is not yet defensible."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names data engineers and related data roles; 2024 evidence also included data specialists. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
@@ -324,8 +346,15 @@
           "proxyReason": "Uses broader Science & engineering professionals forecast."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "Difficult-to-fill evidence exists but no clean numeric vacancy intensity has been normalized."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names site/civil engineers; 2024 evidence also named civil/site engineers. The fallback remains broader than a clean vacancy-rate statistic.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
@@ -402,8 +431,15 @@
           "proxyReason": "Production & specialised services managers explicitly includes managers in construction."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "Recruitment Agency Survey identifies project/site managers as difficult to fill, but a numeric intensity input is not yet normalized."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names project/site managers; 2024 evidence also named project/site managers. No occupation-level denominator is published.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
@@ -475,8 +511,15 @@
           "proxyReason": "Uses broader Business & administration professionals forecast."
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "Difficult-to-fill accountant evidence is present, but numeric vacancy-intensity normalization is pending."
+          "status": "normalized",
+          "normalizedValue": 4,
+          "scoreValue": 4,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasRas2025",
+          "proxyReason": "2025 survey explicitly names several accountant specialisms; 2024 evidence also named accountants. This supports persistence but not a numeric vacancy rate.",
+          "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
           "status": "pending",
