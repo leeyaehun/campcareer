@@ -145,9 +145,33 @@ test("Cedefop projection proxies normalize reproducibly and retain the source-gr
   }
 })
 
-test("no Wave A Career is falsely declared score-ready while Pay/Vacancy/Diversity evidence is pending", () => {
+test("2025 difficult-to-fill evidence only unlocks conservative vacancy fallbacks where repeated Career evidence exists", () => {
+  const normalizedVacancy = new Set([
+    "software-developer",
+    "cybersecurity-analyst",
+    "data-engineer",
+    "civil-engineer",
+    "construction-manager",
+    "accountant",
+  ])
+
   for (const career of data.careers) {
-    for (const componentKey of ["relative_salary", "vacancy_intensity", "industry_diversity"]) {
+    const vacancy = career.components.vacancy_intensity
+    if (normalizedVacancy.has(career.careerId)) {
+      assert.equal(vacancy?.status, "normalized", career.careerId)
+      assert.equal(vacancy?.normalizedValue, 4, career.careerId)
+      assert.equal(vacancy?.scoreValue, 4, career.careerId)
+      assert.equal(vacancy?.directness, "proxy", career.careerId)
+      assert.ok(vacancy?.proxyReason?.trim(), career.careerId)
+    } else {
+      assert.equal(vacancy?.status, "pending", career.careerId)
+    }
+  }
+})
+
+test("no Wave A Career is falsely declared score-ready while Pay and Industry Diversity remain pending", () => {
+  for (const career of data.careers) {
+    for (const componentKey of ["relative_salary", "industry_diversity"]) {
       assert.equal(career.components[componentKey]?.status, "pending", `${career.careerId} ${componentKey}`)
     }
   }
