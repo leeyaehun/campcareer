@@ -1,4 +1,5 @@
 import type { CampCareerScore } from "@/lib/campcareer-score"
+import type { CareerDegreePath } from "@/lib/career-degree/contract"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
 import type { CountryOccupationMetric, CountryOccupationProfile, OpportunityScoreBreakdown } from "./country-occupation-contract"
 
@@ -61,4 +62,6 @@ export type CareerMarketInsight = {
   demand: CareerMarketDemand | null
   recommendations: CareerMarketRecommendation[]
   visas: CareerVisaPathway[]
+  /** Source-backed degree directions. These are not a Programme publication claim. */
+  degreePaths: CareerDegreePath[]
 }
