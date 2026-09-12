@@ -19,6 +19,52 @@
       "professionalOccupationsEurPerHour": 32.99,
       "professionalToAllRatio": 1.6832,
       "source": "csoSes2022"
+    },
+    "industryDiversity": {
+      "method": "conservative_hhi_upper_bound",
+      "rule": "Square the published broad-sector shares and treat all unpublished residual employment as one 'other' bucket. This can only overstate concentration relative to a fully disaggregated residual.",
+      "groups": {
+        "ict": {
+          "publishedSharesPct": [
+            65,
+            9,
+            8
+          ],
+          "residualOtherPct": 18,
+          "hhiUpperBound": 0.4694,
+          "scoreValue": 1
+        },
+        "construction": {
+          "publishedSharesPct": [
+            73,
+            13,
+            5
+          ],
+          "residualOtherPct": 9,
+          "hhiUpperBound": 0.5604,
+          "scoreValue": 1
+        },
+        "businessFinancial": {
+          "publishedSharesPct": [
+            31,
+            22,
+            9,
+            8
+          ],
+          "residualOtherPct": 30,
+          "hhiUpperBound": 0.249,
+          "scoreValue": 3
+        },
+        "healthcare": {
+          "publishedSharesPct": [
+            87,
+            7
+          ],
+          "residualOtherPct": 6,
+          "hhiUpperBound": 0.7654,
+          "scoreValue": 0
+        }
+      }
     }
   },
   "sources": {
@@ -26,7 +72,8 @@
       "authority": "SOLAS Skills and Labour Market Research Unit",
       "title": "National Skills Bulletin 2025",
       "url": "https://www.solas.ie/f/70398/x/893ebacfd9/national-skills-bulletin-2025.pdf",
-      "sourceType": "government_aggregator"
+      "sourceType": "government_aggregator",
+      "note": "Sector-share rows are used only as broader occupational-family proxies. Unpublished residual employment is grouped into one 'other' bucket to produce a conservative HHI upper bound."
     },
     "solasForecast2023": {
       "authority": "SOLAS Skills and Labour Market Research Unit / Cedefop",
@@ -116,8 +163,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "SOLAS publishes sector shares for the wider ICT occupation family, not a complete comparable sector distribution for software developers alone."
+          "status": "normalized",
+          "normalizedValue": 0.4694,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -215,8 +270,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "No complete cyber-security occupation-by-industry share distribution has been normalized."
+          "status": "normalized",
+          "normalizedValue": 0.4694,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -314,8 +377,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "No complete Data Engineer occupation-by-industry distribution has been normalized."
+          "status": "normalized",
+          "normalizedValue": 0.4694,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader ict occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 82% of the occupational family; the remaining 18% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -413,8 +484,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "Published construction-family sector shares are broader than Civil Engineer."
+          "status": "normalized",
+          "normalizedValue": 0.5604,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -512,8 +591,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "No complete Construction Project Manager occupation-by-industry distribution has been normalized."
+          "status": "normalized",
+          "normalizedValue": 0.5604,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -606,8 +693,16 @@
           "reason": "Conservative fallback: low vacancy intensity (3) + one persistence point (1). The survey confirms repeated difficult-to-fill mentions but cannot support a vacancy-rate band above low without a denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "SOLAS describes cross-sector demand but the exact complete sector-share vector required for HHI is not normalized."
+          "status": "normalized",
+          "normalizedValue": 0.249,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 3,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader businessFinancial occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 70% of the occupational family; the remaining 30% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -693,8 +788,16 @@
           "reason": "Grouped recruitment evidence exists, but a defensible Architect-only numeric intensity input is not yet normalized."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "No complete Architect occupation-by-industry share vector has been normalized."
+          "status": "normalized",
+          "normalizedValue": 0.5604,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 1,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader construction occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 91% of the occupational family; the remaining 9% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
@@ -776,12 +879,27 @@
           "normalizedUnit": "percentage_points_per_year"
         },
         "vacancy_intensity": {
-          "status": "pending",
-          "reason": "SOLAS difficult-to-fill survey names radiographers, but no clean numeric vacancy denominator/intensity has been normalized."
+          "status": "normalized",
+          "normalizedValue": 3,
+          "scoreValue": 3,
+          "maxScore": 15,
+          "directness": "proxy",
+          "evidenceStatus": "fallback",
+          "source": "solasNsb2025",
+          "proxyReason": "The November 2024 SOLAS Recruitment Agency Survey directly named radiographers as difficult to fill. The November 2025 survey's health summary does not repeat radiographers, so no persistence bonus is applied.",
+          "reason": "Conservative fallback uses low vacancy intensity only (3/15). There is no clean occupation-level vacancy numerator/denominator."
         },
         "industry_diversity": {
-          "status": "pending",
-          "reason": "Healthcare concentration must be measured as real concentration, not replaced with a missing-data zero; exact shares are not yet normalized."
+          "status": "normalized",
+          "normalizedValue": 0.7654,
+          "normalizedUnit": "hhi_upper_bound",
+          "scoreValue": 0,
+          "maxScore": 5,
+          "directness": "proxy",
+          "evidenceStatus": "derived",
+          "source": "solasNsb2025",
+          "proxyReason": "SOLAS publishes main-sector shares for the broader healthcare occupational family, not this exact Career. Residual employment is aggregated into one 'other' bucket as a conservative concentration upper bound.",
+          "reason": "Published shares cover 94% of the occupational family; the remaining 6% is deliberately treated as one sector. The resulting score must be labelled Estimated and must not be described as an exact Career HHI."
         },
         "relative_salary": {
           "status": "normalized",
