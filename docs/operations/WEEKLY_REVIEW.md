@@ -1,4 +1,4 @@
-# Weekly operating review
+# Weekly product review
 
 Week ending: `YYYY-MM-DD`  
 Owner:  
@@ -8,6 +8,9 @@ Release/data version reviewed:
 | --- | --- | --- | --- |
 | Users and organic users | | GA4 / Search Console | |
 | Decision Sessions | | GA4 | |
+| GA4 event delivery | Search, filter, Compare, share and real outbound actions | |
+| GSC impressions, clicks, CTR and position | Search Console | |
+| Top landing pages and new/repeated queries | Search Console | |
 | Searches and zero-result rate | | GA4 | |
 | Search → result and entity → Compare rates | | GA4 | |
 | Compare views/completion | | GA4 | |
@@ -17,8 +20,21 @@ Release/data version reviewed:
 | Sitemap/index coverage | | Search Console | |
 | Data freshness / latest import | | source runs / data registry | |
 | Feedback and data issues | | service-managed feedback review | |
+| Vercel storage/functions and resource alerts | Vercel dashboard | |
 
 Record only observed values and links. Triage P0 immediately, assign material
 P1s, and capture whether a data correction needs `Corrected`, `Updated` or
 `Source changed` traceability. Do not infer a product rewrite from a single
 week of pageviews.
+
+## One next problem
+
+After the evidence review, select **one** primary product or growth problem
+for the next iteration.
+
+| Chosen problem | Evidence and period | Smallest useful change | Measure / guardrails | Owner / review date |
+| --- | --- | --- | --- | --- |
+|  |  |  | Decision Sessions, Compare, feedback, accessibility, performance and trust |  |
+
+Record candidates that were intentionally not chosen in the monthly review;
+do not turn this document into a weekly roadmap.
