@@ -15,6 +15,7 @@ import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract
 import { SourceInfo } from "@/components/ui/data-display"
 import { Skeleton } from "@/components/ui/skeleton"
 import { EmptyState as SurfaceEmptyState } from "@/components/ui/status-state"
+import type { CareerDegreePath } from "@/lib/career-degree/contract"
 import type { OverviewSearchValues } from "../home/home-overview-config"
 
 type Locale = "en" | "ko"
@@ -316,9 +317,11 @@ export function CareerCoreSections({
   const sources = evidenceSources(insight, locale)
   const steps = routeSteps(insight, locale)
   const study = studyResources(insight, locale)
+  const degreePaths = insight.degreePaths
   const jobs = jobResources(insight)
   const careerName = locale === "ko" ? insight.career.labelKo : insight.career.label
   const programsHref = careerProgramsHref(query, locale)
+  const irelandProgramsPublicationPending = insight.country.code === "IE" && degreePaths.length > 0
 
   return (
     <div className="mt-10">
@@ -382,6 +385,17 @@ export function CareerCoreSections({
           title="Study / Programs"
           description={tr(locale, "학업은 독립적인 목적지가 아니라 이 커리어에 진입하는 데 필요한 경우에만 경로 안에서 제시합니다.", "Study is not a separate destination here. It appears when education or training helps you enter this career.")}
         />
+        {degreePaths.length > 0 && (
+          <div className="mt-7">
+            <h3 className="text-base font-semibold text-campcareer-ink">{tr(locale, "관련 학위·학업 경로", "Relevant degrees / study paths")}</h3>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-campcareer-ink-secondary">
+              {tr(locale, "이 경로는 직업과 학위 분야 사이의 검토된 관계를 보여줍니다. 학위는 등록, 근무 자격 또는 취업을 보장하지 않습니다.", "These are reviewed relationships between the career and degree fields. A degree does not guarantee registration, work eligibility or employment.")}
+            </p>
+            <div className="mt-4 divide-y divide-campcareer-border border-y border-campcareer-border">
+              {degreePaths.map((path) => <DegreePathRow key={path.degree.id} path={path} locale={locale} />)}
+            </div>
+          </div>
+        )}
         {study.length > 0 ? (
           <div className="mt-7">
             <div className="grid gap-3 md:grid-cols-2">
@@ -391,6 +405,12 @@ export function CareerCoreSections({
               {tr(locale, "이 커리어의 프로그램 더 보기", "Explore more programs for this career")} <ArrowRight className="size-4" />
             </Link>
           </div>
+        ) : irelandProgramsPublicationPending ? (
+          <SurfaceEmptyState
+            icon={<GraduationCap className="size-5" />}
+            title={tr(locale, "프로그램 상세 공개를 위한 검증이 진행 중입니다.", "Programme detail publication is still under verification.")}
+            detail={tr(locale, "위 학위 관계의 근거는 검토되었지만, 아일랜드 프로그램은 정확한 프로그램 단위의 국제학생 자격과 제공 상태가 확인될 때까지 공개 목록으로 연결하지 않습니다.", "The degree relationships above are reviewed, but Ireland programmes are not linked as public listings until exact programme-level international-eligibility and offering evidence is verified.")}
+          />
         ) : (
           <SurfaceEmptyState
             icon={<GraduationCap className="size-5" />}
@@ -466,6 +486,34 @@ function ResourceCard({ resource, icon }: { resource: ResourceLink; icon: ReactN
       {resource.detail && <p className="mt-1 text-xs leading-5 text-campcareer-ink-secondary">{resource.detail}</p>}
       {resource.meta && <p className="mt-2 text-xs leading-5 text-campcareer-muted">{resource.meta}</p>}
     </a>
+  )
+}
+
+function relationshipLabel(path: CareerDegreePath, locale: Locale) {
+  if (path.relationType === "direct") return tr(locale, "직접 경로", "Direct pathway")
+  if (path.relationType === "common_pathway") return tr(locale, "일반적인 경로", "Common pathway")
+  return tr(locale, "인접 경로", "Related pathway")
+}
+
+function DegreePathRow({ path, locale }: { path: CareerDegreePath; locale: Locale }) {
+  const checkedAt = new Intl.DateTimeFormat(locale === "ko" ? "ko-KR" : "en-IE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${path.evidence.checkedAt}T00:00:00Z`))
+
+  return (
+    <article className="py-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+        <h4 className="text-base font-semibold text-campcareer-ink">{path.degree.name}</h4>
+        <p className="text-xs font-semibold text-campcareer-muted">{relationshipLabel(path, locale)}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-campcareer-ink-secondary">{path.rationale}</p>
+      <p className="mt-3 text-xs leading-5 text-campcareer-muted">
+        {tr(locale, "근거", "Evidence")}: {path.evidence.authority} · {path.evidence.title} · {path.evidence.referencePeriod} · {tr(locale, "확인일", "checked")} {checkedAt}
+      </p>
+    </article>
   )
 }
 

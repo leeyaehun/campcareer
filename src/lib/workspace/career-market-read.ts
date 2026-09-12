@@ -3,6 +3,7 @@ import "server-only"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
+import { getCareerDegreePaths } from "@/lib/career-degree/read"
 import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/career-data-foundation/read"
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
@@ -384,14 +385,16 @@ export async function getCareerMarketInsight({
       demand: null,
       recommendations: includeRecommendations ? await getCareerCountryRecommendations(careerId) : [],
       visas: [],
+      degreePaths: [],
     }
   }
 
-  const [foundation, recommendations] = await Promise.all([
+  const [foundation, recommendations, degreePaths] = await Promise.all([
     getCareerDataFoundation({ countryCode: country, careerId }),
     includeRecommendations
       ? getCareerCountryRecommendations(careerId)
       : Promise.resolve([] as CareerMarketRecommendation[]),
+    getCareerDegreePaths(country, careerId),
   ])
 
   if (foundation && foundationHasPublicScore(foundation)) {
@@ -411,6 +414,7 @@ export async function getCareerMarketInsight({
       demand: toFoundationDemand(foundation),
       recommendations,
       visas: toFoundationVisas(foundation),
+      degreePaths,
     }
   }
 
@@ -435,6 +439,7 @@ export async function getCareerMarketInsight({
       demand: null,
       recommendations,
       visas: [],
+      degreePaths,
     }
   }
 
@@ -455,5 +460,6 @@ export async function getCareerMarketInsight({
       sourceTitle: visa.source_title,
       lastVerifiedOn: visa.last_verified_on,
     })),
+    degreePaths,
   }
 }
