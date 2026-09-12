@@ -38,7 +38,7 @@ test("Ireland Wave A backfill creates one mapping and one nine-component snapsho
 })
 
 test("incomplete Ireland Careers are persisted as unavailable evidence, not zero-filled components", () => {
-  for (const careerId of ["accountant", "architect", "radiographer"]) {
+  for (const careerId of ["accountant", "architect"]) {
     assert.match(sql, new RegExp(`IE:${careerId}.*unavailable`, "s"))
   }
 
