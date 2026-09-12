@@ -15,3 +15,17 @@ test("workspace compare sidebar uses the contextual career resolver instead of s
   assert.match(sidebar, /resolveCareerCompareHref/)
   assert.match(sidebar, /mode\.type === "career" && currentCareerCompareHref/)
 })
+
+
+test("workspace career compare links the six reviewed Ireland MVP Careers", () => {
+  assert.equal(
+    resolveCareerCompareHref("IE", "software-developer"),
+    "/compare?type=career&country=IE&profile=ireland-career-mvp-v1&careers=software-developer",
+  )
+  assert.equal(
+    resolveCareerCompareHref("IE", "radiographer"),
+    "/compare?type=career&country=IE&profile=ireland-career-mvp-v1&careers=radiographer",
+  )
+  assert.equal(resolveCareerCompareHref("IE", "accountant"), null)
+  assert.equal(resolveCareerCompareHref("IE", "architect"), null)
+})
