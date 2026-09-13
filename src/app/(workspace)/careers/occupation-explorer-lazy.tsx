@@ -26,6 +26,8 @@ export function LazyOccupationExplorer(props: {
   initialCountry: string
   initialCategory: string
   initialBrowseAll: boolean
+  initialPublicResultCount: number
+  suppressedCareerIds: readonly string[]
 }) {
   return <OccupationExplorerView basePath="/careers" {...props} />
 }

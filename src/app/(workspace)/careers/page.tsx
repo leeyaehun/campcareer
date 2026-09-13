@@ -18,8 +18,10 @@ import {
 import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
 import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
+import { searchIrelandPublicEntities } from "@/lib/search/ireland-public-entity-search.server"
 import { CareerCountrySelector } from "@/components/workspace/career-country-selector"
 import { LazyOccupationExplorer } from "./occupation-explorer-lazy"
+import { IrelandPublicSearchResults } from "./ireland-public-search-results"
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -77,7 +79,7 @@ function CareerDiscovery() {
             id="career-search"
             name="q"
             type="search"
-            placeholder="Search careers, e.g. Nurse or Electrician…"
+            placeholder="Search careers, Ireland cities or institutions…"
             className="h-12 w-full rounded-cc-control border border-campcareer-border bg-campcareer-surface pl-11 pr-24 text-sm text-campcareer-ink shadow-cc-surface outline-none focus:border-brand focus:ring-2 focus:ring-ring/20"
           />
           <button
@@ -160,13 +162,23 @@ export default async function CareersPage({
     return <CareerDiscovery />
   }
 
+  const irelandSearchQuery = q.trim().length >= 2 ? q : ""
+  const irelandPublicResults = irelandSearchQuery
+    ? await searchIrelandPublicEntities(q)
+    : []
+
   return (
-    <LazyOccupationExplorer
-      initialQuery={q}
-      initialOccupation={occupation}
-      initialCountry={country.toUpperCase() === "GB" ? "UK" : country.toUpperCase()}
-      initialCategory={category}
-      initialBrowseAll={browse}
-    />
+    <>
+      <IrelandPublicSearchResults query={irelandSearchQuery} results={irelandPublicResults} />
+      <LazyOccupationExplorer
+        initialQuery={q}
+        initialOccupation={occupation}
+        initialCountry={country.toUpperCase() === "GB" ? "UK" : country.toUpperCase()}
+        initialCategory={category}
+        initialBrowseAll={browse}
+        initialPublicResultCount={irelandPublicResults.length}
+        suppressedCareerIds={irelandPublicResults.flatMap((result) => result.careerId ? [result.careerId] : [])}
+      />
+    </>
   )
 }

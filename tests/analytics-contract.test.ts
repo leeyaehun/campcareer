@@ -50,6 +50,7 @@ test("Decision Session counts unique meaningful paths and requires two entity ty
   assert.equal(state.entityTypes.length, 3)
   assert.equal(duplicate, state)
   assert.equal(entityTypeForPath("/career/au/electrician"), "career")
+  assert.equal(entityTypeForPath("/cities/ie/dublin"), "city")
   assert.equal(entityTypeForPath("/programs/au/electrical"), "program")
   assert.equal(entityTypeForPath("/careers"), null)
 })

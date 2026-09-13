@@ -30,6 +30,17 @@ export type PublishedUkCitySlug = (typeof PUBLISHED_UK_CITY_SLUGS)[number]
 export const PUBLISHED_IE_CITY_SLUGS = ["dublin", "cork", "galway", "limerick"] as const
 export type PublishedIeCitySlug = (typeof PUBLISHED_IE_CITY_SLUGS)[number]
 
+/**
+ * Public Ireland City identity is intentionally kept beside its route gate so
+ * search and City pages cannot independently widen the published cohort.
+ */
+export const PUBLISHED_IE_CITY_NAMES: Readonly<Record<PublishedIeCitySlug, string>> = {
+  dublin: "Dublin",
+  cork: "Cork",
+  galway: "Galway",
+  limerick: "Limerick",
+}
+
 export const PUBLISHED_NZ_CITY_SLUGS = ["auckland", "christchurch", "hamilton", "wellington", "dunedin"] as const
 export type PublishedNzCitySlug = (typeof PUBLISHED_NZ_CITY_SLUGS)[number]
 

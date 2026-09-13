@@ -120,6 +120,8 @@ export function OccupationExplorer({
   initialCountry,
   initialCategory,
   initialBrowseAll = false,
+  initialPublicResultCount = 0,
+  suppressedCareerIds = [],
 }: {
   basePath?: "/careers" | "/occupation"
   initialQuery: string
@@ -127,6 +129,8 @@ export function OccupationExplorer({
   initialCountry: string
   initialCategory: string
   initialBrowseAll?: boolean
+  initialPublicResultCount?: number
+  suppressedCareerIds?: readonly string[]
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -153,11 +157,20 @@ export function OccupationExplorer({
   }, [initialCountry, setSelectedCountry])
 
   const filtered = useMemo(() => {
+    const countryCode = selectedCountry?.code ?? initialCountry
+    const suppressInitialIrelandResults = query.trim() === initialQuery.trim()
+    const suppressed = suppressInitialIrelandResults ? new Set(suppressedCareerIds) : null
+
     return CAREER_CATALOGUE.filter((career) => {
       if (category !== "all" && career.categoryId !== category) return false
+      if (isCareerIndex && countryCode && !getIndexableCareerRoute(countryCode, career.id)) return false
+      if (isCareerIndex && suppressed?.has(career.id)) return false
       return matchCareer(career, query)
     })
-  }, [query, category])
+  }, [category, initialCountry, initialQuery, isCareerIndex, query, selectedCountry?.code, suppressedCareerIds])
+
+  const publicResultsActive = query.trim() === initialQuery.trim()
+  const searchResultCount = filtered.length + (publicResultsActive ? initialPublicResultCount : 0)
 
   const [selectedId, setSelectedId] = useState<string | undefined>(() =>
     initialSelection(initialOccupation, initialQuery, filtered)
@@ -229,14 +242,14 @@ export function OccupationExplorer({
         name: "search",
         params: {
           search_location: "careers",
-          result_count: filtered.length,
+          result_count: searchResultCount,
           ...(category !== "all" ? { entity_filter: category } : {}),
           search_term: query,
         },
       })
     }, 600)
     return () => window.clearTimeout(timer)
-  }, [category, filtered.length, query])
+  }, [category, query, searchResultCount])
 
   function updateCountry(code: string | null) {
     const params = new URLSearchParams(searchParams.toString())
@@ -282,6 +295,7 @@ export function OccupationExplorer({
 
   const selectedCategoryLabel = category === "all" ? (isCareerIndex ? "All careers" : "All occupations") : CATEGORY_LABELS.get(category) ?? "Filters"
   const isDiscoveryMode = !showAllOccupations && category === "all" && !query.trim() && !selectedId
+  const hasOnlyPublicResults = isCareerIndex && publicResultsActive && initialPublicResultCount > 0 && filtered.length === 0
 
   return (
     <>
@@ -303,7 +317,7 @@ export function OccupationExplorer({
         <CategorySearch
           value={query}
           onChange={setQuery}
-          placeholder={isCareerIndex ? "Search careers, e.g. Nurse or Electrician…" : "Search occupations, e.g. Nurse or Electrician…"}
+          placeholder={isCareerIndex ? "Search careers, Ireland cities or institutions…" : "Search occupations, e.g. Nurse or Electrician…"}
         />
       </div>
 
@@ -325,7 +339,7 @@ export function OccupationExplorer({
         ))}
       </FilterBar>
 
-      {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} isCareerIndex={isCareerIndex} /> : <>
+      {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} isCareerIndex={isCareerIndex} /> : !hasOnlyPublicResults ? <>
       <div className="mt-6 flex items-center justify-between">
         <p className="text-sm font-medium text-campcareer-muted">
           {filtered.length} {isCareerIndex ? "careers" : "occupations"}
@@ -429,7 +443,7 @@ export function OccupationExplorer({
           </section>
         </div>
       )}
-      </>}
+      </> : null}
     </>
   )
 }
