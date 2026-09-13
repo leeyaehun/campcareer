@@ -21,6 +21,8 @@ import { getAeInstitutionDetail, type AeInstitutionDetailResult } from "@/lib/in
 import { getAuthorityFastpathInstitutionDetail, type AuthorityFastpathCountryCode, type AuthorityFastpathInstitutionDetailResult } from "@/lib/institutions/authority-fastpath-institution-detail.server"
 import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFastpathInstitutionDetailResult } from "@/lib/institutions/eu-fastpath-institution-detail.server"
 import { getIrelandInstitution, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
+import { getIrelandInstitutionCareerDegreeEvidence } from "@/lib/career-degree/ireland-institution-evidence.server"
+import type { IrelandInstitutionCareerDegreeEvidence } from "@/lib/career-degree/contract"
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
 import { getUsInstitutionDetail, type UsInstitutionDetailResult } from "@/lib/institutions/us-institution-detail.server"
 import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
@@ -108,9 +110,15 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
 
   if (countryCode === "IE") {
     let detail: IrelandInstitution | null = null
-    try { detail = await getIrelandInstitution(slug) } catch (error) { console.error("Unable to load Ireland institution detail page", error); return <InstitutionUnavailable /> }
+    let careerDegreeEvidence: IrelandInstitutionCareerDegreeEvidence[] = []
+    try {
+      [detail, careerDegreeEvidence] = await Promise.all([
+        getIrelandInstitution(slug),
+        getIrelandInstitutionCareerDegreeEvidence(slug),
+      ])
+    } catch (error) { console.error("Unable to load Ireland institution detail page", error); return <InstitutionUnavailable /> }
     if (!detail) notFound()
-    return <IrelandInstitutionDetailView institution={detail} />
+    return <IrelandInstitutionDetailView institution={detail} careerDegreeEvidence={careerDegreeEvidence} />
   }
 
   if (countryCode === "ES") {

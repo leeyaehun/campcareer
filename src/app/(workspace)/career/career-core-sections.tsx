@@ -10,6 +10,7 @@ import {
   GraduationCap,
 } from "lucide-react"
 import { localizePath } from "@/lib/i18n/config"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
 import { SourceInfo } from "@/components/ui/data-display"
@@ -502,6 +503,9 @@ function DegreePathRow({ path, locale }: { path: CareerDegreePath; locale: Local
     day: "numeric",
     timeZone: "UTC",
   }).format(new Date(`${path.evidence.checkedAt}T00:00:00Z`))
+  const evidenceInstitutionPath = path.evidenceInstitution
+    ? institutionDetailPath(path.evidenceInstitution.countryCode, path.evidenceInstitution.slug)
+    : null
 
   return (
     <article className="py-5">
@@ -510,6 +514,14 @@ function DegreePathRow({ path, locale }: { path: CareerDegreePath; locale: Local
         <p className="text-xs font-semibold text-campcareer-muted">{relationshipLabel(path, locale)}</p>
       </div>
       <p className="mt-2 text-sm leading-6 text-campcareer-ink-secondary">{path.rationale}</p>
+      {path.evidenceInstitution && evidenceInstitutionPath ? (
+        <div className="mt-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{tr(locale, "검토된 근거 기관", "Reviewed evidence institution")}</p>
+          <Link href={evidenceInstitutionPath} className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-press hover:underline">
+            {path.evidenceInstitution.name} <ArrowRight className="size-3.5" aria-hidden="true" />
+          </Link>
+        </div>
+      ) : null}
       <p className="mt-3 text-xs leading-5 text-campcareer-muted">
         {tr(locale, "근거", "Evidence")}: {path.evidence.authority} · {path.evidence.title} · {path.evidence.referencePeriod} · {tr(locale, "확인일", "checked")} {checkedAt}
       </p>

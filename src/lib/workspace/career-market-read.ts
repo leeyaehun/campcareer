@@ -3,6 +3,7 @@ import "server-only"
 import { CANONICAL_CAREER_BY_ID } from "@/data/career-comparison-catalog"
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
+import { getIrelandCareerDegreePaths } from "@/lib/career-degree/ireland-institution-evidence.server"
 import { getCareerDegreePaths } from "@/lib/career-degree/read"
 import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/career-data-foundation/read"
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
@@ -394,7 +395,7 @@ export async function getCareerMarketInsight({
     includeRecommendations
       ? getCareerCountryRecommendations(careerId)
       : Promise.resolve([] as CareerMarketRecommendation[]),
-    getCareerDegreePaths(country, careerId),
+    country === "IE" ? getIrelandCareerDegreePaths(careerId) : getCareerDegreePaths(country, careerId),
   ])
 
   if (foundation && foundationHasPublicScore(foundation)) {

@@ -18,7 +18,7 @@ test("Country Degree read groups reviewed careers from one server-only relation-
 })
 
 test("Ireland Country Hub renders reviewed Degree connections as canonical Career actions", () => {
-  assert.match(page, /getCountryDegreeConnections\("IE"\)/)
+  assert.match(page, /getIrelandCountryDegreeInstitutionConnections\(\)/)
   assert.match(page, /Promise\.all/)
   assert.match(dashboard, /Career-linked degree pathways/)
   assert.match(dashboard, /degreeConnections\.map/)
@@ -26,6 +26,8 @@ test("Ireland Country Hub renders reviewed Degree connections as canonical Caree
   assert.match(dashboard, /careerCanonicalPath\("IE", career\.careerId\)/)
   assert.match(dashboard, /career\.directness === "direct" \? "Direct" : "Adjacent"/)
   assert.match(dashboard, /Evidence: \{career\.evidence\.authority\}/)
+  assert.match(dashboard, /Reviewed evidence institution/)
+  assert.match(dashboard, /career\.evidenceInstitution\.countryCode/)
   assert.match(dashboard, /target="_blank"/)
   assert.match(dashboard, /rel="noreferrer"/)
   assert.doesNotMatch(dashboard, /profile\.strongMajors/)

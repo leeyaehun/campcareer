@@ -18,6 +18,17 @@ export type DegreePathEvidence = {
   checkedAt: string
 }
 
+/**
+ * A verified Ireland Institution whose official provider page is the reviewed
+ * evidence for a Career ↔ Degree relationship. It is not a programme listing.
+ */
+export type ReviewedEvidenceInstitution = {
+  countryCode: "IE"
+  id: string
+  slug: string
+  name: string
+}
+
 export type CareerDegreePath = {
   degree: DegreeConcept
   relationType: CareerDegreeRelationType
@@ -25,6 +36,7 @@ export type CareerDegreePath = {
   relationshipStrength: CareerDegreeRelationshipStrength
   rationale: string
   evidence: DegreePathEvidence
+  evidenceInstitution?: ReviewedEvidenceInstitution | null
 }
 
 export type DegreeCareerOutcome = {
@@ -36,6 +48,7 @@ export type DegreeCareerOutcome = {
   relationshipStrength: CareerDegreeRelationshipStrength
   rationale: string
   evidence: DegreePathEvidence
+  evidenceInstitution?: ReviewedEvidenceInstitution | null
 }
 
 export type DegreeCareerReadModel = {
@@ -48,4 +61,11 @@ export type DegreeCareerReadModel = {
 export type CountryDegreeConnection = {
   degree: DegreeConcept
   careers: readonly DegreeCareerOutcome[]
+}
+
+/** A reviewed Ireland Career ↔ Degree relation shown on its evidence Institution. */
+export type IrelandInstitutionCareerDegreeEvidence = {
+  degree: DegreeConcept
+  career: DegreeCareerOutcome
+  institution: ReviewedEvidenceInstitution
 }
