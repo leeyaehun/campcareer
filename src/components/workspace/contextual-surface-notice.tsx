@@ -29,14 +29,6 @@ const SURFACES: Array<{ matches: (pathname: string) => boolean; copy: SurfaceCop
     },
   },
   {
-    matches: (pathname) => pathname === "/countries" || pathname.startsWith("/countries/") || pathname === "/cities" || pathname.startsWith("/cities/"),
-    copy: {
-      eyebrow: { en: "COUNTRY CONTEXT", ko: "국가 맥락" },
-      title: { en: "Location gives a career context", ko: "국가는 커리어의 맥락을 제공합니다" },
-      detail: { en: "Use country and city evidence to understand a career in place, not as a separate destination dashboard.", ko: "국가와 도시 정보는 별도 목적지 대시보드가 아니라 특정 커리어를 현지에서 이해하는 근거로 사용합니다." },
-    },
-  },
-  {
     matches: (pathname) => pathname === "/visas" || pathname.startsWith("/visas/"),
     copy: {
       eyebrow: { en: "PATH CONTEXT", ko: "경로 맥락" },

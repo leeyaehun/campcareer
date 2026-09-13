@@ -21,10 +21,20 @@ test("the consent boundary is the only GA4 mounting point", () => {
   assert.match(ga, /isGoogleAnalyticsMeasurementId/)
 })
 
-test("career feedback keeps its entity context without a duplicate footer prompt", () => {
+test("generic usefulness prompts are not mounted, while explicit data-issue reporting remains available", () => {
   const footer = readFileSync("src/components/layout/site-footer.tsx", "utf8")
   const careerPage = readFileSync("src/app/(workspace)/career/[country]/[career]/page.tsx", "utf8")
-  assert.match(careerPage, /<PageFeedback entityType="career" entityId=/)
-  assert.match(footer, /hasCareerPageFeedback/)
-  assert.match(footer, /!hasCareerPageFeedback && <PageFeedback \/>/)
+  const report = readFileSync("src/components/feedback/data-issue-report.tsx", "utf8")
+  assert.doesNotMatch(footer, /PageFeedback|Was this useful|usePathname/)
+  assert.doesNotMatch(careerPage, /PageFeedback|Was this useful/)
+  assert.match(report, /Report a data issue/)
+  assert.match(report, /fetch\("\/api\/v1\/feedback"/)
+})
+
+test("Country and City routes no longer show the shared contextual notice", () => {
+  const notice = readFileSync("src/components/workspace/contextual-surface-notice.tsx", "utf8")
+  assert.doesNotMatch(notice, /COUNTRY CONTEXT|Location gives a career context|pathname === "\/countries"|pathname === "\/cities"/)
+  assert.match(notice, /CAREER PATH/)
+  assert.match(notice, /SECONDARY ACTION/)
+  assert.match(notice, /PATH CONTEXT/)
 })
