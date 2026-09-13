@@ -28,6 +28,7 @@ import { INDEXABLE_ES_INSTITUTION_PATHS } from "@/lib/institutions/institution-s
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-eu-fastpath"
 import { INDEXABLE_FR_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-fr"
 import { INDEXABLE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo"
+import { INDEXABLE_IE_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-ie"
 import { INDEXABLE_NL_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_PATHS } from "@/lib/institutions/institution-seo-sg"
@@ -77,6 +78,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/kr`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ae`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/us`, lastModified, priority: 0.82, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/institutions/ie`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({ url: `${SITE_URL}${countryCanonicalPath(slug)}`, lastModified, priority: 0.85, changeFrequency: "monthly" as const })),
     { url: `${SITE_URL}/cities/au/sydney`, lastModified, priority: 0.8, changeFrequency: "monthly" },
     { url: `${SITE_URL}/cities/au/melbourne`, lastModified, priority: 0.8, changeFrequency: "monthly" },
@@ -136,6 +138,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const studyPages: MetadataRoute.Sitemap = AU_PROGRAMMATIC_STUDY_PAGES.map((page) => ({ url: `${SITE_URL}${page.path}`, lastModified, priority: 0.72, changeFrequency: "weekly" as const }))
   const institutionPages: MetadataRoute.Sitemap = [
     ...INDEXABLE_INSTITUTION_PATHS,
+    ...INDEXABLE_IE_INSTITUTION_PATHS,
     ...INDEXABLE_UK_INSTITUTION_PATHS,
     ...INDEXABLE_NL_INSTITUTION_PATHS,
     ...INDEXABLE_NZ_INSTITUTION_PATHS,

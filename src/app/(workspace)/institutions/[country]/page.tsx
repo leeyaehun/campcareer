@@ -5,6 +5,7 @@ import {
   INSTITUTION_MVP_COUNTRIES,
   normalizeInstitutionCountrySegment,
 } from "@/lib/institutions/institution-search"
+import { IrelandInstitutionsExplorer } from "../ireland-institutions-explorer"
 import { InstitutionsExplorer } from "../institutions-explorer"
 
 export const revalidate = 3600
@@ -24,6 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ country: 
   const authorityFastpath = countryCode === "FI" || countryCode === "NO" || countryCode === "JP" || countryCode === "KR" || countryCode === "AE"
   const description = countryCode === "US"
     ? `Explore the CampCareer US launch cohort of 25 research universities with NCES/IPEDS UNITID identity, NCSES selection context and source-backed city-level ${locationLabel}. The US degree-program catalogue is pending.`
+    : countryCode === "IE"
+      ? "Explore the verified Ireland institution and location cohort with Higher Education Authority recognition and published City connections. Verified programme listings are not yet published."
     : countryCode === "NL"
       ? `Explore verified institutions in ${launchCountry?.name ?? countryCode} with official BRIN identity and source-backed ${locationLabel}. Program data will be added as the Netherlands catalogue is verified.`
       : countryCode === "NZ"
@@ -56,5 +59,6 @@ export default async function InstitutionCountryPage({ params, searchParams }: {
   const countryCode = normalizeInstitutionCountrySegment(country)
   if (!countryCode) notFound()
   if (country !== countryCode.toLowerCase()) permanentRedirect(`/institutions/${countryCode.toLowerCase()}`)
+  if (countryCode === "IE") return <IrelandInstitutionsExplorer />
   return <InstitutionsExplorer countryCode={countryCode} searchParams={await searchParams} />
 }

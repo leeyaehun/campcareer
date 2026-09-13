@@ -10,6 +10,7 @@ import { INDEXABLE_DE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-
 import { INDEXABLE_ES_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-es"
 import { INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-eu-fastpath"
 import { INDEXABLE_FR_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-fr"
+import { INDEXABLE_IE_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-ie"
 import { INDEXABLE_NL_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nl"
 import { INDEXABLE_NZ_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-nz"
 import { INDEXABLE_SG_INSTITUTION_ROUTES } from "@/lib/institutions/institution-seo-sg"
@@ -19,6 +20,7 @@ import { getInstitutionDetail, type InstitutionDetail } from "@/lib/institutions
 import { getAeInstitutionDetail, type AeInstitutionDetailResult } from "@/lib/institutions/ae-institution-detail.server"
 import { getAuthorityFastpathInstitutionDetail, type AuthorityFastpathCountryCode, type AuthorityFastpathInstitutionDetailResult } from "@/lib/institutions/authority-fastpath-institution-detail.server"
 import { getEuFastpathInstitutionDetail, type EuFastpathCountryCode, type EuFastpathInstitutionDetailResult } from "@/lib/institutions/eu-fastpath-institution-detail.server"
+import { getIrelandInstitution, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import { getSpainInstitutionDetail, type SpainInstitutionDetailResult } from "@/lib/institutions/spain-institution-detail.server"
 import { getUsInstitutionDetail, type UsInstitutionDetailResult } from "@/lib/institutions/us-institution-detail.server"
 import { AuthorityFastpathInstitutionDetailView } from "../../authority-fastpath-institution-detail"
@@ -26,6 +28,7 @@ import { CanadianInstitutionDetailView } from "../../canadian-institution-detail
 import { EuFastpathInstitutionDetailView } from "../../eu-fastpath-institution-detail"
 import { FranceInstitutionDetailView } from "../../france-institution-detail"
 import { GermanyInstitutionDetailView } from "../../germany-institution-detail"
+import { IrelandInstitutionDetailView } from "../../ireland-institution-detail"
 import { InstitutionDetailView } from "../../institution-detail"
 import { NetherlandsInstitutionDetailView } from "../../netherlands-institution-detail"
 import { NewZealandInstitutionDetailView } from "../../new-zealand-institution-detail"
@@ -55,6 +58,7 @@ function isIndexableInstitutionRoute(countryCode: string, slug: string) {
     || INDEXABLE_SG_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_DE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_FR_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
+    || INDEXABLE_IE_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_ES_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_EU_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
     || INDEXABLE_AUTHORITY_FASTPATH_INSTITUTION_ROUTES.some(([c,s]) => c===countryCode && s===slug)
@@ -68,7 +72,8 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
   const slug = normalizeInstitutionSlugSegment(institution)
   if (!countryCode || !slug) return { title: "Institution not found", robots: { index: false, follow: true } }
   try {
-    const detail = countryCode === "ES" ? (await getSpainInstitutionDetail(slug))?.institution ?? null
+    const detail = countryCode === "IE" ? await getIrelandInstitution(slug)
+      : countryCode === "ES" ? (await getSpainInstitutionDetail(slug))?.institution ?? null
       : countryCode === "AE" ? (await getAeInstitutionDetail(slug))?.institution ?? null
       : countryCode === "US" ? (await getUsInstitutionDetail(slug))?.institution ?? null
       : isEuFastpathCountry(countryCode) ? (await getEuFastpathInstitutionDetail(countryCode, slug))?.institution ?? null
@@ -79,6 +84,7 @@ export async function generateMetadata({ params }: InstitutionDetailPageProps): 
     const locationLabel = countryCode === "AU" ? "campuses" : "locations"
     const description = countryCode === "US"
       ? `Explore ${detail.name} verified NCES/IPEDS UNITID identity, NCSES launch-cohort context and city-level ${locationLabel} on CampCareer. The US degree-program catalogue is pending.`
+      : countryCode === "IE" ? `Explore ${detail.name} Higher Education Authority-recognised identity and source-backed Ireland location on CampCareer. Verified programme listings are not yet published.`
       : countryCode === "NL" ? `Explore ${detail.name} official institution identity, BRIN registration and source-backed ${locationLabel} on CampCareer. Program data will be added as the Netherlands catalogue is verified.`
       : countryCode === "NZ" ? `Explore ${detail.name} NZQA provider identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the New Zealand catalogue is verified.`
       : countryCode === "SG" ? `Explore ${detail.name} UEN identity and source-backed ${locationLabel} on CampCareer. Program data will be added as the Singapore catalogue is verified.`
@@ -99,6 +105,13 @@ export default async function InstitutionDetailPage({ params }: InstitutionDetai
   if (!countryCode || !slug) notFound()
   const canonicalPath = institutionDetailPath(countryCode, slug)
   if (country !== countryCode.toLowerCase() || institution !== slug) permanentRedirect(canonicalPath)
+
+  if (countryCode === "IE") {
+    let detail: IrelandInstitution | null = null
+    try { detail = await getIrelandInstitution(slug) } catch (error) { console.error("Unable to load Ireland institution detail page", error); return <InstitutionUnavailable /> }
+    if (!detail) notFound()
+    return <IrelandInstitutionDetailView institution={detail} />
+  }
 
   if (countryCode === "ES") {
     let result: SpainInstitutionDetailResult | null = null
