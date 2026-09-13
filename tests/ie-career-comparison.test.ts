@@ -59,6 +59,10 @@ test("Ireland Career MVP compare href is reconstructable and non-duplicating", (
     buildIrelandCareerCompareHref(["software-developer", "civil-engineer"]),
     "/compare?type=career&country=IE&profile=ireland-career-mvp-v1&careers=software-developer%2Ccivil-engineer",
   )
+  assert.equal(
+    buildIrelandCareerCompareHref(["civil-engineer", "software-developer"]),
+    "/compare?type=career&country=IE&profile=ireland-career-mvp-v1&careers=software-developer%2Ccivil-engineer",
+  )
   assert.deepEqual(
     replaceIrelandCareerAtIndex(
       ["software-developer", "civil-engineer"],

@@ -17,6 +17,7 @@ import type { CountryDegreeConnection, DegreeCareerOutcome } from "@/lib/career-
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
 import type { IrelandEmploymentEcosystem } from "@/lib/employment/ireland-employment-ecosystem-contract"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import { buildIrelandCareerCompareHref } from "@/lib/ireland-career-comparison"
 import type { IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { formatMoneyRange, formatRankingValue, type CountryMetrics } from "@/lib/workspace/country-metric-contract"
@@ -63,6 +64,8 @@ function relationshipLabel(career: DegreeCareerOutcome) {
 }
 
 function DegreeConnectionCard({ connection }: { connection: CountryDegreeConnection }) {
+  const compareHref = buildIrelandCareerCompareHref(connection.careers.map((career) => career.careerId))
+
   return (
     <article className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-3">
       <h3 className="text-[12.5px] font-semibold text-[#2f5f25]">{connection.degree.name}</h3>
@@ -104,6 +107,9 @@ function DegreeConnectionCard({ connection }: { connection: CountryDegreeConnect
           </div>
         ))}
       </div>
+      <Link href={compareHref} className="mt-3 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
+        Compare Ireland careers <ArrowRight className="size-3" aria-hidden="true" />
+      </Link>
     </article>
   )
 }
@@ -170,7 +176,7 @@ export function IrelandCountryDashboard({
           <div className="mt-3 flex flex-wrap gap-2">{profile.academicYear.intakes.map((intake) => <span key={intake} className="rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-semibold text-[#2563eb]">{intake}</span>)}</div>
         </section>
         <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
-          <div className="flex items-center gap-2 text-[#3e7a2e]"><GraduationCap className="size-4" /><h2 className="text-[14.5px] font-semibold">Career-linked degree pathways</h2></div>
+          <div className="flex flex-wrap items-center gap-2 text-[#3e7a2e]"><GraduationCap className="size-4" /><h2 className="text-[14.5px] font-semibold">Career-linked degree pathways</h2><Link href={buildIrelandCareerCompareHref()} className="sm:ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Compare Ireland careers</Link></div>
           <p className="mt-2 text-[11px] leading-4 text-[#66805f]">Reviewed Degree-to-Career relationships. These are not programme listings or availability claims.</p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">{degreeConnections.map((connection) => <DegreeConnectionCard key={connection.degree.id} connection={connection} />)}</div>
         </section>
