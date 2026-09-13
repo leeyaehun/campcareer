@@ -71,8 +71,8 @@ export const COUNTRY_EXPLORER: readonly CountryExplorerEntry[] = [
     code: "IE",
     regions: [
       { name: "Leinster", cities: ["Dublin", "Kilkenny", "Drogheda"] },
-      { name: "Munster", cities: ["Cork", "Limerick", "Waterford", "Galway"] },
-      { name: "Connacht", cities: ["Sligo", "Castlebar"] },
+      { name: "Munster", cities: ["Cork", "Limerick", "Waterford"] },
+      { name: "Connacht", cities: ["Galway", "Sligo", "Castlebar"] },
       { name: "Ulster", cities: ["Donegal", "Cavan", "Monaghan"] },
     ],
   },
