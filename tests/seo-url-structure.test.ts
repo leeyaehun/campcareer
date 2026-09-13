@@ -106,7 +106,7 @@ test("sitemap URLs are unique and publish the indexable Careers hub", () => {
 
   assert.equal(new Set(urls).size, urls.length)
   assert.ok(urls.includes(`${SITE_URL}/careers`))
-  assert.match(careersSource, /robots: \\{ index: isBaseBrowse, follow: true \\}/)
+  assert.match(careersSource, /robots: \{ index: isBaseBrowse, follow: true \}/)
   assert.equal(programsCanonicalPath("AU"), "/programs")
   assert.ok(programsSource.includes("programsCanonicalPath(filters.country)"))
   assert.ok(urls.includes(`${SITE_URL}${programsCanonicalPath("AU")}`))
