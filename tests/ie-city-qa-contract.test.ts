@@ -5,6 +5,7 @@ import test from "node:test"
 const routes = readFileSync("src/lib/cities/city-routes.ts", "utf8")
 const profilePage = readFileSync("src/app/(workspace)/cities/ie/[city]/page.tsx", "utf8")
 const profileServer = readFileSync("src/lib/cities/ie-city-profile.server.ts", "utf8")
+const decisionConnections = readFileSync("src/lib/cities/ireland-city-decision-connections.server.ts", "utf8")
 const dashboard = readFileSync("src/app/(workspace)/cities/ireland-city-dashboard.tsx", "utf8")
 const compareServer = readFileSync("src/lib/cities/ie-city-comparison.server.ts", "utf8")
 const comparePage = readFileSync("src/app/(workspace)/compare/page.tsx", "utf8")
@@ -71,9 +72,9 @@ test("Phase 8 keeps exactly the five shared verified city metric contracts", () 
 
 test("Phase 8 keeps profile and Compare on verified server-side read models", () => {
   assert.ok(profileServer.includes('.from("city_directory_ie_v1")'))
-  assert.ok(profileServer.includes('.from("city_institution_directory_ie_v1")'))
   assert.ok(profileServer.includes('.from("report_metric_evidence_city")'))
   assert.ok(profileServer.includes('.eq("review_status", "verified")'))
+  assert.ok(decisionConnections.includes("getIrelandInstitutions()"))
   assert.doesNotMatch(profileServer, /\.from\("campuses"\)|\.from\("programmes"\)|\.from\("programme_offerings"\)/)
   assert.ok(compareServer.includes('.from("city_directory_ie_v1")'))
   assert.ok(compareServer.includes('.from("report_metric_evidence_city")'))

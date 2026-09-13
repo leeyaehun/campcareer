@@ -19,25 +19,6 @@ type CityRow = {
   programme_coverage_status: string
 }
 
-type InstitutionRow = {
-  city_id: string
-  campus_id: string
-  institution_id: string
-  institution_name: string
-  institution_slug: string
-  provider_authority: string
-  provider_source_url: string
-  website_url: string
-  campus_name: string
-  campus_city: string
-  region: string
-  address_line: string | null
-  postal_code: string | null
-  location_source_url: string
-  location_quality: string
-  record_scope: string
-}
-
 type MetricRow = {
   metric_key: string
   value: unknown
@@ -46,25 +27,6 @@ type MetricRow = {
   data_as_of: string
   confidence: string
   evidence_kind: string
-}
-
-export type IeCityCampus = {
-  id: string
-  name: string
-  city: string
-  addressLine: string | null
-  postalCode: string | null
-  sourceUrl: string
-}
-
-export type IeCityInstitution = {
-  id: string
-  name: string
-  slug: string
-  websiteUrl: string
-  providerAuthority: string
-  providerSourceUrl: string
-  campuses: IeCityCampus[]
 }
 
 export type IeCityMetricSource = {
@@ -125,7 +87,6 @@ export type IeCityProfile = {
   } | null
   employmentSectors: string[]
   employmentSectorBasis: string | null
-  institutions: IeCityInstitution[]
   sources: IeCityMetricSource[]
 }
 
@@ -150,39 +111,6 @@ function stringValue(value: unknown): string | null {
 
 function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []
-}
-
-function groupInstitutions(rows: InstitutionRow[]): IeCityInstitution[] {
-  const grouped = new Map<string, IeCityInstitution>()
-
-  for (const row of rows) {
-    const campus: IeCityCampus = {
-      id: row.campus_id,
-      name: row.campus_name,
-      city: row.campus_city,
-      addressLine: row.address_line,
-      postalCode: row.postal_code,
-      sourceUrl: row.location_source_url,
-    }
-
-    const existing = grouped.get(row.institution_id)
-    if (existing) {
-      existing.campuses.push(campus)
-      continue
-    }
-
-    grouped.set(row.institution_id, {
-      id: row.institution_id,
-      name: row.institution_name,
-      slug: row.institution_slug,
-      websiteUrl: row.website_url,
-      providerAuthority: row.provider_authority,
-      providerSourceUrl: row.provider_source_url,
-      campuses: [campus],
-    })
-  }
-
-  return [...grouped.values()].sort((a, b) => a.name.localeCompare(b.name))
 }
 
 function scopeLabel(city: CityRow) {
@@ -216,38 +144,25 @@ async function loadIeCityProfile(slug: string): Promise<IeCityProfile | null> {
   if (!cityData) return null
 
   const city = cityData as CityRow
-  const [institutionResult, metricResult] = await Promise.all([
-    supabaseAdmin
-      .from("city_institution_directory_ie_v1")
-      .select(
-        "city_id,campus_id,institution_id,institution_name,institution_slug,provider_authority,provider_source_url,website_url,campus_name,campus_city,region,address_line,postal_code,location_source_url,location_quality,record_scope",
-      )
-      .eq("city_id", city.city_id)
-      .order("institution_name", { ascending: true }),
-    supabaseAdmin
-      .from("report_metric_evidence_city")
-      .select("metric_key,value,source_name,source_url,data_as_of,confidence,evidence_kind")
-      .eq("geography_id", city.city_id)
-      .eq("scope_type", "city")
-      .eq("review_status", "verified")
-      .in("metric_key", [
-        "city_population",
-        "student_living_cost_monthly_range",
-        "student_transport_reference",
-        "student_work_hours_week",
-        "employment_focus_sectors",
-      ])
-      .order("metric_key", { ascending: true }),
-  ])
+  const metricResult = await supabaseAdmin
+    .from("report_metric_evidence_city")
+    .select("metric_key,value,source_name,source_url,data_as_of,confidence,evidence_kind")
+    .eq("geography_id", city.city_id)
+    .eq("scope_type", "city")
+    .eq("review_status", "verified")
+    .in("metric_key", [
+      "city_population",
+      "student_living_cost_monthly_range",
+      "student_transport_reference",
+      "student_work_hours_week",
+      "employment_focus_sectors",
+    ])
+    .order("metric_key", { ascending: true })
 
-  if (institutionResult.error) {
-    throw new Error(`Unable to load Ireland city institutions: ${institutionResult.error.message}`)
-  }
   if (metricResult.error) {
     throw new Error(`Unable to load Ireland city metrics: ${metricResult.error.message}`)
   }
 
-  const institutionRows = (institutionResult.data ?? []) as InstitutionRow[]
   const metricRows = (metricResult.data ?? []) as MetricRow[]
   const metrics = new Map(metricRows.map((row) => [row.metric_key, row]))
 
@@ -347,7 +262,6 @@ async function loadIeCityProfile(slug: string): Promise<IeCityProfile | null> {
         : null,
     employmentSectors: stringArray(sectorsValue.sectors),
     employmentSectorBasis: stringValue(sectorsValue.basis),
-    institutions: groupInstitutions(institutionRows),
     sources,
   }
 }
