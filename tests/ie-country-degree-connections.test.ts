@@ -1,0 +1,34 @@
+import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import test from "node:test"
+
+const contract = readFileSync("src/lib/career-degree/contract.ts", "utf8")
+const readModel = readFileSync("src/lib/career-degree/read.ts", "utf8")
+const page = readFileSync("src/app/(workspace)/countries/ie/page.tsx", "utf8")
+const dashboard = readFileSync("src/app/(workspace)/countries/ireland-country-dashboard.tsx", "utf8")
+
+test("Country Degree read groups reviewed careers from one server-only relation-view query", () => {
+  assert.match(contract, /export type CountryDegreeConnection/)
+  assert.match(readModel, /import "server-only"/)
+  assert.match(readModel, /async function loadCountryDegreeConnections/)
+  assert.match(readModel, /const relations = await loadRelations\(country\)/)
+  assert.match(readModel, /connectionsByDegree/)
+  assert.match(readModel, /getCountryDegreeConnections = cache\(loadCountryDegreeConnections\)/)
+  assert.match(readModel, /if \(relationUnavailable\(result\.error\)\) return \[\] as RelationRow\[\]/)
+})
+
+test("Ireland Country Hub renders reviewed Degree connections as canonical Career actions", () => {
+  assert.match(page, /getCountryDegreeConnections\("IE"\)/)
+  assert.match(page, /Promise\.all/)
+  assert.match(dashboard, /Career-linked degree pathways/)
+  assert.match(dashboard, /degreeConnections\.map/)
+  assert.match(dashboard, /connection\.careers\.map/)
+  assert.match(dashboard, /careerCanonicalPath\("IE", career\.careerId\)/)
+  assert.match(dashboard, /career\.directness === "direct" \? "Direct" : "Adjacent"/)
+  assert.match(dashboard, /Evidence: \{career\.evidence\.authority\}/)
+  assert.match(dashboard, /target="_blank"/)
+  assert.match(dashboard, /rel="noreferrer"/)
+  assert.doesNotMatch(dashboard, /profile\.strongMajors/)
+  assert.doesNotMatch(dashboard, /\/degrees/)
+  assert.doesNotMatch(dashboard, /\/programs\/ie/)
+})

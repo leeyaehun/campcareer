@@ -43,3 +43,9 @@ export type DegreeCareerReadModel = {
   degree: DegreeConcept
   careers: readonly DegreeCareerOutcome[]
 }
+
+/** A country-scoped Degree concept with every reviewed Career connection. */
+export type CountryDegreeConnection = {
+  degree: DegreeConcept
+  careers: readonly DegreeCareerOutcome[]
+}

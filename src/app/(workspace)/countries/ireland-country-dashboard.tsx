@@ -1,8 +1,10 @@
 import Link from "next/link"
 import {
+  ArrowRight,
   Banknote,
   Building2,
   CalendarDays,
+  ExternalLink,
   GraduationCap,
   MapPin,
   Sparkles,
@@ -12,7 +14,9 @@ import {
 import { COUNTRY_INSTITUTION_TYPE_LABELS } from "@/data/australia-occupation-country-profile"
 import { IRELAND_OCCUPATION_COUNTRY_PROFILE } from "@/data/ireland-occupation-country-profile"
 import { ieCityPath } from "@/lib/cities/city-routes"
+import type { CountryDegreeConnection, DegreeCareerOutcome } from "@/lib/career-degree/contract"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
+import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
 import { formatMoneyRange, formatRankingValue, type CountryMetrics } from "@/lib/workspace/country-metric-contract"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
@@ -42,7 +46,61 @@ function MetricCard({ icon, label, value, hint, accent, href }: {
   return <article className={className}>{content}</article>
 }
 
-export function IrelandCountryDashboard({ metrics }: { metrics: CountryMetrics }) {
+function relationshipLabel(career: DegreeCareerOutcome) {
+  const relationType = {
+    direct: "Direct",
+    common_pathway: "Common pathway",
+    related: "Related",
+  }[career.relationType]
+  const directness = career.directness === "direct" ? "Direct" : "Adjacent"
+  const strength = career.relationshipStrength[0].toUpperCase() + career.relationshipStrength.slice(1)
+  return career.relationType === "direct"
+    ? `${directness} · ${strength}`
+    : `${relationType} · ${directness} · ${strength}`
+}
+
+function DegreeConnectionCard({ connection }: { connection: CountryDegreeConnection }) {
+  return (
+    <article className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-3">
+      <h3 className="text-[12.5px] font-semibold text-[#2f5f25]">{connection.degree.name}</h3>
+      <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#66805f]">Career connection</p>
+      <div className="mt-1.5 space-y-2">
+        {connection.careers.map((career) => (
+          <div key={career.careerId}>
+            <Link
+              href={careerCanonicalPath("IE", career.careerId)}
+              className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline"
+            >
+              {career.careerName} <ArrowRight className="size-3" aria-hidden="true" />
+            </Link>
+            <p className="mt-1 text-[10.5px] font-medium text-[#66805f]">{relationshipLabel(career)}</p>
+            <p className="mt-1 text-[10.5px] leading-4 text-[#66805f]">{career.rationale}</p>
+            <a
+              href={career.evidence.url}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline"
+            >
+              Evidence: {career.evidence.authority} · {career.evidence.title}
+              <ExternalLink className="size-3" aria-hidden="true" />
+            </a>
+            <p className="mt-1 text-[10px] text-[#66805f]">
+              {career.evidence.referencePeriod} · checked {career.evidence.checkedAt}
+            </p>
+          </div>
+        ))}
+      </div>
+    </article>
+  )
+}
+
+export function IrelandCountryDashboard({
+  metrics,
+  degreeConnections,
+}: {
+  metrics: CountryMetrics
+  degreeConnections: readonly CountryDegreeConnection[]
+}) {
   const explorer = getCountryExplorer("IE")
   const countryProfile = getCountryProfile("IE")
   const profile = IRELAND_OCCUPATION_COUNTRY_PROFILE
@@ -70,8 +128,9 @@ export function IrelandCountryDashboard({ metrics }: { metrics: CountryMetrics }
           <div className="mt-3 flex flex-wrap gap-2">{profile.academicYear.intakes.map((intake) => <span key={intake} className="rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11px] font-semibold text-[#2563eb]">{intake}</span>)}</div>
         </section>
         <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
-          <div className="flex items-center gap-2 text-[#3e7a2e]"><GraduationCap className="size-4" /><h2 className="text-[14.5px] font-semibold">Strong majors by workforce demand</h2></div>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">{profile.strongMajors.map((major) => <div key={major.id} className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] px-3 py-2.5"><p className="text-[12px] font-semibold text-[#2f5f25]">{major.label}</p><p className="mt-1 text-[10.5px] leading-4 text-[#66805f]">{major.reason}</p></div>)}</div>
+          <div className="flex items-center gap-2 text-[#3e7a2e]"><GraduationCap className="size-4" /><h2 className="text-[14.5px] font-semibold">Career-linked degree pathways</h2></div>
+          <p className="mt-2 text-[11px] leading-4 text-[#66805f]">Reviewed Degree-to-Career relationships. These are not programme listings or availability claims.</p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">{degreeConnections.map((connection) => <DegreeConnectionCard key={connection.degree.id} connection={connection} />)}</div>
         </section>
       </div>
       <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5">

@@ -5,6 +5,7 @@ import { getCareer } from "@/lib/career-data-foundation/career-catalogue"
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import type {
   CareerDegreePath,
+  CountryDegreeConnection,
   DegreeCareerOutcome,
   DegreeCareerReadModel,
   DegreeConcept,
@@ -38,6 +39,12 @@ type RelationRow = {
 
 const isCountryCode = (value: string) => /^[A-Z]{2}$/.test(value)
 
+const strengthOrder: Record<CareerDegreePath["relationshipStrength"], number> = {
+  primary: 0,
+  strong: 1,
+  supporting: 2,
+}
+
 function toDegreeConcept(row: DegreeRow): DegreeConcept {
   return {
     id: row.id,
@@ -56,6 +63,27 @@ function toEvidence(row: RelationRow) {
     referencePeriod: row.reference_period,
     checkedAt: row.source_checked_at,
   }
+}
+
+function toDegreeCareerOutcome(row: RelationRow): DegreeCareerOutcome | null {
+  const career = getCareer(row.canonical_career_id)
+  if (!career) return null
+
+  return {
+    careerId: career.id,
+    careerName: career.label,
+    careerNameKo: career.labelKo,
+    relationType: row.relation_type,
+    directness: row.directness,
+    relationshipStrength: row.relationship_strength,
+    rationale: row.rationale,
+    evidence: toEvidence(row),
+  }
+}
+
+function compareCareerOutcomes(left: DegreeCareerOutcome, right: DegreeCareerOutcome) {
+  return strengthOrder[left.relationshipStrength] - strengthOrder[right.relationshipStrength]
+    || left.careerName.localeCompare(right.careerName)
 }
 
 function relationUnavailable(error: { code?: string } | null) {
@@ -93,12 +121,6 @@ async function loadCareerDegreePaths(countryCode: string, careerId: string): Pro
   const relations = await loadRelations(country, career)
   if (relations.length === 0) return []
 
-  const strengthOrder: Record<CareerDegreePath["relationshipStrength"], number> = {
-    primary: 0,
-    strong: 1,
-    supporting: 2,
-  }
-
   return relations
     .map((relation) => ({
       degree: toDegreeConcept({
@@ -118,6 +140,50 @@ async function loadCareerDegreePaths(countryCode: string, careerId: string): Pro
       strengthOrder[left.relationshipStrength] - strengthOrder[right.relationshipStrength]
       || left.degree.name.localeCompare(right.degree.name),
     )
+}
+
+async function loadCountryDegreeConnections(countryCode: string): Promise<CountryDegreeConnection[]> {
+  const country = countryCode.trim().toUpperCase()
+  if (!isCountryCode(country)) return []
+
+  // One read from the reviewed relation view keeps country Degree cards and
+  // their Career links consistent without querying once per Degree.
+  const relations = await loadRelations(country)
+  const connectionsByDegree = new Map<string, {
+    degree: DegreeConcept
+    careers: DegreeCareerOutcome[]
+  }>()
+
+  for (const relation of relations) {
+    const career = toDegreeCareerOutcome(relation)
+    if (!career) continue
+
+    const degree = toDegreeConcept({
+      id: relation.degree_id,
+      concept_key: relation.degree_key,
+      slug: relation.degree_slug,
+      canonical_name: relation.degree_name,
+      description: relation.degree_description,
+    })
+    const connection = connectionsByDegree.get(degree.id)
+    if (connection) {
+      connection.careers.push(career)
+    } else {
+      connectionsByDegree.set(degree.id, { degree, careers: [career] })
+    }
+  }
+
+  return Array.from(connectionsByDegree.values())
+    .map((connection) => ({
+      degree: connection.degree,
+      careers: connection.careers.sort(compareCareerOutcomes),
+    }))
+    .sort((left, right) => {
+      const leftStrength = left.careers[0]?.relationshipStrength ?? "supporting"
+      const rightStrength = right.careers[0]?.relationshipStrength ?? "supporting"
+      return strengthOrder[leftStrength] - strengthOrder[rightStrength]
+        || left.degree.name.localeCompare(right.degree.name)
+    })
 }
 
 async function loadDegreeCareerReadModel(
@@ -151,30 +217,12 @@ async function loadDegreeCareerReadModel(
     canonical_name: firstRelation.degree_name,
     description: firstRelation.degree_description,
   })
-  const strengthOrder: Record<DegreeCareerOutcome["relationshipStrength"], number> = {
-    primary: 0,
-    strong: 1,
-    supporting: 2,
-  }
-
   const careers = relations
     .flatMap((relation) => {
-      const career = getCareer(relation.canonical_career_id)
-      return career ? [{
-        careerId: career.id,
-        careerName: career.label,
-        careerNameKo: career.labelKo,
-        relationType: relation.relation_type,
-        directness: relation.directness,
-        relationshipStrength: relation.relationship_strength,
-        rationale: relation.rationale,
-        evidence: toEvidence(relation),
-      }] : []
+      const career = toDegreeCareerOutcome(relation)
+      return career ? [career] : []
     })
-    .sort((left, right) =>
-      strengthOrder[left.relationshipStrength] - strengthOrder[right.relationshipStrength]
-      || left.careerName.localeCompare(right.careerName),
-    )
+    .sort(compareCareerOutcomes)
 
   return { countryCode: country, degree, careers }
 }
@@ -184,3 +232,6 @@ export const getCareerDegreePaths = cache(loadCareerDegreePaths)
 
 /** Bidirectional Degree read model. A dedicated `/degrees` route is intentionally not created. */
 export const getDegreeCareerReadModel = cache(loadDegreeCareerReadModel)
+
+/** Country Hub read: reviewed Degree concepts grouped with their Career links. */
+export const getCountryDegreeConnections = cache(loadCountryDegreeConnections)
