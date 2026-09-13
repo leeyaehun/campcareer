@@ -74,6 +74,18 @@ test("Next redirects wire the centralized permanent SEO registry before broad le
   assert.ok(!redirects.some((redirect) => redirect.source === "/" && redirect.destination === "/home"))
   assert.ok(redirects.some((redirect) => redirect.source === "/home/:path*" && redirect.destination === "/"))
   assert.ok(redirects.some((redirect) => redirect.source === "/fifo/:path*" && redirect.destination === "/"))
+  assert.ok(!redirects.some((redirect) => redirect.source === "/au/:path*" && redirect.destination === "/"))
+  assert.ok(!redirects.some((redirect) => redirect.source === "/roi-explorer/:path*" && redirect.destination === "/"))
+  assert.ok(
+    redirects.some((redirect) => redirect.source === "/au/jobs/registered-nurse"
+      && redirect.destination === "/career/australia/registered-nurse"
+      && redirect.permanent),
+  )
+  assert.ok(
+    redirects.some((redirect) => redirect.source === "/roi-explorer/ca/:path*"
+      && redirect.destination === "/countries/ca"
+      && redirect.permanent),
+  )
 })
 
 test("legacy country roots retain their centralized permanent redirect registry", () => {
@@ -87,16 +99,18 @@ test("legacy country roots retain their centralized permanent redirect registry"
   }
 })
 
-test("sitemap URLs are unique and the Programs base canonical matches the sitemap", () => {
+test("sitemap URLs are unique and publish the indexable Careers hub", () => {
   const urls = sitemapUrls()
   const programsSource = readFileSync("src/app/(workspace)/programs/page.tsx", "utf8")
+  const careersSource = readFileSync("src/app/(workspace)/careers/page.tsx", "utf8")
 
   assert.equal(new Set(urls).size, urls.length)
+  assert.ok(urls.includes(`${SITE_URL}/careers`))
+  assert.match(careersSource, /robots: \{ index: isBaseBrowse, follow: true \}/)
   assert.equal(programsCanonicalPath("AU"), "/programs")
   assert.ok(programsSource.includes("programsCanonicalPath(filters.country)"))
   assert.ok(urls.includes(`${SITE_URL}${programsCanonicalPath("AU")}`))
 })
-
 test("published Program country hubs are canonical sitemap URLs with crawlable links", () => {
   const urls = sitemapUrls()
   const headerSource = readFileSync("src/app/(workspace)/programs/programs-header.tsx", "utf8")

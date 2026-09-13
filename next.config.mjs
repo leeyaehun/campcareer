@@ -61,14 +61,11 @@ const nextConfig = {
 
       // Raw country, university, and major research is not a primary public
       // product until it is assembled into a source-backed Career decision.
-      { source: "/au/:path*", destination: "/", permanent: false },
       { source: "/fields/:path*", destination: "/", permanent: false },
       { source: "/study/:path*", destination: "/", permanent: false },
       { source: "/study-options/:path*", destination: "/", permanent: false },
       { source: "/majors/:path*", destination: "/", permanent: false },
       { source: "/universities/:path*", destination: "/", permanent: false },
-      { source: "/roi-explorer/:path*", destination: "/", permanent: false },
-      { source: "/:country(au|ca|us|uk|de|nl|ie|be|sg|kr|jp|fr|es|nz|no|se|dk|fi|ch|ae)/:path*", destination: "/", permanent: false },
     ]
   },
 }

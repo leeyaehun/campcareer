@@ -83,7 +83,7 @@ test("Career Search keeps Ireland country selections inside the public Career ro
   assert.match(explorer, /getIndexableCareerRoute\(countryCode, career\.id\)/)
   assert.match(careersPage, /searchIrelandPublicEntities\(q\)/)
   assert.match(careersPage, /IrelandPublicSearchResults/)
-  assert.match(careersPage, /robots: \{ index: false, follow: true \}/)
+  assert.match(careersPage, /robots: \{ index: isBaseBrowse, follow: true \}/)
   assert.doesNotMatch(sitemap, /\/careers\?/)
 })
 

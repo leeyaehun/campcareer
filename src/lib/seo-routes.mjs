@@ -40,9 +40,51 @@ export function programsCanonicalPath(countryCode = "AU") {
 // Exact legacy routes with a verified replacement. Keep these separate from
 // broad retired funnels so permanent SEO redirects never swallow active child routes.
 // /sg is an active Singapore study-destination root, so it is intentionally not legacy.
+const LEGACY_AU_INDEXABLE_CAREER_SLUGS = Object.freeze([
+  "care-worker",
+  "carpenter",
+  "electrician",
+  "medical-laboratory-technician",
+  "midwife",
+  "occupational-therapist",
+  "pharmacist",
+  "physiotherapist",
+  "radiographer",
+  "registered-nurse",
+  "welder",
+])
+
 export const LEGACY_SEO_REDIRECTS = Object.freeze([
+  // Preserve the strongest legacy Australia job intent where a reviewed
+  // canonical Career replacement is already indexable.
+  ...LEGACY_AU_INDEXABLE_CAREER_SLUGS.map((careerId) => ({
+    source: `/au/jobs/${careerId}`,
+    destination: `/career/australia/${careerId}`,
+    permanent: true,
+  })),
+  { source: "/au/jobs", destination: "/careers", permanent: true },
+
+  // Old ROI detail URLs carried country-level education intent. The retired
+  // UUID route cannot be reconstructed safely, so consolidate it into the
+  // corresponding canonical Country hub instead of the homepage.
+  ...CANONICAL_COUNTRY_SLUGS.map((slug) => ({
+    source: `/roi-explorer/${slug}/:path*`,
+    destination: countryCanonicalPath(slug),
+    permanent: true,
+  })),
+  { source: "/roi-explorer", destination: "/careers", permanent: true },
+
   ...CANONICAL_COUNTRY_SLUGS.filter((slug) => slug !== "sg").map((slug) => ({
     source: `/${slug}`,
+    destination: countryCanonicalPath(slug),
+    permanent: true,
+  })),
+
+  // Retired country sub-routes must never collapse to the homepage. When no
+  // exact replacement is known, the canonical Country hub is the closest
+  // durable, indexable destination.
+  ...CANONICAL_COUNTRY_SLUGS.filter((slug) => slug !== "sg").map((slug) => ({
+    source: `/${slug}/:path*`,
     destination: countryCanonicalPath(slug),
     permanent: true,
   })),

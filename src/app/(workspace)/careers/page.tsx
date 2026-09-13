@@ -23,11 +23,24 @@ import { CareerCountrySelector } from "@/components/workspace/career-country-sel
 import { LazyOccupationExplorer } from "./occupation-explorer-lazy"
 import { IrelandPublicSearchResults } from "./ireland-public-search-results"
 
-export const metadata: Metadata = {
-  title: "Careers",
-  description: "Explore CampCareer's career catalogue by field, country and keyword.",
-  alternates: { canonical: "/careers" },
-  robots: { index: false, follow: true },
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const isBaseBrowse = Object.values(params).every((value) => (
+    value === undefined
+    || value === ""
+    || (Array.isArray(value) && value.length === 0)
+  ))
+
+  return {
+    title: "Careers",
+    description: "Explore CampCareer's career catalogue by field, country and keyword.",
+    alternates: { canonical: "/careers" },
+    robots: { index: isBaseBrowse, follow: true },
+  }
 }
 
 const SHORT_CATEGORY_LABELS = new Map([

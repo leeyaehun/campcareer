@@ -51,6 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const methodologies = ["australia", "canada", "united-states", "united-kingdom", "ireland", "germany", "netherlands", "belgium", "france", "spain", "singapore", "south-korea", "japan", "new-zealand", "norway", "sweden", "denmark", "finland", "switzerland", "united-arab-emirates"]
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified, priority: 1, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/careers`, lastModified: new Date("2026-09-13"), priority: 0.95, changeFrequency: "weekly" },
     { url: `${SITE_URL}/maps`, lastModified, priority: 0.9, changeFrequency: "daily" },
     ...PUBLISHED_PROGRAM_COUNTRIES.map((countryCode) => ({
       url: `${SITE_URL}${programsCanonicalPath(countryCode)}`,
