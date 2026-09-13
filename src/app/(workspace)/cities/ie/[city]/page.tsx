@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { IrelandCityDashboard } from "@/app/(workspace)/cities/ireland-city-dashboard"
+import { getIrelandCityDecisionConnections } from "@/lib/cities/ireland-city-decision-connections.server"
 import { getIeCityProfile } from "@/lib/cities/ie-city-profile.server"
 import { PUBLISHED_IE_CITY_SLUGS, isPublishedIeCitySlug } from "@/lib/cities/city-routes"
 
@@ -38,8 +39,11 @@ export default async function IrelandCityPage({ params }: { params: Promise<{ ci
   const normalized = city.trim().toLowerCase()
   if (!isPublishedIeCitySlug(normalized)) notFound()
 
-  const profile = await getIeCityProfile(normalized)
+  const [profile, decisionConnections] = await Promise.all([
+    getIeCityProfile(normalized),
+    getIrelandCityDecisionConnections(normalized),
+  ])
   if (!profile) notFound()
 
-  return <IrelandCityDashboard profile={profile} />
+  return <IrelandCityDashboard profile={profile} decisionConnections={decisionConnections} />
 }

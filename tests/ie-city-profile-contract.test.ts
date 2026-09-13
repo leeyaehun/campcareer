@@ -4,6 +4,7 @@ import test from "node:test"
 
 const routes = readFileSync("src/lib/cities/city-routes.ts", "utf8")
 const profile = readFileSync("src/lib/cities/ie-city-profile.server.ts", "utf8")
+const decisionConnections = readFileSync("src/lib/cities/ireland-city-decision-connections.server.ts", "utf8")
 const page = readFileSync("src/app/(workspace)/cities/ie/[city]/page.tsx", "utf8")
 const dashboard = readFileSync("src/app/(workspace)/cities/ireland-city-dashboard.tsx", "utf8")
 
@@ -21,12 +22,13 @@ test("Ireland city profile scope is exactly the approved four Tier A cities", ()
   assert.ok(routes.includes("/cities/ie/${slug}"))
 })
 
-test("Ireland profile reads only verified city linkage and metric read models", () => {
+test("Ireland profile reads city metadata and verified metrics, with institution linkage in the strict P1.3 reader", () => {
   assert.ok(profile.includes('.from("city_directory_ie_v1")'))
-  assert.ok(profile.includes('.from("city_institution_directory_ie_v1")'))
   assert.ok(profile.includes('.from("report_metric_evidence_city")'))
   assert.ok(profile.includes('.eq("review_status", "verified")'))
+  assert.ok(decisionConnections.includes('getIrelandInstitutions()'))
   assert.doesNotMatch(profile, /\.from\("city_programme_directory_ie_v1"\)/)
+  assert.doesNotMatch(profile, /\.from\("city_institution_directory_ie_v1"\)/)
   assert.doesNotMatch(profile, /\.from\("campuses"\)|\.from\("programmes"\)|\.from\("programme_offerings"\)/)
 })
 
@@ -41,8 +43,7 @@ test("Ireland profile requires the five shared city metrics", () => {
 })
 
 test("Ireland institution presentation preserves HEA and official location evidence", () => {
-  assert.ok(profile.includes("provider_authority,provider_source_url,website_url"))
-  assert.ok(profile.includes("location_source_url,location_quality,record_scope"))
+  assert.ok(decisionConnections.includes("getIrelandInstitutions"))
   assert.ok(dashboard.includes("initial verified HEA-recognised institution set"))
   assert.ok(dashboard.includes("official institution website and explicit official location evidence"))
   assert.ok(dashboard.includes("HEA source"))

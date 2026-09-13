@@ -12,8 +12,11 @@ import {
   Users,
   Wallet,
 } from "lucide-react"
+import type { IrelandCityDecisionConnections } from "@/lib/cities/ireland-city-decision-connections.server"
 import type { IeCityProfile } from "@/lib/cities/ie-city-profile.server"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
+import { institutionDetailPath } from "@/lib/institutions/institution-search"
+import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
 
 function money(value: number, currency = "EUR", decimals = 0) {
   return new Intl.NumberFormat("en-IE", {
@@ -59,7 +62,18 @@ function MetricCard({ icon, label, value, note }: { icon: React.ReactNode; label
   )
 }
 
-export function IrelandCityDashboard({ profile }: { profile: IeCityProfile }) {
+export function IrelandCityDashboard({
+  profile,
+  decisionConnections,
+}: {
+  profile: IeCityProfile
+  decisionConnections: IrelandCityDecisionConnections
+}) {
+  const institutionCount = decisionConnections.institutions.length
+  const locationCount = decisionConnections.institutions.reduce(
+    (total, institution) => total + institution.locations.length,
+    0,
+  )
   const scopeCopy =
     profile.studyDestinationScope === "dublin_four_local_authorities"
       ? "Dublin uses an explicit study-market boundary covering Dublin City, Fingal, Dún Laoghaire-Rathdown and South Dublin. Campus membership still requires verified official location evidence."
@@ -100,8 +114,8 @@ export function IrelandCityDashboard({ profile }: { profile: IeCityProfile }) {
               <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Study destination evidence for {profile.name}</h2>
               <p className="mt-1.5 max-w-3xl text-[12px] leading-5 text-[#77746e]">{scopeCopy}</p>
               <div className="mt-4 flex flex-wrap gap-2 text-[10.5px] font-semibold text-[#5d6470]">
-                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedInstitutionCount} verified institutions</span>
-                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{profile.linkedCampusCount} verified locations</span>
+                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{institutionCount} verified institutions</span>
+                <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">{locationCount} verified locations</span>
                 <span className="rounded-full bg-[#f4f6f9] px-2.5 py-1">5 verified city metrics</span>
               </div>
             </div>
@@ -159,25 +173,25 @@ export function IrelandCityDashboard({ profile }: { profile: IeCityProfile }) {
               <GraduationCap className="size-4" />
               <h2 className="text-[15px] font-semibold">Verified institutions in {profile.scopeLabel}</h2>
               <span className="ml-auto rounded-full bg-[#edf7f4] px-2.5 py-1 text-[10.5px] font-semibold text-[#16705f]">
-                {profile.linkedInstitutionCount} institutions · {profile.linkedCampusCount} locations
+                {institutionCount} institutions · {locationCount} locations
               </span>
             </div>
             <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">
               This is the initial verified HEA-recognised institution set, not an exhaustive city directory. Each row requires an official institution website and explicit official location evidence.
             </p>
             <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-              {profile.institutions.map((institution) => (
+              {decisionConnections.institutions.map((institution) => (
                 <article key={institution.id} className="rounded-lg border border-[#eeece8] bg-[#fafaf8] p-3.5">
                   <div className="flex items-start gap-3">
                     <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white text-[#16705f] shadow-sm"><Building2 className="size-4" /></span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b]">{institution.name}</p>
-                      <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.providerAuthority} · {institution.campuses.length} verified {institution.campuses.length === 1 ? "location" : "locations"}</p>
+                      <Link href={institutionDetailPath("IE", institution.slug)} className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b] hover:text-[#16705f] hover:underline">{institution.name}</Link>
+                      <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.providerAuthority} · {institution.locations.length} verified {institution.locations.length === 1 ? "location" : "locations"}</p>
                       <div className="mt-2 space-y-1.5">
-                        {institution.campuses.map((campus) => (
-                          <div key={campus.id} className="flex items-start gap-1.5 text-[10.5px] leading-4 text-[#77746e]">
+                        {institution.locations.map((location) => (
+                          <div key={location.id} className="flex items-start gap-1.5 text-[10.5px] leading-4 text-[#77746e]">
                             <MapPin className="mt-0.5 size-3 shrink-0" />
-                            <span>{campus.name}{campus.postalCode ? ` · ${campus.postalCode}` : ""}</span>
+                            <span>{location.name}{location.postalCode ? ` · ${location.postalCode}` : ""}</span>
                           </div>
                         ))}
                       </div>
@@ -194,6 +208,36 @@ export function IrelandCityDashboard({ profile }: { profile: IeCityProfile }) {
                 </article>
               ))}
             </div>
+            {decisionConnections.careerDegreeEvidence.length > 0 ? (
+              <section className="mt-5 border-t border-[#eeece8] pt-5">
+                <div className="flex items-center gap-2 text-[#3e7a2e]">
+                  <BriefcaseBusiness className="size-4" />
+                  <h2 className="text-[14.5px] font-semibold">Career-linked education evidence</h2>
+                </div>
+                <p className="mt-2 text-[11.5px] leading-5 text-[#77746e]">
+                  Reviewed Degree → Career relationships supported by a verified institution in {profile.name}. They are not programme listings or city-level availability claims.
+                </p>
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+                  {decisionConnections.careerDegreeEvidence.map((relation) => (
+                    <article key={`${relation.degree.id}-${relation.career.careerId}-${relation.institution.id}`} className="rounded-lg border border-[#dfe8db] bg-[#f7faf5] p-3.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#66805f]">Degree → Career</p>
+                      <h3 className="mt-1 text-[12.5px] font-semibold text-[#2f5f25]">{relation.degree.name}</h3>
+                      <Link href={careerCanonicalPath("IE", relation.career.careerId)} className="mt-2 inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
+                        {relation.career.careerName} <ArrowRight className="size-3" aria-hidden="true" />
+                      </Link>
+                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#66805f]">Reviewed evidence institution</p>
+                      <Link href={institutionDetailPath(relation.institution.countryCode, relation.institution.slug)} className="mt-1 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
+                        {relation.institution.name} <ArrowRight className="size-3" aria-hidden="true" />
+                      </Link>
+                      <p className="mt-2 text-[10.5px] leading-4 text-[#66805f]">{relation.career.rationale}</p>
+                      <a href={relation.career.evidence.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline">
+                        Evidence: {relation.career.evidence.authority} <ExternalLink className="size-3" aria-hidden="true" />
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </section>
 
           <div className="space-y-5">
