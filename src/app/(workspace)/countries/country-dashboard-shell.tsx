@@ -8,6 +8,7 @@ export function CountryDashboardShell({
   countryCode,
   initialQuery = "",
   summary,
+  showSummary = true,
   showExploreCareers = true,
   cityCount: cityCountOverride,
   children,
@@ -15,6 +16,7 @@ export function CountryDashboardShell({
   countryCode?: string | null
   initialQuery?: string
   summary?: string
+  showSummary?: boolean
   showExploreCareers?: boolean
   cityCount?: number
   children?: React.ReactNode
@@ -37,9 +39,11 @@ export function CountryDashboardShell({
               <p className="mt-2 text-[14px] font-medium text-white/85">
                 {routeCountry.code} · {explorer?.regions.length ?? 0} regions · {cityCount} cities · {routeCountry.currency}
               </p>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-white/85">
-                {summary ?? `Explore career demand, study options and regional context across ${routeCountry.name} before comparing your next step.`}
-              </p>
+              {showSummary ? (
+                <p className="mt-4 max-w-xl text-sm leading-6 text-white/85">
+                  {summary ?? `Explore career demand, study options and regional context across ${routeCountry.name} before comparing your next step.`}
+                </p>
+              ) : null}
             </>
           ) : (
             <>

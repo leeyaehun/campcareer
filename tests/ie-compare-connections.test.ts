@@ -30,10 +30,9 @@ test("every reviewed Ireland Career enters the shared, reconstructable Career Co
   )
 })
 
-test("Ireland Country and Degree relationships launch only the existing Career Compare", () => {
+test("Ireland Country keeps the existing Career Compare as a section continuation", () => {
   assert.match(countryDashboard, /buildIrelandCareerCompareHref/)
-  assert.match(countryDashboard, /connection\.careers\.map\(\(career\) => career\.careerId\)/)
-  assert.match(countryDashboard, /Compare Ireland careers/)
+  assert.match(countryDashboard, /Compare reviewed careers/)
   assert.doesNotMatch(countryDashboard, /Degree Compare|Compare degrees|\/degrees/)
   assert.doesNotMatch(countryDashboard, /\/programs\/ie/)
 })

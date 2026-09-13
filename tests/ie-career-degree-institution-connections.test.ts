@@ -26,7 +26,7 @@ test("Ireland Career-Degree-Institution relations are server-only and require ex
   assert.doesNotMatch(relationLayer, /colleges_ie|institution_detail_v1|program_count|city_programme_directory_ie_v1/)
 })
 
-test("Ireland Career and Country surfaces keep Career primary while linking only reviewed evidence Institutions", () => {
+test("Ireland Career keeps reviewed evidence Institutions while the Country hub stays concise", () => {
   assert.match(careerRead, /country === "IE" \? getIrelandCareerDegreePaths\(careerId\) : getCareerDegreePaths\(country, careerId\)/)
   assert.match(careerCore, /Reviewed evidence institution/)
   assert.match(careerCore, /institutionDetailPath\(path\.evidenceInstitution\.countryCode, path\.evidenceInstitution\.slug\)/)
@@ -35,8 +35,9 @@ test("Ireland Career and Country surfaces keep Career primary while linking only
   assert.match(countryPage, /return \[\]/)
   assert.match(countryPage, /Unable to load Ireland institutions for Country Hub/)
   assert.match(countryDashboard, /careerCanonicalPath\("IE", career\.careerId\)/)
-  assert.match(countryDashboard, /Reviewed evidence institution/)
-  assert.match(countryDashboard, /institutionDetailPath\(career\.evidenceInstitution\.countryCode, career\.evidenceInstitution\.slug\)/)
+  assert.match(countryDashboard, /institutionDetailPath\("IE", institution\.slug\)/)
+  assert.doesNotMatch(countryDashboard, /Reviewed evidence institution/)
+  assert.doesNotMatch(countryDashboard, /career\.evidenceInstitution/)
   assert.doesNotMatch(countryDashboard, /\/degrees|\/programs\/ie/)
 })
 
