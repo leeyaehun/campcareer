@@ -77,7 +77,7 @@ test("Career and Degree read models traverse the same relation in both direction
   assert.match(readModel, /getDegreeCareerReadModel = cache\(loadDegreeCareerReadModel\)/)
   assert.match(readModel, /\.from\("career_degree_relation_read_v1"\)/)
   assert.doesNotMatch(readModel, /\.eq\("review_status", "reviewed"\)/)
-  assert.match(careerRead, /getCareerDegreePaths\(country, careerId\)/)
+  assert.match(careerRead, /country === "IE" \? getIrelandCareerDegreePaths\(careerId\) : getCareerDegreePaths\(country, careerId\)/)
   assert.match(careerCore, /Relevant degrees \/ study paths/)
 })
 

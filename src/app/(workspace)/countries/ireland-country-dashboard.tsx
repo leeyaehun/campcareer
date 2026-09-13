@@ -74,6 +74,17 @@ function DegreeConnectionCard({ connection }: { connection: CountryDegreeConnect
             >
               {career.careerName} <ArrowRight className="size-3" aria-hidden="true" />
             </Link>
+            {career.evidenceInstitution ? (
+              <div className="mt-2">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#66805f]">Reviewed evidence institution</p>
+                <Link
+                  href={institutionDetailPath(career.evidenceInstitution.countryCode, career.evidenceInstitution.slug)}
+                  className="mt-1 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline"
+                >
+                  {career.evidenceInstitution.name} <ArrowRight className="size-3" aria-hidden="true" />
+                </Link>
+              </div>
+            ) : null}
             <p className="mt-1 text-[10.5px] font-medium text-[#66805f]">{relationshipLabel(career)}</p>
             <p className="mt-1 text-[10.5px] leading-4 text-[#66805f]">{career.rationale}</p>
             <a

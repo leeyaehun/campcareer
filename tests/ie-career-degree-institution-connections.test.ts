@@ -1,0 +1,55 @@
+import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import test from "node:test"
+
+const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8")
+const relationLayer = read("src/lib/career-degree/ireland-institution-evidence.server.ts")
+const contract = read("src/lib/career-degree/contract.ts")
+const careerRead = read("src/lib/workspace/career-market-read.ts")
+const careerCore = read("src/app/(workspace)/career/career-core-sections.tsx")
+const countryPage = read("src/app/(workspace)/countries/ie/page.tsx")
+const countryDashboard = read("src/app/(workspace)/countries/ireland-country-dashboard.tsx")
+const institutionRoute = read("src/app/(workspace)/institutions/[country]/[institution]/page.tsx")
+const institutionDetail = read("src/app/(workspace)/institutions/ireland-institution-detail.tsx")
+
+test("Ireland Career-Degree-Institution relations are server-only and require exact verified evidence matches", () => {
+  assert.match(contract, /export type ReviewedEvidenceInstitution/)
+  assert.match(contract, /export type IrelandInstitutionCareerDegreeEvidence/)
+  assert.match(relationLayer, /import "server-only"/)
+  assert.match(relationLayer, /getIrelandInstitutions/)
+  assert.match(relationLayer, /candidate\.name === evidence\.authority\.trim\(\)/)
+  assert.match(relationLayer, /sourceHost\(candidate\.websiteUrl\) === evidenceHost/)
+  assert.match(relationLayer, /getCareerDegreePaths\("IE", careerId\)/)
+  assert.match(relationLayer, /getCountryDegreeConnections\("IE"\)/)
+  assert.match(relationLayer, /Promise\.all/)
+  assert.match(relationLayer, /institution\?\.slug === slug/)
+  assert.doesNotMatch(relationLayer, /colleges_ie|institution_detail_v1|program_count|city_programme_directory_ie_v1/)
+})
+
+test("Ireland Career and Country surfaces keep Career primary while linking only reviewed evidence Institutions", () => {
+  assert.match(careerRead, /country === "IE" \? getIrelandCareerDegreePaths\(careerId\) : getCareerDegreePaths\(country, careerId\)/)
+  assert.match(careerCore, /Reviewed evidence institution/)
+  assert.match(careerCore, /institutionDetailPath\(path\.evidenceInstitution\.countryCode, path\.evidenceInstitution\.slug\)/)
+  assert.match(countryPage, /getIrelandCountryDegreeInstitutionConnections\(\)/)
+  assert.match(countryPage, /getIrelandInstitutionsForCountryPage/)
+  assert.match(countryPage, /return \[\]/)
+  assert.match(countryPage, /Unable to load Ireland institutions for Country Hub/)
+  assert.match(countryDashboard, /careerCanonicalPath\("IE", career\.careerId\)/)
+  assert.match(countryDashboard, /Reviewed evidence institution/)
+  assert.match(countryDashboard, /institutionDetailPath\(career\.evidenceInstitution\.countryCode, career\.evidenceInstitution\.slug\)/)
+  assert.doesNotMatch(countryDashboard, /\/degrees|\/programs\/ie/)
+})
+
+test("only an Institution's own reviewed provider evidence creates its Career-linked study evidence section", () => {
+  assert.match(institutionRoute, /getIrelandInstitutionCareerDegreeEvidence\(slug\)/)
+  assert.match(institutionRoute, /Promise\.all/)
+  assert.match(institutionRoute, /careerDegreeEvidence=\{careerDegreeEvidence\}/)
+  assert.match(institutionDetail, /careerDegreeEvidence\.length > 0/)
+  assert.match(institutionDetail, /Career-linked study evidence/)
+  assert.match(institutionDetail, /Degree → Career/)
+  assert.match(institutionDetail, /careerCanonicalPath\("IE", relation\.career\.careerId\)/)
+  assert.match(institutionDetail, /relation\.career\.evidence\.url/)
+  assert.match(institutionDetail, /location\.city\.path/)
+  assert.match(institutionDetail, /Verified programme listings are not yet published for this institution\./)
+  assert.doesNotMatch(institutionDetail, /\/degrees|\/programs\/ie|programCount|international eligibility is verified/)
+})
