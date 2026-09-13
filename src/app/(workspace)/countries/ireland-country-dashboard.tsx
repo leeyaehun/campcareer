@@ -15,6 +15,7 @@ import { IRELAND_OCCUPATION_COUNTRY_PROFILE } from "@/data/ireland-occupation-co
 import { ieCityPath } from "@/lib/cities/city-routes"
 import type { CountryDegreeConnection, DegreeCareerOutcome } from "@/lib/career-degree/contract"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
+import type { IrelandEmploymentEcosystem } from "@/lib/employment/ireland-employment-ecosystem-contract"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import type { IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
@@ -23,6 +24,7 @@ import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { getCountryProfile } from "@/lib/workspace/country-profile"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
+import { IrelandEmploymentEcosystemSection } from "./ireland-employment-ecosystem-section"
 
 function MetricCard({ icon, label, value, hint, accent, href }: {
   icon: React.ReactNode
@@ -134,10 +136,12 @@ export function IrelandCountryDashboard({
   metrics,
   degreeConnections,
   institutions,
+  employmentEcosystem,
 }: {
   metrics: CountryMetrics
   degreeConnections: readonly CountryDegreeConnection[]
   institutions: readonly IrelandInstitution[]
+  employmentEcosystem: IrelandEmploymentEcosystem
 }) {
   const explorer = getCountryExplorer("IE")
   const countryProfile = getCountryProfile("IE")
@@ -176,6 +180,7 @@ export function IrelandCountryDashboard({
         <p className="mt-2 text-[11px] leading-4 text-[#6f6d68]">Verified Higher Education Authority institution identities with source-backed official locations. Programme listings are not published from this layer.</p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{institutions.map((institution) => <InstitutionConnectionCard key={institution.id} institution={institution} />)}</div>
       </section>
+      <IrelandEmploymentEcosystemSection ecosystem={employmentEcosystem} />
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <section className="min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
           <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4"><MapPin className="size-4 text-[#3e7a2e]" /><h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2><Link href={buildCityCompareCanonicalHref({ country: "IE" })} className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Compare cities</Link><span className="text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span></div>

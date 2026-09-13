@@ -10,6 +10,7 @@ import {
   GraduationCap,
 } from "lucide-react"
 import { localizePath } from "@/lib/i18n/config"
+import { ieCityPath } from "@/lib/cities/city-routes"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
@@ -225,6 +226,69 @@ function jobResources(insight: CareerMarketInsight): ResourceLink[] {
   return dedupeLinks(resources).slice(0, 8)
 }
 
+function IrelandEmploymentContext({
+  context,
+  locale,
+}: {
+  context: NonNullable<CareerMarketInsight["employmentEcosystem"]>
+  locale: Locale
+}) {
+  return (
+    <div className="mt-7 border-y border-campcareer-border py-5">
+      <p className="text-xs font-semibold tracking-[0.06em] text-brand">{tr(locale, "아일랜드 고용 맥락", "Ireland employment context")}</p>
+      <h3 className="mt-2 text-lg font-semibold tracking-[-0.02em] text-campcareer-ink">{tr(locale, "이 커리어가 나타나는 산업", "Where this career appears")}</h3>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {context.industries.map((industry) => (
+          <a
+            key={industry.id}
+            href={industry.evidence.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 rounded-cc-control bg-brand-tint px-3 py-1.5 text-xs font-semibold text-brand hover:bg-brand-tint/70 hover:underline"
+          >
+            {industry.name} <ExternalLink className="size-3" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+      {context.employers.length > 0 ? (
+        <div className="mt-5">
+          <p className="text-sm font-semibold text-campcareer-ink">{tr(locale, "이 커리어와 관련된 선정 고용주", "Selected employers relevant to this career")}</p>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {context.employers.map((employer) => (
+              <article key={employer.id} className="rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4">
+                <a href={employer.careersUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-campcareer-ink hover:text-brand hover:underline">
+                  {employer.name} <ExternalLink className="size-3.5" aria-hidden="true" />
+                </a>
+                <p className="mt-2 text-xs leading-5 text-campcareer-ink-secondary">{tr(locale, "공식 고용주·채용 출처로 확인됨", "Verified through an official employer/careers source")} · {employer.checkedAt}</p>
+                {employer.careers.map((connection) => (
+                  <a key={connection.evidence.url} href={connection.evidence.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-press hover:underline">
+                    {tr(locale, "커리어 관계 근거", "Career relationship evidence")} <ExternalLink className="size-3" aria-hidden="true" />
+                  </a>
+                ))}
+                {employer.cities.length > 0 ? (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {employer.cities.map((city) => {
+                      const cityPath = ieCityPath(city.citySlug)
+                      return cityPath ? (
+                        <Link key={city.citySlug} href={cityPath} className="text-xs font-semibold text-brand hover:text-brand-press hover:underline">
+                          {city.cityName}
+                        </Link>
+                      ) : null
+                    })}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : null}
+      <p className="mt-5 text-xs leading-5 text-campcareer-muted">
+        {tr(locale, "이 정보는 현재 채용, 연봉 또는 비자 스폰서를 의미하지 않습니다. 고용주의 공식 채용 페이지에서 실제 조건을 확인하세요.", "This context does not indicate current hiring, salary or visa sponsorship. Check the employer's official careers source for current conditions.")}
+      </p>
+    </div>
+  )
+}
+
 function routeSteps(insight: CareerMarketInsight, locale: Locale) {
   const profile = insight.profile
   const foundation = insight.foundation
@@ -430,6 +494,7 @@ export function CareerCoreSections({
           title="Jobs"
           description={tr(locale, "점수와 경로를 확인한 뒤, 실제 고용주와 채용 공고에서 요구 조건을 검증하세요.", "After reviewing the score and path, validate the requirements in real employer and job listings.")}
         />
+        {insight.employmentEcosystem ? <IrelandEmploymentContext context={insight.employmentEcosystem} locale={locale} /> : null}
         {jobs.length > 0 ? (
           <div className="mt-7 grid gap-3 md:grid-cols-2">
             {jobs.map((resource) => <ResourceCard key={resource.key} resource={resource} icon={<BriefcaseBusiness className="size-4" />} />)}
