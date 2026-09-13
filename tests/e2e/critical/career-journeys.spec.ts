@@ -30,7 +30,8 @@ test("Journey A–B: Career discovery reaches evidence, then a supported Compare
   await expect(page.getByRole("heading", { name: "Software Developer", exact: true })).toBeVisible()
 
   await page.goto("/compare?type=career&country=AU&profile=starting-from-scratch&careers=software-engineer")
-  await expect(page.getByRole("heading", { name: "Compare careers" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Compare", exact: true })).toBeVisible()
+  await expect(page.getByRole("navigation", { name: "Comparison type" }).getByRole("link", { name: "Careers" })).toHaveAttribute("aria-current", "page")
   await expect(page.getByRole("button", { name: "Change career from Software Engineer" })).toBeVisible()
   await expect(page.getByText("Select one more career to compare.")).toBeVisible()
   await page.waitForLoadState("networkidle")
@@ -64,7 +65,8 @@ test("Ireland Career MVP links into a reconstructable noindex comparison context
   )
   await compare.click()
 
-  await expect(page.getByRole("heading", { name: "Compare careers" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Compare", exact: true })).toBeVisible()
+  await expect(page.getByRole("navigation", { name: "Comparison type" }).getByRole("link", { name: "Careers" })).toHaveAttribute("aria-current", "page")
   await expect(page.getByRole("heading", { name: "Compare reviewed Ireland careers" })).toBeVisible()
   await page.getByLabel("Choose career 2").selectOption("civil-engineer")
 

@@ -1,5 +1,6 @@
 import { IrelandCountryDashboard } from "../ireland-country-dashboard"
 import { CountryDashboardShell } from "../country-dashboard-shell"
+import { IRELAND_OCCUPATION_COUNTRY_PROFILE } from "@/data/ireland-occupation-country-profile"
 import { getIrelandCountryDegreeInstitutionConnections } from "@/lib/career-degree/ireland-institution-evidence.server"
 import { getIrelandEmploymentEcosystem } from "@/lib/employment/ireland-employment-ecosystem.server"
 import { getIrelandInstitutions, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
@@ -35,7 +36,11 @@ export default async function IrelandPage() {
   ])
 
   return (
-    <CountryDashboardShell countryCode="IE">
+    <CountryDashboardShell
+      countryCode="IE"
+      summary={IRELAND_OCCUPATION_COUNTRY_PROFILE.introduction}
+      showExploreCareers={false}
+    >
       <IrelandCountryDashboard
         metrics={metrics}
         degreeConnections={degreeConnections}

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { ChevronRight, FileBadge2 } from "lucide-react"
 import { VISA_KINDS, type VisaEntry } from "@/lib/workspace/visa-catalog"
 import { getVisaDetail } from "@/lib/workspace/visa-detail-resolver"
-import { visaCanonicalPath } from "@/lib/workspace/visa-routes"
+import { visaPublicCanonicalPath } from "@/lib/workspace/visa-routes"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { CategorySearch } from "@/components/workspace/category-search"
 import { CountryPill } from "@/components/workspace/country-pill"
@@ -76,7 +76,7 @@ export function VisasExplorer({
 
   function selectVisa(visa: VisaEntry) {
     setSelectedKey(`${visa.countryCode}:${visa.name}`)
-    router.replace(visaCanonicalPath(visa.countryCode, visa.name), { scroll: false })
+    router.replace(visaPublicCanonicalPath(visa.countryCode, visa.name), { scroll: false })
   }
 
   const results = useMemo(() => {

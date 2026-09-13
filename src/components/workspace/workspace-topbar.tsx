@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LanguageMenu } from "@/components/layout/language-menu"
-import { CompareNavigationAction, PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
+import { PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
 import { WorkspaceUserMenu } from "./workspace-user-menu"
@@ -26,9 +26,8 @@ export function WorkspaceTopbar() {
 
         <PrimaryProductNavigation pathname={pathname} locale={locale} />
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <CompareNavigationAction pathname={pathname} locale={locale} />
-        <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-secondary" />
-        <WorkspaceUserMenu />
+          <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-secondary" />
+          <WorkspaceUserMenu />
         </div>
       </div>
     </header>
