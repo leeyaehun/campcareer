@@ -1,4 +1,5 @@
-import type { ReactNode } from "react"
+import Link from "next/link"
+import type { ComponentProps, ReactNode } from "react"
 
 import { EntityBadge } from "@/components/ui/data-display"
 import { cn } from "@/lib/utils"
@@ -30,4 +31,18 @@ function EntityCard({ title, description, meta, badge, action, children, classNa
   )
 }
 
-export { EntityCard }
+function EntityCardLink({ className, children, ...props }: ComponentProps<typeof Link>) {
+  return (
+    <Link
+      {...props}
+      className={cn(
+        "group block min-h-11 cursor-pointer rounded-cc-large border border-campcareer-border bg-campcareer-surface transition-colors duration-cc-fast hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20",
+        className,
+      )}
+    >
+      {children}
+    </Link>
+  )
+}
+
+export { EntityCard, EntityCardLink }
