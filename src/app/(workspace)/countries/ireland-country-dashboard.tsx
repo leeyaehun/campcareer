@@ -12,6 +12,7 @@ import {
   Wallet,
 } from "lucide-react"
 import { IRELAND_OCCUPATION_COUNTRY_PROFILE } from "@/data/ireland-occupation-country-profile"
+import { EntityCardLink } from "@/components/ui/entity-card"
 import { ieCityPath } from "@/lib/cities/city-routes"
 import type { CountryDegreeConnection, DegreeCareerOutcome } from "@/lib/career-degree/contract"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
@@ -119,22 +120,30 @@ function InstitutionConnectionCard({ institution }: { institution: IrelandInstit
   const locations = institution.locations
 
   return (
-    <article className="rounded-lg border border-[#e5e4df] bg-[#fafaf8] px-3 py-3">
-      <Link href={detailPath} className="inline-flex items-center gap-1 text-[12.5px] font-semibold leading-4 text-[#1b1b1b] hover:text-[#3e7a2e] hover:underline">
+    <div className="space-y-2">
+      <EntityCardLink href={detailPath} className="rounded-lg border-[#e5e4df] bg-[#fafaf8] px-3 py-3 hover:border-[#cfd9ca] hover:bg-[#fafaf8]">
+      <div className="inline-flex items-center gap-1 text-[12.5px] font-semibold leading-4 text-[#1b1b1b] transition group-hover:text-[#3e7a2e]">
         {institution.name} <ArrowRight className="size-3" aria-hidden="true" />
-      </Link>
+      </div>
       <p className="mt-1 text-[10.5px] font-medium text-[#6f6d68]">HEA-recognised institution</p>
       <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5">
         {locations.map((location) => (
-          <Link key={location.id} href={location.city.path} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:underline">
+          <span key={location.id} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb]">
             <MapPin className="size-3" aria-hidden="true" />{location.city.name}
-          </Link>
+          </span>
         ))}
       </div>
-      <Link href={detailPath} className="mt-3 inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#3e7a2e] hover:underline">
-        View education profile <ArrowRight className="size-3" aria-hidden="true" />
-      </Link>
-    </article>
+      </EntityCardLink>
+      {locations.length > 0 ? (
+        <div className="flex flex-wrap gap-x-3 gap-y-1 px-1">
+          {locations.map((location) => (
+            <Link key={location.id} href={location.city.path} className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#2563eb] hover:underline">
+              Open {location.city.name} <ArrowRight className="size-3" aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      ) : null}
+    </div>
   )
 }
 
@@ -154,7 +163,10 @@ export function IrelandCountryDashboard({
   const profile = IRELAND_OCCUPATION_COUNTRY_PROFILE
   const visas = VISA_CATALOG.filter((visa) => visa.countryCode === "IE")
   if (!explorer || !countryProfile) return null
-  const cityCount = explorer.regions.reduce((total, region) => total + region.cities.length, 0)
+  const publishedRegions = explorer.regions
+    .map((region) => ({ ...region, cities: region.cities.filter((city) => Boolean(ieCityPath(city))) }))
+    .filter((region) => region.cities.length > 0)
+  const cityCount = publishedRegions.reduce((total, region) => total + region.cities.length, 0)
   const salaryHint = metrics.salaryRange
     ? `CSO sector-average IQR · comparison value ${formatRankingValue(metrics.salaryRange)}`
     : "Verified salary range coming soon"
@@ -197,10 +209,10 @@ export function IrelandCountryDashboard({
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <section id="cities" className="scroll-mt-24 min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
           <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4"><MapPin className="size-4 text-[#3e7a2e]" /><h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2><Link href={buildCityCompareCanonicalHref({ country: "IE" })} className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Compare cities</Link><span className="text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span></div>
-          <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">{explorer.regions.map((region) => <div key={region.name}><h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1b1b]"><MapPin className="size-3.5 text-[#9c9a94]" />{region.name}</h3><div className="mt-2 flex flex-wrap gap-1.5">{region.cities.map((city) => {
+          <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">{publishedRegions.map((region) => <div key={region.name}><h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1b1b]"><MapPin className="size-3.5 text-[#9c9a94]" />{region.name}</h3><div className="mt-2 flex flex-wrap gap-1.5">{region.cities.map((city) => {
             const cityPath = ieCityPath(city)
             const className = "rounded-md border border-[#e7e6e3] bg-[#fafaf8] px-2.5 py-1 text-[12px] font-medium text-[#4d4c48]"
-            return cityPath ? <Link key={city} href={cityPath} className={`${className} hover:border-[#c9d7f5] hover:text-[#2563eb]`}>{city}</Link> : <span key={city} className={className}>{city}</span>
+            return <Link key={city} href={cityPath!} className={`${className} hover:border-[#c9d7f5] hover:text-[#2563eb]`}>{city}</Link>
           })}</div></div>)}</div>
         </section>
         <section className="rounded-xl border border-[#e7e6e3] bg-white">

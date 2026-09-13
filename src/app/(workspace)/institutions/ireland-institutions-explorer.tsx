@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Building2, ChevronRight, DatabaseZap, ExternalLink, MapPin } from "lucide-react"
+import { EntityCardLink } from "@/components/ui/entity-card"
 import { InstitutionCountrySelector } from "./institution-country-selector"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { getIrelandInstitutions, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
@@ -9,32 +10,34 @@ function IrelandInstitutionCard({ institution }: { institution: IrelandInstituti
   const location = institution.locations[0]
 
   return (
-    <article className="rounded-xl border border-[#e7e6e3] bg-white p-5 transition hover:border-[#cfd9ca] hover:shadow-sm">
+    <div className="space-y-2">
+      <EntityCardLink href={detailPath} className="rounded-xl border-[#e7e6e3] bg-white p-5 hover:border-[#cfd9ca] hover:bg-white hover:shadow-sm">
       <div className="flex items-start gap-3">
         <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[#edf5ea] text-[#3e7a2e]">
           <Building2 className="size-4" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <Link href={detailPath} className="group inline-flex min-w-0 items-center gap-1.5 text-[16px] font-semibold leading-6 tracking-[-0.01em] text-[#1b1b1b] transition hover:text-[#3e7a2e]">
+          <div className="inline-flex min-w-0 items-center gap-1.5 text-[16px] font-semibold leading-6 tracking-[-0.01em] text-[#1b1b1b] transition group-hover:text-[#3e7a2e]">
             <span className="truncate">{institution.name}</span>
             <ChevronRight className="size-3.5 shrink-0 text-[#aaa7a0] transition group-hover:translate-x-0.5 group-hover:text-[#3e7a2e]" aria-hidden="true" />
-          </Link>
+          </div>
           <p className="mt-1 text-[11px] font-medium text-[#6f6d68]">HEA-recognised institution</p>
           {location ? (
-            <Link href={location.city.path} className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#2563eb] hover:underline">
+            <div className="mt-3 inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#2563eb]">
               <MapPin className="size-3.5" aria-hidden="true" />
               {location.city.name}
-            </Link>
+            </div>
           ) : null}
-          <div className="mt-3 flex flex-wrap items-center gap-4">
-            <Link href={detailPath} className="text-[11.5px] font-semibold text-[#3e7a2e] hover:underline">View education profile</Link>
-            <a href={institution.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
-              Official website <ExternalLink className="size-3" aria-hidden="true" />
-            </a>
-          </div>
         </div>
       </div>
-    </article>
+      </EntityCardLink>
+      <div className="flex flex-wrap items-center gap-4 px-1">
+        {location ? <Link href={location.city.path} className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Open {location.city.name} <ChevronRight className="size-3" aria-hidden="true" /></Link> : null}
+        <a href={institution.websiteUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-[#6f6d68] hover:text-[#3e7a2e]">
+          Official website <ExternalLink className="size-3" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
   )
 }
 

@@ -9,17 +9,19 @@ export function CountryDashboardShell({
   initialQuery = "",
   summary,
   showExploreCareers = true,
+  cityCount: cityCountOverride,
   children,
 }: {
   countryCode?: string | null
   initialQuery?: string
   summary?: string
   showExploreCareers?: boolean
+  cityCount?: number
   children?: React.ReactNode
 }) {
   const routeCountry = countryCode ? getLaunchCountry(countryCode) : null
   const explorer = routeCountry ? getCountryExplorer(routeCountry.code) : null
-  const cityCount = explorer?.regions.reduce((total, region) => total + region.cities.length, 0) ?? 0
+  const cityCount = cityCountOverride ?? explorer?.regions.reduce((total, region) => total + region.cities.length, 0) ?? 0
 
   return (
     <div>
