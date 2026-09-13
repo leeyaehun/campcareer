@@ -1,6 +1,7 @@
 import { IrelandCountryDashboard } from "../ireland-country-dashboard"
 import { CountryDashboardShell } from "../country-dashboard-shell"
 import { getCountryDegreeConnections } from "@/lib/career-degree/read"
+import { getIrelandInstitutions } from "@/lib/institutions/ireland-institutions.server"
 import { getCountryMetrics } from "@/lib/workspace/country-metrics"
 
 export const revalidate = 3600
@@ -13,14 +14,15 @@ export const metadata = {
 }
 
 export default async function IrelandPage() {
-  const [metrics, degreeConnections] = await Promise.all([
+  const [metrics, degreeConnections, institutions] = await Promise.all([
     getCountryMetrics("IE"),
     getCountryDegreeConnections("IE"),
+    getIrelandInstitutions(),
   ])
 
   return (
     <CountryDashboardShell countryCode="IE">
-      <IrelandCountryDashboard metrics={metrics} degreeConnections={degreeConnections} />
+      <IrelandCountryDashboard metrics={metrics} degreeConnections={degreeConnections} institutions={institutions} />
     </CountryDashboardShell>
   )
 }
