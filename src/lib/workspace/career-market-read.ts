@@ -8,6 +8,7 @@ import { getCareerDegreePaths } from "@/lib/career-degree/read"
 import { getCareerDataFoundation, getFoundationCountriesForCareer } from "@/lib/career-data-foundation/read"
 import { isFoundationRankable } from "@/lib/career-data-foundation/opportunity-score"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
+import { getIrelandCareerEmploymentContext } from "@/lib/employment/ireland-employment-ecosystem.server"
 import { supabase } from "@/lib/supabase"
 import {
   hasStrictFoundationPublicScoreEvidence,
@@ -387,15 +388,17 @@ export async function getCareerMarketInsight({
       recommendations: includeRecommendations ? await getCareerCountryRecommendations(careerId) : [],
       visas: [],
       degreePaths: [],
+      employmentEcosystem: null,
     }
   }
 
-  const [foundation, recommendations, degreePaths] = await Promise.all([
+  const [foundation, recommendations, degreePaths, employmentEcosystem] = await Promise.all([
     getCareerDataFoundation({ countryCode: country, careerId }),
     includeRecommendations
       ? getCareerCountryRecommendations(careerId)
       : Promise.resolve([] as CareerMarketRecommendation[]),
     country === "IE" ? getIrelandCareerDegreePaths(careerId) : getCareerDegreePaths(country, careerId),
+    country === "IE" ? getIrelandCareerEmploymentContext(careerId) : Promise.resolve(null),
   ])
 
   if (foundation && foundationHasPublicScore(foundation)) {
@@ -416,6 +419,7 @@ export async function getCareerMarketInsight({
       recommendations,
       visas: toFoundationVisas(foundation),
       degreePaths,
+      employmentEcosystem,
     }
   }
 
@@ -441,6 +445,7 @@ export async function getCareerMarketInsight({
       recommendations,
       visas: [],
       degreePaths,
+      employmentEcosystem,
     }
   }
 
@@ -462,5 +467,6 @@ export async function getCareerMarketInsight({
       lastVerifiedOn: visa.last_verified_on,
     })),
     degreePaths,
+    employmentEcosystem,
   }
 }

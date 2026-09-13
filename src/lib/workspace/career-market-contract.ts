@@ -1,6 +1,7 @@
 import type { CampCareerScore } from "@/lib/campcareer-score"
 import type { CareerDegreePath } from "@/lib/career-degree/contract"
 import type { CareerDataFoundationResult } from "@/lib/career-data-foundation/types"
+import type { IrelandCareerEmploymentContext } from "@/lib/employment/ireland-employment-ecosystem-contract"
 import type { CountryOccupationMetric, CountryOccupationProfile, OpportunityScoreBreakdown } from "./country-occupation-contract"
 
 export type CareerMarketDemand = {
@@ -64,4 +65,6 @@ export type CareerMarketInsight = {
   visas: CareerVisaPathway[]
   /** Source-backed degree directions. These are not a Programme publication claim. */
   degreePaths: CareerDegreePath[]
+  /** Reviewed Ireland Industry/Employer context. This is not a hiring signal. */
+  employmentEcosystem: IrelandCareerEmploymentContext | null
 }
