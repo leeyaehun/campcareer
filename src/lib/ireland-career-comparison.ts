@@ -72,7 +72,9 @@ export function parseIrelandCareerComparisonState(searchParams: Pick<URLSearchPa
 }
 
 export function buildIrelandCareerCompareHref(careerIds: readonly string[] = []) {
-  const ids = normalizeIrelandCareerIds(careerIds)
+  const ids = normalizeIrelandCareerIds(careerIds).sort(
+    (left, right) => IE_CAREER_COMPARE_IDS.indexOf(left) - IE_CAREER_COMPARE_IDS.indexOf(right),
+  )
   const params = new URLSearchParams({
     type: "career",
     country: IE_CAREER_COMPARE_COUNTRY,

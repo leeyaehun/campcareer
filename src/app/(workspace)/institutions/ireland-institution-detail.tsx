@@ -3,6 +3,11 @@ import { ArrowRight, ArrowUpRight, Building2, ExternalLink, MapPin, ShieldCheck 
 import { institutionCountryPath } from "@/lib/institutions/institution-search"
 import type { IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import type { IrelandInstitutionCareerDegreeEvidence } from "@/lib/career-degree/contract"
+import {
+  buildIrelandCareerCompareHref,
+  IE_CAREER_COMPARE_MIN_CAREERS,
+  normalizeIrelandCareerIds,
+} from "@/lib/ireland-career-comparison"
 import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
 
 export function IrelandInstitutionDetailView({
@@ -13,6 +18,10 @@ export function IrelandInstitutionDetailView({
   careerDegreeEvidence: readonly IrelandInstitutionCareerDegreeEvidence[]
 }) {
   const countryPath = institutionCountryPath("IE")
+  const compareCareerIds = normalizeIrelandCareerIds(careerDegreeEvidence.map((relation) => relation.career.careerId))
+  const compareHref = compareCareerIds.length >= IE_CAREER_COMPARE_MIN_CAREERS
+    ? buildIrelandCareerCompareHref(compareCareerIds)
+    : null
 
   return (
     <>
@@ -82,6 +91,11 @@ export function IrelandInstitutionDetailView({
                   </article>
                 ))}
               </div>
+              {compareHref ? (
+                <Link href={compareHref} className="mt-4 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline">
+                  Compare these careers <ArrowRight className="size-3" aria-hidden="true" />
+                </Link>
+              ) : null}
             </section>
           ) : null}
           <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
