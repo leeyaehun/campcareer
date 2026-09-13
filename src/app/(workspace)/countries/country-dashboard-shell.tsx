@@ -7,10 +7,14 @@ import { CountrySearchControl } from "./country-search-control"
 export function CountryDashboardShell({
   countryCode,
   initialQuery = "",
+  summary,
+  showExploreCareers = true,
   children,
 }: {
   countryCode?: string | null
   initialQuery?: string
+  summary?: string
+  showExploreCareers?: boolean
   children?: React.ReactNode
 }) {
   const routeCountry = countryCode ? getLaunchCountry(countryCode) : null
@@ -32,7 +36,7 @@ export function CountryDashboardShell({
                 {routeCountry.code} · {explorer?.regions.length ?? 0} regions · {cityCount} cities · {routeCountry.currency}
               </p>
               <p className="mt-4 max-w-xl text-sm leading-6 text-white/85">
-                Explore career demand, study options and regional context across {routeCountry.name} before comparing your next step.
+                {summary ?? `Explore career demand, study options and regional context across ${routeCountry.name} before comparing your next step.`}
               </p>
             </>
           ) : (
@@ -53,7 +57,7 @@ export function CountryDashboardShell({
             initialQuery={initialQuery}
           />
 
-          {routeCountry ? (
+          {routeCountry && showExploreCareers ? (
             <Link
               href={`/careers?country=${routeCountry.code}`}
               prefetch={false}

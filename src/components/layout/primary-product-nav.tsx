@@ -3,10 +3,11 @@ import { localizePath, type LocaleOption, withoutLocalePrefix } from "@/lib/i18n
 import { cn } from "@/lib/utils"
 
 const PRIMARY_DESTINATIONS = [
-  { href: "/careers", label: { en: "Careers", ko: "커리어" }, matches: ["/careers", "/career"] },
   { href: "/countries", label: { en: "Countries", ko: "국가" }, matches: ["/countries"] },
-  { href: "/programs", label: { en: "Degrees", ko: "학위" }, matches: ["/programs", "/courses"] },
+  { href: "/careers", label: { en: "Careers", ko: "커리어" }, matches: ["/careers", "/career"] },
   { href: "/institutions", label: { en: "Education", ko: "교육" }, matches: ["/institutions"] },
+  { href: "/programs", label: { en: "Degrees", ko: "학위" }, matches: ["/programs", "/courses"] },
+  { href: "/compare", label: { en: "Compare", ko: "비교" }, matches: ["/compare"] },
 ] as const
 
 type PrimaryProductNavigationProps = {
@@ -45,26 +46,5 @@ export function PrimaryProductNavigation({ pathname, locale, className }: Primar
         )
       })}
     </nav>
-  )
-}
-
-export function CompareNavigationAction({ pathname, locale, className }: PrimaryProductNavigationProps) {
-  const active = isCurrentPath(withoutLocalePrefix(pathname), ["/compare"])
-
-  return (
-    <Link
-      href={localizePath("/compare", locale)}
-      prefetch={false}
-      aria-current={active ? "page" : undefined}
-      className={cn(
-        "hidden min-h-10 rounded-cc-control border px-3 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 lg:inline-flex",
-        active
-          ? "border-brand bg-brand-tint text-brand"
-          : "border-campcareer-border text-campcareer-ink-secondary hover:border-brand/40 hover:text-brand",
-        className,
-      )}
-    >
-      {locale === "ko" ? "비교" : "Compare"}
-    </Link>
   )
 }

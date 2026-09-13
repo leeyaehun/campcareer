@@ -15,14 +15,19 @@ export const metadata: Metadata = {
 
 const destinations = [
   {
+    href: "/countries",
+    title: "Countries",
+    description: "Compare where studying and working could take you.",
+  },
+  {
     href: "/careers",
     title: "Careers",
     description: "Explore career outcomes, demand, pay, and pathways.",
   },
   {
-    href: "/countries",
-    title: "Countries",
-    description: "Compare where studying and working could take you.",
+    href: "/institutions",
+    title: "Education",
+    description: "Explore institutions and the programs they provide.",
   },
   {
     href: "/programs",
@@ -30,9 +35,9 @@ const destinations = [
     description: "Explore programs and qualifications connected to career outcomes.",
   },
   {
-    href: "/institutions",
-    title: "Education",
-    description: "Explore institutions and the programs they provide.",
+    href: "/compare",
+    title: "Compare",
+    description: "Compare reviewed career, country, city, and program options.",
   },
 ] as const
 

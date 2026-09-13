@@ -1,6 +1,8 @@
 import { getLaunchCountry } from "@/data/launch-countries"
 import type { VisaEntry } from "./visa-catalog"
 
+export const IRELAND_VISA_DIRECTORY_PATH = "/countries/ie/visas"
+
 export function normalizeVisaCountryCode(value: string) {
   const normalized = value.trim().toUpperCase()
   return normalized === "GB" ? "UK" : normalized
@@ -19,6 +21,16 @@ export function visaSlug(name: string) {
 
 export function visaCanonicalPath(countryCode: string, visaName: string) {
   return `/visas/${normalizeVisaCountryCode(countryCode).toLowerCase()}/${visaSlug(visaName)}`
+}
+
+export function irelandVisaCanonicalPath(visaName: string) {
+  return `${IRELAND_VISA_DIRECTORY_PATH}/${visaSlug(visaName)}`
+}
+
+export function visaPublicCanonicalPath(countryCode: string, visaName: string) {
+  return normalizeVisaCountryCode(countryCode) === "IE"
+    ? irelandVisaCanonicalPath(visaName)
+    : visaCanonicalPath(countryCode, visaName)
 }
 
 export function getVisaRoute(
@@ -45,6 +57,13 @@ export function getVisaRoute(
   }
 }
 
+export function getIrelandCountryVisaRoute(catalog: readonly VisaEntry[], visaSegment: string) {
+  const route = getVisaRoute(catalog, "IE", visaSegment)
+  if (!route) return null
+
+  return { ...route, path: irelandVisaCanonicalPath(route.visa.name) }
+}
+
 export function getIndexableVisaRoutes(catalog: readonly VisaEntry[]) {
   const routes: Array<NonNullable<ReturnType<typeof getVisaRoute>>> = []
   const seen = new Set<string>()
@@ -56,7 +75,7 @@ export function getIndexableVisaRoutes(catalog: readonly VisaEntry[]) {
 
     const slug = visaSlug(visa.name)
     if (!slug) continue
-    const path = visaCanonicalPath(country.code, visa.name)
+    const path = visaPublicCanonicalPath(country.code, visa.name)
     if (seen.has(path)) {
       throw new Error(`Duplicate visa canonical route: ${path}`)
     }

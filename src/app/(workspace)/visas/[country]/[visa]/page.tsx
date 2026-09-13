@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
 import { loadVisaCatalog } from "@/lib/workspace/visa-catalog-loader"
-import { getVisaRoute } from "@/lib/workspace/visa-routes"
+import { getVisaRoute, visaPublicCanonicalPath } from "@/lib/workspace/visa-routes"
 import { VisasExplorer } from "../../visas-explorer"
 
 export const dynamic = "force-dynamic"
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: VisaDetailPageProps): Promise
   return {
     title: `${route.visa.name} in ${route.country.name}`,
     description: route.visa.note,
-    alternates: { canonical: route.path },
+    alternates: { canonical: visaPublicCanonicalPath(route.country.code, route.visa.name) },
     robots: { index: true, follow: true },
   }
 }
@@ -35,6 +35,10 @@ export default async function VisaDetailPage({ params }: VisaDetailPageProps) {
   const catalog = await loadVisaCatalog()
   const route = getVisaRoute(catalog, country, visa)
   if (!route) notFound()
+
+  if (route.country.code === "IE") {
+    permanentRedirect(visaPublicCanonicalPath(route.country.code, route.visa.name))
+  }
 
   if (country !== route.country.code.toLowerCase() || visa !== route.slug) {
     permanentRedirect(route.path)

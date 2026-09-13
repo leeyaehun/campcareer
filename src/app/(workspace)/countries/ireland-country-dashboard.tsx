@@ -162,14 +162,21 @@ export function IrelandCountryDashboard({
 
   return (
     <div>
-      <p className="mb-4 max-w-3xl text-[13px] leading-6 text-[#6f6d68]">{profile.introduction}</p>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <MetricCard icon={<Stamp className="size-4 text-[#6d4fc4]" />} accent="bg-[#f3f0fa]" label="Visa options" value={String(visas.length)} hint="Study, graduate-work and critical-skills pathways" href="/visas?country=IE" />
+      <nav className="mb-4 flex flex-wrap gap-x-4 gap-y-2 border-b border-[#e7e6e3] pb-3 text-[12px] font-semibold text-[#5d6470]" aria-label="Ireland sections">
+        <Link href="#overview" className="hover:text-[#2563eb] hover:underline">Overview</Link>
+        <Link href="#careers" className="hover:text-[#2563eb] hover:underline">Careers</Link>
+        <Link href="#education" className="hover:text-[#2563eb] hover:underline">Education</Link>
+        <Link href="#cities" className="hover:text-[#2563eb] hover:underline">Cities</Link>
+        <Link href="#industries" className="hover:text-[#2563eb] hover:underline">Industries</Link>
+        <Link href="/countries/ie/visas" className="hover:text-[#2563eb] hover:underline">Visas</Link>
+      </nav>
+      <div id="overview" className="scroll-mt-24 grid gap-4 sm:grid-cols-3">
+        <MetricCard icon={<Stamp className="size-4 text-[#6d4fc4]" />} accent="bg-[#f3f0fa]" label="Visa options" value={String(visas.length)} hint="Study, graduate-work and critical-skills pathways" href="/countries/ie/visas" />
         <MetricCard icon={<Banknote className="size-4 text-[#2563eb]" />} accent="bg-[#eef4ff]" label="Salary range" value={formatMoneyRange(metrics.salaryRange)} hint={salaryHint} />
         <MetricCard icon={<Wallet className="size-4 text-[#c2691e]" />} accent="bg-[#fbf0e7]" label="Living costs" value={formatMoneyRange(metrics.livingCostRange)} hint={livingHint} />
       </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <section className="rounded-xl border border-[#e7e6e3] bg-white p-5">
+        <section id="careers" className="scroll-mt-24 rounded-xl border border-[#e7e6e3] bg-white p-5">
           <div className="flex items-center gap-2 text-[#2563eb]"><CalendarDays className="size-4" /><h2 className="text-[14.5px] font-semibold">Academic year</h2></div>
           <p className="mt-3 text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">{profile.academicYear.headline}</p>
           <p className="mt-2 text-[12.5px] leading-5 text-[#6f6d68]">{profile.academicYear.summary}</p>
@@ -181,14 +188,14 @@ export function IrelandCountryDashboard({
           <div className="mt-3 grid gap-2 sm:grid-cols-2">{degreeConnections.map((connection) => <DegreeConnectionCard key={connection.degree.id} connection={connection} />)}</div>
         </section>
       </div>
-      <section className="mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5">
+      <section id="education" className="scroll-mt-24 mt-4 rounded-xl border border-[#e7e6e3] bg-white p-5">
         <div className="flex items-center gap-2 text-[#6d4fc4]"><Building2 className="size-4" /><h2 className="text-[14.5px] font-semibold">Education in Ireland</h2><Link href="/institutions/ie" className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Explore institutions</Link></div>
         <p className="mt-2 text-[11px] leading-4 text-[#6f6d68]">Verified Higher Education Authority institution identities with source-backed official locations. Programme listings are not published from this layer.</p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{institutions.map((institution) => <InstitutionConnectionCard key={institution.id} institution={institution} />)}</div>
       </section>
-      <IrelandEmploymentEcosystemSection ecosystem={employmentEcosystem} />
+      <div id="industries" className="scroll-mt-24"><IrelandEmploymentEcosystemSection ecosystem={employmentEcosystem} /></div>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <section className="min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
+        <section id="cities" className="scroll-mt-24 min-w-0 rounded-xl border border-[#e7e6e3] bg-white lg:col-span-2">
           <div className="flex items-center gap-2.5 border-b border-[#f0efec] px-5 py-4"><MapPin className="size-4 text-[#3e7a2e]" /><h2 className="text-[14.5px] font-semibold text-[#1b1b1b]">Regions &amp; cities</h2><Link href={buildCityCompareCanonicalHref({ country: "IE" })} className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Compare cities</Link><span className="text-[11.5px] font-medium text-[#a3a19b]">{cityCount} cities</span></div>
           <div className="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-2">{explorer.regions.map((region) => <div key={region.name}><h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1b1b]"><MapPin className="size-3.5 text-[#9c9a94]" />{region.name}</h3><div className="mt-2 flex flex-wrap gap-1.5">{region.cities.map((city) => {
             const cityPath = ieCityPath(city)

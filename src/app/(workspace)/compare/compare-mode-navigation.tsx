@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CountryPill } from "@/components/workspace/country-pill"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
@@ -58,20 +59,27 @@ export function ComparePageHeader({ activeType, countryCode }: ComparePageHeader
 
   return (
     <header className="mb-5 border-b border-[hsl(var(--cc-border))] pb-4">
-      <p className="text-[10px] font-semibold tracking-[0.12em] text-brand">{locale === "ko" ? "보조 판단" : "SECONDARY DECISION"}</p>
-      <div className="mt-1.5 flex min-h-10 flex-wrap items-center gap-3">
+      <div className="flex min-h-10 flex-wrap items-center gap-3">
         <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.025em] text-[hsl(var(--cc-ink))] sm:text-3xl">
-          {title[locale]}
+          {locale === "ko" ? "비교" : "Compare"}
         </h1>
         {showCountry ? (
           <CountryPill value={resolvedCountry} allowAll={false} onChange={updateCountry} />
         ) : null}
       </div>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-[hsl(var(--cc-muted))]">
-        {locale === "ko"
-          ? "비교는 결론을 대신하지 않습니다. Career Page의 Score, 근거와 Path를 확인한 뒤 실제 선택지를 검증할 때 사용하세요."
-          : "Comparison does not replace the verdict. Use it to test real options after reviewing the Career Page score, evidence and path."}
-      </p>
+      <nav aria-label={locale === "ko" ? "비교 유형" : "Comparison type"} className="mt-4 flex flex-wrap gap-2">
+        {COMPARE_MODE_NAV_ITEMS.map((item) => (
+          <Link
+            key={item.type}
+            href={item.href}
+            aria-current={item.type === activeType ? "page" : undefined}
+            className={`rounded-cc-control border px-3 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 ${item.type === activeType ? "border-brand bg-brand text-white" : "border-campcareer-border text-campcareer-ink-secondary hover:border-brand/40 hover:text-brand"}`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+      <p className="mt-3 text-sm leading-6 text-[hsl(var(--cc-muted))]">{title[locale]}</p>
     </header>
   )
 }

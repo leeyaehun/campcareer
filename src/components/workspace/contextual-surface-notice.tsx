@@ -21,14 +21,6 @@ const SURFACES: Array<{ matches: (pathname: string) => boolean; copy: SurfaceCop
     },
   },
   {
-    matches: (pathname) => pathname === "/compare" || pathname.startsWith("/compare/"),
-    copy: {
-      eyebrow: { en: "SECONDARY ACTION", ko: "보조 기능" },
-      title: { en: "Compare a decision, not everything", ko: "판단할 대상을 정한 뒤 비교하세요" },
-      detail: { en: "Comparison is a supporting tool. CampCareer Score and the Career Page remain the primary decision surface.", ko: "비교는 보조 도구입니다. CampCareer Score와 Career Page가 기본 판단 화면입니다." },
-    },
-  },
-  {
     matches: (pathname) => pathname === "/visas" || pathname.startsWith("/visas/"),
     copy: {
       eyebrow: { en: "PATH CONTEXT", ko: "경로 맥락" },
