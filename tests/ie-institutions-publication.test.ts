@@ -51,9 +51,10 @@ test("Country, explorer and detail surfaces preserve the programme gate while li
   assert.match(dashboard, /Education in Ireland/)
   assert.match(dashboard, /institutions\.map/)
   assert.match(dashboard, /institutionDetailPath\("IE", institution\.slug\)/)
-  assert.match(dashboard, /location\.city\.path/)
+  assert.match(dashboard, /location\.city\.name/)
+  assert.doesNotMatch(dashboard, /Open \{location\.city\.name\}/)
   assert.doesNotMatch(dashboard, /profile\.majorInstitutions/)
-  assert.match(dashboard, /Career-linked degree pathways/)
+  assert.match(dashboard, /Study areas/)
   assert.match(dashboard, /degreeConnections\.map/)
 
   assert.match(countryRoute, /countryCode === "IE"[\s\S]*IrelandInstitutionsExplorer/)

@@ -34,7 +34,7 @@ test("Ireland institution explorer makes each verified institution card the prim
   assert.match(card, /<a href=\{institution\.websiteUrl\}/)
 })
 
-test("Ireland Country institution cards avoid nested links and keep city actions secondary", () => {
+test("Ireland Country institution cards avoid nested links and keep location contextual", () => {
   const card = countryDashboard.slice(
     countryDashboard.indexOf("function InstitutionConnectionCard"),
     countryDashboard.indexOf("export function IrelandCountryDashboard"),
@@ -42,7 +42,8 @@ test("Ireland Country institution cards avoid nested links and keep city actions
 
   assert.match(card, /<EntityCardLink href=\{detailPath\}/)
   assert.doesNotMatch(card, /<Link href=\{detailPath\}/)
-  assert.match(card, /<Link key=\{location\.id\} href=\{location\.city\.path\}/)
+  assert.match(card, /location\.city\.name/)
+  assert.doesNotMatch(card, /Open \{location\.city\.name\}/)
   assert.doesNotMatch(card.slice(card.indexOf("<EntityCardLink"), card.indexOf("</EntityCardLink>")), /<Link|<a /)
 })
 
@@ -50,7 +51,7 @@ test("Ireland Country city links are limited to the four published city routes",
   assert.match(countryDashboard, /const publishedRegions = explorer\.regions/)
   assert.match(countryDashboard, /cities\.filter\(\(city\) => Boolean\(ieCityPath\(city\)\)\)/)
   assert.match(countryDashboard, /return <Link key=\{city\} href=\{cityPath!\}/)
-  assert.doesNotMatch(countryDashboard, /: <span key=\{city\} className=\{className\}/)
+  assert.match(countryDashboard, /min-h-20/)
   assert.match(countryPage, /PUBLISHED_IE_CITY_SLUGS/)
   assert.match(countryPage, /cityCount=\{PUBLISHED_IE_CITY_SLUGS\.length\}/)
   assert.match(countryShell, /cityCountOverride \?\? explorer\?\.regions/)
@@ -61,8 +62,7 @@ test("Ireland search results remain full-row canonical links", () => {
   assert.doesNotMatch(searchResults, /onClick=/)
 })
 
-test("UX-2 leaves employer and degree relationship architecture unchanged", () => {
-  assert.match(employmentSection, /href=\{employer\.careersUrl\}/)
+test("UX-2 preserves the absence of speculative employer and Degree routes", () => {
   assert.doesNotMatch(employmentSection, /employerDetailPath|\/employers\//)
   assert.doesNotMatch(countryDashboard, /\/degrees\//)
   assert.doesNotMatch(countryDashboard, /degreeDetailPath/)

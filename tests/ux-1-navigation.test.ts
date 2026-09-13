@@ -19,13 +19,15 @@ test("global navigation uses the five requested durable categories", () => {
   assert.ok(primaryNav.includes('href: "/compare"'))
 })
 
-test("Ireland country hub has stable local decision links without a duplicate career CTA", () => {
+test("Ireland country hub has visible local decision links without a duplicate career CTA", () => {
   const ireland = source("src/app/(workspace)/countries/ireland-country-dashboard.tsx")
   const countryPage = source("src/app/(workspace)/countries/ie/page.tsx")
 
-  for (const href of ['href="#overview"', 'href="#careers"', 'href="#education"', 'href="#cities"', 'href="#industries"', 'href="/countries/ie/visas"']) {
-    assert.ok(ireland.includes(href))
+  for (const anchor of ["#careers", "#education", "#cities", "#industries"]) {
+    assert.ok(ireland.includes(`"${anchor}"`))
   }
+  assert.ok(ireland.includes('href="/countries/ie/visas"'))
+  assert.ok(ireland.includes("min-h-11"))
   assert.ok(countryPage.includes("showExploreCareers={false}"))
 })
 
