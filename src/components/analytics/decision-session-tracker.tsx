@@ -36,6 +36,7 @@ export function entityTypeForPath(pathname: string): AnalyticsEntityType | null 
   const path = withoutLocalePrefix(pathname)
   if (path.startsWith("/career/")) return "career"
   if (path.startsWith("/countries/")) return "country"
+  if (path.startsWith("/cities/")) return "city"
   if (/^\/programs\/[a-z]{2}\/.+/.test(path)) return "program"
   if (/^\/institutions\/[a-z]{2}\/.+/.test(path)) return "institution"
   if (path === "/compare") return "compare"

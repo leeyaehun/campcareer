@@ -3,16 +3,13 @@ import { notFound } from "next/navigation"
 import { IrelandCityDashboard } from "@/app/(workspace)/cities/ireland-city-dashboard"
 import { getIrelandCityDecisionConnections } from "@/lib/cities/ireland-city-decision-connections.server"
 import { getIeCityProfile } from "@/lib/cities/ie-city-profile.server"
-import { PUBLISHED_IE_CITY_SLUGS, isPublishedIeCitySlug } from "@/lib/cities/city-routes"
+import {
+  PUBLISHED_IE_CITY_NAMES,
+  PUBLISHED_IE_CITY_SLUGS,
+  isPublishedIeCitySlug,
+} from "@/lib/cities/city-routes"
 
 export const dynamic = "force-dynamic"
-
-const CITY_NAMES: Record<(typeof PUBLISHED_IE_CITY_SLUGS)[number], string> = {
-  dublin: "Dublin",
-  cork: "Cork",
-  galway: "Galway",
-  limerick: "Limerick",
-}
 
 export function generateStaticParams() {
   return PUBLISHED_IE_CITY_SLUGS.map((city) => ({ city }))
@@ -25,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
     return { robots: { index: false, follow: false } }
   }
 
-  const name = CITY_NAMES[normalized]
+  const name = PUBLISHED_IE_CITY_NAMES[normalized]
   return {
     title: `Study in ${name}, Ireland`,
     description: `Explore ${name} student living costs, transport, Stamp 2 work context, verified institutions and current programme-delivery coverage.`,
