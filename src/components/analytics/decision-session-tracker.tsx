@@ -35,6 +35,7 @@ export function getCompareAnalyticsDetails(searchParams: Pick<URLSearchParams, "
 export function entityTypeForPath(pathname: string): AnalyticsEntityType | null {
   const path = withoutLocalePrefix(pathname)
   if (path.startsWith("/career/")) return "career"
+  if (path.startsWith("/countries/") && path.includes("/employers")) return "employer"
   if (path.startsWith("/countries/")) return "country"
   if (path.startsWith("/cities/")) return "city"
   if (/^\/programs\/[a-z]{2}\/.+/.test(path)) return "program"

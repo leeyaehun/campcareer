@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { localizePath } from "@/lib/i18n/config"
 import { ieCityPath } from "@/lib/cities/city-routes"
+import { ieEmployerDetailPath } from "@/lib/employment/ireland-employer-routes"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import type { CareerProfile } from "@/lib/career-data-foundation/career-profile-contract"
 import type { CareerMarketInsight } from "@/lib/workspace/career-market-contract"
@@ -256,9 +257,14 @@ function IrelandEmploymentContext({
           <div className="mt-3 grid gap-3 md:grid-cols-2">
             {context.employers.map((employer) => (
               <article key={employer.id} className="rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4">
-                <a href={employer.careersUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-campcareer-ink hover:text-brand hover:underline">
-                  {employer.name} <ExternalLink className="size-3.5" aria-hidden="true" />
-                </a>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <Link href={ieEmployerDetailPath(employer.slug)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-campcareer-ink hover:text-brand hover:underline">
+                    {employer.name} <ArrowRight className="size-3.5" aria-hidden="true" />
+                  </Link>
+                  <a href={employer.careersUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-campcareer-ink-secondary hover:text-brand hover:underline">
+                    {employer.careersSourceTitle} <ExternalLink className="size-3" aria-hidden="true" />
+                  </a>
+                </div>
                 <p className="mt-2 text-xs leading-5 text-campcareer-ink-secondary">{tr(locale, "공식 고용주·채용 출처로 확인됨", "Verified through an official employer/careers source")} · {employer.checkedAt}</p>
                 {employer.careers.map((connection) => (
                   <a key={connection.evidence.url} href={connection.evidence.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-press hover:underline">

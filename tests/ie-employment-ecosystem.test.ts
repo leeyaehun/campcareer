@@ -38,14 +38,21 @@ test("Ireland P1.6 publishes only the reviewed Industry → Career cohort", () =
 test("selected Ireland employers have official presence and Career evidence without inferred cities", () => {
   assert.deepEqual(
     IRELAND_EMPLOYMENT_ECOSYSTEM.employers.map((employer) => employer.id),
-    ["ie:microsoft", "ie:sisk", "ie:hse"],
+    ["ie:microsoft", "ie:google", "ie:apple", "ie:sisk", "ie:bam", "ie:jones", "ie:hse", "ie:st-james", "ie:mater"],
+  )
+  assert.deepEqual(
+    [...new Set(IRELAND_EMPLOYMENT_ECOSYSTEM.employers.map((employer) => employer.industryId))].sort(),
+    ["ie-construction", "ie-healthcare", "ie-ict"],
   )
 
   for (const employer of IRELAND_EMPLOYMENT_ECOSYSTEM.employers) {
     assert.ok(employer.name)
+    assert.ok(employer.descriptor)
+    assert.ok(employer.irelandPresenceDescription)
+    assert.match(employer.websiteUrl, /^https:\/\//)
     assert.match(employer.irelandPresence.url, /^https:\/\//)
     assert.match(employer.careersUrl, /^https:\/\//)
-    assert.ok(employer.careers.length > 0)
+    assert.ok(employer.checkedAt)
     for (const connection of employer.careers) {
       assert.equal(isReviewedIrelandEmploymentCareer(connection.careerId), true)
       assert.match(connection.evidence.url, /^https:\/\//)
@@ -53,10 +60,16 @@ test("selected Ireland employers have official presence and Career evidence with
     }
   }
 
+  for (const industryId of ["ie-ict", "ie-construction", "ie-healthcare"]) {
+    assert.ok(IRELAND_EMPLOYMENT_ECOSYSTEM.employers.some((employer) => employer.industryId === industryId))
+  }
+
   const employerCities = IRELAND_EMPLOYMENT_ECOSYSTEM.employers.flatMap((employer) => employer.cities)
-  assert.deepEqual(employerCities.map((city) => city.citySlug), ["dublin"])
-  assert.match(employerCities[0]!.rationale, /location context only/)
-  assert.match(employerCities[0]!.evidence.url, /^https:\/\//)
+  assert.deepEqual(employerCities.map((city) => city.citySlug), ["dublin", "dublin", "cork"])
+  for (const city of employerCities) {
+    assert.match(city.rationale, /location context only/)
+    assert.match(city.evidence.url, /^https:\/\//)
+  }
 })
 
 test("P1.6 keeps opportunities evergreen-only and rejects the legacy job table as public truth", () => {
