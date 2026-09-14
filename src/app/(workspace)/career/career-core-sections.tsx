@@ -234,8 +234,8 @@ function IrelandEmploymentContext({
   locale: Locale
 }) {
   return (
-    <div className="mt-7 border-y border-campcareer-border py-5">
-      <p className="text-xs font-semibold tracking-[0.06em] text-brand">{tr(locale, "아일랜드 고용 맥락", "Ireland employment context")}</p>
+    <div className="mt-7 rounded-cc-surface border border-campcareer-border bg-campcareer-canvas p-5">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{tr(locale, "아일랜드 고용 맥락", "Ireland employment context")}</p>
       <h3 className="mt-2 text-lg font-semibold tracking-[-0.02em] text-campcareer-ink">{tr(locale, "이 커리어가 나타나는 산업", "Where this career appears")}</h3>
       <div className="mt-4 flex flex-wrap gap-2">
         {context.industries.map((industry) => (
@@ -389,15 +389,15 @@ export function CareerCoreSections({
   const irelandProgramsPublicationPending = insight.country.code === "IE" && degreePaths.length > 0
 
   return (
-    <div className="mt-10">
-      <nav aria-label={tr(locale, "커리어 페이지 섹션", "Career page sections")} className="flex flex-wrap gap-x-5 gap-y-2 border-y border-campcareer-border py-3 text-sm font-medium text-campcareer-muted">
+    <div className="mt-8">
+      <nav aria-label={tr(locale, "커리어 페이지 섹션", "Career page sections")} className="flex flex-wrap gap-x-5 gap-y-2 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-4 py-3 text-sm font-medium text-campcareer-muted shadow-cc-surface">
         <a href="#evidence" className="transition hover:text-brand">{tr(locale, "근거", "Evidence")}</a>
         <a href="#path" className="transition hover:text-brand">{tr(locale, "경로", "Path")}</a>
         <a href="#study" className="transition hover:text-brand">{tr(locale, "학업·과정", "Study / Programs")}</a>
         <a href="#jobs" className="transition hover:text-brand">{tr(locale, "일자리", "Jobs")}</a>
       </nav>
 
-      <section id="evidence" className="scroll-mt-24 border-b border-campcareer-border py-10" aria-labelledby="evidence-heading">
+      <section id="evidence" className="mt-6 scroll-mt-24 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface sm:p-8" aria-labelledby="evidence-heading">
         <SectionHeading
           eyebrow={tr(locale, "CampCareer Score 근거", "CampCareer Score evidence")}
           title={tr(locale, "왜 이 점수인가", "Why this score")}
@@ -405,10 +405,10 @@ export function CareerCoreSections({
         />
         <div className="mt-7 divide-y divide-campcareer-border border-y border-campcareer-border">
           {evidence.map((row) => (
-            <div key={row.label} className="grid gap-2 py-5 md:grid-cols-[9rem_minmax(0,1fr)] md:gap-6">
-              <div className="flex items-baseline gap-2">
-                <p className="text-sm font-semibold text-campcareer-ink">{row.label}</p>
-                {row.score != null && <span className="text-sm font-bold tabular-nums text-brand">{row.score}</span>}
+            <div key={row.label} className="grid gap-3 py-5 md:grid-cols-[8rem_minmax(0,1fr)] md:items-start md:gap-6 sm:py-6">
+              <div className="flex items-center gap-2.5">
+                <p className="text-base font-semibold text-campcareer-ink">{row.label}</p>
+                {row.score != null && <span className="shrink-0 rounded-cc-control bg-brand-tint px-2.5 py-1 text-sm font-bold tabular-nums text-brand">{row.score}</span>}
               </div>
               <p className="text-sm leading-6 text-campcareer-ink-secondary">{row.detail}</p>
             </div>
@@ -424,7 +424,7 @@ export function CareerCoreSections({
         )}
       </section>
 
-      <section id="path" className="scroll-mt-24 border-b border-campcareer-border py-10" aria-labelledby="path-heading">
+      <section id="path" className="mt-6 scroll-mt-24 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface sm:p-8" aria-labelledby="path-heading">
         <SectionHeading
           eyebrow={tr(locale, "기본 진입 경로", "Basic entry path")}
           title={tr(locale, "이 커리어에 도달하는 순서", "The path to get there")}
@@ -444,7 +444,7 @@ export function CareerCoreSections({
         </ol>
       </section>
 
-      <section id="study" className="scroll-mt-24 border-b border-campcareer-border py-10" aria-labelledby="study-heading">
+      <section id="study" className="mt-6 scroll-mt-24 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface sm:p-8" aria-labelledby="study-heading">
         <SectionHeading
           eyebrow={tr(locale, "경로에 필요한 경우", "When the path requires it")}
           title="Study / Programs"
@@ -488,7 +488,7 @@ export function CareerCoreSections({
         )}
       </section>
 
-      <section id="jobs" className="scroll-mt-24 py-10" aria-labelledby="jobs-heading">
+      <section id="jobs" className="mt-6 scroll-mt-24 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-surface sm:p-8" aria-labelledby="jobs-heading">
         <SectionHeading
           eyebrow={tr(locale, "실제 노동시장", "Live labour market")}
           title="Jobs"
@@ -513,14 +513,9 @@ export function CareerCoreSections({
 
 function CareerCoreSkeleton() {
   return (
-    <div className="mt-10 border-t border-campcareer-border pt-8" aria-label="Loading" role="status">
-      <Skeleton className="h-4 w-28" />
-      <Skeleton className="mt-3 h-8 w-48" />
-      <div className="mt-7 space-y-4">
-        <Skeleton className="h-16" />
-        <Skeleton className="h-16" />
-        <Skeleton className="h-16" />
-      </div>
+    <div className="mt-8" aria-label="Loading" role="status">
+      <Skeleton className="h-10 w-full rounded-cc-large" />
+      <Skeleton className="mt-6 h-48 w-full rounded-cc-large" />
     </div>
   )
 }
@@ -528,7 +523,7 @@ function CareerCoreSkeleton() {
 function SectionHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
     <header className="max-w-3xl">
-      <p className="text-xs font-semibold tracking-[0.06em] text-brand">{eyebrow}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{eyebrow}</p>
       <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-campcareer-ink sm:text-3xl">{title}</h2>
       <p className="mt-3 text-sm leading-6 text-campcareer-ink-secondary sm:text-base">{description}</p>
     </header>

@@ -72,45 +72,46 @@ const CATEGORY_ICON = new Map([
 function CareerDiscovery() {
   return (
     <>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="hidden text-xs font-semibold tracking-[0.08em] text-brand sm:block">Explore</p>
-          <div className="flex flex-wrap items-center gap-2 sm:mt-1.5 sm:gap-3">
-            <h1 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-campcareer-ink sm:text-3xl">
-              Careers
-            </h1>
-            <CareerCountrySelector />
+      <header className="max-w-3xl">
+        <h1 className="text-3xl font-bold tracking-[-0.045em] text-campcareer-ink sm:text-4xl">Careers</h1>
+        <p className="mt-3 text-base leading-7 text-campcareer-ink-secondary">
+          Explore careers by field, country and keyword, then review the evidence and entry path for each one.
+        </p>
+      </header>
+
+      <section className="mt-8 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface sm:p-5" aria-label="Career search and filters">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">Find a career</p>
+        <form action="/careers" className="mt-3">
+          <label htmlFor="career-search" className="sr-only">Search careers</label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-campcareer-muted" />
+            <input
+              id="career-search"
+              name="q"
+              type="search"
+              placeholder="Search careers, Ireland cities or institutions…"
+              className="h-12 w-full rounded-cc-control border border-campcareer-border bg-campcareer-surface pl-11 pr-24 text-sm text-campcareer-ink shadow-cc-surface outline-none focus:border-brand focus:ring-2 focus:ring-ring/20"
+            />
+            <button
+              type="submit"
+              className="absolute right-1.5 top-1/2 min-h-9 -translate-y-1/2 rounded-cc-control bg-brand px-3 text-xs font-semibold text-white"
+            >
+              Search
+            </button>
           </div>
+        </form>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-campcareer-border pt-3">
+          <p className="text-xs font-semibold text-campcareer-muted">Country filter</p>
+          <CareerCountrySelector />
         </div>
-      </div>
+      </section>
 
-      <form action="/careers" className="mt-4 lg:mt-6 lg:max-w-xl">
-        <label htmlFor="career-search" className="sr-only">Search careers</label>
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-campcareer-muted" />
-          <input
-            id="career-search"
-            name="q"
-            type="search"
-            placeholder="Search careers, Ireland cities or institutions…"
-            className="h-12 w-full rounded-cc-control border border-campcareer-border bg-campcareer-surface pl-11 pr-24 text-sm text-campcareer-ink shadow-cc-surface outline-none focus:border-brand focus:ring-2 focus:ring-ring/20"
-          />
-          <button
-            type="submit"
-            className="absolute right-1.5 top-1/2 min-h-9 -translate-y-1/2 rounded-cc-control bg-brand px-3 text-xs font-semibold text-white"
-          >
-            Search
-          </button>
-        </div>
-      </form>
-
-      <section className="mt-6" aria-labelledby="field-discovery-heading">
+      <section className="mt-10" aria-labelledby="field-discovery-heading">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold tracking-[0.08em] text-brand">Start here</p>
-            <h2 id="field-discovery-heading" className="mt-2 text-lg font-semibold tracking-[-0.03em] text-campcareer-ink sm:text-2xl">
-              <span className="sm:hidden">Career fields</span>
-              <span className="hidden sm:inline">Explore career fields</span>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">Start here</p>
+            <h2 id="field-discovery-heading" className="mt-2 text-2xl font-bold tracking-[-0.04em] text-campcareer-ink">
+              Explore career fields
             </h2>
           </div>
           <p className="hidden max-w-52 text-right text-xs leading-5 text-campcareer-muted sm:block">
