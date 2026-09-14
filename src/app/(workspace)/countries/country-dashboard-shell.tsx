@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Globe2 } from "lucide-react"
 import { getLaunchCountry } from "@/data/launch-countries"
@@ -24,10 +25,25 @@ export function CountryDashboardShell({
   const routeCountry = countryCode ? getLaunchCountry(countryCode) : null
   const explorer = routeCountry ? getCountryExplorer(routeCountry.code) : null
   const cityCount = cityCountOverride ?? explorer?.regions.reduce((total, region) => total + region.cities.length, 0) ?? 0
+  // The ignored query string is a fixed display crop from the discovery catalogue.
+  // Next/Image sizes above the fold itself, so the raw preset is replaced by sizes="100vw".
+  const heroImage = routeCountry?.image ? routeCountry.image.split("?")[0] : null
 
   return (
     <div>
       <section className="relative overflow-hidden bg-[#273444]">
+        {heroImage ? (
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="object-cover"
+          />
+        ) : null}
         <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-32 pt-16 sm:px-8 sm:pt-20 lg:px-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">Countries</p>

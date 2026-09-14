@@ -1,8 +1,8 @@
+import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowRight,
   BriefcaseBusiness,
-  Building2,
   Clock3,
   ExternalLink,
   GraduationCap,
@@ -12,6 +12,8 @@ import {
   Users,
   Wallet,
 } from "lucide-react"
+import { EntityLogo } from "@/components/ui/entity-logo"
+import { regionalDiscoveryFor } from "@/data/regional-discovery"
 import type { IrelandCityDecisionConnections } from "@/lib/cities/ireland-city-decision-connections.server"
 import type { IeCityProfile } from "@/lib/cities/ie-city-profile.server"
 import { buildCityCompareCanonicalHref } from "@/lib/compare-routes"
@@ -88,11 +90,28 @@ export function IrelandCityDashboard({
       profile.linkedInstitutionCount > 0,
   )
   const compareHref = buildCityCompareCanonicalHref({ country: "IE", left: profile.slug })
+  // Reuses the approved regional-discovery Unsplash image for the city when one
+  // exists; the fixed crop query is dropped because Next/Image sizes the fill above
+  // the fold itself.
+  const heroImage = regionalDiscoveryFor("IE").find((card) => card.city === profile.name)?.image?.split("?")[0] ?? null
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-[#143b34] via-[#1f584d] to-[#3f786d] text-white">
-        <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-14 sm:px-8 sm:pt-20 lg:px-10">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#143b34] via-[#1f584d] to-[#3f786d] text-white">
+        {heroImage ? (
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            sizes="100vw"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="object-cover"
+          />
+        ) : null}
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#143b34]/90 via-[#1f584d]/75 to-[#3f786d]/55" />
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-14 sm:px-8 sm:pt-20 lg:px-10">
           <nav className="flex flex-wrap items-center gap-2 text-[11px] font-medium text-white/70" aria-label="Breadcrumb">
             <Link href="/countries" className="hover:text-white">Countries</Link>
             <span>/</span>
@@ -183,7 +202,7 @@ export function IrelandCityDashboard({
               {decisionConnections.institutions.map((institution) => (
                 <article key={institution.id} className="rounded-lg border border-[#eeece8] bg-[#fafaf8] p-3.5">
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-white text-[#16705f] shadow-sm"><Building2 className="size-4" /></span>
+                    <EntityLogo name={institution.name} size="sm" />
                     <div className="min-w-0 flex-1">
                       <Link href={institutionDetailPath("IE", institution.slug)} className="text-[12.5px] font-semibold leading-5 text-[#1b1b1b] hover:text-[#16705f] hover:underline">{institution.name}</Link>
                       <p className="mt-0.5 text-[10.5px] text-[#8f8c85]">{institution.providerAuthority} · {institution.locations.length} verified {institution.locations.length === 1 ? "location" : "locations"}</p>

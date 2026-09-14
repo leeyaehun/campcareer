@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Building2, ChevronRight, DatabaseZap, ExternalLink, MapPin } from "lucide-react"
 import { EntityCardLink } from "@/components/ui/entity-card"
+import { EntityLogo } from "@/components/ui/entity-logo"
 import { InstitutionCountrySelector } from "./institution-country-selector"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { getIrelandInstitutions, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
@@ -13,9 +14,7 @@ function IrelandInstitutionCard({ institution }: { institution: IrelandInstituti
     <div className="space-y-2">
       <EntityCardLink href={detailPath} className="rounded-xl border-[#e7e6e3] bg-white p-5 hover:border-[#cfd9ca] hover:bg-white hover:shadow-sm">
       <div className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-[#edf5ea] text-[#3e7a2e]">
-          <Building2 className="size-4" aria-hidden="true" />
-        </span>
+        <EntityLogo name={institution.name} size="md" />
         <div className="min-w-0 flex-1">
           <div className="inline-flex min-w-0 items-center gap-1.5 text-[16px] font-semibold leading-6 tracking-[-0.01em] text-[#1b1b1b] transition group-hover:text-[#3e7a2e]">
             <span className="truncate">{institution.name}</span>
@@ -51,14 +50,16 @@ export async function IrelandInstitutionsExplorer() {
 
   return (
     <>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Explore</p>
-      <div className="mt-1.5 flex flex-wrap items-center gap-3">
-        <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">Institutions</h1>
-        <InstitutionCountrySelector countryCode="IE" />
-      </div>
-      <p className="mt-2 max-w-2xl text-[12.5px] leading-5 text-[#77746e]">
-        Explore the verified Ireland institution and location cohort. Programme listings are not published from this institution layer.
-      </p>
+      <section className="rounded-cc-large border border-campcareer-border bg-brand-tint p-5 shadow-cc-surface sm:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brand">Explore</p>
+        <div className="mt-1.5 flex flex-wrap items-center gap-3">
+          <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-campcareer-ink sm:text-3xl">Institutions</h1>
+          <InstitutionCountrySelector countryCode="IE" />
+        </div>
+        <p className="mt-2 max-w-2xl text-[12.5px] leading-5 text-campcareer-ink-secondary">
+          Explore the verified Ireland institution and location cohort. Programme listings are not published from this institution layer.
+        </p>
+      </section>
 
       <section className="mt-6">
         {!institutions ? (

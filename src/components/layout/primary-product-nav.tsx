@@ -37,8 +37,8 @@ export function PrimaryProductNavigation({ pathname, locale, className }: Primar
             className={cn(
               "rounded-cc-control px-2.5 py-2 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
               active
-                ? "bg-brand-tint text-campcareer-ink"
-                : "text-campcareer-muted hover:bg-secondary hover:text-campcareer-ink",
+                ? "bg-campcareer-surface text-campcareer-ink shadow-cc-surface"
+                : "text-campcareer-muted hover:bg-campcareer-surface/70 hover:text-campcareer-ink",
             )}
           >
             {item.label[language]}
