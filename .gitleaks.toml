@@ -19,3 +19,13 @@ condition = "AND"
 regexTarget = "line"
 regexes = ['''where\s+observation_key\s*=\s*'au-carpenters-joiners-ivi-may-2026';?''']
 paths = ['''supabase/migrations/20260813122259_strengthen_au_carpenter_vacancy_raw_evidence\.sql''']
+
+[[rules.allowlists]]
+description = "Ireland Career Future Intelligence public source identifiers"
+condition = "AND"
+regexTarget = "line"
+regexes = [
+  '''sourceKey:\s*"solas-skills-forecast-2023"''',
+  '''sourceKey:\s*"oecd-ai-exposure-2026"''',
+]
+paths = ['''src/data/ireland-career-future-evidence\.ts''']
