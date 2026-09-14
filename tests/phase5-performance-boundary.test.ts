@@ -50,9 +50,10 @@ test("consent prompt is present in initial HTML and returning visitors are hidde
 })
 
 test("the country search keeps its option index out of the initial document", () => {
-  assert.doesNotMatch(countryDashboard, /fetchPriority=["']high["']/)
-  assert.doesNotMatch(countryDashboard, /style=\{\{\s*backgroundImage:/)
+  // UX-6 adds fetchPriority="high" on the country hero image, which is an
+  // above-the-fold LCP candidate. The search index itself remains lazy-loaded.
   assert.match(countrySearchControl, /import\(["']@\/lib\/workspace\/country-search-options-data["']\)/)
+  assert.doesNotMatch(countryDashboard, /style=\{\{\s*backgroundImage:/)
 })
 
 test("career foundation reads are deduplicated with primitive cache keys", () => {

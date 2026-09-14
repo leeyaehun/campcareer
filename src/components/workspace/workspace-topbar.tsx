@@ -13,7 +13,7 @@ export function WorkspaceTopbar() {
   const pathname = usePathname() || "/"
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b border-campcareer-border bg-campcareer-surface">
+    <header className="sticky top-0 z-30 h-16 border-b border-campcareer-border bg-campcareer-surface bg-[hsl(var(--cc-color-accent-subtle))]">
       <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-6 max-sm:px-[18px]">
         <Link
           href={localizePath("/", locale)}
@@ -26,7 +26,7 @@ export function WorkspaceTopbar() {
 
         <PrimaryProductNavigation pathname={pathname} locale={locale} />
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-          <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-secondary" />
+          <LanguageMenu buttonClassName="text-campcareer-muted hover:bg-campcareer-surface/70" />
           <WorkspaceUserMenu />
         </div>
       </div>

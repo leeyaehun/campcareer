@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Building2, ExternalLink, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowRight, ArrowUpRight, ExternalLink, MapPin, ShieldCheck } from "lucide-react"
+import { EntityLogo } from "@/components/ui/entity-logo"
 import { institutionCountryPath } from "@/lib/institutions/institution-search"
 import type { IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import type { IrelandInstitutionCareerDegreeEvidence } from "@/lib/career-degree/contract"
@@ -36,7 +37,7 @@ export function IrelandInstitutionDetailView({
       <header className="mt-5 rounded-2xl border border-[#e7e6e3] bg-white p-6 sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-start gap-4">
-            <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#edf5ea] text-[#3e7a2e]"><Building2 className="size-5" aria-hidden="true" /></span>
+            <EntityLogo name={institution.name} size="lg" />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Ireland institution</p>
               <h1 className="mt-2 max-w-3xl text-[27px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">{institution.name}</h1>
