@@ -39,6 +39,9 @@ export type IrelandSelectedEmployer = {
   slug: string
   name: string
   industryId: string
+  descriptor: string
+  websiteUrl: string
+  irelandPresenceDescription: string
   irelandPresence: EmploymentEvidence
   careersUrl: string
   careersSourceTitle: string

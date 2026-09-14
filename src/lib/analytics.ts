@@ -30,7 +30,7 @@ export const CORE_ANALYTICS_EVENTS = [
 ] as const
 
 export type CoreAnalyticsEventName = (typeof CORE_ANALYTICS_EVENTS)[number]
-export type AnalyticsEntityType = "career" | "country" | "city" | "program" | "institution" | "compare" | "source" | "methodology" | "data_policy"
+export type AnalyticsEntityType = "career" | "country" | "city" | "program" | "institution" | "employer" | "compare" | "source" | "methodology" | "data_policy"
 
 export type CoreAnalyticsEvent =
   | { name: "search"; params: { search_location: "careers"; result_count: number; entity_filter?: string; search_term?: string } }
