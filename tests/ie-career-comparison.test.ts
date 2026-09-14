@@ -21,12 +21,12 @@ test("Ireland Career MVP compare allowlist is exactly the six reviewed Careers",
   ])
 })
 
-test("Ireland career compare query normalizes, dedupes and caps at three", () => {
+test("Ireland career compare query normalizes, dedupes and caps at two", () => {
   assert.deepEqual(
     normalizeIrelandCareerIds(
       "software-developer,civil-engineer,software-developer,radiographer,architect",
     ),
-    ["software-developer", "civil-engineer", "radiographer"],
+    ["software-developer", "civil-engineer"],
   )
   assert.deepEqual(normalizeIrelandCareerIds("accountant,architect"), [])
 })
@@ -97,7 +97,7 @@ test("Compare page routes Ireland careers to the Ireland matrix instead of Austr
   assert.match(matrix, /Pay/)
   assert.match(matrix, /Entry/)
   assert.match(matrix, /Evidence confidence/)
-  assert.match(matrix, /Pay currently uses the same broad official Professional-occupations proxy/)
+  assert.match(matrix, /Pay currently uses the same broad official\s+Professional-occupations proxy/)
   assert.match(matrix, /name: "compare_complete"/)
   assert.match(matrix, /comparison_category: "career"/)
 })

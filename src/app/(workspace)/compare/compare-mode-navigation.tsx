@@ -20,8 +20,8 @@ type ComparePageHeaderProps = {
 
 const TITLE: Record<CompareModeType, { en: string; ko: string }> = {
   program: { en: "Compare programs", ko: "프로그램 비교" },
-  country: { en: "Compare country context", ko: "국가 맥락 비교" },
-  city: { en: "Compare city context", ko: "도시 맥락 비교" },
+  country: { en: "Compare countries", ko: "국가 비교" },
+  city: { en: "Compare cities", ko: "도시 비교" },
   career: { en: "Compare careers", ko: "커리어 비교" },
 }
 
@@ -29,7 +29,7 @@ export function ComparePageHeader({ activeType, countryCode }: ComparePageHeader
   const router = useRouter()
   const searchParams = useSearchParams()
   const locale = useRouteLocale()
-  const showCountry = activeType === "program" || activeType === "career" || activeType === "city"
+  const showCountry = activeType === "career" || activeType === "city"
   const resolvedCountry = countryCode?.toUpperCase() || "AU"
   const title = TITLE[activeType]
 

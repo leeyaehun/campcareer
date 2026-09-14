@@ -1,22 +1,21 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
-  COUNTRY_COMPARE_MAX_LOCATIONS,
+  COUNTRY_COMPARE_MAX_COUNTRIES,
   addCountrySlot,
   buildCountryCompareHref,
   cancelEmptyCountrySlot,
-  completeCountryLocations,
+  completeCountryCodes,
   fromExternalIsoCountryCode,
-  normalizeCountryLocations,
+  normalizeCountryCodes,
   parseCountryComparisonState,
   removeCountrySlot,
-  replaceCityInSlot,
   replaceCountryInSlot,
   resolveComparisonPageType,
-  slotsFromCountryLocations,
+  slotsFromCountryCodes,
   toExternalIsoCountryCode,
 } from "../src/lib/country-comparison"
-import { COUNTRY_COMPARE_CATALOG, getCountryCompareCity } from "../src/data/country-comparison/locations"
+import { COUNTRY_COMPARE_CATALOG } from "../src/data/country-comparison/locations"
 import {
   REGISTERED_NURSE_COUNTRY_SHELL,
 } from "../src/data/country-comparison/registered-nurse"
@@ -43,7 +42,7 @@ test("compare dispatcher keeps Programs default and isolates Countries", () => {
 test("country comparison accepts only the registered nurse starting profile", () => {
   const supported = parseCountryComparisonState(new URLSearchParams("goal=registered-nurse&profile=starting-from-scratch"))
   assert.equal(supported.contextState, "supported")
-  assert.equal(supported.locations.length, 0)
+  assert.equal(supported.countries.length, 0)
 
   const invalidGoal = parseCountryComparisonState(new URLSearchParams("goal=software-developer&profile=starting-from-scratch"))
   assert.equal(invalidGoal.contextState, "unsupported")
@@ -52,16 +51,12 @@ test("country comparison accepts only the registered nurse starting profile", ()
   assert.equal(invalidProfile.contextState, "unsupported")
 })
 
-test("locations normalize pairs, validate country membership, dedupe countries, and cap at five", () => {
+test("country codes normalize, validate membership, dedupe and cap at three", () => {
   assert.deepEqual(
-    normalizeCountryLocations(" au:SYDNEY , IE:dublin,AU:melbourne,IE:sydney,UK:london,UK:glasgow,AU:brisbane,XX:sydney,IE:unknown"),
-    [
-      { countryCode: "AU", citySlug: "sydney" },
-      { countryCode: "IE", citySlug: "dublin" },
-      { countryCode: "UK", citySlug: "london" },
-    ],
+    normalizeCountryCodes(" au,IE,AU,sydney,sg,UK"),
+    ["AU", "IE", "UK"],
   )
-  assert.deepEqual(normalizeCountryLocations("AU, :sydney, AU:, AU:dublin, IE:sydney"), [])
+  assert.deepEqual(normalizeCountryCodes(" , ,:sydney,AU:,XX"), [])
 })
 
 test("country and external ISO codes remain distinct at the adapter boundary", () => {
@@ -72,87 +67,58 @@ test("country and external ISO codes remain distinct at the adapter boundary", (
   assert.equal(fromExternalIsoCountryCode("UK"), null)
 })
 
-test("country URLs are canonical and omit incomplete locations", () => {
+test("country URLs are canonical and omit incomplete selections", () => {
   assert.equal(
-    buildCountryCompareHref([
-      { countryCode: "AU", citySlug: "sydney" },
-      { countryCode: "IE", citySlug: "dublin" },
-    ]),
-    "/compare?type=country&goal=registered-nurse&profile=starting-from-scratch&locations=AU:sydney,IE:dublin",
+    buildCountryCompareHref(["AU", "IE"]),
+    "/compare?type=country&goal=registered-nurse&profile=starting-from-scratch&countries=AU,IE",
   )
   assert.deepEqual(
-    completeCountryLocations([
-      { countryCode: "AU", citySlug: null, optional: false },
-      { countryCode: "IE", citySlug: "dublin", optional: false },
+    completeCountryCodes([
+      { countryCode: "AU", optional: false },
+      { countryCode: null, optional: false },
     ]),
-    [{ countryCode: "IE", citySlug: "dublin" }],
+    ["AU"],
   )
 })
 
-test("selection helpers reset cities, preserve order, compact removals, and cancel optional slots", () => {
-  const initial = slotsFromCountryLocations([
-    { countryCode: "AU", citySlug: "sydney" },
-    { countryCode: "IE", citySlug: "dublin" },
-  ])
+test("selection helpers preserve order, compact removals and cancel optional slots", () => {
+  const initial = slotsFromCountryCodes(["AU", "IE"])
+  assert.deepEqual(initial.map((slot) => slot.countryCode), ["AU", "IE"])
+
   const replaced = replaceCountryInSlot(initial, 0, "UK")
-  assert.deepEqual(replaced.map((slot) => [slot.countryCode, slot.citySlug]), [["UK", null], ["IE", "dublin"]])
+  assert.deepEqual(replaced.map((slot) => slot.countryCode), ["UK", "IE"])
+  assert.deepEqual(replaceCountryInSlot(replaced, 0, "IE").map((slot) => slot.countryCode), ["UK", "IE"])
 
-  const city = getCountryCompareCity("UK", "london")
-  assert.ok(city)
-  const completed = replaceCityInSlot(replaced, 0, city!)
-  assert.deepEqual(completeCountryLocations(completed), [
-    { countryCode: "UK", citySlug: "london" },
-    { countryCode: "IE", citySlug: "dublin" },
-  ])
-
-  const withExtra = addCountrySlot(completed)
+  const withExtra = addCountrySlot(replaced)
   assert.equal(withExtra.length, 3)
   assert.equal(withExtra[2].optional, true)
   assert.equal(cancelEmptyCountrySlot(withExtra, 2).length, 2)
 
-  const removed = removeCountrySlot(completed, 0)
-  assert.deepEqual(removed.map((slot) => [slot.countryCode, slot.citySlug]), [["IE", "dublin"], [null, null]])
+  const removed = removeCountrySlot(replaced, 0)
+  assert.deepEqual(removed.map((slot) => slot.countryCode), ["IE", null])
 })
 
-test("selection helpers keep country-city pairs aligned and expose the 0-to-3 state progression", () => {
-  const empty = slotsFromCountryLocations([])
-  const one = slotsFromCountryLocations([{ countryCode: "AU", citySlug: "sydney" }])
-  const two = slotsFromCountryLocations([
-    { countryCode: "AU", citySlug: "sydney" },
-    { countryCode: "IE", citySlug: "dublin" },
-  ])
-  const three = slotsFromCountryLocations([
-    { countryCode: "AU", citySlug: "sydney" },
-    { countryCode: "IE", citySlug: "dublin" },
-    { countryCode: "UK", citySlug: "london" },
-  ])
-
-  assert.equal(completeCountryLocations(empty).length, 0)
-  assert.equal(completeCountryLocations(one).length, 1)
-  assert.equal(completeCountryLocations(two).length, 2)
-  assert.equal(completeCountryLocations(three).length, 3)
-
-  const mismatchedCity = getCountryCompareCity("IE", "cork")
-  assert.ok(mismatchedCity)
-  assert.deepEqual(replaceCityInSlot(two, 0, mismatchedCity!), two)
+test("selection helpers expose the 0-to-3 state progression", () => {
+  assert.equal(completeCountryCodes(slotsFromCountryCodes([])).length, 0)
+  assert.equal(completeCountryCodes(slotsFromCountryCodes(["AU"])).length, 1)
+  assert.equal(completeCountryCodes(slotsFromCountryCodes(["AU", "IE"])).length, 2)
+  assert.equal(completeCountryCodes(slotsFromCountryCodes(["AU", "IE", "UK"])).length, 3)
 })
 
-test("country selection has a hard five-slot ceiling", () => {
-  let slots = slotsFromCountryLocations([
-    { countryCode: "AU", citySlug: "sydney" },
-    { countryCode: "IE", citySlug: "dublin" },
-  ])
+test("country selection has a hard three-slot ceiling", () => {
+  let slots = slotsFromCountryCodes(["AU", "IE"])
   slots = addCountrySlot(slots)
   slots = addCountrySlot(slots)
   slots = addCountrySlot(slots)
-  slots = addCountrySlot(slots)
-  assert.equal(slots.length, COUNTRY_COMPARE_MAX_LOCATIONS)
-  assert.equal(addCountrySlot(slots).length, COUNTRY_COMPARE_MAX_LOCATIONS)
+  assert.equal(slots.length, COUNTRY_COMPARE_MAX_COUNTRIES)
+  assert.equal(addCountrySlot(slots).length, COUNTRY_COMPARE_MAX_COUNTRIES)
 })
 
-test("country parser ignores invalid locations without falling back to another country", () => {
-  const parsed = parseCountryComparisonState(new URLSearchParams("goal=registered-nurse&profile=starting-from-scratch&locations=AU:dublin,IE:sydney,UK:london"))
-  assert.deepEqual(parsed.locations, [{ countryCode: "UK", citySlug: "london" }])
+test("country parser ignores invalid codes without falling back to another country", () => {
+  const parsed = parseCountryComparisonState(new URLSearchParams(
+    "goal=registered-nurse&profile=starting-from-scratch&countries=AU,dublin,IE,sg,UK:london",
+  ))
+  assert.deepEqual(parsed.countries, ["AU", "IE"])
 })
 
 test("AU, IE, and UK share the same null-safe RN contract", () => {
@@ -169,7 +135,7 @@ test("AU, IE, and UK share the same null-safe RN contract", () => {
     assert.equal(country.professionalIncome.startingIncome, null)
     assert.equal(country.timeAndInvestment.recoveryPeriod, null)
     assert.deepEqual(country.sources, [])
-    assert.equal("cityCost" in country, false)
+    assert.equal("citySlug" in country, false)
   }
   assert.deepEqual(COUNTRY_COMPARE_CATALOG.map((country) => country.productCode), ["AU", "IE", "UK"])
 })
@@ -209,12 +175,10 @@ test("source references resolve known IDs and safely ignore missing IDs", () => 
 
 test("RN matrix rows use shared definitions and keep missing values safe", () => {
   const country = REGISTERED_NURSE_COUNTRY_SHELL.find((entry) => entry.countryCode === "AU")!
-  const city = getCountryCompareCity("AU", "sydney")
-  const context = { country, city, cityCost: null }
+  const context = { country, city: null, cityCost: null }
   const rowKeys = REGISTERED_NURSE_MATRIX_ROWS.map((row) => row.fieldKey)
   assert.equal(new Set(rowKeys).size, rowKeys.length)
   assert.equal(formatCountryComparisonRow(REGISTERED_NURSE_MATRIX_ROWS.find((row) => row.fieldKey === "studyCost.annualTuition")!, context), "Not available")
-  assert.equal(formatCountryComparisonRow(REGISTERED_NURSE_MATRIX_ROWS.find((row) => row.fieldKey === "city.cityName")!, context), "Sydney")
   assert.equal(formatCountryComparisonRow(REGISTERED_NURSE_MATRIX_ROWS.find((row) => row.fieldKey === "currency")!, context), "AUD (A$)")
   assert.deepEqual([...new Set(REGISTERED_NURSE_MATRIX_ROWS.map((row) => row.section))], [
     "Pathway",

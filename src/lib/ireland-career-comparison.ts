@@ -2,8 +2,11 @@ import type { CampCareerScore } from "@/lib/campcareer-score"
 
 export const IE_CAREER_COMPARE_COUNTRY = "IE" as const
 export const IE_CAREER_COMPARE_PROFILE = "ireland-career-mvp-v1" as const
-export const IE_CAREER_COMPARE_MAX_CAREERS = 3
+export const IE_CAREER_COMPARE_MAX_CAREERS = 2
 export const IE_CAREER_COMPARE_MIN_CAREERS = 2
+export const IE_CAREER_COMPARE_PAY_PROXY_PER_HOUR = "€32.99/hour" as const
+export const IE_CAREER_COMPARE_PAY_PROXY_CAVEAT =
+  "CSO Professional occupations hourly proxy — not an exact salary difference between these careers." as const
 
 export const IE_CAREER_COMPARE_IDS = [
   "software-developer",

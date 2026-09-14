@@ -25,7 +25,7 @@ function countDelimitedValues(value: string | null) {
 export function getCompareAnalyticsDetails(searchParams: Pick<URLSearchParams, "get">): CompareAnalyticsDetails {
   const type = searchParams.get("type")
   if (type === "career") return { comparison_category: "career", entity_count: countDelimitedValues(searchParams.get("careers")) }
-  if (type === "country") return { comparison_category: "country", entity_count: countDelimitedValues(searchParams.get("locations")) }
+  if (type === "country") return { comparison_category: "country", entity_count: countDelimitedValues(searchParams.get("countries")) }
   if (type === "city") return { comparison_category: "city", entity_count: countDelimitedValues([searchParams.get("left"), searchParams.get("right")].filter(Boolean).join(",")) }
   if (type === "program") return { comparison_category: "program", entity_count: countDelimitedValues(searchParams.get("items")) }
   if (type === null) return { comparison_category: "program", entity_count: 0 }
