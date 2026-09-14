@@ -164,6 +164,7 @@ export function IrelandCountryDashboard({
       <section id="careers" className="scroll-mt-24 mt-10" aria-labelledby="ireland-careers-heading">
         <div className="flex flex-wrap items-center gap-2"><BriefcaseBusiness className="size-4 text-[#2563eb]" /><h2 id="ireland-careers-heading" className="text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Careers in Ireland</h2><Link href={compareHref} className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">Compare reviewed careers</Link></div>
         <p className="mt-1 text-[12px] text-[#6f6d68]">Six reviewed Career paths with connected study areas.</p>
+        <Link href="/countries/ie/careers" className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Explore Ireland careers <ArrowRight className="size-3" aria-hidden="true" /></Link>
         <div className="mt-4"><IrelandCareerCards degreeConnections={degreeConnections} /></div>
       </section>
       <section id="education" className="scroll-mt-24 mt-12 rounded-xl border border-[#e7e6e3] bg-white p-5 sm:p-6" aria-labelledby="ireland-education-heading">
@@ -171,6 +172,7 @@ export function IrelandCountryDashboard({
         <div className="mt-6">
           <h3 className="text-[15px] font-semibold text-[#1b1b1b]">Study areas</h3>
           <p className="mt-1 text-[12px] text-[#6f6d68]">Fields connected to reviewed Ireland Career paths.</p>
+          <Link href="/countries/ie/education" className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Explore Ireland education <ArrowRight className="size-3" aria-hidden="true" /></Link>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{degreeConnections.map((connection) => <DegreeConnectionCard key={connection.degree.id} connection={connection} />)}</div>
         </div>
         <aside className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-[#eef0ec] bg-[#fafaf8] px-4 py-3" aria-label="Academic year details">
@@ -186,6 +188,7 @@ export function IrelandCountryDashboard({
       </section>
       <div id="cities" className="scroll-mt-24 mt-12">
         <div className="flex flex-wrap items-center gap-2"><MapPin className="size-4 text-[#3e7a2e]" /><h2 className="text-[20px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Cities</h2><span className="text-[12px] font-medium text-[#8f8c85]">{cityCount} public cities</span><Link href={buildCityCompareCanonicalHref({ country: "IE" })} className="ml-auto text-[11.5px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">Compare cities</Link></div>
+        <Link href="/countries/ie/cities" className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-semibold text-[#2563eb] hover:underline">Explore Ireland cities <ArrowRight className="size-3" aria-hidden="true" /></Link>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{publishedRegions.flatMap((region) => region.cities).map((city) => {
           const cityPath = ieCityPath(city)
           return <Link key={city} href={cityPath!} className="group flex min-h-20 items-center justify-between rounded-xl border border-[#e7e6e3] bg-white px-4 py-3 text-[14px] font-semibold text-[#1b1b1b] transition hover:border-[#c9d7f5] hover:bg-[#f8faff] hover:text-[#2563eb] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#2563eb]/15"><span className="inline-flex items-center gap-2"><MapPin className="size-4 text-[#8f8c85] transition group-hover:text-[#2563eb]" aria-hidden="true" />{city}</span><ArrowRight className="size-4 text-[#aaa7a0] transition group-hover:translate-x-0.5 group-hover:text-[#2563eb]" aria-hidden="true" /></Link>
