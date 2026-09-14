@@ -63,7 +63,7 @@ export function IrelandEmploymentEcosystemSection({ ecosystem }: { ecosystem: Ir
           )
         })}
       </div>
-    {ecosystem.employers.length > 0 ? (
+      {ecosystem.employers.length > 0 ? (
         <div className="mt-6 border-t border-[#e7e6e3] pt-6">
           <div className="flex items-center gap-2 text-[#3e7a2e]">
             <Building2 className="size-4" />

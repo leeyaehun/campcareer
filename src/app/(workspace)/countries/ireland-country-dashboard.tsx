@@ -24,6 +24,7 @@ import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { VISA_CATALOG } from "@/lib/workspace/visa-catalog"
 import { cn } from "@/lib/utils"
 import { IrelandEmploymentEcosystemSection } from "./ireland-employment-ecosystem-section"
+import { IrelandEmploymentSectorChart } from "./ireland-employment-sector-chart"
 
 function MetricCard({ icon, label, value, hint, accent, href }: {
   icon: React.ReactNode
@@ -195,6 +196,7 @@ export function IrelandCountryDashboard({
         })}</div>
       </div>
       <div id="industries" className="scroll-mt-24"><IrelandEmploymentEcosystemSection ecosystem={employmentEcosystem} /></div>
+      <IrelandEmploymentSectorChart ecosystem={employmentEcosystem} />
       <section className="mt-12 rounded-xl border border-[#e7e6e3] bg-[#fafaf8] p-5 sm:flex sm:items-center sm:justify-between sm:gap-8" aria-labelledby="ireland-visas-heading">
         <div><p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8f8c85]">Path context</p><h2 id="ireland-visas-heading" className="mt-1 text-[18px] font-semibold tracking-[-0.02em] text-[#1b1b1b]">Ireland visa information</h2><p className="mt-1 text-[12px] text-[#6f6d68]">Review study, graduate-work and critical-skills pathways.</p></div>
         <Link href="/countries/ie/visas" className="mt-4 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[#2557e0] px-4 text-[12px] font-semibold text-white transition hover:bg-[#1d4ed8] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#2563eb]/20 sm:mt-0">View Ireland visas <ArrowRight className="size-4" aria-hidden="true" /></Link>
