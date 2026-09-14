@@ -56,8 +56,12 @@ export function sitemapIndexXml(lastModified = "2026-07-12") {
 }
 
 function belongsToCountrySitemap(pathname: string, code: string) {
-  return pathname === `/${code}` || pathname === `/${code}/jobs` ||
-    pathname.startsWith(`/maps/${code}/`) || pathname.startsWith(`/map/${code}/`)
+  return pathname === `/countries/${code}`
+    || pathname.startsWith(`/countries/${code}/`)
+    || pathname === `/${code}`
+    || pathname === `/${code}/jobs`
+    || pathname.startsWith(`/maps/${code}/`)
+    || pathname.startsWith(`/map/${code}/`)
 }
 
 export function urlSetXml(entries: MetadataRoute.Sitemap) {
@@ -84,7 +88,7 @@ export function belongsToSegment(pathname: string, segment: SitemapSegment) {
     case "fields-en":
       return pathname.startsWith("/fields/") || /^\/countries\/[^/]+\/fields\//.test(pathname)
     case "countries-en":
-      return /^\/countries\/[^/]+$/.test(pathname) || /^\/(au|be|ca|de|dk|es|fi|fr|ie|kr|nl|no|nz|se|sg|uk|us)(\/jobs)?$/.test(pathname)
+      return /^\/countries\/[^/]+(?:\/(?:careers|education|cities|visas))?$/.test(pathname) || /^\/(au|be|ca|de|dk|es|fi|fr|ie|kr|nl|no|nz|se|sg|uk|us)(\/jobs)?$/.test(pathname)
     case "careers":
       return pathname.startsWith("/maps/") && !pathname.includes("/regions/") && !pathname.includes("/cities/") && !pathname.includes("/areas/") && !pathname.includes("/prefectures/")
     case "schools":

@@ -1,6 +1,6 @@
 # Ireland Golden Slice
 
-Last reviewed: 12 September 2026
+Last reviewed: 14 September 2026
 
 Current production inventory and reuse/gap findings are recorded in
 [IRELAND_GOLDEN_SLICE_CURRENT_STATE.md](IRELAND_GOLDEN_SLICE_CURRENT_STATE.md).
@@ -28,6 +28,16 @@ options, with sources and trade-offs, before CampCareer expands breadth.
   missing evidence as a score.
 - The private Ireland program cohort contains 40 reviewed staging records and
   63 approved Career relations spanning 41 canonical Careers.
+
+## P1 public intelligence hubs
+
+The Ireland Country layer now has three dedicated canonical continuation pages:
+
+- `/countries/ie/careers` — the six reviewed Career paths, their study-area connections and reviewed industry context.
+- `/countries/ie/education` — reviewed study areas plus the verified HEA-recognised Institution cohort.
+- `/countries/ie/cities` — Dublin, Cork, Galway and Limerick with verified student-planning context.
+
+These pages are indexable, included in the main sitemap and country sitemap contract, and linked from `/countries/ie`. They do not relax the Ireland programme publication gate.
 
 ## Known disconnected or gated areas
 
