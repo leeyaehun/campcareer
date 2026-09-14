@@ -1,8 +1,5 @@
 import {
-  getCountryCompareCity,
-  getCountryCompareCities,
   getCountryCompareCountry,
-  type CountryCompareCity,
   type CountryCompareCode,
 } from "@/data/country-comparison/locations"
 import {
@@ -18,17 +15,11 @@ import {
 } from "@/lib/data-foundation/entity-aliases"
 
 export const COUNTRY_COMPARE_TYPE = "country" as const
-export const COUNTRY_COMPARE_MAX_LOCATIONS = 3
-export const COUNTRY_COMPARE_MIN_LOCATIONS = 2
-
-export type CountryCompareLocation = {
-  countryCode: CountryCompareCode
-  citySlug: string
-}
+export const COUNTRY_COMPARE_MAX_COUNTRIES = 3
+export const COUNTRY_COMPARE_MIN_COUNTRIES = 2
 
 export type CountryCompareSlot = {
   countryCode: CountryCompareCode | null
-  citySlug: string | null
   optional: boolean
 }
 
@@ -39,7 +30,7 @@ export type CountryComparisonState = {
   contextState: CountryComparisonContextState
   goal: CountryCompareGoal | null
   profile: CountryCompareProfile | null
-  locations: readonly CountryCompareLocation[]
+  countries: readonly CountryCompareCode[]
 }
 
 export type ComparisonPageType = "program" | "country" | "career" | "unsupported"
@@ -61,34 +52,16 @@ export function fromExternalIsoCountryCode(value: string): CountryCompareCode | 
   return toProductCountryCode(normalized) as CountryCompareCode
 }
 
-function parseLocationPair(rawPair: string): CountryCompareLocation | null {
-  const separatorIndex = rawPair.indexOf(":")
-  if (separatorIndex < 1) return null
-
-  const countryCode = rawPair.slice(0, separatorIndex).trim().toUpperCase()
-  const citySlug = rawPair.slice(separatorIndex + 1).trim().toLowerCase()
-  if (!countryCode || !citySlug) return null
-
-  const country = getCountryCompareCountry(countryCode)
-  const city = getCountryCompareCity(countryCode, citySlug)
-  if (!country || !city) return null
-
-  return { countryCode: country.productCode, citySlug: city.citySlug }
-}
-
-export function normalizeCountryLocations(rawLocations: string | null): CountryCompareLocation[] {
-  if (!rawLocations) return []
-
-  const locations: CountryCompareLocation[] = []
-  const usedCountries = new Set<CountryCompareCode>()
-  for (const rawPair of rawLocations.split(",")) {
-    const location = parseLocationPair(rawPair)
-    if (!location || usedCountries.has(location.countryCode)) continue
-    usedCountries.add(location.countryCode)
-    locations.push(location)
-    if (locations.length >= COUNTRY_COMPARE_MAX_LOCATIONS) break
+export function normalizeCountryCodes(raw: string | readonly string[] | null): CountryCompareCode[] {
+  const values = Array.isArray(raw) ? raw : typeof raw === "string" ? raw.split(",") : []
+  const selected: CountryCompareCode[] = []
+  for (const value of values) {
+    const code = value.trim().toUpperCase() as CountryCompareCode
+    if (!getCountryCompareCountry(code) || selected.includes(code)) continue
+    selected.push(code)
+    if (selected.length >= COUNTRY_COMPARE_MAX_COUNTRIES) break
   }
-  return locations
+  return selected
 }
 
 export function parseCountryComparisonState(searchParams: Pick<URLSearchParams, "get">): CountryComparisonState {
@@ -103,39 +76,32 @@ export function parseCountryComparisonState(searchParams: Pick<URLSearchParams, 
     contextState,
     goal: validGoal,
     profile: validProfile,
-    locations: contextState === "supported" ? normalizeCountryLocations(searchParams.get("locations")) : [],
+    countries: contextState === "supported" ? normalizeCountryCodes(searchParams.get("countries")) : [],
   }
 }
 
-export function serializeCountryLocations(locations: readonly CountryCompareLocation[]): string {
-  return normalizeCountryLocations(locations.map((location) => `${location.countryCode}:${location.citySlug}`).join(","))
-    .map((location) => `${location.countryCode}:${location.citySlug}`)
-    .join(",")
-}
-
-export function buildCountryCompareHref(locations: readonly CountryCompareLocation[] = []): string {
-  const serializedLocations = serializeCountryLocations(locations)
+export function buildCountryCompareHref(countries: readonly CountryCompareCode[] = []): string {
+  const codes = normalizeCountryCodes(countries).sort()
   const base = `/compare?type=${COUNTRY_COMPARE_TYPE}&goal=${REGISTERED_NURSE_COMPARE_GOAL}&profile=${REGISTERED_NURSE_COMPARE_PROFILE}`
-  return serializedLocations ? `${base}&locations=${serializedLocations}` : base
+  return codes.length ? `${base}&countries=${codes.join(",")}` : base
 }
 
-export function slotsFromCountryLocations(locations: readonly CountryCompareLocation[]): CountryCompareSlot[] {
-  const slots: CountryCompareSlot[] = locations.map((location) => ({
-    countryCode: location.countryCode,
-    citySlug: location.citySlug,
+export function slotsFromCountryCodes(codes: readonly CountryCompareCode[]): CountryCompareSlot[] {
+  const slots: CountryCompareSlot[] = codes.map((countryCode) => ({
+    countryCode,
     optional: false,
   }))
-  while (slots.length < COUNTRY_COMPARE_MIN_LOCATIONS) {
-    slots.push({ countryCode: null, citySlug: null, optional: false })
+  while (slots.length < COUNTRY_COMPARE_MIN_COUNTRIES) {
+    slots.push({ countryCode: null, optional: false })
   }
   return slots
 }
 
-export function completeCountryLocations(slots: readonly CountryCompareSlot[]): CountryCompareLocation[] {
-  return normalizeCountryLocations(
+export function completeCountryCodes(slots: readonly CountryCompareSlot[]): CountryCompareCode[] {
+  return normalizeCountryCodes(
     slots
-      .filter((slot): slot is CountryCompareSlot & { countryCode: CountryCompareCode; citySlug: string } => Boolean(slot.countryCode && slot.citySlug))
-      .map((slot) => `${slot.countryCode}:${slot.citySlug}`)
+      .filter((slot): slot is CountryCompareSlot & { countryCode: CountryCompareCode } => Boolean(slot.countryCode))
+      .map((slot) => slot.countryCode)
       .join(","),
   )
 }
@@ -148,35 +114,22 @@ export function replaceCountryInSlot(
   if (index < 0 || index >= slots.length) return [...slots]
   if (slots.some((slot, slotIndex) => slotIndex !== index && slot.countryCode === countryCode)) return [...slots]
   return slots.map((slot, slotIndex) => slotIndex === index
-    ? { countryCode, citySlug: null, optional: slot.optional }
+    ? { countryCode, optional: slot.optional }
     : { ...slot })
-}
-
-export function replaceCityInSlot(
-  slots: readonly CountryCompareSlot[],
-  index: number,
-  city: CountryCompareCity,
-): CountryCompareSlot[] {
-  if (index < 0 || index >= slots.length) return [...slots]
-  const slot = slots[index]
-  if (slot.countryCode !== city.countryCode) return [...slots]
-  return slots.map((current, slotIndex) => slotIndex === index
-    ? { ...current, citySlug: city.citySlug, optional: false }
-    : { ...current })
 }
 
 export function removeCountrySlot(slots: readonly CountryCompareSlot[], index: number): CountryCompareSlot[] {
   if (index < 0 || index >= slots.length) return [...slots]
   const next = slots.filter((_, slotIndex) => slotIndex !== index).map((slot) => ({ ...slot }))
-  while (next.length < COUNTRY_COMPARE_MIN_LOCATIONS) {
-    next.push({ countryCode: null, citySlug: null, optional: false })
+  while (next.length < COUNTRY_COMPARE_MIN_COUNTRIES) {
+    next.push({ countryCode: null, optional: false })
   }
   return next
 }
 
 export function addCountrySlot(slots: readonly CountryCompareSlot[]): CountryCompareSlot[] {
-  if (slots.length >= COUNTRY_COMPARE_MAX_LOCATIONS) return [...slots]
-  return [...slots.map((slot) => ({ ...slot })), { countryCode: null, citySlug: null, optional: true }]
+  if (slots.length >= COUNTRY_COMPARE_MAX_COUNTRIES) return [...slots]
+  return [...slots.map((slot) => ({ ...slot })), { countryCode: null, optional: true }]
 }
 
 export function cancelEmptyCountrySlot(slots: readonly CountryCompareSlot[], index: number): CountryCompareSlot[] {
@@ -184,8 +137,4 @@ export function cancelEmptyCountrySlot(slots: readonly CountryCompareSlot[], ind
   return slots.filter((_, slotIndex) => slotIndex !== index).map((slot) => ({ ...slot }))
 }
 
-export function getCountryCompareCityOption(countryCode: CountryCompareCode, citySlug: string | null) {
-  return citySlug ? getCountryCompareCity(countryCode, citySlug) : null
-}
-
-export { getCountryCompareCities }
+export { getCountryCompareCountry as getCountryCompareCountryOption }

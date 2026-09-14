@@ -140,7 +140,7 @@ async function ProgramsCompare({ params }: { params: URLSearchParams }) {
   const programs = await AU_NURSING_PROGRAM_COMPARE_REPOSITORY.getProgramCompareItems(AU_NURSING_PROGRAM_IDS)
   return <section className="w-full pb-4" aria-label="Programs comparison"><ComparePageHeader activeType="program" countryCode={country} /><ProgramsCompareMatrix availablePrograms={programs} /></section>
 }
-function CountriesCompare({ comparison }: { comparison: CountryComparisonState }) { if (comparison.contextState === "unsupported") return <UnsupportedCountryComparison />; return <section className="w-full pb-4" aria-label="Countries comparison"><ComparePageHeader activeType="country" /><CountriesCompareMatrix initialLocations={comparison.locations} /></section> }
+function CountriesCompare({ comparison }: { comparison: CountryComparisonState }) { if (comparison.contextState === "unsupported") return <UnsupportedCountryComparison />; return <section className="w-full pb-4" aria-label="Countries comparison"><ComparePageHeader activeType="country" /><CountriesCompareMatrix initialCountries={comparison.countries} /></section> }
 
 async function CitiesCompare({ countryCode, params }: { countryCode: string; params: URLSearchParams }) {
   if (countryCode === "SG") return <SingaporeCityStateDecision />

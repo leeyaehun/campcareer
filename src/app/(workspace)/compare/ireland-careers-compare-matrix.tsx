@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { ShareComparisonButton } from "@/components/compare/share-comparison-button"
-import { CompareShell } from "@/components/ui/compare"
+import { CompareCell, CompareShell } from "@/components/ui/compare"
 import { DataTable, DataTableCell, DataTableHeader, DataTableRow } from "@/components/ui/data-table"
 import { trackAnalyticsEvent } from "@/lib/analytics"
 import {
   buildIrelandCareerCompareHref,
   IE_CAREER_COMPARE_IDS,
   IE_CAREER_COMPARE_LABELS,
-  IE_CAREER_COMPARE_MAX_CAREERS,
+  IE_CAREER_COMPARE_PAY_PROXY_PER_HOUR,
   normalizeIrelandCareerIds,
   replaceIrelandCareerAtIndex,
   type IrelandCareerCompareItem,
@@ -69,6 +69,8 @@ export function IrelandCareersCompareMatrix({
     })
   }, [canCompare, selected.length, selectedIds])
 
+  const payProxy = IE_CAREER_COMPARE_PAY_PROXY_PER_HOUR
+
   return (
     <CompareShell>
       <div className="border-b border-campcareer-border pb-5">
@@ -77,13 +79,15 @@ export function IrelandCareersCompareMatrix({
           Compare reviewed Ireland careers
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-campcareer-ink-secondary">
-          Compare the same reviewed Demand, Pay and Entry dimensions used on the six public Ireland Career pages.
-          Pay currently uses the same broad official Professional-occupations proxy, so it should not be read as an exact salary difference between these careers.
+          Choose two reviewed Ireland careers to compare the Demand, Pay and Entry evidence used
+          on the six public Ireland Career pages. Pay currently uses the same broad official
+          Professional-occupations proxy, so it should not be read as an exact salary difference
+          between these careers.
         </p>
       </div>
 
-      <div className="mt-5 grid gap-3 md:grid-cols-3" aria-label="Choose careers to compare">
-        {Array.from({ length: IE_CAREER_COMPARE_MAX_CAREERS }, (_, index) => {
+      <div className="mt-5 grid gap-3 md:grid-cols-2" aria-label="Choose careers to compare">
+        {Array.from({ length: 2 }, (_, index) => {
           const current = selectedIds[index] ?? ""
           return (
             <label key={index} className="block">
@@ -96,7 +100,7 @@ export function IrelandCareersCompareMatrix({
                 className="min-h-11 w-full rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
                 aria-label={`Choose career ${index + 1}`}
               >
-                <option value="">{index < 2 ? "Choose a career" : "Optional third career"}</option>
+                <option value="">Choose a career</option>
                 {IE_CAREER_COMPARE_IDS.map((careerId) => (
                   <option
                     key={careerId}
@@ -116,7 +120,9 @@ export function IrelandCareersCompareMatrix({
 
       {!canCompare ? (
         <p className="mt-4 text-sm font-medium text-campcareer-ink-secondary" role="status">
-          Select at least two Ireland careers to compare.
+          {selected.length === 1
+            ? "Select one more Ireland career to compare."
+            : "Select two Ireland careers to compare."}
         </p>
       ) : (
         <>
@@ -130,8 +136,8 @@ export function IrelandCareersCompareMatrix({
             />
           </div>
 
-          <div className="mt-4">
-            <DataTable label="Ireland career comparison" className="min-w-[48rem] table-fixed">
+          <div className="mt-4 hidden md:block">
+            <DataTable label="Ireland career comparison" className="table-fixed">
               <DataTableHeader>
                 <DataTableRow>
                   <DataTableCell as="th" className="w-44">Metric</DataTableCell>
@@ -141,21 +147,52 @@ export function IrelandCareersCompareMatrix({
                 </DataTableRow>
               </DataTableHeader>
               <tbody>
-                <CompareRow label="CampCareer Score" values={selected.map((item) => `${item.score.total}/100`)} />
-                <CompareRow label="Demand" values={selected.map((item) => `${item.score.demand}/10`)} />
-                <CompareRow label="Pay" values={selected.map((item) => `${item.score.pay}/10`)} />
-                <CompareRow label="Entry" values={selected.map((item) => `${item.score.entry}/10`)} />
-                <CompareRow label="Evidence confidence" values={selected.map((item) => confidenceLabel(item.confidence))} />
-                <CompareRow label="Official occupation scope" values={selected.map((item) => item.officialTitle ?? "—")} />
-                <CompareRow label="Registration" values={selected.map((item) => registrationLabel(item.registrationRequired))} />
-                <CompareRow
+                <DesktopRow label="CampCareer Score" values={selected.map((item) => `${item.score.total}/100`)} />
+                <DesktopRow label="Demand" values={selected.map((item) => `${item.score.demand}/10`)} />
+                <DesktopRow label="Pay" values={selected.map(() => payProxy)} />
+                <DesktopRow label="Entry" values={selected.map((item) => `${item.score.entry}/10`)} />
+                <DesktopRow label="Evidence confidence" values={selected.map((item) => confidenceLabel(item.confidence))} />
+                <DesktopRow label="Official occupation scope" values={selected.map((item) => item.officialTitle ?? "—")} />
+                <DesktopRow label="Registration" values={selected.map((item) => registrationLabel(item.registrationRequired))} />
+                <DesktopRow
                   label="Key sources"
                   values={selected.map((item) => item.sourceLabels.length ? item.sourceLabels.join(" · ") : "—")}
                   secondary
                 />
-                <CompareRow label="Evidence checked" values={selected.map((item) => item.sourceCheckedOn ?? "—")} />
+                <DesktopRow label="Evidence checked" values={selected.map((item) => item.sourceCheckedOn ?? "—")} />
               </tbody>
             </DataTable>
+          </div>
+
+          <div className="mt-4 divide-y divide-campcareer-border border-y border-campcareer-border md:hidden">
+            {[
+              { label: "CampCareer Score", values: selected.map((item) => `${item.score.total}/100`) },
+              { label: "Demand", values: selected.map((item) => `${item.score.demand}/10`) },
+              { label: "Pay", values: selected.map(() => payProxy) },
+              { label: "Entry", values: selected.map((item) => `${item.score.entry}/10`) },
+              { label: "Evidence confidence", values: selected.map((item) => confidenceLabel(item.confidence)) },
+              { label: "Official occupation scope", values: selected.map((item) => item.officialTitle ?? "—") },
+              { label: "Registration", values: selected.map((item) => registrationLabel(item.registrationRequired)) },
+              {
+                label: "Key sources",
+                values: selected.map((item) => item.sourceLabels.length ? item.sourceLabels.join(" · ") : "—"),
+                secondary: true,
+              },
+              { label: "Evidence checked", values: selected.map((item) => item.sourceCheckedOn ?? "—") },
+            ].map((row) => (
+              <div key={row.label} className="py-4">
+                <p className="text-sm font-medium text-campcareer-ink-secondary">{row.label}</p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {selected.map((item, index) => (
+                    <CompareCell key={`${row.label}-${item.id}`} label={item.label}>
+                      <p className={`break-words text-sm font-semibold leading-5 text-campcareer-ink ${row.secondary ? "text-xs leading-5 text-campcareer-ink-secondary" : ""}`}>
+                        {row.values[index]}
+                      </p>
+                    </CompareCell>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </>
       )}
@@ -163,7 +200,7 @@ export function IrelandCareersCompareMatrix({
   )
 }
 
-function CompareRow({
+function DesktopRow({
   label,
   values,
   secondary = false,

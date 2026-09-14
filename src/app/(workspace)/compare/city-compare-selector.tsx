@@ -38,52 +38,56 @@ export function CityCompareSelector({
   }
 
   return (
-    <div className="grid gap-3 rounded-2xl border border-[#e7e6e3] bg-white p-4 sm:grid-cols-[minmax(0,1fr)_44px_minmax(0,1fr)] sm:items-end sm:p-5">
+    <div className="grid gap-3 rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface sm:grid-cols-[minmax(0,1fr)_44px_minmax(0,1fr)] sm:items-end sm:p-5">
       <label className="block min-w-0">
-        <span className="mb-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
+        <span className="mb-1.5 block text-xs font-semibold text-campcareer-muted">
           First city
         </span>
-        <select
-          value={leftSlug}
-          onChange={(event) => navigate(event.target.value, rightSlug)}
-          className="h-11 w-full min-w-0 rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
-          aria-label="First city to compare"
-        >
-          {options.map((city) => (
-            <option key={city.slug} value={city.slug} disabled={city.slug === rightSlug}>
-              🏙️ {city.name} · {city.regionName}
-            </option>
-          ))}
-        </select>
+        <span className="relative block min-w-0">
+          <select
+            value={leftSlug}
+            onChange={(event) => navigate(event.target.value, rightSlug)}
+            className="h-11 w-full min-w-0 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink shadow-cc-surface focus:border-brand focus:ring-4 focus:ring-ring/30"
+            aria-label="First city to compare"
+          >
+            {options.map((city) => (
+              <option key={city.slug} value={city.slug} disabled={city.slug === rightSlug}>
+                {city.name} · {city.regionName}
+              </option>
+            ))}
+          </select>
+        </span>
       </label>
 
       <button
         type="button"
         onClick={() => navigate(rightSlug, leftSlug)}
-        className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#ded9eb] bg-[#f8f6fc] px-3 text-[#6d4fc4] transition hover:bg-[#f3f0fa] focus:outline-none focus:ring-4 focus:ring-[#6d4fc4]/10 sm:grid sm:w-11 sm:place-items-center sm:px-0"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-brand shadow-cc-surface transition-colors duration-cc-fast hover:bg-brand-tint focus:outline-none focus:ring-4 focus:ring-ring/30 sm:grid sm:w-11 sm:place-items-center sm:px-0"
         aria-label="Swap compared cities"
         title="Swap cities"
       >
         <ArrowLeftRight className="size-4" />
-        <span className="text-[12px] font-semibold sm:hidden">Swap cities</span>
+        <span className="text-sm font-semibold sm:hidden">Swap cities</span>
       </button>
 
       <label className="block min-w-0">
-        <span className="mb-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.08em] text-[#8f8c85]">
+        <span className="mb-1.5 block text-xs font-semibold text-campcareer-muted">
           Second city
         </span>
-        <select
-          value={rightSlug}
-          onChange={(event) => navigate(leftSlug, event.target.value)}
-          className="h-11 w-full min-w-0 rounded-xl border border-[#dfded9] bg-[#fafaf8] px-3 text-[13px] font-semibold text-[#1b1b1b] outline-none focus:border-[#6d4fc4] focus:ring-4 focus:ring-[#6d4fc4]/10"
-          aria-label="Second city to compare"
-        >
-          {options.map((city) => (
-            <option key={city.slug} value={city.slug} disabled={city.slug === leftSlug}>
-              🏙️ {city.name} · {city.regionName}
-            </option>
-          ))}
-        </select>
+        <span className="relative block min-w-0">
+          <select
+            value={rightSlug}
+            onChange={(event) => navigate(leftSlug, event.target.value)}
+            className="h-11 w-full min-w-0 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink shadow-cc-surface focus:border-brand focus:ring-4 focus:ring-ring/30"
+            aria-label="Second city to compare"
+          >
+            {options.map((city) => (
+              <option key={city.slug} value={city.slug} disabled={city.slug === leftSlug}>
+                {city.name} · {city.regionName}
+              </option>
+            ))}
+          </select>
+        </span>
       </label>
     </div>
   )

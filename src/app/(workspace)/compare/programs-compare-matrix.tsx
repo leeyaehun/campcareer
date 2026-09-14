@@ -7,6 +7,7 @@ import {
   formatProgramCompareValue,
   type ProgramCompareItem,
 } from "@/lib/data-foundation/program-compare-contract"
+import { CompareShell } from "@/components/ui/compare"
 
 type Props = {
   availablePrograms: readonly ProgramCompareItem[]
@@ -101,9 +102,9 @@ export default function ProgramsCompareMatrix({ availablePrograms }: Props) {
   }
 
   return (
-    <section className="mt-1" aria-label="Program comparison">
+    <CompareShell>
       {!canCompare ? (
-        <p className="mb-3 text-sm font-medium text-[#5f5d57]" role="status">
+        <p className="mb-3 text-sm font-medium text-campcareer-ink-secondary" role="status">
           {selectedPrograms.length === 1 ? "Select one more program to compare." : "Select two programs to start comparing."}
         </p>
       ) : null}
@@ -150,8 +151,8 @@ export default function ProgramsCompareMatrix({ availablePrograms }: Props) {
         />
       ) : null}
 
-      <p className="mt-5 text-xs leading-5 text-[#77746e]">Verified canonical fields only. Missing values are shown as —.</p>
-    </section>
+      <p className="mt-5 text-xs leading-5 text-campcareer-muted">Verified canonical fields only. Missing values are shown as —.</p>
+    </CompareShell>
   )
 }
 
@@ -160,7 +161,7 @@ function comparisonSections(programs: readonly ProgramCompareItem[]): readonly P
     program.sources[0] ? (
       <a
         key={program.productProgramId}
-        className="font-semibold text-blue-700 underline-offset-2 hover:underline"
+        className="font-semibold text-brand underline-offset-2 hover:underline"
         href={program.sources[0].url}
         target="_blank"
         rel="noreferrer"
@@ -213,38 +214,40 @@ type MatrixProps = {
 
 function DesktopMatrix({ slots, selectedPrograms, chooserSlot, showAdd, sections, triggerRefs, onOpen, onRemove, onAdd, onCancelThird }: MatrixProps) {
   return (
-    <div className="hidden border-y border-[#e7e6e3] bg-white md:block">
-      <table className="w-full table-fixed border-collapse text-left text-sm">
-        <thead>
-          <tr>
-            <th scope="col" className="sticky top-14 z-20 w-36 border-b border-[#e7e6e3] bg-white/95 px-4 py-3 backdrop-blur-md xl:w-44">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#77746e]">Compare</span>
-                {showAdd ? <AddButton label="Add a third program" onClick={onAdd} /> : null}
-              </div>
-            </th>
-            {slots.map((slot) => (
-              <DesktopHeader
-                key={slot}
-                slot={slot}
-                program={selectedPrograms[slot] ?? null}
-                chooserOpen={chooserSlot === slot}
-                triggerRef={(element) => { triggerRefs.current[slot] = element }}
-                onOpen={onOpen}
-                onRemove={onRemove}
-                onCancel={slot === 2 && !selectedPrograms[slot] ? onCancelThird : undefined}
-              />
-            ))}
-          </tr>
-        </thead>
-        {selectedPrograms.length >= 2 ? (
-          <tbody>
-            {sections.map((section) => (
-              <ProgramSectionRows key={section.title} section={section} slots={slots} />
-            ))}
-          </tbody>
-        ) : null}
-      </table>
+    <div className="hidden overflow-hidden rounded-cc-large border border-campcareer-border bg-campcareer-surface shadow-cc-surface md:block">
+      <div className="overflow-x-auto">
+        <table className="w-full table-fixed border-collapse text-left text-sm">
+          <thead>
+            <tr>
+              <th scope="col" className="w-36 border-b border-campcareer-border bg-campcareer-surface px-4 py-3 text-left xl:w-44">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">Compare</span>
+                  {showAdd ? <AddButton label="Add a third program" onClick={onAdd} /> : null}
+                </div>
+              </th>
+              {slots.map((slot) => (
+                <DesktopHeader
+                  key={slot}
+                  slot={slot}
+                  program={selectedPrograms[slot] ?? null}
+                  chooserOpen={chooserSlot === slot}
+                  triggerRef={(element) => { triggerRefs.current[slot] = element }}
+                  onOpen={onOpen}
+                  onRemove={onRemove}
+                  onCancel={slot === 2 && !selectedPrograms[slot] ? onCancelThird : undefined}
+                />
+              ))}
+            </tr>
+          </thead>
+          {selectedPrograms.length >= 2 ? (
+            <tbody>
+              {sections.map((section) => (
+                <ProgramSectionRows key={section.title} section={section} slots={slots} />
+              ))}
+            </tbody>
+          ) : null}
+        </table>
+      </div>
     </div>
   )
 }
@@ -253,15 +256,15 @@ function ProgramSectionRows({ section, slots }: { section: ProgramComparisonSect
   return (
     <>
       <tr>
-        <th colSpan={slots.length + 1} className="border-b border-[#e7e6e3] bg-[#f7f7f5] px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">
+        <th colSpan={slots.length + 1} className="border-b border-campcareer-border bg-campcareer-canvas px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">
           {section.title}
         </th>
       </tr>
       {section.rows.map((row) => (
         <tr key={row.key}>
-          <th scope="row" className="border-b border-[#ecebe7] bg-white px-4 py-4 align-top text-sm font-medium text-[#5f5d57]">{row.label}</th>
+          <th scope="row" className="border-b border-campcareer-border bg-campcareer-surface px-4 py-4 align-top text-sm font-medium text-campcareer-ink-secondary">{row.label}</th>
           {slots.map((slot) => (
-            <td key={`${row.key}-${slot}`} className="border-b border-l border-[#ecebe7] px-5 py-4 align-top text-sm font-semibold leading-6 text-[#1b1b1b]">
+            <td key={`${row.key}-${slot}`} className="border-b border-l border-campcareer-border px-5 py-4 align-top text-sm font-semibold leading-6 text-campcareer-ink">
               {row.values[slot] ?? null}
             </td>
           ))}
@@ -273,7 +276,7 @@ function ProgramSectionRows({ section, slots }: { section: ProgramComparisonSect
 
 function DesktopHeader({ slot, program, chooserOpen, triggerRef, onOpen, onRemove, onCancel }: { slot: number; program: ProgramCompareItem | null; chooserOpen: boolean; triggerRef: (element: HTMLButtonElement | null) => void; onOpen: (slot: number) => void; onRemove: (slot: number) => void; onCancel?: () => void }) {
   return (
-    <th scope="col" className="sticky top-14 z-20 border-b border-l border-[#e7e6e3] bg-white/95 px-2 py-2 align-top backdrop-blur-md">
+    <th scope="col" className="border-b border-l border-campcareer-border bg-campcareer-surface px-2 py-2 align-top">
       <div className="relative">
         <ProgramTrigger slot={slot} program={program} chooserOpen={chooserOpen} triggerRef={triggerRef} onOpen={onOpen} />
         <HeaderAction program={program} slot={slot} onRemove={onRemove} onCancel={onCancel} />
@@ -285,7 +288,7 @@ function DesktopHeader({ slot, program, chooserOpen, triggerRef, onOpen, onRemov
 function MobileMatrix({ slots, selectedPrograms, chooserSlot, showAdd, sections, triggerRefs, onOpen, onRemove, onAdd, onCancelThird }: MatrixProps) {
   return (
     <div className="md:hidden">
-      <div className="sticky top-14 z-20 -mx-1 border-y border-[#e7e6e3] bg-white/95 px-1 py-2 backdrop-blur-md" aria-label="Program comparison columns">
+      <div className="sticky top-14 z-20 -mx-1 border-y border-campcareer-border bg-campcareer-surface/95 px-1 py-2 backdrop-blur-sm" aria-label="Program comparison columns">
         <div className="grid grid-cols-2 gap-2">
           {slots.map((slot) => (
             <MobileHeader
@@ -302,7 +305,7 @@ function MobileMatrix({ slots, selectedPrograms, chooserSlot, showAdd, sections,
           ))}
         </div>
         {showAdd ? (
-          <button type="button" onClick={onAdd} className="mt-2 inline-flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+          <button type="button" onClick={onAdd} className="mt-2 inline-flex min-h-10 items-center rounded-cc-control px-2 text-sm font-semibold text-brand transition-colors duration-cc-fast hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <Plus aria-hidden="true" className="mr-1.5 size-4" /> Add program
           </button>
         ) : null}
@@ -312,16 +315,16 @@ function MobileMatrix({ slots, selectedPrograms, chooserSlot, showAdd, sections,
         <div className="mt-5 space-y-7">
           {sections.map((section) => (
             <section key={section.title}>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-[#6f6d68]">{section.title}</h3>
-              <div className="mt-2 divide-y divide-[#ecebe7] border-y border-[#ecebe7]">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{section.title}</h3>
+              <div className="mt-2 divide-y divide-campcareer-border border-y border-campcareer-border">
                 {section.rows.map((row) => (
                   <div key={row.key} className="py-4">
-                    <p className="text-sm font-medium text-[#5f5d57]">{row.label}</p>
+                    <p className="text-sm font-medium text-campcareer-ink-secondary">{row.label}</p>
                     <div className="mt-2 grid grid-cols-2 gap-2">
                       {selectedPrograms.map((program, index) => (
-                        <div key={`${row.key}-${program.productProgramId}`} className="min-w-0 rounded-xl bg-[#fafaf9] p-3">
-                          <p className="truncate text-[11px] font-semibold text-[#77746e]">{displayInstitution(program)}</p>
-                          <div className="mt-1 break-words text-sm font-semibold leading-5 text-[#1b1b1b]">{row.values[index]}</div>
+                        <div key={`${row.key}-${program.productProgramId}`} className="min-w-0 rounded-cc-surface bg-campcareer-canvas p-3">
+                          <p className="truncate text-xs font-semibold text-campcareer-muted">{displayInstitution(program)}</p>
+                          <div className="mt-1 break-words text-sm font-semibold leading-5 text-campcareer-ink">{row.values[index]}</div>
                         </div>
                       ))}
                     </div>
@@ -338,7 +341,7 @@ function MobileMatrix({ slots, selectedPrograms, chooserSlot, showAdd, sections,
 
 function MobileHeader({ slot, program, chooserOpen, triggerRef, onOpen, onRemove, onCancel, className }: { slot: number; program: ProgramCompareItem | null; chooserOpen: boolean; triggerRef: (element: HTMLButtonElement | null) => void; onOpen: (slot: number) => void; onRemove: (slot: number) => void; onCancel?: () => void; className?: string }) {
   return (
-    <div className={`relative min-w-0 rounded-xl border border-[#e7e6e3] bg-white p-1 ${className ?? ""}`}>
+    <div className={`relative min-w-0 rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-1 shadow-cc-surface ${className ?? ""}`}>
       <ProgramTrigger slot={slot} program={program} chooserOpen={chooserOpen} triggerRef={triggerRef} onOpen={onOpen} />
       <HeaderAction program={program} slot={slot} onRemove={onRemove} onCancel={onCancel} mobile />
     </div>
@@ -354,11 +357,11 @@ function ProgramTrigger({ slot, program, chooserOpen, triggerRef, onOpen }: { sl
       aria-expanded={chooserOpen}
       aria-label={program ? `Change ${displayInstitution(program)} ${displayProgramName(program)}` : `Select program ${slot + 1}`}
       onClick={() => onOpen(slot)}
-      className="relative min-h-16 w-full rounded-lg px-3 py-2.5 pr-10 text-left hover:bg-[#fafaf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35"
+      className="relative min-h-16 w-full rounded-cc-control px-3 py-2.5 pr-10 text-left transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
     >
-      <span className="block pr-5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#77746e]">{program ? displayInstitution(program) : `Program ${slot + 1}`}</span>
-      <span className="mt-1 block break-words pr-5 text-sm font-semibold leading-5 text-[#1b1b1b]">{program ? displayProgramName(program) : "Choose a programme"}</span>
-      <ChevronDown aria-hidden="true" className="absolute right-3 top-5 size-4 text-[#77746e]" />
+      <span className="block pr-5 text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{program ? displayInstitution(program) : `Program ${slot + 1}`}</span>
+      <span className="mt-1 block break-words pr-5 text-sm font-semibold leading-5 text-campcareer-ink">{program ? displayProgramName(program) : "Choose a programme"}</span>
+      <ChevronDown aria-hidden="true" className="absolute right-3 top-5 size-4 text-campcareer-muted" />
     </button>
   )
 }
@@ -366,14 +369,14 @@ function ProgramTrigger({ slot, program, chooserOpen, triggerRef, onOpen }: { sl
 function HeaderAction({ program, slot, onRemove, onCancel, mobile = false }: { program: ProgramCompareItem | null; slot: number; onRemove: (slot: number) => void; onCancel?: () => void; mobile?: boolean }) {
   if (onCancel) {
     return (
-      <button type="button" onClick={onCancel} aria-label="Cancel third program" className={`absolute ${mobile ? "right-1 top-1" : "right-1 top-1"} z-10 min-h-9 rounded-lg px-2 text-xs font-semibold text-[#5f5d57] hover:bg-[#f0efeb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35`}>
+      <button type="button" onClick={onCancel} aria-label="Cancel third program" className={`absolute ${mobile ? "right-1 top-1" : "right-1 top-1"} z-10 min-h-9 rounded-cc-control px-2 text-xs font-semibold text-campcareer-ink-secondary transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30`}>
         Cancel
       </button>
     )
   }
   if (!program) return null
   return (
-    <button type="button" onClick={() => onRemove(slot)} aria-label={`Remove ${displayInstitution(program)} ${displayProgramName(program)} from comparison`} className={`absolute ${mobile ? "right-1 top-1" : "right-1 top-1"} z-10 inline-flex size-9 items-center justify-center rounded-lg text-[#77746e] hover:bg-[#f0efeb] hover:text-[#1b1b1b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35`}>
+    <button type="button" onClick={() => onRemove(slot)} aria-label={`Remove ${displayInstitution(program)} ${displayProgramName(program)} from comparison`} className={`absolute ${mobile ? "right-1 top-1" : "right-1 top-1"} z-10 inline-flex size-9 items-center justify-center rounded-cc-control text-campcareer-muted transition-colors duration-cc-fast hover:bg-secondary hover:text-campcareer-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30`}>
       <X aria-hidden="true" className="size-4" />
     </button>
   )
@@ -381,7 +384,7 @@ function HeaderAction({ program, slot, onRemove, onCancel, mobile = false }: { p
 
 function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <button type="button" aria-label={label} onClick={onClick} className="inline-flex size-9 items-center justify-center rounded-lg text-blue-700 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+    <button type="button" aria-label={label} onClick={onClick} className="inline-flex size-9 items-center justify-center rounded-cc-control text-brand transition-colors duration-cc-fast hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
       <Plus aria-hidden="true" className="size-4" />
     </button>
   )
@@ -396,13 +399,13 @@ function ProgramChooser({ slot, selectedIds, programs, onChoose, onClose }: { sl
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/20 p-3 sm:items-center" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose() }}>
-      <div role="dialog" aria-modal="true" aria-labelledby="program-chooser-heading" className="w-full max-w-lg rounded-2xl border border-[#e7e6e3] bg-white p-5 shadow-xl">
+      <div role="dialog" aria-modal="true" aria-labelledby="program-chooser-heading" className="w-full max-w-lg rounded-cc-large border border-campcareer-border bg-campcareer-surface p-5 shadow-cc-raised">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 id="program-chooser-heading" className="text-base font-semibold text-[#1b1b1b]">Choose a programme</h2>
-            <p className="mt-1 text-sm text-[#6f6d68]">Select a verified option for column {slot + 1}.</p>
+            <h2 id="program-chooser-heading" className="text-base font-semibold text-campcareer-ink">Choose a programme</h2>
+            <p className="mt-1 text-sm text-campcareer-ink-secondary">Select a verified option for column {slot + 1}.</p>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close programme chooser" className="inline-flex size-10 items-center justify-center rounded-lg text-[#6f6d68] hover:bg-[#f0efeb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
+          <button type="button" onClick={onClose} aria-label="Close programme chooser" className="inline-flex size-10 items-center justify-center rounded-cc-control text-campcareer-ink-secondary transition-colors duration-cc-fast hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
             <X aria-hidden="true" className="size-4" />
           </button>
         </div>
@@ -410,10 +413,10 @@ function ProgramChooser({ slot, selectedIds, programs, onChoose, onClose }: { sl
           {programs.map((program) => {
             const disabled = selectedIds.includes(program.productProgramId) && selectedIds[slot] !== program.productProgramId
             return (
-              <button key={program.productProgramId} type="button" disabled={disabled} onClick={() => onChoose(slot, program.productProgramId)} className="w-full rounded-xl border border-[#e7e6e3] px-3 py-3 text-left text-sm hover:bg-[#fafaf9] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/35">
-                <span className="block font-semibold text-[#1b1b1b]">{displayInstitution(program)}</span>
-                <span className="mt-1 block text-[#6f6d68]">{displayProgramName(program)}</span>
-                {disabled ? <span className="mt-1 block text-xs text-[#6f6d68]">Already selected</span> : null}
+              <button key={program.productProgramId} type="button" disabled={disabled} onClick={() => onChoose(slot, program.productProgramId)} className="w-full rounded-cc-surface border border-campcareer-border px-3 py-3 text-left text-sm shadow-cc-surface transition-colors duration-cc-fast hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+                <span className="block font-semibold text-campcareer-ink">{displayInstitution(program)}</span>
+                <span className="mt-1 block text-campcareer-ink-secondary">{displayProgramName(program)}</span>
+                {disabled ? <span className="mt-1 block text-xs text-campcareer-muted">Already selected</span> : null}
               </button>
             )
           })}
