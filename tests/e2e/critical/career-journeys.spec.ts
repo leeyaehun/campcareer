@@ -14,9 +14,8 @@ test("Journey A–B: Career discovery reaches evidence, then a supported Compare
   await page.getByRole("option", { name: "Australia" }).click()
   await expect(page).toHaveURL(/\/careers\?country=AU$/)
 
-  const search = page.getByRole("searchbox", { name: /Search careers/ })
-  await search.fill("Registered Nurse")
-  await page.getByRole("button", { name: /^Registered Nurse/ }).click()
+  await page.getByRole("searchbox", { name: /Search careers/ }).fill("Registered Nurse")
+  await page.getByRole("link", { name: /^Registered Nurse/ }).click()
 
   await expect(page).toHaveURL(/\/career\/australia\/registered-nurse$/)
   await expect(page.getByRole("heading", { name: "Registered Nurse", exact: true })).toBeVisible()

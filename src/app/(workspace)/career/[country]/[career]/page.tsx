@@ -235,36 +235,34 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <main className="min-h-[calc(100vh-4rem)] bg-campcareer-surface px-4 pb-16 pt-5 sm:px-8 sm:pt-8">
-        <div className="mx-auto max-w-5xl">
-          <nav aria-label="Career context" className="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold text-campcareer-muted">
-            <Link href={countryContextPath} prefetch={false} className="inline-flex items-center gap-1.5 rounded-cc-control px-2.5 py-2 transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
-              <ArrowLeft className="size-4" /> {locale === "ko" ? `${route.country.name}(으)로 돌아가기` : `Back to ${route.country.name}`}
-            </Link>
-            <Link href={careersContextPath} prefetch={false} className="rounded-cc-control px-2.5 py-2 transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
-              {locale === "ko" ? `${route.country.name} 커리어` : `Browse ${route.country.name} careers`}
-            </Link>
-          </nav>
+      <div>
+        <nav aria-label="Career context" className="flex min-h-10 flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold text-campcareer-muted">
+          <Link href={countryContextPath} prefetch={false} className="inline-flex items-center gap-1.5 rounded-cc-control px-2.5 py-2 transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+            <ArrowLeft className="size-4" /> {locale === "ko" ? `${route.country.name}(으)로 돌아가기` : `Back to ${route.country.name}`}
+          </Link>
+          <Link href={careersContextPath} prefetch={false} className="rounded-cc-control px-2.5 py-2 transition-colors duration-cc-fast hover:bg-brand-tint hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+            {locale === "ko" ? `${route.country.name} 커리어` : `Browse ${route.country.name} careers`}
+          </Link>
+        </nav>
 
-          <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
-            <EntityPageHeader title={careerName} titleId="career-heading" subtitle={route.country.name} />
-            <p className="mt-4 max-w-xl text-sm leading-6 text-campcareer-ink-secondary sm:text-base sm:leading-7">
-              {locale === "ko"
-                ? `${route.country.name}에서 수요, 보수와 진입 요건의 근거를 확인하세요.`
-                : `Compare demand, pay and entry evidence for this career in ${route.country.name}.`}
-            </p>
-            <Suspense fallback={<CareerScoreFallback />}>
-              <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
-            </Suspense>
-          </section>
-
-          <Suspense fallback={<CareerSectionsFallback />}>
-            <CareerSectionsContent profilePromise={profilePromise} query={query} locale={locale} />
+        <section className="mt-6 rounded-cc-large border border-campcareer-border bg-campcareer-surface px-5 py-6 shadow-cc-surface sm:px-8 sm:py-8" aria-labelledby="career-heading">
+          <EntityPageHeader title={careerName} titleId="career-heading" subtitle={route.country.name} />
+          <p className="mt-4 max-w-xl text-sm leading-6 text-campcareer-ink-secondary sm:text-base sm:leading-7">
+            {locale === "ko"
+              ? `${route.country.name}에서 수요, 보수와 진입 요건의 근거를 확인하세요.`
+              : `Compare demand, pay and entry evidence for this career in ${route.country.name}.`}
+          </p>
+          <Suspense fallback={<CareerScoreFallback />}>
+            <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
           </Suspense>
+        </section>
 
-          <CareerResultActions query={query} locale={locale} />
-        </div>
-      </main>
+        <Suspense fallback={<CareerSectionsFallback />}>
+          <CareerSectionsContent profilePromise={profilePromise} query={query} locale={locale} />
+        </Suspense>
+
+        <CareerResultActions query={query} locale={locale} />
+      </div>
     </>
   )
 }

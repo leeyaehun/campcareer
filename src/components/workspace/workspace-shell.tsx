@@ -16,8 +16,18 @@ export function WorkspaceShell({ children }: WorkspaceShellProps) {
 
   // Career is the focused public product surface. The outer layout supplies
   // the standard CampCareer navigation so no workspace chrome is rendered.
+  // A shared canvas + container shell keeps /careers and /career pages
+  // visually consistent with the rest of CampCareer.
   const isCareerSurface = pathname === "/career" || pathname.startsWith("/career/")
-  if (isCareerSurface || pathname === "/careers") return <>{children}</>
+  if (isCareerSurface || pathname === "/careers") {
+    return (
+      <div className="bg-campcareer-canvas">
+        <div className="mx-auto max-w-6xl px-4 pb-16 pt-6 sm:px-8 sm:pt-10 lg:px-10">
+          {children}
+        </div>
+      </div>
+    )
+  }
 
   const isCityProfile = pathname.startsWith("/cities/") && !pathname.endsWith("/compare")
   const hasFullBleedHero =

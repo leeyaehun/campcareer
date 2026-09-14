@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BriefcaseBusiness, ChevronDown, Factory, HandHeart, Hammer, HeartPulse, Landmark, Laptop, MousePointerClick, Palette, Plane, ShoppingBag, SlidersHorizontal, Sprout } from "lucide-react"
 import { CAREER_CATALOGUE, type Career } from "@/lib/career-data-foundation/career-catalogue"
@@ -143,6 +144,7 @@ export function OccupationExplorer({
   const [countryProfile, setCountryProfile] = useState<CountryOccupationProfile | null>(null)
   const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
   const isCareerIndex = basePath === "/careers"
+  const effectiveCountry = selectedCountry?.code || initialCountry
 
   useEffect(() => {
     if (!initialCountry) return
@@ -354,7 +356,7 @@ export function OccupationExplorer({
 
           <section className="lg:hidden">
             <div className="flex items-center justify-between"><h2 className="text-sm font-semibold text-campcareer-ink">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} ${isCareerIndex ? "careers" : "occupations"}`}</h2><span className="text-xs text-campcareer-muted">Tap to view</span></div>
-            <div className="mt-2 space-y-2">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; return <button key={career.id} type="button" onClick={() => select(career)} className={cn("flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30", isSelected ? "border-brand bg-brand-tint" : "border-campcareer-border hover:border-brand/40 hover:bg-secondary")}><span className="size-2 shrink-0 rounded-full bg-brand" /><span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>{demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}</button> })}</div>
+            <div className="mt-2 space-y-2">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; const careerRoute = isCareerIndex && effectiveCountry ? getIndexableCareerRoute(effectiveCountry, career.id) : null; const itemClassName = cn("flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30", isSelected ? "border-brand bg-brand-tint" : "border-campcareer-border hover:border-brand/40 hover:bg-brand-tint cursor-pointer"); const inner = <><span className="size-2 shrink-0 rounded-full bg-brand" /><span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>{demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}</>; return careerRoute ? <Link key={career.id} href={careerRoute.path} className={itemClassName}>{inner}</Link> : <button key={career.id} type="button" onClick={() => select(career)} className={itemClassName}>{inner}</button> })}</div>
           </section>
 
           <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:block lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
@@ -384,37 +386,24 @@ export function OccupationExplorer({
                         isSelected && countryProfile?.canonicalCareerId === career.id
                           ? countryProfile.metric.opportunityScore
                           : null
-
-                      return (
-                        <button
-                          key={career.id}
-                          type="button"
-                          onClick={() => select(career)}
-                          className={cn(
-                            "flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30",
-                            isSelected
-                              ? "border-brand bg-brand-tint"
-                              : "border-campcareer-border hover:border-brand/40 hover:bg-secondary"
-                          )}
-                        >
-                          <span
-                            className="size-2 shrink-0 rounded-full bg-brand"
-                          />
-                          <span
-                            className={cn(
-                              "min-w-0 flex-1 truncate text-sm font-semibold",
-                              isSelected ? "text-brand" : "text-campcareer-ink"
-                            )}
-                          >
-                            {displayLabel}
-                          </span>
-                          {selectedScore != null ? (
-                            <Badge variant="primary">{selectedScore}</Badge>
-                          ) : demand ? (
-                            <Badge variant="success">{demand.rating.toUpperCase()}</Badge>
-                          ) : null}
-                        </button>
+                      const careerRoute = isCareerIndex && effectiveCountry ? getIndexableCareerRoute(effectiveCountry, career.id) : null
+                      const itemClassName = cn(
+                        "flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30",
+                        isSelected
+                          ? "border-brand bg-brand-tint"
+                          : "border-campcareer-border hover:border-brand/40 hover:bg-brand-tint cursor-pointer"
                       )
+                      const inner = (
+                        <>
+                          <span className="size-2 shrink-0 rounded-full bg-brand" />
+                          <span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>
+                          {selectedScore != null ? <Badge variant="primary">{selectedScore}</Badge> : demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}
+                        </>
+                      )
+
+                      return careerRoute
+                        ? <Link key={career.id} href={careerRoute.path} className={itemClassName}>{inner}</Link>
+                        : <button key={career.id} type="button" onClick={() => select(career)} className={itemClassName}>{inner}</button>
                     })}
                   </div>
                 </div>
