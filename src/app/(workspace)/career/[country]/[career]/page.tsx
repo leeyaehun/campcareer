@@ -10,6 +10,8 @@ import { localizePath, type Locale } from "@/lib/i18n/config"
 import { SITE_URL } from "@/lib/seo-routes.mjs"
 import { getPublicCareerPageProfile } from "@/lib/career-data-foundation/public-career-profile-read"
 import { getCareerRoute, getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
+import { SCORE_READY_CAREER_PROFILES } from "@/lib/workspace/career-coverage"
+import { getLaunchCountry } from "@/data/launch-countries"
 import type { OverviewSearchValues } from "../../../home/home-overview-config"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
 import { CareerCoreSections } from "../../career-core-sections"
@@ -182,6 +184,16 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
   const countryUrl = `${SITE_URL}/countries/${route.country.code.toLowerCase()}`
   const countryContextPath = route.country.code === "IE" ? "/countries/ie" : countryUrl.replace(SITE_URL, "")
   const careersContextPath = `/careers?country=${route.country.code}`
+  const availableCountries = SCORE_READY_CAREER_PROFILES
+    .filter((profile) => profile.careerId === route.career.id)
+    .map((profile) => ({
+      code: profile.countryCode,
+      country: getLaunchCountry(profile.countryCode),
+      isCurrent: profile.countryCode === route.country.code,
+    }))
+    .filter((entry) => entry.country)
+    .sort((a, b) => (a.isCurrent ? -1 : b.isCurrent ? 1 : 0))
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -257,6 +269,37 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
             <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
           </Suspense>
         </section>
+
+        {availableCountries.length > 1 ? (
+          <section className="mt-6" aria-label={locale === "ko" ? "이 커리어를 둘러볼 수 있는 국가" : "Explore this career by country"}>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">
+              {locale === "ko" ? "국가" : "Countries"}
+            </p>
+            <h2 className="mt-2 text-sm font-semibold text-campcareer-ink">
+              {locale === "ko"
+                ? `다른 국가에서 ${careerName} 살펴보기`
+                : `Explore ${careerName} in other countries`}
+            </h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {availableCountries.map((entry) => (
+                entry.country ? (
+                  <Link
+                    key={entry.code}
+                    href={localizePath(`/career/${entry.country.slug}/${route.career.id}`, locale)}
+                    prefetch={false}
+                    className={`inline-flex min-h-9 items-center rounded-cc-control px-3 text-sm font-semibold transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 ${
+                      entry.isCurrent
+                        ? "border border-brand bg-brand-tint text-brand"
+                        : "border border-campcareer-border bg-campcareer-surface text-campcareer-ink hover:border-brand/40 hover:bg-brand-tint"
+                    }`}
+                  >
+                    {entry.country.name}
+                  </Link>
+                ) : null
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {route.country.code === "IE" ? (
           <IrelandCareerFutureOutlook countryCode={route.country.code} careerId={route.career.id} locale={locale} />

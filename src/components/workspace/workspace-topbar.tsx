@@ -21,7 +21,7 @@ export function WorkspaceTopbar() {
           className="campcareer-wordmark shrink-0 text-campcareer-ink"
           aria-label="CampCareer career search"
         >
-          campcareer
+          CampCareer
         </Link>
 
         <PrimaryProductNavigation pathname={pathname} locale={locale} />

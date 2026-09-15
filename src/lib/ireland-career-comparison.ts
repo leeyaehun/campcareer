@@ -61,7 +61,8 @@ export function normalizeIrelandCareerIds(raw: string | readonly string[] | null
 
 export function parseIrelandCareerComparisonState(searchParams: Pick<URLSearchParams, "get">) {
   const country = searchParams.get("country")?.trim().toUpperCase() ?? null
-  const profile = searchParams.get("profile")?.trim() ?? null
+  const rawProfile = searchParams.get("profile")?.trim() ?? null
+  const profile = rawProfile === "starting-from-scratch" ? IE_CAREER_COMPARE_PROFILE : rawProfile
   const supported = country === IE_CAREER_COMPARE_COUNTRY
     && profile === IE_CAREER_COMPARE_PROFILE
   const careerIds = supported ? normalizeIrelandCareerIds(searchParams.get("careers")) : []
