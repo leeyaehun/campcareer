@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import { CAREER_CATALOGUE } from "@/lib/career-data-foundation/career-catalogue"
 import { STUDY_CATEGORIES } from "@/data/study-concepts"
-import { getIndexableOccupationRoute } from "@/lib/workspace/occupation-routes"
+import { INDEXABLE_CAREER_PROFILES, getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
 import { searchIrelandPublicEntities } from "@/lib/search/ireland-public-entity-search.server"
 import { CareerCountrySelector } from "@/components/workspace/career-country-selector"
 import { LazyOccupationExplorer } from "./occupation-explorer-lazy"
@@ -68,6 +68,11 @@ const CATEGORY_ICON = new Map([
   ["hospitality", ShoppingBag],
   ["transport", Plane],
 ])
+
+const PUBLISHED_CAREER_LINKS = INDEXABLE_CAREER_PROFILES.flatMap((profile) => {
+  const route = getIndexableCareerRoute(profile.countryCode, profile.careerId)
+  return route ? [route] : []
+})
 
 function CareerDiscovery() {
   return (
@@ -151,6 +156,29 @@ function CareerDiscovery() {
           Browse all careers
         </Link>
       </section>
+
+      <section className="mt-10" aria-labelledby="published-careers-heading">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">Published with evidence</p>
+        <h2 id="published-careers-heading" className="mt-2 text-2xl font-bold tracking-[-0.04em] text-campcareer-ink">
+          Reviewed career pages
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-campcareer-ink-secondary">
+          Open the career pages that currently meet CampCareer&apos;s public evidence and scoring gate.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {PUBLISHED_CAREER_LINKS.map((route) => (
+            <Link
+              key={`${route.country.code}:${route.career.id}`}
+              href={route.path}
+              prefetch={false}
+              className="rounded-cc-large border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface transition-colors duration-cc-standard hover:border-brand/40 hover:bg-brand-tint"
+            >
+              <span className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{route.country.name}</span>
+              <span className="mt-1 block text-sm font-semibold text-campcareer-ink">{route.career.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
     </>
   )
 }
@@ -167,7 +195,7 @@ export default async function CareersPage({
   const category = typeof sp.category === "string" ? sp.category : ""
   const browse = sp.browse === "1"
   const canonicalRoute = country && occupation
-    ? getIndexableOccupationRoute(country, occupation)
+    ? getIndexableCareerRoute(country, occupation)
     : null
 
   if (canonicalRoute) permanentRedirect(canonicalRoute.path)

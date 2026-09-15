@@ -4,7 +4,7 @@ import { InstitutionLogo } from "@/components/institution-logo"
 import { getLaunchCountry } from "@/data/launch-countries"
 import { InstitutionCountrySelector } from "./institution-country-selector"
 import {
-  buildInstitutionExplorerUrl, INSTITUTION_KIND_OPTIONS,
+  buildInstitutionExplorerUrl, INSTITUTION_KIND_OPTIONS, INSTITUTION_MVP_COUNTRIES,
   institutionCountryPath, institutionDetailPath, parseInstitutionSearchParams,
   type InstitutionMvpCountryCode, type InstitutionSearchFilters,
 } from "@/lib/institutions/institution-search"
@@ -90,6 +90,20 @@ export async function InstitutionsExplorer({ countryCode, searchParams }: { coun
     <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#3e7a2e]">Explore</p>
     <div className="mt-1.5 flex flex-wrap items-center gap-3"><h1 className="text-[28px] font-semibold leading-tight tracking-[-0.025em] text-[#1b1b1b] sm:text-3xl">Institutions</h1><InstitutionCountrySelector countryCode={countryCode} /></div>
     <p className="mt-2 max-w-2xl text-[12.5px] leading-5 text-[#77746e]">{countryCode === "US" ? "Explore the 25-university US launch cohort selected from the latest NCSES federal science and engineering support table. NCES selection is a publication criterion; official institution identity remains NCES/IPEDS UNITID. The CampCareer US degree-program catalogue is not yet published." : hasPendingProgrammeCatalog(countryCode) ? `Search verified institution identities and source-backed ${connectionLabel} data in ${country?.name ?? countryCode}. The CampCareer ${country?.name ?? countryCode} program catalog is not yet published.` : `Search verified institution identities and their current CampCareer program and ${connectionLabel} connections in ${country?.name ?? countryCode}.`}</p>
+    <nav aria-label="Published institution countries" className="mt-4 flex gap-1.5 overflow-x-auto pb-1">
+      {INSTITUTION_MVP_COUNTRIES.map((code) => (
+        <Link
+          key={code}
+          href={institutionCountryPath(code)}
+          aria-current={code === countryCode ? "page" : undefined}
+          className={code === countryCode
+            ? "shrink-0 rounded-lg border border-[#3e7a2e]/30 bg-[#edf5ea] px-3 py-1.5 text-[11.5px] font-medium text-[#3e7a2e]"
+            : "shrink-0 rounded-lg border border-[#e7e6e3] bg-white px-3 py-1.5 text-[11.5px] font-medium text-[#65625c] transition hover:border-[#3e7a2e]/40 hover:text-[#3e7a2e]"}
+        >
+          {getLaunchCountry(code)?.name ?? code}
+        </Link>
+      ))}
+    </nav>
 
     {filters.city ? <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#eef4ff] px-3 py-1.5 text-[11.5px] font-semibold text-[#2755a5]"><MapPin className="size-3.5" />Campuses in {filters.city}<Link href={countryPath} className="ml-1 text-[#2755a5]/70 underline underline-offset-2 hover:text-[#2755a5]">Clear</Link></div> : null}
 
