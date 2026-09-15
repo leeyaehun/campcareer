@@ -5,6 +5,7 @@ import {
   type CareerFutureIntelligenceRawEvidence,
   type CareerFutureIntelligenceReferencePeriod,
   type CareerFutureIntelligenceSignalKey,
+  type CareerFutureIntelligenceSourceTier,
 } from "@/lib/career-future-intelligence-contract"
 import {
   IRELAND_CAREER_FUTURE_EVIDENCE,
@@ -193,6 +194,44 @@ export function classifyCareerFutureDirections(
 
 export const IRELAND_CAREER_FUTURE_MODEL_CAREER_IDS = IE_CAREER_COMPARE_IDS
 export const IRELAND_CAREER_FUTURE_MODEL_SIGNAL_KEYS = CAREER_FUTURE_INTELLIGENCE_SIGNAL_KEYS
+
+/**
+ * Source metadata for the evidence that supports one derived signal. The UI
+ * renders this as provenance only; values always come from the derived signal.
+ */
+export type IrelandCareerFutureProvenance = {
+  evidenceKey: string
+  publisher: string
+  title: string
+  url: string
+  tier: CareerFutureIntelligenceSourceTier
+  occupationSpecific: boolean
+  referencePeriodLabel: string
+  geographyLabel: string
+  proxyDisclosure: CareerFutureProxyDisclosure
+}
+
+export function getIrelandCareerFutureProvenance(
+  careerId: string,
+  signal: CareerFutureIntelligenceSignalKey,
+): IrelandCareerFutureProvenance[] {
+  const derived = getIrelandCareerFutureSignal(careerId, signal)
+  if (!derived) return []
+  const record = IRELAND_CAREER_FUTURE_EVIDENCE.find((candidate) => candidate.careerId === careerId)
+  if (!record) return []
+  const rows = record.rawEvidence.filter((evidence) => derived.evidenceKeys.includes(evidence.evidenceKey))
+  return rows.map((evidence) => ({
+    evidenceKey: evidence.evidenceKey,
+    publisher: evidence.source.publisher,
+    title: evidence.source.title,
+    url: evidence.source.url,
+    tier: evidence.source.tier,
+    occupationSpecific: evidence.source.occupationSpecific,
+    referencePeriodLabel: evidence.referencePeriod.label,
+    geographyLabel: evidence.geography.label,
+    proxyDisclosure: proxyDisclosureFor(evidence),
+  }))
+}
 
 // Keep mappings imported into the domain module so model consumers can inspect
 // the same explicit occupation boundaries without re-reading raw evidence.
