@@ -115,8 +115,8 @@ function LoginPageContent() {
   return (
     <main className="min-h-screen bg-[#fafaf9] px-5 py-8 sm:px-6 sm:py-12">
       <div className="mx-auto w-full max-w-[460px]">
-        <Link href={localizePath('/', locale)} className="campcareer-wordmark text-[#1b1b1b]" aria-label="campcareer home">
-          campcareer
+        <Link href={localizePath('/', locale)} className="campcareer-wordmark text-[#1b1b1b]" aria-label="CampCareer home">
+          CampCareer
         </Link>
 
         <section className="mt-8 sm:mt-10 sm:rounded-xl sm:border sm:border-campcareer-border sm:bg-white sm:p-8">

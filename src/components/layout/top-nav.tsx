@@ -83,7 +83,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
             className="campcareer-wordmark shrink-0 text-campcareer-ink"
             aria-label="CampCareer home"
           >
-            campcareer
+            CampCareer
           </Link>
 
           <PrimaryProductNavigation pathname={pathname} locale={pathLocale} />

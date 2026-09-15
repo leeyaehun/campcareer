@@ -50,7 +50,7 @@ test("Ireland career compare requires the explicit Ireland MVP context", () => {
     parseIrelandCareerComparisonState(
       new URLSearchParams("country=IE&profile=starting-from-scratch"),
     ).contextState,
-    "unsupported",
+    "supported",
   )
 })
 

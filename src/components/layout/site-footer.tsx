@@ -14,7 +14,7 @@ export function SiteFooter({ className }: { className?: string }) {
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <Link href={localizePath("/", locale)} prefetch={false} className="campcareer-wordmark text-[hsl(var(--cc-ink))]">campcareer</Link>
+            <Link href={localizePath("/", locale)} prefetch={false} className="campcareer-wordmark text-[hsl(var(--cc-ink))]">CampCareer</Link>
             <p className="mt-3 max-w-sm text-sm leading-6 text-[hsl(var(--cc-muted))]">
               {isKo
                 ? "커리어, 학업, 국가 선택을 근거 있는 데이터로 비교하세요."
