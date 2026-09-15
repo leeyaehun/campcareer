@@ -14,6 +14,7 @@ import type { OverviewSearchValues } from "../../../home/home-overview-config"
 import { CampCareerScoreHero } from "../../campcareer-score-hero"
 import { CareerCoreSections } from "../../career-core-sections"
 import { CareerResultActions } from "../../career-result-actions"
+import { IrelandCareerFutureOutlook } from "../../career-future-outlook"
 
 export const dynamic = "force-dynamic"
 
@@ -256,6 +257,10 @@ export default async function CareerCanonicalPage({ params }: CareerCanonicalPag
             <CareerScoreContent profilePromise={profilePromise} query={query} locale={locale} />
           </Suspense>
         </section>
+
+        {route.country.code === "IE" ? (
+          <IrelandCareerFutureOutlook countryCode={route.country.code} careerId={route.career.id} locale={locale} />
+        ) : null}
 
         <Suspense fallback={<CareerSectionsFallback />}>
           <CareerSectionsContent profilePromise={profilePromise} query={query} locale={locale} />
