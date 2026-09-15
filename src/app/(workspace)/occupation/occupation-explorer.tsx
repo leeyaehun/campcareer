@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -20,6 +20,20 @@ import { EmptyState } from "@/components/ui/status-state"
 import { FilterBar, FilterChip } from "@/components/ui/filter-bar"
 import { cn } from "@/lib/utils"
 import { trackAnalyticsEvent } from "@/lib/analytics"
+import {
+  futureFilterActiveNote,
+  futureFilterGroupLabel,
+  futureFilterHiddenCareerIds,
+  futureFilterHiddenNote,
+  futureFilterMatchCount,
+  futureFilterMatchesCareer,
+  futureFilterTokenLabel,
+  FUTURE_FILTER_COUNTRY_CODE,
+  FUTURE_FILTER_GROUPS,
+  parseFutureFilter,
+  futurePreviewForCareer,
+  type FutureFilterToken,
+} from "@/lib/career-future-discovery"
 
 const CATEGORY_LABELS = new Map<string, string>(STUDY_CATEGORIES.map((c) => [c.id, c.label]))
 const CATEGORY_ICON = new Map([
@@ -145,6 +159,8 @@ export function OccupationExplorer({
   const [countryProfileStatus, setCountryProfileStatus] = useState<CountryProfileStatus>("idle")
   const isCareerIndex = basePath === "/careers"
   const effectiveCountry = selectedCountry?.code || initialCountry
+  const futureCountryActive = isCareerIndex && effectiveCountry === FUTURE_FILTER_COUNTRY_CODE
+  const futureToken = futureCountryActive ? parseFutureFilter(searchParams.get("future")) : null
 
   useEffect(() => {
     if (!initialCountry) return
@@ -167,9 +183,10 @@ export function OccupationExplorer({
       if (category !== "all" && career.categoryId !== category) return false
       if (isCareerIndex && countryCode && !getIndexableCareerRoute(countryCode, career.id)) return false
       if (isCareerIndex && suppressed?.has(career.id)) return false
+      if (futureToken && !futureFilterMatchesCareer(career.id, futureToken)) return false
       return matchCareer(career, query)
     })
-  }, [category, initialCountry, initialQuery, isCareerIndex, query, selectedCountry?.code, suppressedCareerIds])
+  }, [category, futureToken, initialCountry, initialQuery, isCareerIndex, query, selectedCountry?.code, suppressedCareerIds])
 
   const publicResultsActive = query.trim() === initialQuery.trim()
   const searchResultCount = filtered.length + (publicResultsActive ? initialPublicResultCount : 0)
@@ -245,18 +262,19 @@ export function OccupationExplorer({
         params: {
           search_location: "careers",
           result_count: searchResultCount,
-          ...(category !== "all" ? { entity_filter: category } : {}),
+          entity_filter: futureToken ?? (category !== "all" ? category : undefined),
           search_term: query,
         },
       })
     }, 600)
     return () => window.clearTimeout(timer)
-  }, [category, query, searchResultCount])
+  }, [category, futureToken, query, searchResultCount])
 
   function updateCountry(code: string | null) {
     const params = new URLSearchParams(searchParams.toString())
     if (code) params.set("country", code)
     else params.delete("country")
+    if (code && code.toUpperCase() !== FUTURE_FILTER_COUNTRY_CODE) params.delete("future")
     if (selectedId) params.set("occupation", selectedId)
     if (query.trim()) params.set("q", query.trim())
     else params.delete("q")
@@ -295,9 +313,48 @@ export function OccupationExplorer({
     setFiltersOpen(false)
   }
 
+  function chooseFutureFilter(token: FutureFilterToken) {
+    const nextToken = futureToken === token ? null : token
+    const params = new URLSearchParams(searchParams.toString())
+    if (nextToken) {
+      params.set("future", nextToken)
+      trackAnalyticsEvent({ name: "filter_apply", params: { search_location: "careers", entity_filter: nextToken } })
+    } else {
+      params.delete("future")
+      trackAnalyticsEvent({ name: "filter_clear", params: { search_location: "careers", entity_filter: token } })
+    }
+    if (selectedId) params.set("occupation", selectedId)
+    if (query.trim()) params.set("q", query.trim())
+    else params.delete("q")
+    router.replace(params.toString() ? `${basePath}?${params.toString()}` : basePath, { scroll: false })
+  }
+
   const selectedCategoryLabel = category === "all" ? (isCareerIndex ? "All careers" : "All occupations") : CATEGORY_LABELS.get(category) ?? "Filters"
   const isDiscoveryMode = !showAllOccupations && category === "all" && !query.trim() && !selectedId
   const hasOnlyPublicResults = isCareerIndex && publicResultsActive && initialPublicResultCount > 0 && filtered.length === 0
+  const hiddenFutureCareerIds = futureToken ? futureFilterHiddenCareerIds(futureToken) : []
+  const futureFilterNote = futureToken
+    ? `${futureFilterActiveNote(locale)}${futureFilterHiddenNote(hiddenFutureCareerIds.length, locale) ?? ""}`
+    : null
+  const futureFilterLabel = isCareerIndex ? "Future outlook" : null
+  const futureFilterChips = (
+    <FilterBar className="mt-1.5">
+      {FUTURE_FILTER_GROUPS.map((group) => (
+        <Fragment key={group.key}>
+          <span className="px-0.5 text-xs font-medium text-campcareer-muted">{futureFilterGroupLabel(group.key, locale)}</span>
+          {group.tokens.map((chip) => (
+            <FilterChip
+              key={chip.token}
+              active={futureToken === chip.token}
+              onClick={() => chooseFutureFilter(chip.token)}
+            >
+              {futureFilterTokenLabel(chip.token, locale)} ({futureFilterMatchCount(chip.token)})
+            </FilterChip>
+          ))}
+        </Fragment>
+      ))}
+    </FilterBar>
+  )
 
   return (
     <>
@@ -325,7 +382,7 @@ export function OccupationExplorer({
 
       <div className="relative mt-3 lg:hidden">
         <button type="button" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} className="inline-flex min-h-10 items-center gap-2 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink-secondary shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"><SlidersHorizontal className="size-4" /><span>{selectedCategoryLabel}</span><ChevronDown className={cn("size-3.5 transition-transform duration-cc-fast", filtersOpen && "rotate-180")} /></button>
-        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-3 shadow-cc-raised"><p className="px-1 pb-2 text-xs font-semibold text-campcareer-muted">Filter {isCareerIndex ? "careers" : "occupations"}</p><FilterBar><FilterChip active={category === "all"} onClick={() => chooseCategory("all")}>All</FilterChip>{STUDY_CATEGORIES.map((item) => <FilterChip key={item.id} active={category === item.id} onClick={() => chooseCategory(item.id)}>{item.label}</FilterChip>)}</FilterBar></div> : null}
+        {filtersOpen ? <div className="absolute left-0 top-12 z-30 w-full rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-3 shadow-cc-raised"><p className="px-1 pb-2 text-xs font-semibold text-campcareer-muted">Filter {isCareerIndex ? "careers" : "occupations"}</p><FilterBar><FilterChip active={category === "all"} onClick={() => chooseCategory("all")}>All</FilterChip>{STUDY_CATEGORIES.map((item) => <FilterChip key={item.id} active={category === item.id} onClick={() => chooseCategory(item.id)}>{item.label}</FilterChip>)}</FilterBar>{futureCountryActive ? <div className="mt-3 border-t border-campcareer-border pt-3"><p className="px-1 pb-2 text-xs font-semibold text-campcareer-muted">{futureFilterLabel}</p>{futureFilterChips}</div> : null}</div> : null}
       </div>
 
       <FilterBar className="mt-5 hidden lg:flex">
@@ -341,22 +398,38 @@ export function OccupationExplorer({
         ))}
       </FilterBar>
 
+      {futureCountryActive ? (
+        <div className="mt-3">
+          <p className="text-xs font-semibold text-campcareer-muted">{futureFilterLabel}</p>
+          {futureFilterChips}
+        </div>
+      ) : null}
+
       {isDiscoveryMode ? <OccupationDiscovery locale={locale} onChoose={chooseCategory} onBrowseAll={() => setShowAllOccupations(true)} isCareerIndex={isCareerIndex} /> : !hasOnlyPublicResults ? <>
-      <div className="mt-6 flex items-center justify-between">
+<div className="mt-6 flex items-center justify-between">
         <p className="text-sm font-medium text-campcareer-muted">
           {filtered.length} {isCareerIndex ? "careers" : "occupations"}
         </p>
       </div>
 
+      {futureFilterNote ? (
+        <p role="status" className="mt-2 text-xs leading-5 text-campcareer-muted">{futureFilterNote}</p>
+      ) : null}
+
       {filtered.length === 0 ? (
-        <EmptyState icon={<BriefcaseBusiness className="size-6" />} title={`No ${isCareerIndex ? "careers" : "occupations"} found`} detail={`No results match “${query}”.`} className="mt-4 min-h-56" />
+        <EmptyState
+          icon={<BriefcaseBusiness className="size-6" />}
+          title={`No ${isCareerIndex ? "careers" : "occupations"} found`}
+          detail={futureToken && !query.trim() ? "No Ireland careers match this Future outlook filter." : `No results match "${query}".`}
+          className="mt-4 min-h-56"
+        />
       ) : (
         <div className="mt-3 grid gap-4 lg:grid-cols-12 lg:items-start">
           {selected ? <section id="occupation-detail-mobile" className="min-w-0 scroll-mt-4 lg:hidden"><CountryAwareOccupationDetail career={selected} detail={selectedDetail} countryCode={selectedCountry?.code} countryName={selectedCountry?.name} countryProfile={countryProfile} countryProfileStatus={countryProfileStatus} /></section> : null}
 
           <section className="lg:hidden">
             <div className="flex items-center justify-between"><h2 className="text-sm font-semibold text-campcareer-ink">{selected ? `Browse ${filtered.length} related roles` : `${filtered.length} ${isCareerIndex ? "careers" : "occupations"}`}</h2><span className="text-xs text-campcareer-muted">Tap to view</span></div>
-            <div className="mt-2 space-y-2">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; const careerRoute = isCareerIndex && effectiveCountry ? getIndexableCareerRoute(effectiveCountry, career.id) : null; const itemClassName = cn("flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30", isSelected ? "border-brand bg-brand-tint" : "border-campcareer-border hover:border-brand/40 hover:bg-brand-tint cursor-pointer"); const inner = <><span className="size-2 shrink-0 rounded-full bg-brand" /><span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>{demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}</>; return careerRoute ? <Link key={career.id} href={careerRoute.path} className={itemClassName}>{inner}</Link> : <button key={career.id} type="button" onClick={() => select(career)} className={itemClassName}>{inner}</button> })}</div>
+            <div className="mt-2 space-y-2">{filtered.map((career) => { const detail = getOccupationDetail(career.id); const demand = selectedCountry ? detail?.demand.find((entry) => entry.countryCode === selectedCountry.code) : detail?.demand[0]; const isSelected = career.id === selectedId; const displayLabel = locale === "ko" ? career.labelKo : career.label; const futurePreview = isCareerIndex && effectiveCountry === FUTURE_FILTER_COUNTRY_CODE ? futurePreviewForCareer(career.id, locale) : null; const careerRoute = isCareerIndex && effectiveCountry ? getIndexableCareerRoute(effectiveCountry, career.id) : null; const itemClassName = cn("flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30", isSelected ? "border-brand bg-brand-tint" : "border-campcareer-border hover:border-brand/40 hover:bg-brand-tint cursor-pointer"); const inner = <><span className="size-2 shrink-0 rounded-full bg-brand" /><span className="min-w-0 flex-1"><span className={cn("block truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>{futurePreview ? <span className="block truncate text-[11px] font-medium leading-4 text-campcareer-muted">{futurePreview}</span> : null}</span>{demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}</>; return careerRoute ? <Link key={career.id} href={careerRoute.path} className={itemClassName}>{inner}</Link> : <button key={career.id} type="button" onClick={() => select(career)} className={itemClassName}>{inner}</button> })}</div>
           </section>
 
           <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:col-span-4 lg:block lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto lg:pr-1 lg:pb-2">
@@ -387,6 +460,7 @@ export function OccupationExplorer({
                           ? countryProfile.metric.opportunityScore
                           : null
                       const careerRoute = isCareerIndex && effectiveCountry ? getIndexableCareerRoute(effectiveCountry, career.id) : null
+                      const futurePreview = isCareerIndex && effectiveCountry === FUTURE_FILTER_COUNTRY_CODE ? futurePreviewForCareer(career.id, locale) : null
                       const itemClassName = cn(
                         "flex min-h-11 w-full items-center gap-2.5 rounded-cc-surface border bg-campcareer-surface px-3 py-2.5 text-left shadow-cc-surface transition-colors duration-cc-fast focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30",
                         isSelected
@@ -396,7 +470,10 @@ export function OccupationExplorer({
                       const inner = (
                         <>
                           <span className="size-2 shrink-0 rounded-full bg-brand" />
-                          <span className={cn("min-w-0 flex-1 truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>
+                          <span className="min-w-0 flex-1">
+                            <span className={cn("block truncate text-sm font-semibold", isSelected ? "text-brand" : "text-campcareer-ink")}>{displayLabel}</span>
+                            {futurePreview ? <span className="block truncate text-[11px] font-medium leading-4 text-campcareer-muted">{futurePreview}</span> : null}
+                          </span>
                           {selectedScore != null ? <Badge variant="primary">{selectedScore}</Badge> : demand ? <Badge variant="success">{demand.rating.toUpperCase()}</Badge> : null}
                         </>
                       )
