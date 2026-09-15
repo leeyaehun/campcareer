@@ -7,6 +7,8 @@ import { ShareComparisonButton } from "@/components/compare/share-comparison-but
 import { CompareCell, CompareShell } from "@/components/ui/compare"
 import { DataTable, DataTableCell, DataTableHeader, DataTableRow } from "@/components/ui/data-table"
 import { trackAnalyticsEvent } from "@/lib/analytics"
+import { futureOutlookAiExposureBoundary } from "@/lib/career-future-intelligence-ui"
+import { buildIrelandFutureCompareRows } from "@/lib/career-future-compare"
 import {
   buildIrelandCareerCompareHref,
   IE_CAREER_COMPARE_IDS,
@@ -70,6 +72,23 @@ export function IrelandCareersCompareMatrix({
   }, [canCompare, selected.length, selectedIds])
 
   const payProxy = IE_CAREER_COMPARE_PAY_PROXY_PER_HOUR
+  const futureRows = buildIrelandFutureCompareRows(selected.map((item) => item.id))
+  const aiExposureBoundary = futureOutlookAiExposureBoundary("en")
+
+  type MobileCompareRow = { label: string; values: readonly string[]; secondary?: boolean; divider?: boolean }
+  const mobileRows: MobileCompareRow[] = [
+    { label: "CampCareer Score", values: selected.map((item) => `${item.score.total}/100`) },
+    { label: "Demand", values: selected.map((item) => `${item.score.demand}/10`) },
+    { label: "Pay", values: selected.map(() => payProxy) },
+    { label: "Entry", values: selected.map((item) => `${item.score.entry}/10`) },
+    { label: "Evidence confidence", values: selected.map((item) => confidenceLabel(item.confidence)) },
+    { label: "Future outlook", values: [], divider: true },
+    ...futureRows.map((row) => ({ label: row.label, values: row.values, secondary: true })),
+    { label: "Official occupation scope", values: selected.map((item) => item.officialTitle ?? "—") },
+    { label: "Registration", values: selected.map((item) => registrationLabel(item.registrationRequired)) },
+    { label: "Key sources", values: selected.map((item) => item.sourceLabels.length ? item.sourceLabels.join(" · ") : "—"), secondary: true },
+    { label: "Evidence checked", values: selected.map((item) => item.sourceCheckedOn ?? "—") },
+  ]
 
   return (
     <CompareShell>
@@ -152,6 +171,12 @@ export function IrelandCareersCompareMatrix({
                 <DesktopRow label="Pay" values={selected.map(() => payProxy)} />
                 <DesktopRow label="Entry" values={selected.map((item) => `${item.score.entry}/10`)} />
                 <DesktopRow label="Evidence confidence" values={selected.map((item) => confidenceLabel(item.confidence))} />
+                <tr>
+                  <td colSpan={selected.length + 1} className="bg-campcareer-canvas px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">Future outlook</td>
+                </tr>
+                {futureRows.map((row) => (
+                  <DesktopRow key={row.signal} label={row.label} values={row.values} secondary />
+                ))}
                 <DesktopRow label="Official occupation scope" values={selected.map((item) => item.officialTitle ?? "—")} />
                 <DesktopRow label="Registration" values={selected.map((item) => registrationLabel(item.registrationRequired))} />
                 <DesktopRow
@@ -162,37 +187,34 @@ export function IrelandCareersCompareMatrix({
                 <DesktopRow label="Evidence checked" values={selected.map((item) => item.sourceCheckedOn ?? "—")} />
               </tbody>
             </DataTable>
+            <p className="mt-3 text-xs leading-5 text-campcareer-muted">{aiExposureBoundary}</p>
           </div>
 
           <div className="mt-4 divide-y divide-campcareer-border border-y border-campcareer-border md:hidden">
-            {[
-              { label: "CampCareer Score", values: selected.map((item) => `${item.score.total}/100`) },
-              { label: "Demand", values: selected.map((item) => `${item.score.demand}/10`) },
-              { label: "Pay", values: selected.map(() => payProxy) },
-              { label: "Entry", values: selected.map((item) => `${item.score.entry}/10`) },
-              { label: "Evidence confidence", values: selected.map((item) => confidenceLabel(item.confidence)) },
-              { label: "Official occupation scope", values: selected.map((item) => item.officialTitle ?? "—") },
-              { label: "Registration", values: selected.map((item) => registrationLabel(item.registrationRequired)) },
-              {
-                label: "Key sources",
-                values: selected.map((item) => item.sourceLabels.length ? item.sourceLabels.join(" · ") : "—"),
-                secondary: true,
-              },
-              { label: "Evidence checked", values: selected.map((item) => item.sourceCheckedOn ?? "—") },
-            ].map((row) => (
-              <div key={row.label} className="py-4">
-                <p className="text-sm font-medium text-campcareer-ink-secondary">{row.label}</p>
-                <div className="mt-2 grid grid-cols-2 gap-2">
-                  {selected.map((item, index) => (
-                    <CompareCell key={`${row.label}-${item.id}`} label={item.label}>
-                      <p className={`break-words text-sm font-semibold leading-5 text-campcareer-ink ${row.secondary ? "text-xs leading-5 text-campcareer-ink-secondary" : ""}`}>
-                        {row.values[index]}
-                      </p>
-                    </CompareCell>
-                  ))}
+            {mobileRows.map((row) => {
+              if (row.divider) {
+                return (
+                  <div key={row.label} className="py-2.5" role="heading" aria-level={2}>
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-campcareer-muted">{row.label}</p>
+                  </div>
+                )
+              }
+              return (
+                <div key={row.label} className="py-4">
+                  <p className="text-sm font-medium text-campcareer-ink-secondary">{row.label}</p>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    {selected.map((item, index) => (
+                      <CompareCell key={`${row.label}-${item.id}`} label={item.label}>
+                        <p className={`break-words text-sm font-semibold leading-5 text-campcareer-ink ${row.secondary ? "text-xs leading-5 text-campcareer-ink-secondary" : ""}`}>
+                          {row.values[index]}
+                        </p>
+                      </CompareCell>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
+            <p className="py-3 text-xs leading-5 text-campcareer-muted">{aiExposureBoundary}</p>
           </div>
         </>
       )}
