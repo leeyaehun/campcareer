@@ -4,18 +4,20 @@ Last reviewed: 12 September 2026
 
 ## Baseline
 
-The supplied settled 28-day baseline is 1,073 impressions, 3 clicks, roughly
-0.28% CTR and average position 30.2. The homepage is confirmed indexed.
-`/careers` is reported crawled but not indexed; its product policy is
-intentional discovery-surface `noindex`, so do not treat that as an indexing
-defect or request indexing without a separate product decision.
-`/countries/ie` is currently unknown to Google and remains the Ireland Golden
-Slice indexing target once its connected decision value is ready.
+The 12 September supplied settled 28-day baseline was 1,073 impressions, 3 clicks,
+roughly 0.28% CTR and average position 30.2. Treat that snapshot as historical,
+not as the current indexing contract. The homepage is indexed. The base
+`/careers` hub is now intentionally indexable and followable; filtered Career
+states remain non-indexable discovery surfaces. Canonical Country pages are
+published independently and should be inspected against the live sitemap and
+URL Inspection state.
 
-The public sitemap contained 2,156 URL entries when checked on 12 September
-2026. Counts may change with governed publication; use the live sitemap and
-Search Console report rather than treating a prior approximate count as a
-contract.
+On 15 September, the public root sitemap reported 2,194 submitted URLs. The
+crawl graph now requires server-rendered canonical links from the Countries,
+Careers and Institutions discovery hubs so sitemap discovery is not the only
+path into those detail families. Counts may change with governed publication;
+use the live sitemap and Search Console report rather than treating a prior
+approximate count as a contract.
 
 ## Weekly review
 
