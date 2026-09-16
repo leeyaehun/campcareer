@@ -7,6 +7,7 @@ const PRIMARY_DESTINATIONS = [
   { href: "/careers", label: { en: "Careers", ko: "커리어" }, matches: ["/careers", "/career"] },
   { href: "/institutions", label: { en: "Education", ko: "교육" }, matches: ["/institutions"] },
   { href: "/programs", label: { en: "Degrees", ko: "학위" }, matches: ["/programs", "/courses"] },
+  { href: "/maps", label: { en: "Maps", ko: "지도" }, matches: ["/maps"] },
   { href: "/compare", label: { en: "Compare", ko: "비교" }, matches: ["/compare"] },
 ] as const
 

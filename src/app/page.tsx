@@ -35,6 +35,11 @@ const destinations = [
     description: "Explore programs and qualifications connected to career outcomes.",
   },
   {
+    href: "/maps",
+    title: "Maps",
+    description: "Explore geographic differences in careers, countries, education, and pay.",
+  },
+  {
     href: "/compare",
     title: "Compare",
     description: "Compare reviewed career, country, city, and program options.",

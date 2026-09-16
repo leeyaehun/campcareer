@@ -8,15 +8,16 @@ function source(path: string) {
   return readFileSync(path, "utf8")
 }
 
-test("global navigation uses the five requested durable categories", () => {
+test("global navigation uses the official destination categories", () => {
   const primaryNav = source("src/components/layout/primary-product-nav.tsx")
   const landing = source("src/app/page.tsx")
 
-  for (const label of ["Countries", "Careers", "Education", "Degrees", "Compare"]) {
+  for (const label of ["Countries", "Careers", "Education", "Degrees", "Maps", "Compare"]) {
     assert.ok(primaryNav.includes(`en: "${label}"`))
     assert.ok(landing.includes(`title: "${label}"`))
   }
   assert.ok(primaryNav.includes('href: "/compare"'))
+  assert.ok(primaryNav.includes('href: "/maps"'))
 })
 
 test("Ireland country hub has visible local decision links without a duplicate career CTA", () => {

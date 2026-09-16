@@ -28,6 +28,7 @@ export function SiteFooter({ className }: { className?: string }) {
               <FooterLink href="/countries" locale={locale}>{isKo ? "국가" : "Countries"}</FooterLink>
               <FooterLink href="/programs" locale={locale}>{isKo ? "학위" : "Degrees"}</FooterLink>
               <FooterLink href="/institutions" locale={locale}>{isKo ? "교육" : "Education"}</FooterLink>
+              <FooterLink href="/maps" locale={locale}>{isKo ? "지도" : "Maps"}</FooterLink>
               <FooterLink href="/compare" locale={locale}>{isKo ? "비교" : "Compare"}</FooterLink>
             </ul>
           </div>
