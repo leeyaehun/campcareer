@@ -119,6 +119,11 @@ type ProgramFactRow = {
   extracted_at: string | null
 }
 
+type ProgramCareerLinkRow = {
+  profile_key: string
+  relation_type: string
+}
+
 export type AuProgramFact = {
   fieldKey: string
   value: unknown
@@ -127,8 +132,16 @@ export type AuProgramFact = {
   extractedAt: string | null
 }
 
+export type AuProgramCareerRelationType = "direct" | "graduate_entry" | "progression" | "related"
+
+export type AuProgramCareerLink = {
+  careerId: string
+  relationType: AuProgramCareerRelationType
+}
+
 export type AuProgramDetail = AuProgramListItem & {
   facts: AuProgramFact[]
+  careerLinks: AuProgramCareerLink[]
 }
 
 function numberOrNull(value: number | string | null) {
@@ -416,7 +429,7 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
   if (!data) return null
 
   const course = data as unknown as CourseRow
-  const [institutions, factsResult] = await Promise.all([
+  const [institutions, factsResult, careerLinksResult] = await Promise.all([
     institutionMap(course.institution_id ? [course.institution_id] : []),
     supabaseAdmin
       .from("program_page_facts_au")
@@ -425,12 +438,22 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
       .eq("review_status", "verified")
       .order("field_key", { ascending: true })
       .order("extracted_at", { ascending: true }),
+    supabaseAdmin
+      .from("country_occupation_program_links")
+      .select("profile_key, relation_type")
+      .eq("program_ref", `au-program:${id}`)
+      .like("profile_key", "AU:%")
+      .order("profile_key", { ascending: true }),
   ])
 
   if (factsResult.error) {
     throw new Error(`Unable to load Australian program facts: ${factsResult.error.message}`)
   }
+  if (careerLinksResult.error) {
+    throw new Error(`Unable to load Australian program career links: ${careerLinksResult.error.message}`)
+  }
   const factRows = factsResult.data
+  const careerLinkRows = (careerLinksResult.data ?? []) as ProgramCareerLinkRow[]
 
   const program = mapProgram(
     course,
@@ -446,12 +469,19 @@ async function loadAuProgramById(id: number): Promise<AuProgramDetail | null> {
       reviewStatus: fact.review_status,
       extractedAt: fact.extracted_at,
     })),
+    careerLinks: careerLinkRows.flatMap((row) => {
+      const match = /^AU:(.+)$/.exec(row.profile_key)
+      if (!match) return []
+      const relationType = row.relation_type as AuProgramCareerRelationType
+      if (!["direct", "graduate_entry", "progression", "related"].includes(relationType)) return []
+      return [{ careerId: match[1], relationType }]
+    }),
   }
 }
 
 const getCachedAuProgramById = unstable_cache(
   loadAuProgramById,
-  ["au-program-detail-v1"],
+  ["au-program-detail-v2"],
   { revalidate: 3600, tags: ["au-program-detail"] },
 )
 
