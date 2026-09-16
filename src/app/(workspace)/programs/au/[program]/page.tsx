@@ -6,6 +6,7 @@ import { getAuProgramById } from "@/lib/programs/au-programs.server"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { isIndexableAuProgramId } from "@/lib/programs/program-routes"
 import { parseProgramId, programDetailPath } from "@/lib/programs/program-search"
+import { getIndexableCareerRoute } from "@/lib/workspace/occupation-routes"
 import {
   formatProgramDuration,
   formatProgramMoney,
@@ -90,6 +91,10 @@ export default async function ProgramDetailPage({ params }: Params) {
     : null
   const verified = program.officialUrlStatus === "verified"
   const locationsVerified = program.deliveryLocations.length > 0
+  const relatedCareers = program.careerLinks.flatMap((link) => {
+    const route = getIndexableCareerRoute("AU", link.careerId)
+    return route ? [{ ...link, route }] : []
+  })
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -171,6 +176,26 @@ export default async function ProgramDetailPage({ params }: Params) {
             <section className="mt-5 rounded-xl border border-dashed border-[#dcdad4] bg-[#fbfbf9] p-5">
               <h2 className="text-[14px] font-semibold">Detailed admission facts are under review</h2>
             <p className="mt-2 text-[12.5px] leading-5 text-[#6f6d68]">The active CRICOS record and registered delivery locations are available now. Entry requirements and intakes appear after the institution page is verified.</p>
+            </section>
+          )}
+
+          {relatedCareers.length > 0 && (
+            <section className="mt-5 rounded-xl border border-[#e7e6e3] bg-white p-5 sm:p-6">
+              <h2 className="text-[14.5px] font-semibold">Related CampCareer careers</h2>
+              <p className="mt-2 text-[11.5px] leading-5 text-[#6f6d68]">
+                These links use reviewed Program-to-Career relationships. They do not guarantee registration, licensing, visa eligibility or employment.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {relatedCareers.map(({ careerId, relationType, route }) => (
+                  <Link
+                    key={careerId}
+                    href={route.path}
+                    className="rounded-full border border-[#dfe5dc] bg-[#f8faf7] px-3 py-1.5 text-[11.5px] font-semibold text-[#4f6648] transition hover:border-[#3e7a2e]/40 hover:text-[#3e7a2e]"
+                  >
+                    {route.career.label} · {relationType.replaceAll("_", " ")}
+                  </Link>
+                ))}
+              </div>
             </section>
           )}
         </main>
