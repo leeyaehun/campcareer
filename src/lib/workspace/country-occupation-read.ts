@@ -2,6 +2,8 @@ import "server-only"
 
 import { CAMPCAREER_SCORE_VERSION, campCareerScoreFromLegacyBreakdown } from "@/lib/campcareer-score"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { isIndexableAuProgramId } from "@/lib/programs/program-routes"
+import { programDetailPath } from "@/lib/programs/program-search"
 import type {
   CountryOccupationLink,
   CountryOccupationMetric,
@@ -109,7 +111,7 @@ export async function getCountryOccupationProfile(
     // Resolve only the already-curated occupation program IDs through the server-only service-role client.
     const coursesResult = await supabaseAdmin
       .from("courses_au")
-      .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, cricos_url, qualifax_url")
+      .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, official_url_status, cricos_url, qualifax_url")
       .in("id", auProgramIds)
 
     if (coursesResult.error) throw coursesResult.error
@@ -141,6 +143,9 @@ export async function getCountryOccupationProfile(
         durationYears: numeric(row.duration_years),
         tuitionFeeAud: numeric(row.tuition_fee_aud),
         url: row.official_course_url ?? row.cricos_url ?? row.qualifax_url ?? null,
+        canonicalPath: isIndexableAuProgramId(id) && row.official_url_status === "verified"
+          ? programDetailPath(id, row.title ?? "Untitled program")
+          : null,
       })
     }
   }
