@@ -34,7 +34,8 @@ test("generic usefulness prompts are not mounted, while explicit data-issue repo
 test("Country, City, and Compare routes do not show shared internal-context notices", () => {
   const notice = readFileSync("src/components/workspace/contextual-surface-notice.tsx", "utf8")
   assert.doesNotMatch(notice, /COUNTRY CONTEXT|Location gives a career context|pathname === "\/countries"|pathname === "\/cities"/)
-  assert.match(notice, /CAREER PATH/)
+  assert.match(notice, /CAREER DISCOVERY/)
+  assert.doesNotMatch(notice, /CAREER PATH|PROVIDER CONTEXT/)
   assert.doesNotMatch(notice, /SECONDARY ACTION|Compare a decision, not everything/)
   assert.match(notice, /PATH CONTEXT/)
 })

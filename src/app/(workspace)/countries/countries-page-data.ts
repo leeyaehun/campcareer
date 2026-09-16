@@ -10,18 +10,21 @@ import { BELGIUM_OCCUPATION_COUNTRY_PROFILE } from "@/data/belgium-occupation-co
 import { FRANCE_OCCUPATION_COUNTRY_PROFILE } from "@/data/france-occupation-country-profile"
 import { getBatch2CountryContent } from "@/data/batch-2-country-content"
 import { BATCH_3_COUNTRY_CONTENT } from "@/data/batch-3-country-content"
+import { getIrelandEmploymentSectorsSorted } from "@/data/ireland-employment-sectors"
 import { getCountryMetrics } from "@/lib/workspace/country-metrics"
 import { formatMoneyRange, type CountryMetrics } from "@/lib/workspace/country-metric-contract"
 
+export type IndustrySectorBar = { label: string; value: number }
+
 export type CountryDiscoverySummary = {
   country: LaunchCountry
-  introduction: string
   strongMajorLabels: readonly string[]
   institutionCount: number
   topInstitutions: readonly string[]
   workOpportunityHeadline: string
   salaryFormatted: string
   minimumWageFormatted: string | null
+  industrySectors: readonly IndustrySectorBar[] | null
 }
 
 const OCCUPATION_PROFILES: Partial<Record<LaunchCountryCode, { introduction: string; strongMajors: readonly { id: string; label: string; reason: string }[]; majorInstitutions: readonly { name: string; type: string; location: string }[] }>> = {
@@ -104,23 +107,25 @@ export async function loadCountryDiscoveryData(): Promise<readonly CountryDiscov
     const editorial = getEditorialContent(country.code)
     const metrics = metricsResults[index]
 
-    const introduction = editorial?.introduction ?? `${country.name} — explore career and education opportunities.`
     const strongMajorLabels = editorial?.strongMajors.map((m) => m.label) ?? []
     const institutions = editorial?.majorInstitutions ?? []
-    const topInstitutions = institutions.slice(0, 3).map((inst) => inst.name)
+    const topInstitutions = institutions.slice(0, 2).map((inst) => inst.name)
     const workOpportunityHeadline = getWorkOpportunities(country.code)
     const salaryFormatted = formatMoneyRange(metrics?.salaryRange)
     const minimumWageFormatted = metrics ? formatMinimumWage(metrics) : null
+    const industrySectors = country.code === "IE"
+      ? getIrelandEmploymentSectorsSorted().slice(0, 5).map((sector) => ({ label: sector.officialLabel, value: sector.employmentCount }))
+      : null
 
     return {
       country,
-      introduction,
       strongMajorLabels,
       institutionCount: institutions.length,
       topInstitutions,
       workOpportunityHeadline,
       salaryFormatted,
       minimumWageFormatted,
+      industrySectors,
     }
   })
 }

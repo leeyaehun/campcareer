@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { loadCountryDiscoveryData } from "./countries-page-data"
-import { CountryDiscoveryCard } from "./country-discovery-card"
+import { CountrySearch } from "./country-search"
 
 export const metadata = {
   title: "Countries | Explore Study & Career Destinations",
@@ -19,23 +19,12 @@ export default async function CountriesPage() {
       <section>
         <h1 className="text-3xl font-semibold tracking-[-0.04em] text-campcareer-ink sm:text-4xl">Countries</h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-campcareer-ink-secondary">
-          Explore where to study, work and build your career. Each destination profile summarises its economic strengths,
-          minimum wage, notable institutions and career opportunities before you open the full country hub.
+          Explore where to study, work and build your career. Scan career strengths, earnings and notable institutions,
+          then open a country hub for the full picture.
         </p>
       </section>
 
-      <section className="mt-10" aria-label="Explore countries">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-campcareer-muted">
-          {countries.length} supported countries
-        </h2>
-        <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {countries.map((data) => (
-            <li key={data.country.code}>
-              <CountryDiscoveryCard data={data} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <CountrySearch countries={countries} />
 
       <footer className="mt-10 border-t border-campcareer-border pt-6">
         <nav aria-label="Country pages">

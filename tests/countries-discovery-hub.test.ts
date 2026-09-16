@@ -21,13 +21,12 @@ test("the /countries discovery hub is indexable with a canonical URL", () => {
 
 test("every supported launch country gets a canonical detail-page link", () => {
   const card = source("src/app/(workspace)/countries/country-discovery-card.tsx")
-  const page = source("src/app/(workspace)/countries/page.tsx")
+  const search = source("src/app/(workspace)/countries/country-search.tsx")
 
   assert.match(card, /const href = `\/countries\/\$\{country\.code\.toLowerCase\(\)\}`/)
   assert.match(card, /href=\{href\}/)
   assert.match(card, /country\.code\.toLowerCase\(\)/)
-  assert.match(page, /LAUNCH_COUNTRIES\.map/)
-  assert.match(page, /<CountryDiscoveryCard data=\{data\} \/>/)
+  assert.match(search, /<CountryDiscoveryCard data=\{data\} \/>/)
 
   // Every launch country maps to the canonical code-based country hub route.
   for (const country of LAUNCH_COUNTRIES) {
@@ -60,10 +59,35 @@ test("cards surface decision facts: career strengths, earnings, wage and institu
   assert.ok(card.includes("minimumWageFormatted"), "cards must preview minimum wage")
   assert.ok(card.includes("topInstitutions"), "cards must preview notable institutions")
   assert.ok(card.includes("countryFlag(country.code)"), "cards must include a country identity element")
+  assert.ok(card.includes("workOpportunityHeadline"), "cards must preview career opportunities")
 
   // Safe fallback when an official figure is unavailable (never "zero").
   assert.ok(data.includes('salaryFormatted = formatMoneyRange(metrics?.salaryRange)'))
   assert.ok(data.includes("minimumWageFormatted = metrics ? formatMinimumWage(metrics) : null"))
+})
+
+test("major-industry visualization is data-driven and Ireland-only", () => {
+  const card = source("src/app/(workspace)/countries/country-discovery-card.tsx")
+  const data = source("src/app/(workspace)/countries/countries-page-data.ts")
+
+  assert.ok(card.includes("industrySectors"), "cards render a compact sector chart when data exists")
+  assert.ok(card.includes("aria-label=\"Major employment sectors\""), "sector chart is accessible")
+  assert.ok(data.includes("getIrelandEmploymentSectorsSorted"), "Ireland is the approved sector-data source")
+  assert.match(data, /country\.code === "IE"/)
+  assert.ok(data.includes('industrySectors: readonly IndustrySectorBar[] | null'), "unavailable industries stay null, never fabricated")
+})
+
+test("country search filters the supported set with a clear empty state", () => {
+  const page = source("src/app/(workspace)/countries/page.tsx")
+  const search = source("src/app/(workspace)/countries/country-search.tsx")
+
+  assert.match(search, /"use client"/)
+  assert.match(page, /<CountrySearch countries=\{countries\} \/>/)
+  assert.match(search, /placeholder="Search countries\.\.\."/)
+  assert.match(search, /aria-label="Search countries"/)
+  assert.match(search, /country\.name\.toLowerCase\(\)\.includes/)
+  assert.match(search, /No countries match/)
+  assert.match(search, /type="search"/)
 })
 
 test("navigating between the hub and country hubs stays inside canonical routes", () => {
