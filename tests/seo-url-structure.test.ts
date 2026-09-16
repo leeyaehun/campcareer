@@ -126,6 +126,24 @@ test("published Program country hubs are canonical sitemap URLs with crawlable l
   assert.match(headerSource, /aria-label=.*Published program countries/)
 })
 
+test("discovery hubs expose crawlable canonical graph links", () => {
+  const countriesSource = readFileSync("src/app/(workspace)/countries/page.tsx", "utf8")
+  const countryShellSource = readFileSync("src/app/(workspace)/countries/country-dashboard-shell.tsx", "utf8")
+  const careersSource = readFileSync("src/app/(workspace)/careers/page.tsx", "utf8")
+  const institutionsSource = readFileSync("src/app/(workspace)/institutions/institutions-explorer.tsx", "utf8")
+
+  assert.match(countriesSource, /robots: \{ index: false, follow: true \}/)
+  assert.match(countryShellSource, /aria-label="Published country pages"/)
+  assert.match(countryShellSource, /href=\{\`\/countries\/\$\{country\.code\.toLowerCase\(\)\}\`\}/)
+
+  assert.match(careersSource, /INDEXABLE_CAREER_PROFILES/)
+  assert.match(careersSource, /href=\{route\.path\}/)
+  assert.match(careersSource, /Reviewed career pages/)
+
+  assert.match(institutionsSource, /aria-label="Published institution countries"/)
+  assert.match(institutionsSource, /href=\{institutionCountryPath\(code\)\}/)
+})
+
 test("robots includes the production root sitemap without blocking canonical country pages", () => {
   const value = robots()
   const sitemapReferences = Array.isArray(value.sitemap) ? value.sitemap : [value.sitemap]

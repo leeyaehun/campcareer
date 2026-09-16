@@ -4,7 +4,7 @@ export const metadata = {
   title: "Country career context",
   description: "Use country, city, cost, visa and labour-market evidence as context for a specific career decision.",
   alternates: { canonical: "/countries" },
-  robots: { index: false, follow: false } as const,
+  robots: { index: false, follow: true } as const,
 }
 
 export default async function CountriesPage({

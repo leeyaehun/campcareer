@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Globe2 } from "lucide-react"
-import { getLaunchCountry } from "@/data/launch-countries"
+import { getLaunchCountry, LAUNCH_COUNTRIES } from "@/data/launch-countries"
 import { getCountryExplorer } from "@/lib/workspace/country-explorer"
 import { CountrySearchControl } from "./country-search-control"
 
@@ -99,8 +99,20 @@ export function CountryDashboardShell({
             </span>
             <h2 className="mt-4 text-[16px] font-semibold text-[#1b1b1b]">Pick a country to open its dashboard</h2>
             <p className="mt-1.5 max-w-md text-[13px] leading-5.5 text-[#6f6d68]">
-              Search all 20 launch destinations or use a popular country above.
+              Search all 20 launch destinations or browse the published country pages below.
             </p>
+            <nav aria-label="Published country pages" className="mt-6 flex max-w-4xl flex-wrap justify-center gap-2">
+              {LAUNCH_COUNTRIES.map((country) => (
+                <Link
+                  key={country.code}
+                  href={`/countries/${country.code.toLowerCase()}`}
+                  prefetch={false}
+                  className="rounded-full border border-[#e0dfdb] bg-white px-3 py-1.5 text-[12px] font-medium text-[#4d4c48] transition hover:border-[#2563eb] hover:text-[#2563eb]"
+                >
+                  {country.name}
+                </Link>
+              ))}
+            </nav>
           </div>
         )}
       </div>
