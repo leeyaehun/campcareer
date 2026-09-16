@@ -14,7 +14,7 @@ import {
   hasStrictFoundationPublicScoreEvidence,
   isCareerScoreReady,
 } from "./career-coverage"
-import { getCountryOccupationProfile } from "./country-occupation-read"
+import { getCountryOccupationProfile, getCountryOccupationProgramLinks } from "./country-occupation-read"
 import { readRawCareerData } from "./raw-career-data"
 import type {
   CareerMarketDemand,
@@ -119,7 +119,10 @@ const foundationHasPublicScore = (foundation: CareerDataFoundationResult) =>
     && hasStrictFoundationPublicScoreEvidence(foundation.scoreComponents),
   )
 
-const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult): CareerMarketProfile => {
+const toFoundationCompatibilityProfile = (
+  foundation: CareerDataFoundationResult,
+  programLinks: CareerMarketProfile["programLinks"] = [],
+): CareerMarketProfile => {
   const entryLinks: CareerMarketProfile["links"] = foundation.entryPoints
     .filter((entryPoint) => ["job_search", "employer", "apprenticeship", "training"].includes(entryPoint.entryType))
     .map((entryPoint) => ({
@@ -210,7 +213,7 @@ const toFoundationCompatibilityProfile = (foundation: CareerDataFoundationResult
     }],
     regions: [],
     links: entryLinks,
-    programLinks: [],
+    programLinks,
   }
 }
 
@@ -392,13 +395,14 @@ export async function getCareerMarketInsight({
     }
   }
 
-  const [foundation, recommendations, degreePaths, employmentEcosystem] = await Promise.all([
+  const [foundation, recommendations, degreePaths, employmentEcosystem, reviewedProgramLinks] = await Promise.all([
     getCareerDataFoundation({ countryCode: country, careerId }),
     includeRecommendations
       ? getCareerCountryRecommendations(careerId)
       : Promise.resolve([] as CareerMarketRecommendation[]),
     country === "IE" ? getIrelandCareerDegreePaths(careerId) : getCareerDegreePaths(country, careerId),
     country === "IE" ? getIrelandCareerEmploymentContext(careerId) : Promise.resolve(null),
+    country === "AU" ? getCountryOccupationProgramLinks(country, careerId) : Promise.resolve([]),
   ])
 
   if (foundation && foundationHasPublicScore(foundation)) {
@@ -412,7 +416,7 @@ export async function getCareerMarketInsight({
         sources: context.sources,
       },
       country: { code: country, name: countryName(country) },
-      profile: toFoundationCompatibilityProfile(foundation),
+      profile: toFoundationCompatibilityProfile(foundation, reviewedProgramLinks),
       foundation,
       readModelSource: "career_data_foundation",
       demand: toFoundationDemand(foundation),
