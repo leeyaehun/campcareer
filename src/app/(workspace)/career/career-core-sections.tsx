@@ -154,12 +154,14 @@ function studyResources(insight: CareerMarketInsight, locale: Locale): ResourceL
   const resources: ResourceLink[] = []
 
   for (const link of profile?.programLinks ?? []) {
-    if (!link.program?.url) continue
+    if (!link.program) continue
+    const href = link.program.canonicalPath ?? link.program.url
+    if (!href) continue
     resources.push({
       key: `program-${link.programRef}`,
       label: link.program.title,
       detail: link.program.provider,
-      href: link.program.url,
+      href,
       meta: link.program.durationYears ? tr(locale, `${link.program.durationYears}년`, `${link.program.durationYears} years`) : null,
     })
   }
@@ -543,17 +545,25 @@ function ResourceRow({ resource }: { resource: ResourceLink }) {
 }
 
 function ResourceCard({ resource, icon }: { resource: ResourceLink; icon: ReactNode }) {
-  return (
-    <a href={resource.href} target="_blank" rel="noreferrer" className="group rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30">
+  const body = (
+    <>
       <div className="flex items-start justify-between gap-3">
         <span className="grid size-8 place-items-center rounded-cc-control bg-brand-tint text-brand">{icon}</span>
-        <ExternalLink className="size-3.5 text-campcareer-muted transition-colors duration-cc-fast group-hover:text-brand" />
+        {resource.href.startsWith("/") ? (
+          <ArrowRight className="size-3.5 text-campcareer-muted transition-colors duration-cc-fast group-hover:text-brand" />
+        ) : (
+          <ExternalLink className="size-3.5 text-campcareer-muted transition-colors duration-cc-fast group-hover:text-brand" />
+        )}
       </div>
       <h3 className="mt-4 text-sm font-semibold leading-5 text-campcareer-ink">{resource.label}</h3>
       {resource.detail && <p className="mt-1 text-xs leading-5 text-campcareer-ink-secondary">{resource.detail}</p>}
       {resource.meta && <p className="mt-2 text-xs leading-5 text-campcareer-muted">{resource.meta}</p>}
-    </a>
+    </>
   )
+  const className = "group rounded-cc-surface border border-campcareer-border bg-campcareer-surface p-4 shadow-cc-surface transition-colors duration-cc-fast hover:border-brand/40 hover:bg-brand-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+  return resource.href.startsWith("/")
+    ? <Link href={resource.href} className={className}>{body}</Link>
+    : <a href={resource.href} target="_blank" rel="noreferrer" className={className}>{body}</a>
 }
 
 function relationshipLabel(path: CareerDegreePath, locale: Locale) {

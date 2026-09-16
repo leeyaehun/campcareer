@@ -80,6 +80,7 @@ export type CountryOccupationResolvedProgram = {
   durationYears: number | null
   tuitionFeeAud: number | null
   url: string | null
+  canonicalPath: string | null
 }
 
 export type CountryOccupationProgramLink = {
