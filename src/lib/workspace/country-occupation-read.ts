@@ -29,6 +29,102 @@ const auProgramId = (programRef: string): number | null => {
   return Number.isSafeInteger(id) ? id : null
 }
 
+type RawProgramLink = {
+  program_ref: string
+  relation_type: CountryOccupationProgramLink["relationType"]
+}
+
+async function resolveCountryOccupationProgramLinks(
+  country: string,
+  rawProgramLinks: RawProgramLink[],
+): Promise<CountryOccupationProgramLink[]> {
+  if (country !== "AU" || rawProgramLinks.length === 0) {
+    return rawProgramLinks.map((row) => ({
+      programRef: row.program_ref,
+      relationType: row.relation_type,
+      program: null,
+    }))
+  }
+
+  const auProgramIds = Array.from(
+    new Set(
+      rawProgramLinks
+        .map((row) => auProgramId(row.program_ref))
+        .filter((id): id is number => id != null),
+    ),
+  )
+  const resolvedPrograms = new Map<number, CountryOccupationResolvedProgram>()
+
+  if (auProgramIds.length > 0) {
+    const coursesResult = await supabaseAdmin
+      .from("courses_au")
+      .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, official_url_status, cricos_url, qualifax_url")
+      .in("id", auProgramIds)
+
+    if (coursesResult.error) throw coursesResult.error
+
+    const courseRows = coursesResult.data ?? []
+    const institutionIds = Array.from(
+      new Set(courseRows.map((row) => row.institution_id).filter((id): id is string => Boolean(id))),
+    )
+    const institutionNames = new Map<string, string>()
+
+    if (institutionIds.length > 0) {
+      const institutionsResult = await supabaseAdmin
+        .from("au_institution_identity_v1")
+        .select("legacy_provider_id, institution_name")
+        .in("legacy_provider_id", institutionIds)
+
+      if (institutionsResult.error) throw institutionsResult.error
+      for (const row of institutionsResult.data ?? []) {
+        institutionNames.set(row.legacy_provider_id, row.institution_name)
+      }
+    }
+
+    for (const row of courseRows) {
+      const id = Number(row.id)
+      if (!Number.isSafeInteger(id)) continue
+      resolvedPrograms.set(id, {
+        title: row.title,
+        provider: institutionNames.get(row.institution_id) ?? "Australian provider",
+        durationYears: numeric(row.duration_years),
+        tuitionFeeAud: numeric(row.tuition_fee_aud),
+        url: row.official_course_url ?? row.cricos_url ?? row.qualifax_url ?? null,
+        canonicalPath: isIndexableAuProgramId(id) && row.official_url_status === "verified"
+          ? programDetailPath(id, row.title ?? "Untitled program")
+          : null,
+      })
+    }
+  }
+
+  return rawProgramLinks.map((row) => {
+    const programId = auProgramId(row.program_ref)
+    return {
+      programRef: row.program_ref,
+      relationType: row.relation_type,
+      program: programId == null ? null : resolvedPrograms.get(programId) ?? null,
+    }
+  })
+}
+
+export async function getCountryOccupationProgramLinks(
+  countryCode: string,
+  canonicalCareerId: string,
+): Promise<CountryOccupationProgramLink[]> {
+  const country = countryCode.trim().toUpperCase()
+  const career = canonicalCareerId.trim().toLowerCase()
+  if (country !== "AU" || !career) return []
+
+  const result = await readRawCareerData((client) => client
+    .from("country_occupation_program_links")
+    .select("program_ref, relation_type")
+    .eq("profile_key", `${country}:${career}`)
+    .order("program_ref", { ascending: true }))
+
+  if (result.error) throw result.error
+  return resolveCountryOccupationProgramLinks(country, (result.data ?? []) as RawProgramLink[])
+}
+
 export async function getCountryOccupationProfile(
   countryCode: string,
   canonicalCareerId: string
@@ -93,62 +189,8 @@ export async function getCountryOccupationProfile(
     if (result.error) throw result.error
   }
 
-  const rawProgramLinks = programsResult.data ?? []
-  const resolvedPrograms = new Map<number, CountryOccupationResolvedProgram>()
-  const auProgramIds =
-    country === "AU"
-      ? Array.from(
-          new Set(
-            rawProgramLinks
-              .map((row) => auProgramId(row.program_ref))
-              .filter((id): id is number => id != null)
-          )
-        )
-      : []
-
-  if (auProgramIds.length > 0) {
-    // courses_au and the institution identity read model are deliberately not exposed to anon.
-    // Resolve only the already-curated occupation program IDs through the server-only service-role client.
-    const coursesResult = await supabaseAdmin
-      .from("courses_au")
-      .select("id, institution_id, title, duration_years, tuition_fee_aud, official_course_url, official_url_status, cricos_url, qualifax_url")
-      .in("id", auProgramIds)
-
-    if (coursesResult.error) throw coursesResult.error
-
-    const courseRows = coursesResult.data ?? []
-    const institutionIds = Array.from(
-      new Set(courseRows.map((row) => row.institution_id).filter((id): id is string => Boolean(id)))
-    )
-    const institutionNames = new Map<string, string>()
-
-    if (institutionIds.length > 0) {
-      const institutionsResult = await supabaseAdmin
-        .from("au_institution_identity_v1")
-        .select("legacy_provider_id, institution_name")
-        .in("legacy_provider_id", institutionIds)
-
-      if (institutionsResult.error) throw institutionsResult.error
-      for (const row of institutionsResult.data ?? []) {
-        institutionNames.set(row.legacy_provider_id, row.institution_name)
-      }
-    }
-
-    for (const row of courseRows) {
-      const id = Number(row.id)
-      if (!Number.isSafeInteger(id)) continue
-      resolvedPrograms.set(id, {
-        title: row.title,
-        provider: institutionNames.get(row.institution_id) ?? "Australian provider",
-        durationYears: numeric(row.duration_years),
-        tuitionFeeAud: numeric(row.tuition_fee_aud),
-        url: row.official_course_url ?? row.cricos_url ?? row.qualifax_url ?? null,
-        canonicalPath: isIndexableAuProgramId(id) && row.official_url_status === "verified"
-          ? programDetailPath(id, row.title ?? "Untitled program")
-          : null,
-      })
-    }
-  }
+  const rawProgramLinks = (programsResult.data ?? []) as RawProgramLink[]
+  const programLinks = await resolveCountryOccupationProgramLinks(country, rawProgramLinks)
 
   const internalBreakdown = {
     shortage: numeric(metricRow.shortage_component),
@@ -243,15 +285,6 @@ export async function getCountryOccupationProfile(
     providerType: row.provider_type,
     regionCode: row.region_code,
   }))
-
-  const programLinks: CountryOccupationProgramLink[] = rawProgramLinks.map((row) => {
-    const programId = auProgramId(row.program_ref)
-    return {
-      programRef: row.program_ref,
-      relationType: row.relation_type,
-      program: programId == null ? null : resolvedPrograms.get(programId) ?? null,
-    }
-  })
 
   return {
     profileKey: profile.profile_key,
