@@ -25,6 +25,11 @@ test("landing page search integration", () => {
   assert.match(landingPage, /Quick search/)
 })
 
+test("landing page uses the campcareer canvas background to emphasize cards", () => {
+  assert.match(landingPage, /bg-campcareer-canvas/)
+  assert.ok(!landingPage.includes("from-brand-tint via-white to-white"), "hero gradient was removed")
+})
+
 test("quick-search API route exists with force-dynamic", () => {
   assert.match(searchRoute, /force-dynamic/)
   assert.match(searchRoute, /quickSearch/)

@@ -49,7 +49,7 @@ const destinations = [
 
 export default function HomePage() {
   return (
-    <>
+    <div className="bg-campcareer-canvas">
       <Suspense fallback={null}>
         <RootOAuthCallbackFallback />
       </Suspense>
@@ -86,6 +86,6 @@ export default function HomePage() {
           ))}
         </section>
       </main>
-    </>
+    </div>
   )
 }
