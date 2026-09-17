@@ -4,6 +4,7 @@ import { expectNoHorizontalPageOverflow, observeUnexpectedBrowserErrors } from "
 const responsiveSurfaces = [
   { route: "/", width: 360, height: 800, name: "home" },
   { route: "/careers", width: 390, height: 844, name: "Careers" },
+  { route: "/countries", width: 390, height: 844, name: "Countries hub" },
   { route: "/career/australia/registered-nurse", width: 768, height: 900, name: "Career" },
   { route: "/countries/au", width: 1024, height: 900, name: "Country" },
   { route: "/programs/au/1-bachelor-of-arts", width: 1280, height: 900, name: "Program" },

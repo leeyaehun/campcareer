@@ -61,6 +61,43 @@ export function institutionCountryPath(countryCode: InstitutionMvpCountryCode) {
   return `/institutions/${countryCode.toLowerCase()}`
 }
 
+export function institutionExplorerViewName(countryCode: InstitutionMvpCountryCode) {
+  switch (countryCode) {
+    case "UK":
+      return "institution_explorer_uk_v1"
+    case "CA":
+      return "institution_explorer_ca_v1"
+    case "NL":
+      return "institution_explorer_nl_v1"
+    case "NZ":
+      return "institution_explorer_nz_v1"
+    case "SG":
+      return "institution_explorer_sg_v1"
+    case "DE":
+      return "institution_explorer_de_v1"
+    case "FR":
+      return "institution_explorer_fr_v1"
+    case "ES":
+      return "institution_explorer_es_v1"
+    case "AE":
+      return "institution_explorer_ae_v1"
+    case "US":
+      return "institution_explorer_us_tier_a_v1"
+    case "BE":
+    case "CH":
+    case "SE":
+    case "DK":
+      return "institution_explorer_eu_fastpath_v1"
+    case "FI":
+    case "NO":
+    case "JP":
+    case "KR":
+      return "institution_explorer_authority_fastpath_v1"
+    default:
+      return "institution_explorer_v1"
+  }
+}
+
 export function institutionDetailPath(
   countryCode: InstitutionMvpCountryCode,
   slug: string,

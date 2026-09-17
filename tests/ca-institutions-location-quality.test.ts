@@ -9,6 +9,7 @@ const locationMigration = readRepoFile(
   "supabase/migrations/20260808121000_ca_campus_location_quality.sql",
 )
 const explorerServer = readRepoFile("src/lib/institutions/institutions.server.ts")
+const explorerSearch = readRepoFile("src/lib/institutions/institution-search.ts")
 const detailServer = readRepoFile("src/lib/institutions/institution-detail.server.ts")
 
 test("Canada location layer preserves all programme-offering anchors", () => {
@@ -45,8 +46,8 @@ test("Canada verified locations use normalized geography and canonical IRCC prov
 })
 
 test("Canada Explorer and Detail select the Canada-specific location read models", () => {
-  assert.match(explorerServer, /countryCode === "CA"/)
-  assert.match(explorerServer, /institution_explorer_ca_v1/)
+  assert.match(explorerServer, /institutionExplorerViewName\(countryCode\)/)
+  assert.match(explorerSearch, /institution_explorer_ca_v1/)
   assert.match(detailServer, /countryCode === "CA"/)
   assert.match(detailServer, /institution_detail_ca_v1/)
 })

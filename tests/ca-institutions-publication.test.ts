@@ -24,6 +24,7 @@ const statusSyncMigration = readRepoFile(
   "supabase/migrations/20260808184512_ca_program_status_sync_after_phase3.sql",
 )
 const explorerServer = readRepoFile("src/lib/institutions/institutions.server.ts")
+const explorerSearch = readRepoFile("src/lib/institutions/institution-search.ts")
 const detailServer = readRepoFile("src/lib/institutions/institution-detail.server.ts")
 const explorerUi = readRepoFile("src/app/(workspace)/institutions/institutions-explorer.tsx")
 const canadianDetailUi = readRepoFile(
@@ -83,8 +84,8 @@ test("Canadian Detail exposes DLI when available and permits verified institutio
 })
 
 test("Canadian Explorer and Detail use the Canada-specific read models and location-safe wording", () => {
-  assert.match(explorerServer, /countryCode === "CA"/)
-  assert.match(explorerServer, /institution_explorer_ca_v1/)
+  assert.match(explorerServer, /institutionExplorerViewName\(countryCode\)/)
+  assert.match(explorerSearch, /institution_explorer_ca_v1/)
   assert.match(detailServer, /countryCode === "CA"/)
   assert.match(detailServer, /institution_detail_ca_v1/)
   assert.match(explorerUi, /countryCode !== "AU"/)

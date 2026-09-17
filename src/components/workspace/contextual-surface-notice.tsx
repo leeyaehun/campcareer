@@ -13,27 +13,11 @@ type SurfaceCopy = {
 
 const SURFACES: Array<{ matches: (pathname: string) => boolean; copy: SurfaceCopy }> = [
   {
-    matches: (pathname) => pathname === "/programs" || pathname.startsWith("/programs/") || pathname === "/courses" || pathname.startsWith("/courses/") || pathname === "/study" || pathname.startsWith("/study/"),
-    copy: {
-      eyebrow: { en: "CAREER PATH", ko: "커리어 경로" },
-      title: { en: "Programs support the career path", ko: "프로그램은 커리어 경로를 지원합니다" },
-      detail: { en: "Use this surface after evaluating the career. Keep courses tied to the job outcome you want.", ko: "먼저 커리어를 평가한 뒤 이용하세요. 과정 선택은 목표 직업과 연결해서 판단합니다." },
-    },
-  },
-  {
     matches: (pathname) => pathname === "/visas" || pathname.startsWith("/visas/"),
     copy: {
       eyebrow: { en: "PATH CONTEXT", ko: "경로 맥락" },
       title: { en: "Visa and work rights shape the path", ko: "비자와 근무 권한은 경로를 바꿉니다" },
       detail: { en: "Visa information can change your route, but it never changes the public CampCareer Score.", ko: "비자 정보는 진입 경로를 바꿀 수 있지만 공개 CampCareer Score를 바꾸지는 않습니다." },
-    },
-  },
-  {
-    matches: (pathname) => pathname === "/institutions" || pathname.startsWith("/institutions/"),
-    copy: {
-      eyebrow: { en: "PROVIDER CONTEXT", ko: "교육기관 맥락" },
-      title: { en: "Choose providers for the career path", ko: "커리어 경로에 맞는 교육기관을 고르세요" },
-      detail: { en: "Choose providers in the context of a career-relevant program, not as an independent ranking exercise.", ko: "교육기관 자체 순위보다 목표 커리어에 필요한 프로그램을 기준으로 판단합니다." },
     },
   },
   {

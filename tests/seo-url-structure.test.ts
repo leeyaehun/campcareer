@@ -127,12 +127,15 @@ test("published Program country hubs are canonical sitemap URLs with crawlable l
 })
 
 test("discovery hubs expose crawlable canonical graph links", () => {
+  const urls = sitemapUrls()
   const countriesSource = readFileSync("src/app/(workspace)/countries/page.tsx", "utf8")
   const countryShellSource = readFileSync("src/app/(workspace)/countries/country-dashboard-shell.tsx", "utf8")
   const careersSource = readFileSync("src/app/(workspace)/careers/page.tsx", "utf8")
   const institutionsSource = readFileSync("src/app/(workspace)/institutions/institutions-explorer.tsx", "utf8")
 
-  assert.match(countriesSource, /robots: \{ index: false, follow: true \}/)
+  assert.match(countriesSource, /robots: \{ index: true, follow: true \}/)
+  assert.match(countriesSource, /alternates: \{ canonical: "\/countries" \}/)
+  assert.ok(urls.includes(`${SITE_URL}/countries`), "the indexable Countries hub must be in the sitemap")
   assert.match(countryShellSource, /aria-label="Published country pages"/)
   assert.match(countryShellSource, /href=\{\`\/countries\/\$\{country\.code\.toLowerCase\(\)\}\`\}/)
 

@@ -4,6 +4,7 @@ import { observeUnexpectedBrowserErrors } from "./quality-helpers"
 
 for (const route of [
   "/careers",
+  "/countries",
   "/career/australia/registered-nurse",
   "/countries/au",
   "/programs/au/1-bachelor-of-arts",
