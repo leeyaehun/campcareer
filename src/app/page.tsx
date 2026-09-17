@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Suspense } from "react"
 import { ArrowRight } from "lucide-react"
 import { RootOAuthCallbackFallback } from "@/components/auth/root-oauth-callback-fallback"
+import { LandingQuickSearch } from "@/components/search/landing-quick-search"
 import { EntityCard } from "@/components/ui/entity-card"
 import { HOME_CANONICAL_PATH } from "@/lib/seo-routes.mjs"
 
@@ -62,6 +63,10 @@ export default function HomePage() {
           <p className="mt-6 max-w-2xl text-lg leading-8 text-campcareer-muted">
             Start with a career, then explore the country context, degree options, and education providers that support the path.
           </p>
+        </section>
+
+        <section className="mt-8 w-full max-w-xl" aria-label="Quick search">
+          <LandingQuickSearch />
         </section>
 
         <section className="mt-12 grid gap-4 sm:grid-cols-2" aria-label="Explore CampCareer">

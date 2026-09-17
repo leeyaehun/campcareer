@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight, Briefcase, GraduationCap, Landmark } from "lucide-react"
 import { countryFlagEmoji as countryFlag } from "@/lib/country-flag"
+import { formatPriorityEmploymentCount } from "@/data/country-employment-sectors"
 import { Badge } from "@/components/ui/badge"
 import type { CountryDiscoverySummary, IndustrySectorBar } from "./countries-page-data"
 
@@ -14,8 +15,8 @@ function IndustrySectorBars({ sectors }: { sectors: readonly IndustrySectorBar[]
           <div className="relative h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-campcareer-border">
             <div className="absolute inset-y-0 left-0 rounded-full bg-brand/60" style={{ width: `${(sector.value / max) * 100}%` }} />
           </div>
-          <span className="hidden w-12 shrink-0 text-right tabular-nums text-campcareer-muted sm:inline">
-            {Math.round(sector.value / 1000)}k
+          <span className="hidden w-14 shrink-0 text-right tabular-nums text-campcareer-muted sm:inline">
+            {formatPriorityEmploymentCount(sector.value)}
           </span>
         </div>
       ))}

@@ -10,7 +10,7 @@ import { BELGIUM_OCCUPATION_COUNTRY_PROFILE } from "@/data/belgium-occupation-co
 import { FRANCE_OCCUPATION_COUNTRY_PROFILE } from "@/data/france-occupation-country-profile"
 import { getBatch2CountryContent } from "@/data/batch-2-country-content"
 import { BATCH_3_COUNTRY_CONTENT } from "@/data/batch-3-country-content"
-import { getIrelandEmploymentSectorsSorted } from "@/data/ireland-employment-sectors"
+import { getPriorityEmploymentSectorsSorted } from "@/data/country-employment-sectors"
 import { getCountryMetrics } from "@/lib/workspace/country-metrics"
 import { formatMoneyRange, type CountryMetrics } from "@/lib/workspace/country-metric-contract"
 
@@ -113,9 +113,7 @@ export async function loadCountryDiscoveryData(): Promise<readonly CountryDiscov
     const workOpportunityHeadline = getWorkOpportunities(country.code)
     const salaryFormatted = formatMoneyRange(metrics?.salaryRange)
     const minimumWageFormatted = metrics ? formatMinimumWage(metrics) : null
-    const industrySectors = country.code === "IE"
-      ? getIrelandEmploymentSectorsSorted().slice(0, 5).map((sector) => ({ label: sector.officialLabel, value: sector.employmentCount }))
-      : null
+    const industrySectors = getPriorityEmploymentSectorsSorted(country.code)
 
     return {
       country,

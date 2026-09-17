@@ -15,6 +15,7 @@ const locationQa = readRepoFile(
   "supabase/migrations/20260808112000_uk_campus_location_quality.sql",
 )
 const explorerServer = readRepoFile("src/lib/institutions/institutions.server.ts")
+const explorerSearch = readRepoFile("src/lib/institutions/institution-search.ts")
 const detailServer = readRepoFile("src/lib/institutions/institution-detail.server.ts")
 const detailUi = readRepoFile("src/app/(workspace)/institutions/institution-detail.tsx")
 const countryPage = readRepoFile("src/app/(workspace)/institutions/[country]/page.tsx")
@@ -58,8 +59,8 @@ test("UK location policy preserves programme anchors and publishes only verified
 })
 
 test("UK Explorer and Detail use UK-specific read models and fail closed without official identity", () => {
-  assert.match(explorerServer, /countryCode === "UK"/)
-  assert.match(explorerServer, /institution_explorer_uk_v1/)
+  assert.match(explorerServer, /institutionExplorerViewName\(countryCode\)/)
+  assert.match(explorerSearch, /institution_explorer_uk_v1/)
   assert.match(detailServer, /institution_detail_uk_v1/)
   assert.match(detailServer, /institution_identity_uk_v1/)
   assert.match(detailServer, /missing its official UKPRN identity/)

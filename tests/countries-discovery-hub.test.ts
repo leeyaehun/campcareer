@@ -66,14 +66,13 @@ test("cards surface decision facts: career strengths, earnings, wage and institu
   assert.ok(data.includes("minimumWageFormatted = metrics ? formatMinimumWage(metrics) : null"))
 })
 
-test("major-industry visualization is data-driven and Ireland-only", () => {
+test("major-industry visualization is data-driven and priority-country scoped", () => {
   const card = source("src/app/(workspace)/countries/country-discovery-card.tsx")
   const data = source("src/app/(workspace)/countries/countries-page-data.ts")
 
   assert.ok(card.includes("industrySectors"), "cards render a compact sector chart when data exists")
   assert.ok(card.includes("aria-label=\"Major employment sectors\""), "sector chart is accessible")
-  assert.ok(data.includes("getIrelandEmploymentSectorsSorted"), "Ireland is the approved sector-data source")
-  assert.match(data, /country\.code === "IE"/)
+  assert.ok(data.includes("getPriorityEmploymentSectorsSorted"), "sector data is sourced from the priority-country module")
   assert.ok(data.includes('industrySectors: readonly IndustrySectorBar[] | null'), "unavailable industries stay null, never fabricated")
 })
 

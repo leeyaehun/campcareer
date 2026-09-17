@@ -2,9 +2,10 @@ import "server-only"
 
 import { supabaseAdmin } from "@/lib/supabase-admin"
 import { safeInstitutionLogoUrl } from "@/lib/institutions/institution-logo"
-import type {
-  InstitutionMvpCountryCode,
-  InstitutionSearchFilters,
+import {
+  institutionExplorerViewName,
+  type InstitutionMvpCountryCode,
+  type InstitutionSearchFilters,
 } from "@/lib/institutions/institution-search"
 
 export const INSTITUTION_PAGE_SIZE = 20
@@ -113,31 +114,7 @@ export async function searchInstitutions(
   countryCode: InstitutionMvpCountryCode,
   filters: InstitutionSearchFilters,
 ): Promise<InstitutionSearchResult> {
-  const explorerView = countryCode === "UK"
-    ? "institution_explorer_uk_v1"
-    : countryCode === "CA"
-      ? "institution_explorer_ca_v1"
-      : countryCode === "NL"
-        ? "institution_explorer_nl_v1"
-        : countryCode === "NZ"
-          ? "institution_explorer_nz_v1"
-          : countryCode === "SG"
-            ? "institution_explorer_sg_v1"
-            : countryCode === "DE"
-              ? "institution_explorer_de_v1"
-              : countryCode === "FR"
-                ? "institution_explorer_fr_v1"
-                : countryCode === "ES"
-                  ? "institution_explorer_es_v1"
-                  : countryCode === "AE"
-                    ? "institution_explorer_ae_v1"
-                    : countryCode === "US"
-                      ? "institution_explorer_us_tier_a_v1"
-                      : (["BE", "CH", "SE", "DK"] as const).includes(countryCode as "BE" | "CH" | "SE" | "DK")
-                        ? "institution_explorer_eu_fastpath_v1"
-                        : (["FI", "NO", "JP", "KR"] as const).includes(countryCode as "FI" | "NO" | "JP" | "KR")
-                          ? "institution_explorer_authority_fastpath_v1"
-                          : "institution_explorer_v1"
+  const explorerView = institutionExplorerViewName(countryCode)
 
   let query = supabaseAdmin
     .from(explorerView)

@@ -47,8 +47,8 @@ test("NZ publication read models expose eight details while the program catalogu
 
 test("NZ routes use dedicated read models and fail closed without NZQA identity", () => {
   assert.match(searchRoutes, /"NZ"/)
-  assert.match(explorerServer, /countryCode === "NZ"/)
-  assert.match(explorerServer, /institution_explorer_nz_v1/)
+  assert.match(searchRoutes, /institution_explorer_nz_v1/)
+  assert.match(explorerServer, /institutionExplorerViewName\(countryCode\)/)
   assert.match(detailServer, /institution_detail_nz_v1/)
   assert.match(detailServer, /institution_identity_nz_v1/)
   assert.match(detailServer, /missing its official NZQA provider identity/)
