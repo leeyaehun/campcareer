@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
-import { IrelandVisaDetail } from "@/app/(workspace)/countries/ireland-visa-content"
-import { getVisaDetail } from "@/lib/workspace/visa-detail-resolver"
+import { VisasExplorer } from "@/app/(workspace)/visas/visas-explorer"
 import { loadVisaCatalog } from "@/lib/workspace/visa-catalog-loader"
 import { getIrelandCountryVisaRoute } from "@/lib/workspace/visa-routes"
 
@@ -24,9 +23,21 @@ export async function generateMetadata({ params }: IrelandVisaDetailPageProps): 
 
 export default async function IrelandVisaDetailPage({ params }: IrelandVisaDetailPageProps) {
   const { visa } = await params
-  const route = getIrelandCountryVisaRoute(await loadVisaCatalog(), visa)
+  const catalog = await loadVisaCatalog()
+  const route = getIrelandCountryVisaRoute(catalog, visa)
   if (!route) notFound()
   if (visa !== route.slug) permanentRedirect(route.path)
 
-  return <IrelandVisaDetail visa={route.visa} detail={getVisaDetail("IE", route.visa.name)} />
+  return (
+    <div className="w-full px-4 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <div className="mx-auto w-full max-w-6xl">
+        <VisasExplorer
+          initialQuery=""
+          initialCountry="IE"
+          initialVisaName={route.visa.name}
+          catalog={catalog}
+        />
+      </div>
+    </div>
+  )
 }

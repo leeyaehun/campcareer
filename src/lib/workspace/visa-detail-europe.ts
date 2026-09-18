@@ -1,5 +1,7 @@
 import type { VisaDetail } from "./visa-detail"
 
+type CostItemInput = { item: string; amount: number; optional?: boolean }
+
 type DetailInput = {
   status: string
   processingTime: string
@@ -8,7 +10,9 @@ type DetailInput = {
   totalEstimatedTime?: string
   minSalary?: string
   currency?: string
-  fee?: { item: string; amount: number }
+  fee?: CostItemInput
+  fees?: CostItemInput[]
+  topCities?: string[]
   costNote: string
 }
 
@@ -29,10 +33,10 @@ function makeDetail(input: DetailInput): VisaDetail {
     totalEstimatedTime: input.totalEstimatedTime ?? input.processingTime,
     costBreakdown: {
       currency: input.currency ?? "EUR",
-      items: input.fee ? [input.fee] : [],
+      items: [...(input.fees ?? []), ...(input.fee ? [input.fee] : [])],
     },
     costNote: `${input.costNote} Fees and eligibility can change. Confirm the current amount and conditions on the linked official source before applying.`,
-    topCities: [],
+    topCities: input.topCities ?? [],
   }
 }
 
@@ -108,21 +112,29 @@ export const EUROPE_VISA_DETAILS: Record<string, VisaDetail> = {
 
   "IE:Student visa": makeDetail({
     status: "Study",
-    processingTime: "Varies by visa office and application circumstances",
-    duration: "Linked to the approved course and registered immigration permission",
-    costNote: "Visa and registration charges depend on nationality, application type and exemptions.",
+    processingTime: "Usually around 8 weeks once a complete application is received",
+    duration: "Linked to the approved course and registered Stamp 2 immigration permission",
+    fees: [
+      { item: "Long-stay 'D' study visa application (single entry)", amount: 60 },
+      { item: "Multiple-entry visa upgrade", amount: 40, optional: true },
+      { item: "First-time immigration registration (IRP card)", amount: 300 },
+    ],
+    topCities: ["Dublin", "Cork", "Galway", "Limerick"],
+    costNote: "Students on Stamp 2 permission can usually work up to 20 hours a week during term and 40 hours a week during holidays. Tuition, living costs and private medical insurance are separate from the fees above.",
     requirements: [
       "Acceptance on an eligible full-time course from a recognised Irish education provider",
-      "Evidence of tuition payment and sufficient finances",
+      "Evidence of tuition payment and sufficient finances for the stay",
       "Private medical insurance covering the stay",
       "Academic, English-language and immigration documents required by Immigration Service Delivery",
     ],
   }),
   "IE:Stamp 1G": makeDetail({
     status: "Post-study work",
-    processingTime: "Registration processing time varies",
+    processingTime: "Usually a few weeks for a completed online registration",
     duration: "12 months for Level 8 graduates; up to 24 months for Level 9 or above, subject to programme limits",
-    costNote: "The immigration registration fee may apply unless an exemption is available.",
+    fees: [{ item: "Stamp 1G registration and IRP card", amount: 300 }],
+    topCities: ["Dublin", "Cork", "Galway", "Limerick"],
+    costNote: "Stamp 1G allows full-time work without a separate employment permit, but it does not lead directly to long-term residence on its own and the overall Third Level Graduate Programme time limit applies.",
     requirements: [
       "Eligible Irish qualification under the Third Level Graduate Programme",
       "Current or recent eligible Stamp 2 student permission",
@@ -134,7 +146,8 @@ export const EUROPE_VISA_DETAILS: Record<string, VisaDetail> = {
     status: "Working holiday",
     processingTime: "Varies by participating embassy or consulate",
     duration: "Usually up to 12 months, subject to the bilateral agreement",
-    costNote: "Programme fees and financial-evidence rules vary by bilateral agreement.",
+    topCities: ["Dublin", "Cork", "Galway"],
+    costNote: "Programme fees, financial-evidence rules and quotas are set by each bilateral agreement, so no single amount is shown.",
     requirements: [
       "Citizenship of a country with an Irish working-holiday agreement",
       "Age within the bilateral programme limit",
@@ -146,8 +159,10 @@ export const EUROPE_VISA_DETAILS: Record<string, VisaDetail> = {
     status: "Skilled work",
     processingTime: "Use the current employment-permit processing dates published by DETE",
     duration: "Normally issued for 2 years before transition to eligible residence permission",
-    minSalary: "Occupation and remuneration thresholds apply",
-    costNote: "The permit fee and refund rules depend on the application and decision outcome.",
+    minSalary: "Occupation-specific remuneration thresholds apply and are updated regularly",
+    fees: [{ item: "Critical Skills Employment Permit application fee", amount: 1000 }],
+    topCities: ["Dublin", "Cork", "Galway", "Limerick"],
+    costNote: "The permit fee is €1,000 and 90% of it may be refunded if the application is refused. Eligible family members can apply to join under certain conditions.",
     requirements: [
       "Qualifying two-year job offer from a bona fide Irish employer",
       "Eligible occupation and remuneration level under current Critical Skills rules",

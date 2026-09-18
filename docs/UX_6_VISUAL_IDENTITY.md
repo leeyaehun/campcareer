@@ -97,7 +97,7 @@ The Ireland visa directory now groups entries by kind (Study → Work → Workin
 | `src/app/(workspace)/institutions/ireland-institutions-explorer.tsx` | EntityLogo on cards; brand-tint header panel. |
 | `src/app/(workspace)/institutions/ireland-institution-detail.tsx` | EntityLogo in header; Building2 removed. |
 | `src/app/(workspace)/countries/ireland-employment-ecosystem-section.tsx` | "Selected employers" sub-block with EntityLogo, industry, cities, external careers links. |
-| `src/app/(workspace)/countries/ireland-visa-content.tsx` | Directory: grouped by kind with headings + descriptions. Detail: tinted brand pill for pathway kind. |
+| `src/app/(workspace)/countries/ie/visas/page.tsx` + `[visa]/page.tsx` | Ireland visa routes reuse the shared AU-style `VisasExplorer` scoped to IE: kind-filterable route list beside the `VisaDetailPanel` (stats, requirements, process, cost breakdown, top cities). Custom `ireland-visa-content.tsx` removed. |
 | `docs/IMAGE_ASSET_PROVENANCE.md` | **New.** Provenance registry for all visual assets. |
 | `tests/ux-6-visual-identity.test.ts` | **New.** 13 checks covering all surface changes. |
 | `tests/phase5-performance-boundary.test.ts` | Updated to allow hero fetchPriority while preserving search-index deferral check. |

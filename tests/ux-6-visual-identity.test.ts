@@ -11,7 +11,10 @@ const IE_CITY_DASHBOARD = readFileSync(resolve(__dirname, "../src/app/(workspace
 const IE_INSTITUTIONS_EXPLORER = readFileSync(resolve(__dirname, "../src/app/(workspace)/institutions/ireland-institutions-explorer.tsx"), "utf8")
 const IE_INSTITUTION_DETAIL = readFileSync(resolve(__dirname, "../src/app/(workspace)/institutions/ireland-institution-detail.tsx"), "utf8")
 const IE_EMPLOYMENT_SECTION = readFileSync(resolve(__dirname, "../src/app/(workspace)/countries/ireland-employment-ecosystem-section.tsx"), "utf8")
-const IE_VISA_CONTENT = readFileSync(resolve(__dirname, "../src/app/(workspace)/countries/ireland-visa-content.tsx"), "utf8")
+const IE_VISA_DIRECTORY_PAGE = readFileSync(resolve(__dirname, "../src/app/(workspace)/countries/ie/visas/page.tsx"), "utf8")
+const IE_VISA_DETAIL_PAGE = readFileSync(resolve(__dirname, "../src/app/(workspace)/countries/ie/visas/[visa]/page.tsx"), "utf8")
+const VISA_EXPLORER = readFileSync(resolve(__dirname, "../src/app/(workspace)/visas/visas-explorer.tsx"), "utf8")
+const VISA_DETAIL_PANEL = readFileSync(resolve(__dirname, "../src/app/(workspace)/visas/visa-detail-panel.tsx"), "utf8")
 const ENTITY_LOGO = readFileSync(resolve(__dirname, "../src/components/ui/entity-logo.tsx"), "utf8")
 
 describe("UX-6 Visual Identity checks", () => {
@@ -75,18 +78,22 @@ describe("UX-6 Visual Identity checks", () => {
     assert.doesNotMatch(IE_EMPLOYMENT_SECTION, /job listings/)
   })
 
-  test("Visa directory groups official-route entries by kind with descriptive path headings", () => {
-    assert.match(IE_VISA_CONTENT, /KIND_ORDER/)
-    assert.match(IE_VISA_CONTENT, /visa-kind-/)
-    assert.match(IE_VISA_CONTENT, /Study/)
-    assert.match(IE_VISA_CONTENT, /Work/)
-    assert.match(IE_VISA_CONTENT, /Working holiday/)
-    assert.match(IE_VISA_CONTENT, /Skilled/)
+  test("Ireland visa pages reuse the shared AU-style visas explorer scoped to Ireland", () => {
+    assert.match(IE_VISA_DIRECTORY_PAGE, /<VisasExplorer/)
+    assert.match(IE_VISA_DIRECTORY_PAGE, /initialCountry="IE"/)
+    assert.doesNotMatch(IE_VISA_DIRECTORY_PAGE, /ireland-visa-content/)
+    assert.match(IE_VISA_DETAIL_PAGE, /<VisasExplorer/)
+    assert.match(IE_VISA_DETAIL_PAGE, /initialCountry="IE"/)
+    assert.match(IE_VISA_DETAIL_PAGE, /initialVisaName=\{route\.visa\.name\}/)
+    assert.doesNotMatch(IE_VISA_DETAIL_PAGE, /ireland-visa-content/)
   })
 
-  test("Visa detail uses a tinted brand pill for the pathway kind", () => {
-    assert.match(IE_VISA_CONTENT, /rounded-full bg-brand-tint px-3 py-1\.5 text-xs font-semibold text-brand/)
-    assert.match(IE_VISA_CONTENT, /\{visa\.kind\} pathway · Ireland/)
+  test("Ireland visa list and detail render side by side through the shared visa detail panel", () => {
+    assert.match(VISA_EXPLORER, /lg:grid-cols-5/)
+    assert.match(VISA_EXPLORER, /VisaDetailPanel/)
+    assert.match(VISA_EXPLORER, /VISA_KINDS/)
+    assert.match(VISA_DETAIL_PANEL, /Cost breakdown/)
+    assert.match(VISA_DETAIL_PANEL, /Top cities/)
   })
 
   test("EntityLogo is a client-side mark that never links externally by itself", () => {
@@ -100,6 +107,7 @@ describe("UX-6 Visual Identity checks", () => {
   test("No new third-party image packages are introduced on the modified surfaces", () => {
     assert.doesNotMatch(TOP_NAV, /from ["']next\/image["']/)
     assert.doesNotMatch(WORKSPACE_TOPBAR, /from ["']next\/image["']/)
-    assert.doesNotMatch(IE_VISA_CONTENT, /from ["']next\/image["']/)
+    assert.doesNotMatch(VISA_EXPLORER, /from ["']next\/image["']/)
+    assert.doesNotMatch(VISA_DETAIL_PANEL, /from ["']next\/image["']/)
   })
 })
