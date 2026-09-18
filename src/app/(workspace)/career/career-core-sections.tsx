@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { EmptyState as SurfaceEmptyState } from "@/components/ui/status-state"
 import type { CareerDegreePath } from "@/lib/career-degree/contract"
 import type { OverviewSearchValues } from "../home/home-overview-config"
+import { CareerDegreeMatchSection } from "./career-degree-match-section"
 
 type Locale = "en" | "ko"
 
@@ -458,6 +459,9 @@ export function CareerCoreSections({
           title="Study / Programs"
           description={tr(locale, "학업은 독립적인 목적지가 아니라 이 커리어에 진입하는 데 필요한 경우에만 경로 안에서 제시합니다.", "Study is not a separate destination here. It appears when education or training helps you enter this career.")}
         />
+        {insight.country ? (
+          <CareerDegreeMatchSection countryCode={insight.country.code} careerId={insight.career.id} locale={locale} />
+        ) : null}
         {degreePaths.length > 0 && (
           <div className="mt-7">
             <h3 className="text-base font-semibold text-campcareer-ink">{tr(locale, "관련 학위·학업 경로", "Relevant degrees / study paths")}</h3>

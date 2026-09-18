@@ -6,6 +6,7 @@ import { getIrelandCountryDegreeInstitutionConnections } from "@/lib/career-degr
 import { getIrelandInstitutions, type IrelandInstitution } from "@/lib/institutions/ireland-institutions.server"
 import { institutionDetailPath } from "@/lib/institutions/institution-search"
 import { careerCanonicalPath } from "@/lib/workspace/occupation-routes"
+import { IrelandDegreeMatchSection } from "./degree-match-section"
 
 export const revalidate = 3600
 
@@ -83,6 +84,10 @@ export default async function IrelandEducationPage() {
             ))}
           </div>
         </section>
+
+        <div className="mt-10">
+          <IrelandDegreeMatchSection locale="en" />
+        </div>
 
         <section className="mt-10" aria-labelledby="verified-institutions">
           <div className="flex flex-wrap items-center gap-2">
