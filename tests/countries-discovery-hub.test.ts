@@ -66,6 +66,14 @@ test("cards surface decision facts: career strengths, earnings, wage and institu
   assert.ok(data.includes("minimumWageFormatted = metrics ? formatMinimumWage(metrics) : null"))
 })
 
+test("country fact rows use valid list markup for accessibility", () => {
+  const card = source("src/app/(workspace)/countries/country-discovery-card.tsx")
+
+  assert.match(card, /<ul className="mt-4[^"]*" aria-label=\{\`\$\{country\.name\} key facts\`\}>/)
+  assert.match(card, /<li className="flex items-start gap-1\.5">/)
+  assert.doesNotMatch(card, /<dl|<dt|<dd/)
+})
+
 test("major-industry visualization is data-driven and priority-country scoped", () => {
   const card = source("src/app/(workspace)/countries/country-discovery-card.tsx")
   const data = source("src/app/(workspace)/countries/countries-page-data.ts")

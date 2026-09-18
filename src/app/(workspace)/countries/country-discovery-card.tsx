@@ -60,38 +60,38 @@ export function CountryDiscoveryCard({ data }: { data: CountryDiscoverySummary }
         </div>
       ) : null}
 
-      <dl className="mt-4 space-y-3 border-t border-campcareer-border pt-3 text-xs">
-        <div className="flex items-start gap-1.5">
+      <ul className="mt-4 space-y-3 border-t border-campcareer-border pt-3 text-xs" aria-label={`${country.name} key facts`}>
+        <li className="flex items-start gap-1.5">
           <Landmark className="mt-0.5 size-3.5 shrink-0 text-campcareer-muted" aria-hidden="true" />
           <div className="min-w-0">
-            <dt className="font-semibold text-campcareer-ink-secondary">Earnings &amp; minimum wage</dt>
-            <dd className="mt-0.5 tabular-nums text-campcareer-muted">
+            <p className="font-semibold text-campcareer-ink-secondary">Earnings &amp; minimum wage</p>
+            <p className="mt-0.5 tabular-nums text-campcareer-muted">
               {salaryFormatted !== "—" ? `${salaryFormatted}` : "Earnings not available"}
               {minimumWageFormatted ? ` · ${minimumWageFormatted}` : ""}
-            </dd>
+            </p>
           </div>
-        </div>
+        </li>
 
         {topInstitutions.length > 0 ? (
-          <div className="flex items-start gap-1.5">
+          <li className="flex items-start gap-1.5">
             <GraduationCap className="mt-0.5 size-3.5 shrink-0 text-campcareer-muted" aria-hidden="true" />
             <div className="min-w-0">
-              <dt className="font-semibold text-campcareer-ink-secondary">Notable institutions</dt>
-              <dd className="mt-0.5 text-campcareer-muted">{topInstitutions.join(" · ")}{institutionCount > 2 ? ` +${institutionCount - 2}` : ""}</dd>
+              <p className="font-semibold text-campcareer-ink-secondary">Notable institutions</p>
+              <p className="mt-0.5 text-campcareer-muted">{topInstitutions.join(" · ")}{institutionCount > 2 ? ` +${institutionCount - 2}` : ""}</p>
             </div>
-          </div>
+          </li>
         ) : null}
 
         {workOpportunityHeadline ? (
-          <div className="flex items-start gap-1.5">
+          <li className="flex items-start gap-1.5">
             <Briefcase className="mt-0.5 size-3.5 shrink-0 text-campcareer-muted" aria-hidden="true" />
             <div className="min-w-0">
-              <dt className="font-semibold text-campcareer-ink-secondary">Career opportunities</dt>
-              <dd className="mt-0.5 text-campcareer-muted line-clamp-1">{workOpportunityHeadline}</dd>
+              <p className="font-semibold text-campcareer-ink-secondary">Career opportunities</p>
+              <p className="mt-0.5 text-campcareer-muted line-clamp-1">{workOpportunityHeadline}</p>
             </div>
-          </div>
+          </li>
         ) : null}
-      </dl>
+      </ul>
 
       {strongMajorLabels.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-1.5 border-t border-campcareer-border pt-3">
