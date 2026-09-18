@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { IrelandVisaDirectory } from "@/app/(workspace)/countries/ireland-visa-content"
+import { VisasExplorer } from "@/app/(workspace)/visas/visas-explorer"
 import { loadVisaCatalog } from "@/lib/workspace/visa-catalog-loader"
 import { IRELAND_VISA_DIRECTORY_PATH } from "@/lib/workspace/visa-routes"
 
@@ -14,5 +14,11 @@ export const metadata: Metadata = {
 
 export default async function IrelandVisasPage() {
   const catalog = await loadVisaCatalog()
-  return <IrelandVisaDirectory visas={catalog.filter((visa) => visa.countryCode === "IE")} />
+  return (
+    <div className="w-full px-4 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <div className="mx-auto w-full max-w-6xl">
+        <VisasExplorer initialQuery="" initialCountry="IE" catalog={catalog} />
+      </div>
+    </div>
+  )
 }
