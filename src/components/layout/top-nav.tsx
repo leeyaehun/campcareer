@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { LogIn } from "lucide-react"
 import { LanguageMenu } from "@/components/layout/language-menu"
+import { MobileNavigation } from "@/components/layout/mobile-navigation"
 import { PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localeFromPathname, localizePath, type LocaleOption } from "@/lib/i18n/config"
@@ -77,6 +78,8 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
     <header className="sticky top-0 z-40 h-16 border-b border-campcareer-border bg-campcareer-surface bg-[hsl(var(--cc-color-accent-subtle))]">
       <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
         <div className="flex h-16 items-center gap-4">
+          <MobileNavigation pathname={pathname} locale={pathLocale} />
+
           <Link
             href={homeDestination}
             prefetch={false}
@@ -111,10 +114,11 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
                   const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
                   window.location.assign(`${loginPath}?next=${encodeURIComponent(returnTo || homeDestination)}`)
                 }}
+                aria-label={pathLocale === "ko" ? "로그인" : "Log in"}
                 className={cn("inline-flex min-h-10 items-center gap-1.5 rounded-cc-control border border-campcareer-border bg-campcareer-surface px-3 text-sm font-semibold text-campcareer-ink shadow-cc-surface transition-colors duration-cc-fast hover:bg-campcareer-surface/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30")}
               >
                 <LogIn className="size-4" />
-                {pathLocale === "ko" ? "로그인" : "Log in"}
+                <span className="hidden md:inline">{pathLocale === "ko" ? "로그인" : "Log in"}</span>
               </Link>
             )}
           </div>
