@@ -8,6 +8,7 @@ import { COMPARE_MODE_NAV_ITEMS, type CompareModeType } from "@/lib/compare-navi
 import {
   buildCareerCompareCanonicalHref,
   buildCityCompareCanonicalHref,
+  buildDegreeCompareCanonicalHref,
   buildProgramCompareCanonicalHref,
 } from "@/lib/compare-routes"
 
@@ -23,13 +24,14 @@ const TITLE: Record<CompareModeType, { en: string; ko: string }> = {
   country: { en: "Compare countries", ko: "국가 비교" },
   city: { en: "Compare cities", ko: "도시 비교" },
   career: { en: "Compare careers", ko: "커리어 비교" },
+  degree: { en: "Compare degrees", ko: "학위 비교" },
 }
 
 export function ComparePageHeader({ activeType, countryCode }: ComparePageHeaderProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const locale = useRouteLocale()
-  const showCountry = activeType === "career" || activeType === "city"
+  const showCountry = activeType === "career" || activeType === "city" || activeType === "degree"
   const resolvedCountry = countryCode?.toUpperCase() || "AU"
   const title = TITLE[activeType]
 
@@ -48,6 +50,17 @@ export function ComparePageHeader({ activeType, countryCode }: ComparePageHeader
           profile: searchParams.get("profile") ?? undefined,
           city: searchParams.get("city"),
           careers: (searchParams.get("careers") ?? "").split(",").filter(Boolean),
+        }),
+        { scroll: false },
+      )
+      return
+    }
+
+    if (activeType === "degree") {
+      router.replace(
+        buildDegreeCompareCanonicalHref({
+          country: code,
+          degrees: (searchParams.get("degrees") ?? "").split(",").filter(Boolean),
         }),
         { scroll: false },
       )

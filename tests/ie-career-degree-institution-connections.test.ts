@@ -38,7 +38,8 @@ test("Ireland Career keeps reviewed evidence Institutions while the Country hub 
   assert.match(countryDashboard, /institutionDetailPath\("IE", institution\.slug\)/)
   assert.doesNotMatch(countryDashboard, /Reviewed evidence institution/)
   assert.doesNotMatch(countryDashboard, /career\.evidenceInstitution/)
-  assert.doesNotMatch(countryDashboard, /\/degrees|\/programs\/ie/)
+  assert.match(countryDashboard, /countries\/ie\/degrees/)
+  assert.doesNotMatch(countryDashboard, /\/programs\/ie/)
 })
 
 test("only an Institution's own reviewed provider evidence creates its Career-linked study evidence section", () => {

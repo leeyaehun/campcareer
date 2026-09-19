@@ -27,8 +27,8 @@ const NAV_LABELS: Record<Locale, Record<string, string>> = {
 }
 
 const COMPARE_LABELS: Record<Locale, Record<CompareModeType, string>> = {
-  en: { program: "Programs", country: "Countries", city: "Cities", career: "Careers" },
-  ko: { program: "과정", country: "국가", city: "도시", career: "직업" },
+  en: { program: "Programs", country: "Countries", city: "Cities", career: "Careers", degree: "Degrees" },
+  ko: { program: "과정", country: "국가", city: "도시", career: "직업", degree: "학위" },
 }
 
 const REGION_CODE_OVERRIDES: Record<string, string> = { UK: "GB" }

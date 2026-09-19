@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 import { COMPARE_MODE_NAV_ITEMS, resolveCompareModeType } from "../src/lib/compare-navigation"
 
-test("Compare type navigation keeps all four working modes under root compare", () => {
+test("Compare type navigation keeps all five working modes under root compare", () => {
   assert.deepEqual(
     COMPARE_MODE_NAV_ITEMS,
     [
@@ -11,25 +11,29 @@ test("Compare type navigation keeps all four working modes under root compare", 
       { type: "country", label: "Countries", href: "/compare?type=country&goal=registered-nurse&profile=starting-from-scratch" },
       { type: "city", label: "Cities", href: "/compare?type=city&country=AU" },
       { type: "career", label: "Careers", href: "/compare?type=career&country=AU&profile=starting-from-scratch" },
+      { type: "degree", label: "Degrees", href: "/compare?type=degree&country=IE" },
     ],
   )
 })
 
 test("Compare sidebar navigation keeps one stable item per supported type", () => {
-  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.type)).size, 4)
-  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.href)).size, 4)
+  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.type)).size, 5)
+  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.href)).size, 5)
   assert.ok(COMPARE_MODE_NAV_ITEMS.every((item) => item.href.startsWith("/compare?")))
-  assert.deepEqual(COMPARE_MODE_NAV_ITEMS.map((item) => item.type), ["program", "country", "city", "career"])
-  assert.ok(!COMPARE_MODE_NAV_ITEMS.some((item) => ["degree", "institution", "employer"].includes(item.type)))
+  assert.deepEqual(COMPARE_MODE_NAV_ITEMS.map((item) => item.type), ["program", "country", "city", "career", "degree"])
+  assert.ok(COMPARE_MODE_NAV_ITEMS.some((item) => item.type === "degree"))
+  assert.ok(!COMPARE_MODE_NAV_ITEMS.some((item) => ["institution", "employer"].includes(item.type)))
 })
 
-test("query type resolver accepts Cities as a first-class mode", () => {
+test("query type resolver accepts Cities and Degrees as first-class modes", () => {
   assert.equal(resolveCompareModeType(null), "program")
   assert.equal(resolveCompareModeType("program"), "program")
   assert.equal(resolveCompareModeType("country"), "country")
   assert.equal(resolveCompareModeType("city"), "city")
   assert.equal(resolveCompareModeType("career"), "career")
+  assert.equal(resolveCompareModeType("degree"), "degree")
   assert.equal(resolveCompareModeType("cities"), "unsupported")
+  assert.equal(resolveCompareModeType("degrees"), "unsupported")
 })
 
 test("legacy city compare route redirects to root Compare and is not in the sitemap", () => {

@@ -82,6 +82,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/institutions/us`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/institutions/ie`, lastModified, priority: 0.82, changeFrequency: "weekly" },
     { url: `${SITE_URL}/countries/ie/careers`, lastModified: new Date("2026-09-14"), priority: 0.9, changeFrequency: "weekly" },
+    { url: `${SITE_URL}/countries/ie/degrees`, lastModified: new Date("2026-09-16"), priority: 0.88, changeFrequency: "weekly" },
     { url: `${SITE_URL}/countries/ie/education`, lastModified: new Date("2026-09-14"), priority: 0.88, changeFrequency: "weekly" },
     { url: `${SITE_URL}/countries/ie/cities`, lastModified: new Date("2026-09-14"), priority: 0.86, changeFrequency: "weekly" },
     { url: `${SITE_URL}/countries/ie/visas`, lastModified, priority: 0.7, changeFrequency: "monthly" },
