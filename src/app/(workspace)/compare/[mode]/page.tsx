@@ -3,6 +3,7 @@ import {
   buildCareerCompareCanonicalHref,
   buildCityCompareCanonicalHref,
   buildCountryCompareCanonicalHref,
+  buildDegreeCompareCanonicalHref,
   buildProgramCompareCanonicalHref,
   type CanonicalCompareMode,
 } from "@/lib/compare-routes"
@@ -55,6 +56,13 @@ export default async function CompareModePage({ params, searchParams }: CompareM
       profile: first(values.profile),
       city: first(values.city),
       careers: (first(values.careers) ?? "").split(",").filter(Boolean),
+    }))
+  }
+
+  if (mode === "degrees") {
+    permanentRedirect(buildDegreeCompareCanonicalHref({
+      country: first(values.country),
+      degrees: (first(values.degrees) ?? "").split(",").filter(Boolean),
     }))
   }
 

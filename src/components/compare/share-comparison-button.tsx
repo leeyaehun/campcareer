@@ -11,6 +11,7 @@ type ShareComparisonButtonProps = {
   description: string
   entityCount: number
   locale: Locale
+  comparisonCategory?: "career" | "country" | "city" | "program" | "institution" | "degree"
 }
 
 /**
@@ -18,7 +19,7 @@ type ShareComparisonButtonProps = {
  * from validated comparison state so arbitrary query data and private state
  * never become part of a shareable result.
  */
-export function ShareComparisonButton({ href, title, description, entityCount, locale }: ShareComparisonButtonProps) {
+export function ShareComparisonButton({ href, title, description, entityCount, locale, comparisonCategory = "career" }: ShareComparisonButtonProps) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle")
 
   async function share() {
@@ -29,7 +30,7 @@ export function ShareComparisonButton({ href, title, description, entityCount, l
     if (typeof navigator.share === "function") {
       try {
         await navigator.share({ title, text: description, url })
-        trackAnalyticsEvent({ name: "compare_share", params: { entity_count: entityCount, comparison_category: "career", share_method: "native" } })
+        trackAnalyticsEvent({ name: "compare_share", params: { entity_count: entityCount, comparison_category: comparisonCategory, share_method: "native" } })
         return
       } catch (error) {
         // Closing the native share sheet is a normal cancellation and must not
@@ -40,7 +41,7 @@ export function ShareComparisonButton({ href, title, description, entityCount, l
 
     try {
       await navigator.clipboard.writeText(url)
-      trackAnalyticsEvent({ name: "compare_share", params: { entity_count: entityCount, comparison_category: "career", share_method: "clipboard" } })
+      trackAnalyticsEvent({ name: "compare_share", params: { entity_count: entityCount, comparison_category: comparisonCategory, share_method: "clipboard" } })
       setStatus("copied")
     } catch {
       setStatus("failed")

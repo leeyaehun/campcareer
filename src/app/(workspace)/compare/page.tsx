@@ -28,11 +28,18 @@ import { getSeCityComparison } from "@/lib/cities/se-city-comparison.server"
 import { getUkCityComparison } from "@/lib/cities/uk-city-comparison.server"
 import { getUsCityComparison } from "@/lib/cities/us-city-comparison.server"
 import { resolveCompareModeType, type CompareModeType } from "@/lib/compare-navigation"
-import { buildCareerCompareCanonicalHref, buildCityCompareCanonicalHref, buildCountryCompareCanonicalHref, buildProgramCompareCanonicalHref } from "@/lib/compare-routes"
+import { buildCareerCompareCanonicalHref, buildCityCompareCanonicalHref, buildCountryCompareCanonicalHref, buildDegreeCompareCanonicalHref, buildProgramCompareCanonicalHref } from "@/lib/compare-routes"
+import {
+  buildIrelandDegreeCompareHref,
+  IRELAND_DEGREE_COMPARE_LABELS,
+  parseIrelandDegreeComparisonState,
+} from "@/lib/degree-match/ireland-degree-comparison"
+import { IRELAND_DEGREE_MATCH_MODEL } from "@/lib/degree-match/ireland-model"
 import ProgramsCompareMatrix from "./programs-compare-matrix"
 import CountriesCompareMatrix from "./countries-compare-matrix"
 import CareersCompareMatrix from "./careers-compare-matrix"
 import { IrelandCareersCompareMatrix } from "./ireland-careers-compare-matrix"
+import DegreesCompareMatrix from "./degrees-compare-matrix"
 import { CitiesCompareMatrix } from "./cities-compare-matrix"
 import { UaeCitiesCompareMatrix } from "./uae-cities-compare-matrix"
 import { BelgiumCitiesCompareMatrix } from "./belgium-cities-compare-matrix"
@@ -74,6 +81,7 @@ export async function generateMetadata({ searchParams }: ComparePageProps): Prom
   const countryCode = params.get("country")?.trim().toUpperCase() ?? null
   const irelandComparison = countryCode === "IE" ? parseIrelandCareerComparisonState(params) : null
   const australiaComparison = parseCareerComparisonState(params)
+  const irelandDegreeComparison = countryCode === "IE" ? parseIrelandDegreeComparisonState(params) : null
 
   const irelandShareable = Boolean(
     irelandComparison?.contextState === "supported"
@@ -81,22 +89,36 @@ export async function generateMetadata({ searchParams }: ComparePageProps): Prom
   )
   const australiaShareable = australiaComparison.contextState === "supported"
     && australiaComparison.careers.length >= 2
+  const degreeShareable = Boolean(
+    irelandDegreeComparison?.contextState === "supported"
+    && irelandDegreeComparison.degreeIds.length >= 2,
+  )
 
   const names = irelandShareable && irelandComparison
     ? irelandComparison.careerIds.map((careerId) => IE_CAREER_COMPARE_LABELS[careerId])
-    : australiaComparison.careers.map((career) => career.label)
+    : degreeShareable && irelandDegreeComparison
+      ? irelandDegreeComparison.degreeIds.map((degreeId) => IRELAND_DEGREE_COMPARE_LABELS[degreeId])
+      : australiaComparison.careers.map((career) => career.label)
   const isShareableCareerComparison = irelandShareable || australiaShareable
-  const title = isShareableCareerComparison ? `Compare ${names.join(" and ")}` : compareMetadata.title
+  const title = isShareableCareerComparison
+    ? `Compare ${names.join(" and ")}`
+    : degreeShareable
+      ? `Compare ${names.join(" and ")} in Ireland`
+      : compareMetadata.title
   const description = irelandShareable
     ? `Compare reviewed Ireland Career MVP scores, evidence confidence and entry requirements for ${names.join(" and ")}.`
-    : australiaShareable
-      ? `Compare verified Australian career pathways, requirements and outcomes for ${names.join(" and ")}.`
-      : compareMetadata.description
+    : degreeShareable
+      ? `Compare the reviewed six-cohort Ireland Degrees — relationships, evidence confidence and professional requirements — for ${names.join(" and ")}.`
+      : australiaShareable
+        ? `Compare verified Australian career pathways, requirements and outcomes for ${names.join(" and ")}.`
+        : compareMetadata.description
   const shareHref = irelandShareable && irelandComparison
     ? buildIrelandCareerCompareHref(irelandComparison.careerIds)
-    : australiaShareable
-      ? buildCareerCompareCanonicalHref({ city: australiaComparison.citySlug, careers: australiaComparison.careerIds })
-      : "/compare"
+    : degreeShareable && irelandDegreeComparison
+      ? buildIrelandDegreeCompareHref(irelandDegreeComparison.degreeIds)
+      : australiaShareable
+        ? buildCareerCompareCanonicalHref({ city: australiaComparison.citySlug, careers: australiaComparison.careerIds })
+        : "/compare"
 
   return {
     title,
@@ -130,6 +152,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
     if (country === "IE") return <IrelandCareersCompare params={params} />
     return <CareersCompare comparison={parseCareerComparisonState(params)} countryCode={country} />
   }
+  if (pageType === "degree") return <DegreesCompare params={params} />
   if (pageType === "unsupported") return <UnsupportedComparisonType />
   return <ProgramsCompare params={params} />
 }
@@ -267,7 +290,20 @@ async function IrelandCareersCompare({ params }: { params: URLSearchParams }) {
   )
 }
 
+async function DegreesCompare({ params }: { params: URLSearchParams }) {
+  const comparison = parseIrelandDegreeComparisonState(params)
+  if (comparison.contextState === "unsupported") {
+    return <UnsupportedSurface type="Degrees" href={buildDegreeCompareCanonicalHref()} label="Compare Ireland degrees" activeType="degree" countryCode="IE" />
+  }
+  return (
+    <section className="w-full pb-4" aria-label="Degrees comparison">
+      <ComparePageHeader activeType="degree" countryCode="IE" />
+      <DegreesCompareMatrix catalog={IRELAND_DEGREE_MATCH_MODEL} />
+    </section>
+  )
+}
+
 function CareersCompare({ comparison, countryCode }: { comparison: CareerComparisonState; countryCode: string }) { if (comparison.contextState === "unsupported") return <UnsupportedSurface type="Careers" href={buildCareerCompareCanonicalHref()} label="Compare Australian careers" activeType="career" countryCode={countryCode} />; return <section className="w-full pb-4" aria-label="Careers comparison"><ComparePageHeader activeType="career" countryCode={countryCode} /><CareersCompareMatrix /></section> }
 function UnsupportedCountryComparison() { return <UnsupportedSurface type="Countries" href={buildCountryCompareCanonicalHref()} label="Start a country comparison" activeType="country" /> }
 function UnsupportedComparisonType() { return <section className="w-full pb-4" aria-label="Compare unavailable"><div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6"><h1 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h1><p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p><Link href={buildProgramCompareCanonicalHref()} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">Open Programs Compare</Link></div></section> }
-function UnsupportedSurface({ type, href, label, activeType, countryCode }: { type: "Programs" | "Countries" | "Cities" | "Careers"; href: string; label: string; activeType: CompareModeType; countryCode?: string | null }) { return <section className="w-full pb-4" aria-label={`${type} comparison unavailable`}><ComparePageHeader activeType={activeType} countryCode={countryCode} /><div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6"><h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h2><p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link></div></section> }
+function UnsupportedSurface({ type, href, label, activeType, countryCode }: { type: "Programs" | "Countries" | "Cities" | "Careers" | "Degrees"; href: string; label: string; activeType: CompareModeType; countryCode?: string | null }) { return <section className="w-full pb-4" aria-label={`${type} comparison unavailable`}><ComparePageHeader activeType={activeType} countryCode={countryCode} /><div className="max-w-xl rounded-2xl border border-[#e7e6e3] bg-white p-5 sm:p-6"><h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1b1b1b]">Comparison not available</h2><p className="mt-2 text-sm leading-6 text-[#6f6d68]">This comparison context is not supported yet.</p><Link href={href} className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white">{label}</Link></div></section> }

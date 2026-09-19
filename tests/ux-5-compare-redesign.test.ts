@@ -34,14 +34,14 @@ const careersMatrix = read("src/app/(workspace)/compare/careers-compare-matrix.t
 const citySelector = read("src/app/(workspace)/compare/city-compare-selector.tsx")
 const decisionTracker = read("src/components/analytics/decision-session-tracker.tsx")
 
-test("Compare exposes exactly the four supported modes via canonical href builders", () => {
+test("Compare exposes exactly the five supported modes via canonical href builders", () => {
   assert.deepEqual(
     COMPARE_MODE_NAV_ITEMS.map((item) => item.type),
-    ["program", "country", "city", "career"],
+    ["program", "country", "city", "career", "degree"],
   )
-  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.href)).size, 4)
+  assert.equal(new Set(COMPARE_MODE_NAV_ITEMS.map((item) => item.href)).size, 5)
   assert.ok(COMPARE_MODE_NAV_ITEMS.every((item) => item.href.startsWith("/compare?")))
-  assert.ok(!COMPARE_MODE_NAV_ITEMS.some((item) => ["degree", "institution", "employer", "industry"].includes(item.type)))
+  assert.ok(!COMPARE_MODE_NAV_ITEMS.some((item) => ["institution", "employer", "industry"].includes(item.type)))
 })
 
 test("Compare headers name each real mode instead of internal context jargon", () => {
@@ -49,6 +49,7 @@ test("Compare headers name each real mode instead of internal context jargon", (
   assert.match(nav, /country: \{ en: "Compare countries"/)
   assert.match(nav, /city: \{ en: "Compare cities"/)
   assert.match(nav, /career: \{ en: "Compare careers"/)
+  assert.match(nav, /degree: \{ en: "Compare degrees"/)
   assert.doesNotMatch(nav, /Compare country context|Compare city context/)
 })
 
@@ -189,10 +190,11 @@ test("Country, Program and City Compare selectors share the campcareer visual to
   assert.doesNotMatch(citySelector, /#[0-9a-fA-F]{6}/)
 })
 
-test("compare mode dispatcher still resolves only the four supported types", () => {
+test("compare mode dispatcher still resolves only the five supported types", () => {
   assert.equal(resolveCompareModeType("program"), "program")
   assert.equal(resolveCompareModeType("country"), "country")
   assert.equal(resolveCompareModeType("city"), "city")
   assert.equal(resolveCompareModeType("career"), "career")
+  assert.equal(resolveCompareModeType("degree"), "degree")
   assert.equal(resolveCompareModeType("cities"), "unsupported")
 })

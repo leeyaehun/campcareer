@@ -5,8 +5,9 @@ export const CAREER_COMPARE_COUNTRY = "AU" as const
 export const CAREER_COMPARE_PROFILE = "starting-from-scratch" as const
 export const COUNTRY_COMPARE_GOAL = "registered-nurse" as const
 export const COUNTRY_COMPARE_PROFILE = "starting-from-scratch" as const
+export const DEGREE_COMPARE_COUNTRY = "IE" as const
 
-export type CanonicalCompareMode = "programs" | "countries" | "cities" | "careers"
+export type CanonicalCompareMode = "programs" | "countries" | "cities" | "careers" | "degrees"
 
 export function compareModePath(_mode: CanonicalCompareMode) {
   return "/compare"
@@ -58,6 +59,18 @@ export function buildCareerCompareCanonicalHref({
   return `/compare?${params.toString()}`
 }
 
+export function buildDegreeCompareCanonicalHref({
+  country = DEGREE_COMPARE_COUNTRY,
+  degrees = [],
+}: {
+  country?: string
+  degrees?: readonly string[]
+} = {}) {
+  const params = new URLSearchParams({ type: "degree", country: country.toUpperCase() })
+  if (degrees.length) params.set("degrees", degrees.join(","))
+  return `/compare?${params.toString()}`
+}
+
 export function buildCountryCompareCanonicalHref({
   goal = COUNTRY_COMPARE_GOAL,
   profile = COUNTRY_COMPARE_PROFILE,
@@ -81,5 +94,6 @@ export function canonicalCompareModeFromLegacyType(rawType: string | null): Cano
   if (rawType === "country") return "countries"
   if (rawType === "city") return "cities"
   if (rawType === "career") return "careers"
+  if (rawType === "degree") return "degrees"
   return null
 }

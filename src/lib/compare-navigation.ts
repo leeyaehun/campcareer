@@ -2,6 +2,7 @@ import {
   buildCareerCompareCanonicalHref,
   buildCityCompareCanonicalHref,
   buildCountryCompareCanonicalHref,
+  buildDegreeCompareCanonicalHref,
   buildProgramCompareCanonicalHref,
 } from "@/lib/compare-routes"
 
@@ -26,6 +27,11 @@ export const COMPARE_MODE_NAV_ITEMS = [
     label: "Careers",
     href: buildCareerCompareCanonicalHref(),
   },
+  {
+    type: "degree",
+    label: "Degrees",
+    href: buildDegreeCompareCanonicalHref(),
+  },
 ] as const
 
 export type CompareModeType = (typeof COMPARE_MODE_NAV_ITEMS)[number]["type"]
@@ -36,5 +42,6 @@ export function resolveCompareModeType(rawType: string | null): ResolvedCompareM
   if (rawType === "country") return "country"
   if (rawType === "city") return "city"
   if (rawType === "career") return "career"
+  if (rawType === "degree") return "degree"
   return "unsupported"
 }

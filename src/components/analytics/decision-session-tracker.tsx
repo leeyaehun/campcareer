@@ -10,7 +10,7 @@ const STORAGE_KEY = "cc_decision_session_v1"
 
 type CompareAnalyticsDetails = {
   entity_count: number
-  comparison_category: "career" | "country" | "city" | "program" | "institution" | "universal"
+  comparison_category: "career" | "country" | "city" | "program" | "institution" | "degree" | "universal"
 }
 
 function countDelimitedValues(value: string | null) {
@@ -25,6 +25,7 @@ function countDelimitedValues(value: string | null) {
 export function getCompareAnalyticsDetails(searchParams: Pick<URLSearchParams, "get">): CompareAnalyticsDetails {
   const type = searchParams.get("type")
   if (type === "career") return { comparison_category: "career", entity_count: countDelimitedValues(searchParams.get("careers")) }
+  if (type === "degree") return { comparison_category: "degree", entity_count: countDelimitedValues(searchParams.get("degrees")) }
   if (type === "country") return { comparison_category: "country", entity_count: countDelimitedValues(searchParams.get("countries")) }
   if (type === "city") return { comparison_category: "city", entity_count: countDelimitedValues([searchParams.get("left"), searchParams.get("right")].filter(Boolean).join(",")) }
   if (type === "program") return { comparison_category: "program", entity_count: countDelimitedValues(searchParams.get("items")) }

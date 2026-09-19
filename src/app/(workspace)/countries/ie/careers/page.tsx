@@ -105,7 +105,12 @@ export default async function IrelandCareersPage() {
           </div>
         </section>
 
-        <section className="mt-10 grid gap-4 sm:grid-cols-2">
+        <section className="mt-10 grid gap-4 sm:grid-cols-3">
+          <Link href="/countries/ie/degrees" className="group rounded-xl border border-[#dfe8db] bg-[#f7faf5] p-5">
+            <GraduationCap className="size-4 text-[#3e7a2e]" />
+            <h2 className="mt-2 text-[16px] font-semibold text-[#1b1b1b] group-hover:text-[#3e7a2e]">Degrees in Ireland</h2>
+            <p className="mt-1 text-[12px] leading-5 text-[#6f6d68]">Browse the six reviewed Degrees — pick a Degree and follow it into Careers.</p>
+          </Link>
           <Link href="/countries/ie/education" className="group rounded-xl border border-[#dfe8db] bg-[#f7faf5] p-5">
             <GraduationCap className="size-4 text-[#3e7a2e]" />
             <h2 className="mt-2 text-[16px] font-semibold text-[#1b1b1b] group-hover:text-[#3e7a2e]">Education pathways</h2>

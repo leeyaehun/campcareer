@@ -29,6 +29,6 @@ test("Ireland Country Hub keeps reviewed Degree connections concise and career-f
   assert.doesNotMatch(dashboard, /career\.evidenceInstitution/)
   assert.doesNotMatch(dashboard, /career\.rationale/)
   assert.doesNotMatch(dashboard, /profile\.strongMajors/)
-  assert.doesNotMatch(dashboard, /\/degrees/)
+  assert.match(dashboard, /countries\/ie\/degrees/)
   assert.doesNotMatch(dashboard, /\/programs\/ie/)
 })
