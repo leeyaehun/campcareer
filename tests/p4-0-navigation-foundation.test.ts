@@ -195,3 +195,34 @@ test("mobile menu cannot overflow the viewport", () => {
   assert.ok(mobileNav.includes("min-h-11"))
   assert.ok(primaryNav.includes("hidden items-center gap-1 lg:flex"))
 })
+
+test("mobile menu sits left of the CampCareer logo in every shell", () => {
+  const topNav = source("src/components/layout/top-nav.tsx")
+  const workspaceTopbar = source("src/components/workspace/workspace-topbar.tsx")
+  for (const shell of [topNav, workspaceTopbar]) {
+    const mobileIndex = shell.indexOf("<MobileNavigation")
+    const wordmarkIndex = shell.indexOf("CampCareer")
+    assert.ok(mobileIndex !== -1, "shell missing MobileNavigation")
+    assert.ok(wordmarkIndex !== -1)
+    assert.ok(mobileIndex < wordmarkIndex, "MobileNavigation must render before the wordmark")
+  }
+})
+
+test("mobile menu distinguishes sections with emoji, black text and a separator line", () => {
+  assert.ok(mobileNav.includes('DESTINATION_EMOJI: Record<string, string>'))
+  for (const label of ["🌍", "💼", "🏫", "🎓", "🗺️", "⚖️"]) {
+    assert.ok(mobileNav.includes(`"${label}"`), `missing emoji ${label}`)
+  }
+  assert.ok(mobileNav.includes('text-campcareer-ink hover:bg-campcareer-surface/70'))
+  assert.ok(mobileNav.includes("grayscale"))
+  assert.ok(mobileNav.includes('border-t border-campcareer-border pt-6'))
+  assert.ok(mobileNav.includes('text-xs font-semibold uppercase tracking-wide text-campcareer-muted'))
+})
+
+test("mobile drawer slides in from the left", () => {
+  assert.ok(mobileNav.includes('absolute left-0 top-0'))
+  assert.ok(mobileNav.includes('"-translate-x-full"'))
+  assert.ok(mobileNav.includes('"translate-x-0"'))
+  assert.ok(mobileNav.includes("transition-transform duration-cc-standard motion-reduce:transition-none"))
+  assert.ok(mobileNav.includes('open ? "visible" : "invisible pointer-events-none"'))
+})

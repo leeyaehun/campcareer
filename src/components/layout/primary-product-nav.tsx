@@ -2,7 +2,6 @@ import Link from "next/link"
 import { localizePath, type LocaleOption, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 import { CountryContextIndicator } from "./country-context-indicator"
-import { MobileNavigation } from "./mobile-navigation"
 
 export type NavDestination = {
   href: string
@@ -86,8 +85,6 @@ export function PrimaryProductNavigation({ pathname, locale, className }: Primar
       </nav>
 
       <CountryContextIndicator pathname={pathname} locale={locale} className="hidden lg:inline-flex" />
-
-      <MobileNavigation pathname={pathname} locale={locale} />
     </div>
   )
 }
