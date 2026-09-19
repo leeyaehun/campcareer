@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Briefcase, Globe, GraduationCap, Map, Menu, Scale, School, X } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 import { localizePath, type LocaleOption, withoutLocalePrefix } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
@@ -21,13 +22,13 @@ type MobileNavigationProps = {
 
 const DESKTOP_BREAKPOINT = "(min-width: 1024px)"
 
-const DESTINATION_EMOJI: Record<string, string> = {
-  "/countries": "🌍",
-  "/careers": "💼",
-  "/institutions": "🏫",
-  "/programs": "🎓",
-  "/maps": "🗺️",
-  "/compare": "⚖️",
+const DESTINATION_ICONS: Record<string, LucideIcon> = {
+  "/countries": Globe,
+  "/careers": Briefcase,
+  "/institutions": School,
+  "/programs": GraduationCap,
+  "/maps": Map,
+  "/compare": Scale,
 }
 
 export function MobileNavigation({ pathname, locale, className }: MobileNavigationProps) {
@@ -85,6 +86,7 @@ export function MobileNavigation({ pathname, locale, className }: MobileNavigati
 
   function MobileDestinationLink({ item }: { item: NavDestination }) {
     const active = isCurrentPath(currentPath, item.matches)
+    const Icon = DESTINATION_ICONS[item.href] ?? Globe
     return (
       <Link
         href={localizePath(item.href, locale)}
@@ -97,8 +99,8 @@ export function MobileNavigation({ pathname, locale, className }: MobileNavigati
             : "font-medium text-campcareer-ink hover:bg-campcareer-surface/70",
         )}
       >
-        <span className="grid size-5 shrink-0 place-items-center text-base grayscale" aria-hidden="true">
-          {DESTINATION_EMOJI[item.href] ?? "•"}
+        <span className="grid size-5 shrink-0 place-items-center" aria-hidden="true">
+          <Icon className="size-5" strokeWidth={1.75} />
         </span>
         {item.label[language]}
       </Link>

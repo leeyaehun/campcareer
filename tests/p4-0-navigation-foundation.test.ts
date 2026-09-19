@@ -208,13 +208,13 @@ test("mobile menu sits left of the CampCareer logo in every shell", () => {
   }
 })
 
-test("mobile menu distinguishes sections with emoji, black text and a separator line", () => {
-  assert.ok(mobileNav.includes('DESTINATION_EMOJI: Record<string, string>'))
-  for (const label of ["🌍", "💼", "🏫", "🎓", "🗺️", "⚖️"]) {
-    assert.ok(mobileNav.includes(`"${label}"`), `missing emoji ${label}`)
+test("mobile menu distinguishes sections with minimal line icons, black text and a separator line", () => {
+  assert.ok(mobileNav.includes('DESTINATION_ICONS: Record<string, LucideIcon>'))
+  for (const icon of ["Globe", "Briefcase", "School", "GraduationCap", "Map", "Scale"]) {
+    assert.ok(mobileNav.includes(icon), `missing icon ${icon}`)
   }
   assert.ok(mobileNav.includes('text-campcareer-ink hover:bg-campcareer-surface/70'))
-  assert.ok(mobileNav.includes("grayscale"))
+  assert.ok(mobileNav.includes("strokeWidth"))
   assert.ok(mobileNav.includes('border-t border-campcareer-border pt-6'))
   assert.ok(mobileNav.includes('text-xs font-semibold uppercase tracking-wide text-campcareer-muted'))
 })
