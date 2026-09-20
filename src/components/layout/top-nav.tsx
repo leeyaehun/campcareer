@@ -77,7 +77,7 @@ function AccountTopNav({ pathname, pathLocale }: { pathname: string; pathLocale:
   return (
     <header className="sticky top-0 z-40 h-16 border-b border-campcareer-border bg-campcareer-surface bg-[hsl(var(--cc-color-accent-subtle))]">
       <div className="mx-auto max-w-[1240px] px-6 max-sm:px-[18px]">
-        <div className="flex h-16 items-center gap-4">
+        <div className="flex min-h-16 flex-wrap items-center gap-x-4 gap-y-1.5 py-2">
           <MobileNavigation pathname={pathname} locale={pathLocale} />
 
           <Link
