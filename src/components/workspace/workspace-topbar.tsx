@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LanguageMenu } from "@/components/layout/language-menu"
+import { MobileNavigation } from "@/components/layout/mobile-navigation"
 import { PrimaryProductNavigation } from "@/components/layout/primary-product-nav"
 import { useRouteLocale } from "@/lib/i18n/locale-provider"
 import { localizePath } from "@/lib/i18n/config"
@@ -15,6 +16,8 @@ export function WorkspaceTopbar() {
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-campcareer-border bg-campcareer-surface bg-[hsl(var(--cc-color-accent-subtle))]">
       <div className="mx-auto flex h-16 w-full max-w-[1240px] items-center gap-4 px-6 max-sm:px-[18px]">
+        <MobileNavigation pathname={pathname} locale={locale} />
+
         <Link
           href={localizePath("/", locale)}
           prefetch={false}

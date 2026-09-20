@@ -171,9 +171,10 @@ export function WorkspaceUserMenu({ className, minimal = false }: WorkspaceUserM
         const returnTo = `${window.location.pathname}${window.location.search}${window.location.hash}`
         window.location.assign(`${loginPath}?next=${encodeURIComponent(returnTo || homePath)}`)
       }}
+      aria-label={locale === "ko" ? "로그인" : "Log in"}
       className={cn("inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--cc-border))] bg-white px-3 py-2 text-sm font-semibold text-[hsl(var(--cc-ink-secondary))] transition hover:bg-[hsl(var(--cc-canvas))]", minimal && "border-0 bg-transparent px-2 py-1", className)}
     >
-      <LogIn className="size-4" /> {!minimal && <span>{locale === "ko" ? "로그인" : "Log in"}</span>}
+      <LogIn className="size-4" /> {!minimal && <span className="hidden md:inline">{locale === "ko" ? "로그인" : "Log in"}</span>}
     </Link>
   )
 }
